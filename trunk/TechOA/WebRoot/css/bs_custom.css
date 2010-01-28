@@ -1,0 +1,93 @@
+h1 {
+	background-color: #4582B4;
+	padding: 6px 0 6px 8px;
+	color: #FFFFFF;
+}
+.add-cmp .x-btn-text {
+    background-image:url(/images/icons/plugin_add.gif);
+}
+
+.add .x-btn-text {
+    background-image:url(/images/icons/add.gif);
+}
+
+.update .x-btn-text {
+    background-image:url(/images/icons/update.gif);
+}
+
+.delete .x-btn-text {
+    background-image:url(/images/icons/delete.gif);
+}
+
+.delete1 .x-btn-text {
+    background-image:url(/images/icons/cross.gif);
+}
+
+.save .x-btn-text {
+    background-image:url(/images/icons/save.gif);
+}
+
+.send .x-btn-text {
+    background-image:url(/images/icons/email_go.png);
+}
+
+.transmit .x-btn-text {
+    background-image:url(/images/icons/email_edit.png);
+}
+
+.revert .x-btn-text {
+    background-image:url(/images/icons/email_edit.png);
+}
+
+.move .x-btn-text {
+	background-image:url(/images/icons/basket_remove.png);
+}
+
+.xiugai .x-btn-text {
+    background-image:url(/images/icons/xiugai.gif);
+}
+.chaxun .x-btn-text {
+    background-image:url(/images/icons/chaxun.gif);
+}
+.guihuan .x-btn-text {
+    background-image:url(/images/icons/guihuan.gif);
+}
+.jieyue .x-btn-text {
+    background-image:url(/images/icons/jieyue.gif);
+}
+.shangchuan .x-btn-text {
+    background-image:url(/images/icons/shangchuan.gif);
+}
+.huizong .x-btn-text {
+    background-image:url(/images/icons/check.gif);
+}
+.work .x-btn-text {
+    background-image:url(/images/icons/user_edit.png);
+}
+.back .x-btn-text {
+    background-image:url(/images/icons/close.png);
+}
+.tag_blue {
+    background-image:url(/images/icons/tag_blue.png);
+}
+.tag_green {
+    background-image:url(/images/icons/tag_green.png);
+}
+.tag_yellow {
+    background-image:url(/images/icons/tag_yellow.png);
+}
+.tag_orange {
+    background-image:url(/images/icons/tag_orange.png);
+}
+.tag_pink {
+    background-image:url(/images/icons/tag_pink.png);
+}
+.tag_purple {
+    background-image:url(/images/icons/tag_purple.png);
+}
+.tag_wand {
+    background-image:url(/images/icons/wand.png);
+}
+.tag_plugin {
+    background-image:url(/images/icons/plugin.gif);
+}

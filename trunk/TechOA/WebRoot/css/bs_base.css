@@ -1,0 +1,14 @@
+body {
+	font-size: 13px;
+	font-weight: normal;
+}
+
+
+#the-table { border:1px solid #bbb;border-collapse:collapse;margin: 5px auto 5px auto; font-size: 13px;color:#696969;}
+#the-table td,#the-table th { border:1px solid #E6E6E6;border-collapse:collapse;padding:1px;}
+#the-table th {background-color:#E6E6E6;font-weight: bold;border: 1px solid #C1C1C1;border-collapse:collapse;padding:5px;}
+
+.b_tr { font-weight:bolder;}
+.common_table { border:1px solid #bbb;border-collapse:collapse;margin: 5px auto 5px auto; font-size: 13px;}
+.common_table td,.common_table th { border:1px solid #E6E6E6;border-collapse:collapse;padding:1px;}
+.common_table th {background-color:#E6E6E6;font-weight: bold;border: 1px solid #C1C1C1;border-collapse:collapse;padding:5px;}
