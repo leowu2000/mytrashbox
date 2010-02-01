@@ -3,8 +3,14 @@
 <%
 	List listDate = (List)request.getAttribute("listDate");
 	List listWorkCheck = (List)request.getAttribute("listWorkCheck");
+	List listCheck = (List)request.getAttribute("listCheck");
 	String departname = request.getAttribute("departname").toString();
 	String datepick = request.getAttribute("datepick").toString();
+	String depart = request.getAttribute("depart").toString();
+	
+	String minDate = StringUtil.DateToString((Date)listDate.get(0),"yyyy-MM-dd");
+	String maxDate = StringUtil.DateToString((Date)listDate.get(listDate.size()-1),"yyyy-MM-dd");
+	
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -21,9 +27,39 @@
 	<link href="css/bs_base.css" type="text/css" rel="stylesheet">
 	<link href="css/bs_button.css" type="text/css" rel="stylesheet">
 	<link href="css/bs_custom.css" type="text/css" rel="stylesheet">
+	<%@ include file="../../common/meta.jsp" %>
+	<script src="../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+	<script type="text/javascript">
+var win;
+var action;
+var url='/em.do';
+Ext.onReady(function(){
+	var tb = new Ext.Toolbar({renderTo:'toolbar'});
+	tb.add({text: '填写考勤记录',cls: 'x-btn-text-icon add',handler: onAddClick});
+	
+	if(!win){
+        win = new Ext.Window({
+        	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
+	        {text:'关闭',handler: function(){win.hide();}}
+	        ]
+        });
+    }
+    
+    function onAddClick(btn){
+    	action = url+'?action=addWorkcheck';
+    	win.setTitle('增加');
+       	Ext.getDom('dataForm').reset();
+        win.show(btn.dom);
+    }
+
+});
+	</script>
   </head>
   
   <body>
+    <div id="toolbar"></div>
     <center><h2>职工考勤记录</h2></center>
     <span>&nbsp;&nbsp;&nbsp;&nbsp;单位名称:<%=departname %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <span><%=datepick %></span>
@@ -63,5 +99,38 @@
 		</tr>
 <%} %>		
     </table>
+<div id="dlg" class="x-hidden">
+  <div class="x-window-header">Dialog</div>
+  <div class="x-window-body" id="dlg-body">
+	<form id="dataForm" name="dataForm" action="" method="post">
+	  <input type="hidden" name="id" >
+	  <input type="hidden" name="datepick" value="<%=datepick %>">
+	  <input type="hidden" name="depart" value="<%=depart %>">
+        <table>
+		  <tr>
+		  	<td>考勤日期</td>
+		  	<td><input type="text" name="checkdate" onclick="WdatePicker({readOnly:true,minDate:'<%=minDate %>', maxDate:'<%=maxDate %>'})" style="width:200" ></td>
+		  </tr>
+		  <tr>
+		  	<td>考勤状态</td>
+		  	<td><select name="checkcode" style="width:200;">
+<%
+			for(int i=0;i<listCheck.size();i++){
+				Map mapCheck = (Map)listCheck.get(i);
+%>
+				<option value="<%=mapCheck.get("CODE") %>"><%=mapCheck.get("NAME") %></option>
+<%
+			}
+%>
+		  	</select></td>
+		  </tr>	
+		  <tr>
+		  	<td>缺勤时间</td>
+		  	<td><input type="text" name="emptyhour" style="width:200;"></td>
+		  </tr>
+		</table>
+      </form>
+    </div>
+</div>
   </body>
 </html>
