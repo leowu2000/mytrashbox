@@ -80,7 +80,7 @@ create table EMPLOYEE  (
    ID                   VARCHAR(32)                     not null,
    LOGINID              VARCHAR(50),
    PASSWORD             VARCHAR(50),
-   CODE              VARCHAR(20),
+   CODE                 VARCHAR(20),
    ROLECODE             VARCHAR(20),
    NAME                 VARCHAR(20),
    DEPARTCODE           VARCHAR(20),
@@ -402,4 +402,22 @@ comment on column WORKREPORT.FLAG is
 
 comment on column WORKREPORT.DEPARTCODE is
 '部门编码';
+
+/*==============================================================*/
+/* Table: FUNCROLE                                              */
+/*==============================================================*/
+create table FUNCROLE  (
+   ROLECODE             VARCHAR(20),
+   FUNCCODE             VARCHAR(20)
+);
+
+comment on table FUNCROLE is
+'角色功能表';
+
+comment on column FUNCROLE.ROLECODE is
+'角色编码';
+
+comment on column FUNCROLE.FUNCCODE is
+'功能编码';
+
 
