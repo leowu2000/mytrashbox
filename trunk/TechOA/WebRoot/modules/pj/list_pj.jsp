@@ -119,7 +119,7 @@ Ext.onReady(function(){
                 <td>项目经理</td>
                 <!-- <td>参与人员</td> -->
                 <td>计划工作量</td>
-                <td>投入工作量</td>
+                <!-- <td>投入工作量</td> -->
                 <td>开始时间</td>
                 <td>截止时间</td>
                 <td>描述</td>
@@ -149,7 +149,7 @@ for(int i=0;i<listProject.size();i++){
                 <td>&nbsp;<%=status %></td>
                 <td>&nbsp;<%=mapManager.get("NAME") %></td>
                 <!-- <td>&nbsp;<%=members %></td> -->
-                <td>&nbsp;<%=mapProject.get("PLANEDWORKLOAD") %></td>
+                <!-- <td>&nbsp;<%=mapProject.get("PLANEDWORKLOAD") %></td> -->
                 <td>&nbsp;<%=mapProject.get("NOWWORKLOAD") %></td>
                 <td>&nbsp;<%=mapProject.get("STARTDATE") %></td>
                 <td>&nbsp;<%=mapProject.get("ENDDATE") %></td>
