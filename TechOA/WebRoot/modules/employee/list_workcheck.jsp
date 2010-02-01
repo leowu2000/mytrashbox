@@ -24,9 +24,6 @@
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	<link href="css/bs_base.css" type="text/css" rel="stylesheet">
-	<link href="css/bs_button.css" type="text/css" rel="stylesheet">
-	<link href="css/bs_custom.css" type="text/css" rel="stylesheet">
 	<%@ include file="../../common/meta.jsp" %>
 	<script src="../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 	<script type="text/javascript">
@@ -60,17 +57,33 @@ Ext.onReady(function(){
   
   <body>
     <div id="toolbar"></div>
-    <center><h2>职工考勤记录</h2></center>
-    <span>&nbsp;&nbsp;&nbsp;&nbsp;单位名称:<%=departname %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <span><%=datepick %></span>
+    <center><b><span style="font-size: 27;">员工考勤记录</span></b></center>
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;单位名称：<%=departname %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;考勤年月：<%=datepick %></span>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center"  bgcolor="#E0F1F8" class="b_tr">
     		<td rowspan="2">姓名</td>
 <%
+	int tempMonth = 0;
 	for(int i=0;i<listDate.size();i++){
+		Calendar c =  Calendar.getInstance();
+		c.setTime((Date)listDate.get(i));
+		
+		if(i == 0){
+			tempMonth = c.MONTH;
+		}
+		
+		if(c.MONTH != tempMonth){
 %>    		
-			<td rowspan="2"><%=StringUtil.DateToString((Date)listDate.get(i),"MM-dd") %></td>
-<%} %>
+			<td rowspan="2"><%=StringUtil.DateToString((Date)listDate.get(i),"dd") %></td>
+<%
+		}else {
+%>
+			<td rowspan="2"><%=StringUtil.DateToString((Date)listDate.get(i),"dd") %></td>
+<%
+		}
+	}
+%>
 			<td colspan="5">缺勤小结(小时)</td>			
     	</tr>
     	<tr align="center" bgcolor="#E0F1F8" class="b_tr">
@@ -85,11 +98,11 @@ Ext.onReady(function(){
 		Map mapWorkCheck = (Map)listWorkCheck.get(i);
 %>    	
 		<tr align="center">
-			<td><%=mapWorkCheck.get("NAME") %></td>
+			<td nowrap="nowrap"><%=mapWorkCheck.get("NAME") %></td>
 <%
 		for(int j=0;j<listDate.size();j++){
 %>			
-			<td>&nbsp;<%=mapWorkCheck.get(StringUtil.DateToString((Date)listDate.get(j),"yyyy-MM-dd")) %></td>
+			<td nowrap="nowrap">&nbsp;<%=mapWorkCheck.get(StringUtil.DateToString((Date)listDate.get(j),"yyyy-MM-dd")) %></td>
 <%} %>
 			<td><%=mapWorkCheck.get("cd") %></td>
 			<td><%=mapWorkCheck.get("zt") %></td>
