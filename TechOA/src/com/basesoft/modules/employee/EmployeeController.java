@@ -2,6 +2,7 @@ package com.basesoft.modules.employee;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -87,10 +88,15 @@ public class EmployeeController extends CommonController {
 			
 			List listWorkCheck = emDAO.findWorkCheck(start, end, depart, emid);
 			
+			//考勤项列表
+			List listCheck = emDAO.getDICTByType("4");
+			
 			mv.addObject("datepick", datepick);
+			mv.addObject("depart", depart);
 			mv.addObject("departname", departname);
 			mv.addObject("listWorkCheck", listWorkCheck);
 			mv.addObject("listDate", listDate);
+			mv.addObject("listCheck", listCheck);
 		}else if("add".equals(action)){//添加操作
 			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 			//接收页面参数
@@ -167,6 +173,23 @@ public class EmployeeController extends CommonController {
 				emDAO.delete(deleteSql);
 			}
 			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart="+seldepart);
+			return null;
+		}else if("addWorkcheck".equals(action)){//增加考勤记录
+			String checkdate = ServletRequestUtils.getStringParameter(request, "checkdate", "");
+			String checkcode = ServletRequestUtils.getStringParameter(request, "checkcode", "");
+			String emptyhour = ServletRequestUtils.getStringParameter(request, "emptyhour");
+			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
+			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
+			
+			String empcode = emDAO.findByEmId(emid).get("CODE").toString();
+			
+			if("".equals(emptyhour)){
+				emptyhour = "0";
+			}
+			
+			emDAO.insert("insert into WORKCHECK values('" + empcode + "','" + checkdate + "','" + checkcode + "'," + emptyhour + ")");
+			
+			response.sendRedirect("em.do?action=workcheck&datepick=" + datepick + "&depart=" + depart);
 			return null;
 		}
 		

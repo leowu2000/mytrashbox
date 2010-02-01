@@ -38,7 +38,6 @@ ProjectDAO projectDAO = (ProjectDAO)ctx.getBean("projectDAO");
 var win;
 var action;
 var url='/pj.do';
-var vali = "";
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});

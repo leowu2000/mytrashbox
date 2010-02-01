@@ -53,7 +53,7 @@ List listDepart = (List)request.getAttribute("listDepart");
 		<option value="<%=mapDepart.get("CODE") %>"><%=mapDepart.get("NAME") %></option>
 <%} %>					
 	</select>
-    <input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" onchange="commit();">
+    <input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" onchange="commit();" style="width: 50">
     <iframe name="list_cdrwqk" width="100%" frameborder="0" height="500"></iframe>
   </body>
 </html>
