@@ -47,6 +47,7 @@
   <body onload="commit();IFrameResize();" onresize="IFrameResize();">
   	<div id="toolbar"></div>
 	<select name="depart" onchange="commit();">
+		<option value="0">全部</option>
 <%
 	for(int i=0;i<listDepart.size();i++){
 		Map mapDepart = (Map)listDepart.get(i);
