@@ -24,13 +24,13 @@ public class ProjectDAO extends CommonDAO{
 		
 		for(int i=0;i<listProject.size();i++){//循环项目
 			Map mapProject = (Map)listProject.get(i);
-			int totalCount = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'");
+			int totalCount = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'");
 			
 			mapProject.put("totalCount", totalCount);
 			
 			for(int j=0;j<listDepart.size();j++){//循环部门
 				Map mapDepart = (Map)listDepart.get(j);
-				int departCount = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE='" + mapDepart.get("CODE") + "') and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'");
+				int departCount = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE='" + mapDepart.get("CODE") + "') and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'");
 				
 				mapProject.put("departCount" + j, departCount);
 			}
@@ -75,7 +75,7 @@ public class ProjectDAO extends CommonDAO{
 			for(int j=0;j<listPeriod.size();j++){//循环项目阶段，取工时
 				Map mapPeriod = (Map)listPeriod.get(j);
 				
-				int count = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'");
+				int count = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'");
 				
 				returnMap.put(mapPeriod.get("CODE"), count);
 				countCol = countCol + count;
@@ -136,14 +136,14 @@ public class ProjectDAO extends CommonDAO{
 			int C7 = 0;
 			int C8 = 0;
 			
-			C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and DEGREECODE in ('200003','200004','200005','200006') and CODE in (select DISTINCT EMPCODE from WORKREPORT where PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+			C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and DEGREECODE in ('200003','200004','200005','200006') and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
 			C2 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and DEGREECODE in ('200001','200002') and CODE in (select DISTINCT EMPCODE from WORKREPORT where PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
-			C3 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100001' and CODE in (select DISTINCT EMPCODE from WORKREPORT where PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
-			C4 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100002' and CODE in (select DISTINCT EMPCODE from WORKREPORT where PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
-			C5 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100003' and CODE in (select DISTINCT EMPCODE from WORKREPORT where PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
-			C6 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100004' and CODE in (select DISTINCT EMPCODE from WORKREPORT where PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
-			C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100005' and CODE in (select DISTINCT EMPCODE from WORKREPORT where PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
-			C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100006' and CODE in (select DISTINCT EMPCODE from WORKREPORT where PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+			C3 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100001' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+			C4 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100002' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+			C5 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100003' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+			C6 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100004' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+			C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100005' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+			C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100006' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
 			
 			totalCount = C1 + C2;
 			

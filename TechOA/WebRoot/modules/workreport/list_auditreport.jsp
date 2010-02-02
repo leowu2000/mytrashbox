@@ -79,7 +79,7 @@ Ext.onReady(function(){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=listReport.getPageInfo().getHtml("workreport.do?action=list") %>
+<%=listReport.getPageInfo().getHtml("workreport.do?action=auditlist") %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>选　择</td>
