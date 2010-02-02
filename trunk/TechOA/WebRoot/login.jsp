@@ -115,7 +115,7 @@ function toLogin(){
           <tr>
             <td height="14">&nbsp;</td>
             <td height="48" colspan="2">&nbsp;</td>
-            <td width="72"><a href="#" onclick="toLogin()" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image1','','images/denglu_b.gif',1)"><img src="images/denglu_a.gif" name="Image1" width="68" height="24" border="0" id="Image1" /></a></td>
+            <td width="72"><input type="image" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image1','','images/denglu_b.gif',1)" src="images/denglu_a.gif" style="width: 68;height: 24;" border="0" name="Image1"></td>
             <td width="82"><a href="#" onclick="document.getElementById('listForm').reset();" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image2','','images/quxiao_b.gif',1)"><img src="images/quxiao_a.gif" name="Image2" width="68" height="24" border="0" id="Image2" /></a></td>
           </tr>
         </table></td>
