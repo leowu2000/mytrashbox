@@ -46,7 +46,7 @@ public class WorkReportDAO extends CommonDAO {
 	public PageList findAllAudit(String emid, int page){
 		Map mapEm = findByEmId(emid);
 		
-		String sql = "select * from VIEW_WORKREPORT where EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE in (select CODE from DEPARTMENT where CODE='" + mapEm.get("DEPARTCODE") + "' or ALLPARENTS like '%" + mapEm.get("DEPARTCODE") + "%')) and EMPCODE!='" + mapEm.get("CODE") + "' and flag=1 order by STARTDATE desc";
+		String sql = "select * from VIEW_WORKREPORT where EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE in (select CODE from DEPARTMENT where CODE='" + mapEm.get("DEPARTCODE") + "' or ALLPARENTS like '%" + mapEm.get("DEPARTCODE") + "%')) and EMPCODE!='" + mapEm.get("CODE") + "' and (flag=1 or flag=2) order by FLAG, STARTDATE desc";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
