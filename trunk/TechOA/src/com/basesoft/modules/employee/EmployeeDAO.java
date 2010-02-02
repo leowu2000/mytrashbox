@@ -58,12 +58,28 @@ public class EmployeeDAO extends CommonDAO{
 	}
 	
 	/**
-	 * 获取部门下属雇员信息
-	 * @param depart
+	 * 获取部门下属 员工信息
+	 * @param depart 部门
+	 * @param emid 员工id
 	 * @return
 	 */
-	public List<?> fingEmployeeByDepart(String depart){
-		return jdbcTemplate.queryForList("select * from EMPLOYEE where DEPARTCODE='" + depart + "'");
+	public List<?> fingEmployeeByDepart(String depart, String emid){
+		if("0".equals(depart)){
+			//获取下级部门列表
+			List listDepart = getChildDepart(emid);
+			String departs = "";
+			for(int i=0;i<listDepart.size();i++){
+				Map map = (Map)listDepart.get(i);
+				if(i==0){
+					departs = "'" + map.get("CODE").toString() + "'";
+				}else {
+					departs = departs + ",'" + map.get("CODE").toString() + "'";
+				}
+			}
+			return jdbcTemplate.queryForList("select * from EMPLOYEE where DEPARTCODE in (" + departs + ")");
+		}else {
+			return jdbcTemplate.queryForList("select * from EMPLOYEE where DEPARTCODE='" + depart + "'");
+		}
 	}
 	
 	/**
@@ -104,7 +120,7 @@ public class EmployeeDAO extends CommonDAO{
 			
 			returnList.add(returnMap);
 		}else {//领导和管理员看整个部门的
-			List listEmployee = fingEmployeeByDepart(depart);
+			List listEmployee = fingEmployeeByDepart(depart, emid);
 			for(int i=0;i<listEmployee.size();i++){//循环部门中的雇员
 				Map returnMap = new HashMap();
 				Map mapEmployee = (Map)listEmployee.get(i);

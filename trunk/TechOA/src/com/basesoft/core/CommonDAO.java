@@ -42,7 +42,13 @@ public class CommonDAO {
 	 * @return
 	 */
 	public String findNameByCode(String tablename, String code){
-		return jdbcTemplate.queryForMap("select NAME from " + tablename + " where CODE='" + code + "'").get("NAME").toString();
+		try{
+			Map map = jdbcTemplate.queryForMap("select NAME from " + tablename + " where CODE='" + code + "'");
+			String s = map.get("NAME").toString();
+			return s;
+		}catch(Exception e){
+			return "";
+		}
 	}
 	
 	/**

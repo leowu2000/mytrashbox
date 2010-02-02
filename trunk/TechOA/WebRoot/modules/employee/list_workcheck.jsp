@@ -58,7 +58,7 @@ Ext.onReady(function(){
   <body>
     <div id="toolbar"></div>
     <center><b><span style="font-size: 27;">员工考勤记录</span></b></center>
-    <span>&nbsp;&nbsp;&nbsp;&nbsp;单位名称：<%=departname %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;单位名称：<%="".equals(departname)?"全部":departname %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <span>&nbsp;&nbsp;&nbsp;&nbsp;考勤年月：<%=datepick %></span>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center"  bgcolor="#E0F1F8" class="b_tr">
