@@ -55,11 +55,10 @@ public class LoginController extends CommonController {
 					request.getSession().setMaxInactiveInterval(Integer.parseInt(Constants.get("SessionOutTime")));
 					request.getSession().setAttribute("EMID", mapEm.get("ID").toString());
 					request.getSession().setAttribute("EMROLE", mapEm.get("ROLECODE").toString());
+					request.getSession().setAttribute("EMNAME", mapEm.get("NAME").toString());
+					
 					mv = new ModelAndView("index");
 					
-					//String menu = emDAO.getMenu(mapEm.get("ROLECODE").toString());
-					
-					//mv.addObject("menuString", menu);
 					return mv;
 					
 				} else {
