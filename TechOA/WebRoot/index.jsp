@@ -7,7 +7,7 @@
 <%@ include file="common/meta.jsp" %>
 <%
 String emid = session.getAttribute("EMID").toString();
-//String menuString = request.getAttribute("menuString").toString();
+String emname = session.getAttribute("EMNAME").toString();
 %>
 <script type="text/javascript">
 <!--
@@ -32,7 +32,7 @@ Ext.onReady(function(){
                     contentEl:'west',
                     id:'tree',
                     iconCls:'tag_wand',
-                    title:'欢迎使用',
+                    title:'<%=emname %>',
                     xtype: 'treepanel',
                     autoScroll: true,
                     loader: treeloader,
