@@ -1,0 +1,1 @@
+.\jre6\bin\javaw.exe -jar dbtool.jar
