@@ -31,14 +31,14 @@ public class HY_DBFP_JDao {
         }
         String sSQL="";
         String checkSQL = "";
-//        if(version==0){
-//            checkSQL = "select * from fields WHERE tablename='" + tbid + "' and fielde='STCD'";
-//        }else{
+        if(version==0){
+            checkSQL = "select * from fields WHERE tablename='" + tbid + "' and fielde='STCD'";
+        }else{
             checkSQL = "select * from HY_DBFP_J WHERE TBID='" + tbid + "' and upper(FLID)='STCD'";
-//        }
+        }
 
         List rows = conn.queryForList(checkSQL);
-        if ("HY_STSC_A".trim().equalsIgnoreCase(tbid)||"STHD".trim().equalsIgnoreCase(tbid)) {
+        if ("HY_STSC_A".trim().equalsIgnoreCase(tbid)||"STHD".trim().equalsIgnoreCase(tbid)||"HY_DATBDL_I".trim().equalsIgnoreCase(tbid)) {
             sSQL = "select top 500 " + colSql + " from " + tbid;
         } else {
             if (rows != null && rows.size() > 0) {

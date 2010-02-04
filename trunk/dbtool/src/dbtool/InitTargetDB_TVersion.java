@@ -26,7 +26,7 @@ String[] dropTab = new String[]{
         "CREATE TABLE HY_DBFP_J (TBID char (12) NOT NULL ,FLID char (20) NOT NULL ,FLDCNNM char (30) NULL ,FLDENNM varchar (255) NULL ,FLDTPL char (10) NULL ,NLATT char(2)   NULL ,UNNM char(30) NULL ,VLRG varchar (255) NULL ,PKAT char (2) NULL )",
         "CREATE TABLE HY_DBTP_J (TBID char (12) NOT NULL ,TBNO char (5) NOT NULL ,TBCNNM varchar (30)  NULL ,TBENNM varchar (50) NULL,TBTYPE int)",
         "CREATE TABLE TABLE_STCD (STCD char(8) NOT NULL,STNM char (50)  NOT NULL,PARENT varchar(100))",
-        "CREATE TABLE DATA_INDEX_A(BSTCD char (8)  NOT NULL ,CSTNM char(200) null,ATBCNM varchar (30)  NULL,EYEAR char(20),DTOTAL int NULL)",
+        "CREATE TABLE DATA_INDEX_A(BSTCD char (8)  NOT NULL ,CSTNM char(200) null,ATBCNM varchar (30)  NULL,TBID char(50),EYEAR char(20),DTOTAL int NULL)",
         "CREATE TABLE DATA_INDEX_S (ASTCD char (8)  NOT NULL ,BSTNM char(200) null,CSLS char (3) ,DJS char (3) ,ESW char (3) ,FCW char (3) ,GBL char (3)  ,HZF char (3),EDATE varchar(30))",
         "CREATE TABLE DATA_INDEX (YEAR smallint NOT NULL ,TNAME char (20)  NOT NULL ,STCD char (8)  NOT NULL ,NETCODE char (3)  NULL ) ",
         "CREATE TABLE Users(name VarChar(20) Not null ,password VarChar(20) ,PowerDegree numeric(3) Not NULL)",
@@ -1006,7 +1006,8 @@ String[] dropTab = new String[]{
         "INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('DATA_INDEX_A','CSTNM','测站名称','CSTNM',0)",
         "INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('DATA_INDEX_A','ATBCNM','报表名称','ATBCNM',0)",
         "INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('DATA_INDEX_A','EYEAR','起止年份','EYEAR',0)",
-        "INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('DATA_INDEX_A','DTOTAL','数据量','DTOTAL',0)"
+        "INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('DATA_INDEX_A','DTOTAL','数据量','DTOTAL',0)",
+        "INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('DATA_INDEX_A','TBID','表编号','TBID',0)",
 
     };
     String[] initStscTab=new String[]{

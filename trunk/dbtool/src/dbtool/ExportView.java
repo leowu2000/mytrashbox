@@ -82,7 +82,6 @@ public class ExportView extends JFrame {
         bgroup.add(jRadioButtonAll);
         bgroup.add(jRadioButtonY);
         jRadioButtonAll.setSelected(true);
-
         ButtonGroup bgroup2 = new ButtonGroup();
         bgroup2.add(jRadioButton1);
         bgroup2.add(jRadioButton2);
@@ -948,9 +947,9 @@ public class ExportView extends JFrame {
                 .addGroup(ExpDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ExpDataLayout.createSequentialGroup()
                         .addComponent(MessageLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(277, 277, 277)
                         .addComponent(MessageLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 358, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                         .addComponent(MessageLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(58, 58, 58)
                         .addComponent(btnExportPerStep)
@@ -968,18 +967,18 @@ public class ExportView extends JFrame {
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(ExpDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ExpDataLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                        .addGroup(ExpDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(MessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(MessageLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(MessageLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
-                    .addGroup(ExpDataLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(ExpDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(exitBtn)
                             .addComponent(btnExport)
                             .addComponent(btnExportPerStep))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ExpDataLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                        .addGroup(ExpDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(MessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(MessageLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(MessageLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())))
         );
 
@@ -1343,10 +1342,10 @@ public class ExportView extends JFrame {
                             jComboBox1.setEnabled(true);
                         }
                         try {
-                            File saveFile = new File(txtDataDir.getText());
+                            File saveFile = new File(txtDataDir.getText()+"\\excel");
                             boolean flg=false;
                             if(saveFile.exists()){
-                               int k =  JOptionPane.showConfirmDialog(null, "导出目录:["+txtDataDir.getText()+"]下已经有数据文件,是否删除?\n"
+                               int k =  JOptionPane.showConfirmDialog(null, "导出数据文件目录:["+txtDataDir.getText()+"\\excel]已经存在,是否删除?\n"
                                        +" 点击确定删除文件，点击取消修改目录！", "提示", JOptionPane.OK_CANCEL_OPTION);
                                if(k==0){
                                    flg = FileAccess.deleteDirectory(txtDataDir.getText());
@@ -1523,17 +1522,6 @@ public class ExportView extends JFrame {
         if (selectedSnameModel.isEmpty()) {
             JOptionPane.showMessageDialog(null, "您没有选择任何测站，请选择！", "提示", 0);
         } else {
-//            DefaultListModel viewParametersMode = new DefaultListModel();
-//            viewParametersMode.addElement("导出数据参数设置");
-//            viewParametersMode.addElement("               数据库类型：       "+cbDriver.getSelectedItem());
-//            viewParametersMode.addElement("               数据库端口：       "+txtPort.getText());
-//            viewParametersMode.addElement("               数据库版本：       "+Version.getSelectedItem());
-//            viewParametersMode.addElement("               数据库服务器地址： "+txtIP.getText());
-//            viewParametersMode.addElement("               数据库服务名称：   "+DataName.getText());
-//            viewParametersMode.addElement("               用户名：          "+txtUser.getText());
-//            viewParametersMode.addElement("               导出目录:         "+txtDataDir.getText());
-//            viewParametersMode.addElement("               导出模式:         "+exportType.getSelectedItem());
-//            logList.setModel(viewParametersMode);
             tbMainSelect.remove(SelectStsc);
             tbMainSelect.add("数据导出", ExpData);
             tbMainSelect.add("数据查看", DataView);
@@ -1545,6 +1533,8 @@ public class ExportView extends JFrame {
     }//GEN-LAST:event_btnPreviewActionPerformed
     @SuppressWarnings("unchecked")
     private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
+
+//        t.start();
         btnExport.setEnabled(false);
         File dirFile = new File(txtDataDir.getText() + "\\excel\\");
         boolean bFile = dirFile.exists();
@@ -1934,7 +1924,6 @@ public class ExportView extends JFrame {
                         }
                     }
                 }
-//                stscStr = HY_DBFP_JDao.getStscd(stscStr, dbTool);
                 resulstList = HY_DBFP_JDao.findAllList(tabid, colAndNameStri[0], stscStr, type, dbTool, Version.getSelectedIndex());
             }
         } catch (Exception ex) {
@@ -2366,43 +2355,5 @@ public class ExportView extends JFrame {
     private javax.swing.JTextField txtPort;
     private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
-//class ProcessBar1 extends Thread
-//   {
-//       javax.swing.JFrame j =null;
-//       ProcessBar1(javax.swing.JFrame jframe)
-//       {
-//           j = jframe;
-//       }
-//        @Override
-//       public void run() {
-//        int i=0;
-//        while(true){
-//            try {
-//           while(true)
-//            {
-//
-//                jProgressBar1.setValue(DB.getComplete(9, DB.getCon()));
-//                java.lang.Thread.sleep(2000);
-//                if(jProgressBar1.getPercentComplete()==1.0)
-//                {
-//                    System.out.println("Complete");
-//                    jProgressBar1.setVisible(false);
-//                    javax.swing.JOptionPane.showMessageDialog(j,"UserID=1" , "Rejudge Sucess", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-//                    break;
-//                }
-//                int a = (int) (jProgressBar1.getPercentComplete() * 100);
-////                jButton1.setText("完成"+a+"%");
-//            }
-////           jButton1.setText("Rejudge");
-////           jButton1.setEnabled(true);
-//           jProgressBar1.setVisible(false);
-//           System.out.println(i);
-//           break;
-//            } catch (InterruptedException ex) {
-//                ex.printStackTrace();
-//            }
-//        }
-//
-//    }
-//   }
+
 }
