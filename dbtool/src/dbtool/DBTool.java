@@ -76,53 +76,7 @@ public class DBTool {
             if (expType != 0) {
                 clearTable(true, table);
             }
-//        String searChsql = "";
-//        String countChsql = "";
-//        if (isHaveStcdCol(table)) {
-//            searChsql = "select * from " + table + " where stcd in(" + stsc + ")";
-//            countChsql = "select count(*) from " + table + " where stcd in(" + stsc + ")";
-//        } else {
-//            searChsql = "select * from " + table;
-//            countChsql = "select count(*) from " + table;
-//        }
-//        try {
-//            if (expType != 0) {
-//                clearTable(true, table);
-//            }
-//
-//            final String tablename = getTabCnnm(jt2, table);
- /**
-             * 计算分页信息，
-             * 每页10000条数据
-             */
-            //总记录数
-//            int totalRecords = jt1.queryForInt(countChsql);
-//            int totalPage = 1;
-//            if (totalRecords % 10000 == 0) {
-//                totalPage = totalRecords / 50000;
-//            } else {
-//                totalPage = totalRecords / 50000 + 1;
-//            }
-//
-//            for (int p = 0; p < totalPage; p++) {
-//
-//                FileWriter fw = new FileWriter(saveDir + "\\excel\\" + tablename + "_" + p + ".txt");
-//                List rowList = jt1.querySP(searChsql, p * 50000 + 1, 50000);
-//
-//                Iterator it = rowList.iterator();
-//                while (it.hasNext()) {
-//                    String[] themap = (String[]) it.next();
-//                    String str = "";
-//                    for (int i = 0; i < themap.length; i++) {
-//                        if ((i + 1) == themap.length) {
-//                            str += themap[i] + "\r\n";
-//                        } else {
-//                            str += themap[i] + "\t";
-//                        }
-//                    }
-//                    fw.write(str);
-//                    str = "";
-//                }
+
             jt1.query(searChsql, new RowMapper() {
 
                 public Object mapRow(final ResultSet rs, int rowNum) throws SQLException {
@@ -175,7 +129,7 @@ public class DBTool {
 
     public boolean isHaveStcdCol(String table) {
         boolean flag = false;
-        if ("HY_STSC_A".trim().equalsIgnoreCase(table) || "STHD".trim().equalsIgnoreCase(table) || "ADDV".trim().equalsIgnoreCase(table)) {
+        if ("HY_STSC_A".trim().equalsIgnoreCase(table)||"HY_DATBDL_I".trim().equalsIgnoreCase(table) || "STHD".trim().equalsIgnoreCase(table) || "ADDV".trim().equalsIgnoreCase(table)) {
             flag = false;
         } else {
             List rows = jt2.queryForList("select * from HY_DBFP_J WHERE TBID='" + table + "' and upper(FLID)='STCD'");
@@ -355,7 +309,6 @@ public class DBTool {
         if (expType != 0) {
             ((DefaultListModel) (logList.getModel())).addElement("清空目标数据库完成");
         }
-
         // 拷贝数据
         int i = 0;
         for (String table : tables) {
@@ -364,12 +317,17 @@ public class DBTool {
 
             boolean flg = false;
             if (expType == 0) {
-                ((DefaultListModel) (logList.getModel())).addElement("正在处理表：" + table + "  【" + getTabCnnm(jt2, table) + "】 ......");
+                ((DefaultListModel) (logList.getModel())).addElement("正在分析表" + table + "  【" + getTabCnnm(jt2, table) + "】的数据 ......");
                 flg = createExcelTable(table, stscStr, saveDir, logList, expType);
 
             } else {
-//                flg = copyTable(table, stscStr, saveDir, logList, expType, version);
-                flg = copyTablePS(table, stscStr, saveDir, logList, expType, version);
+                flg = copyTable(table, stscStr, saveDir, logList, expType, version);
+//                if(expType==1){
+//                    flg = copyTable(table, stscStr, saveDir, logList, expType, version);
+//                }else{
+//                    ((DefaultListModel) (logList.getModel())).addElement("正在分析表" + table + "  【" + getTabCnnm(jt2, table) + "】的数据 ......");
+//                    flg = copyTablePS(table, stscStr, saveDir, logList, expType, version);
+//                }
             }
             if (flg) {
                 if (expType == 0) {
@@ -530,7 +488,7 @@ public class DBTool {
                             if (afterList != null && afterList.size() > 0) {
                                 for (int w = 0; w < afterList.size(); w++) {
                                     String[] values = ((String) afterList.get(w).toString()).split(",");
-                                    String insertSql = "INSERT INTO DATA_INDEX_A(ATBCNM,BSTCD,CSTNM,DTOTAL,EYEAR)VALUES('"
+                                    String insertSql = "INSERT INTO DATA_INDEX_A(TBID,ATBCNM,BSTCD,CSTNM,DTOTAL,EYEAR)VALUES('"+table+"','"
                                             + getTabCnnm(jt2, table) + "'," + values[0] + ",'" + getStscName2(jt1, values[0], version) + "','" + values[2] + "','" + values[1] + "')";
                                     jt2.execute(insertSql);
                                 }
@@ -607,7 +565,9 @@ public class DBTool {
              * 每页10000条数据
              */
             //总记录数
+
             int totalRecords = jt1.queryForInt(countChsql);
+            
             int totalPage = 1;
             if (totalRecords % 10000 == 0) {
                 totalPage = totalRecords / 50000;
@@ -668,11 +628,11 @@ public class DBTool {
                 fw = new FileWriter(saveDir + "\\excel\\dataIndex.txt", true);
             } else {
                 fw = new FileWriter(saveDir + "\\excel\\dataIndex.txt");
+                fw.write("表编号\t表名称\t测站名称\t测站编码\t年份\t数据量\r\n");
             }
-
             for (int i = 0; i < afterList.size(); i++) {
                 String[] values = ((String) afterList.get(i).toString()).split(",");
-                String str = getTabCnnm(jt2, table) + "\t";
+                String str = table+"\t"+getTabCnnm(jt2, table) + "\t";
                 for (int k = 0; k < values.length; k++) {
                     if(k==0){
                          str += getStscName2(jt1,values[0],version)+"\t"+values[k]+"\t";
@@ -739,7 +699,124 @@ public class DBTool {
             if (expType != 0) {
                 clearTable(true, table);
             }
- /**
+            final String tablename = getTabCnnm(jt2, table);
+            /**
+             * 计算分页信息，
+             * 每页10000条数据
+             */
+            //总记录数
+            int totalRecords = jt1.queryForInt(countChsql);
+            if(totalRecords==0)
+                ((DefaultListModel) (logList.getModel())).addElement("-------：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，需导出数据条数：0");
+            int totalPage = 1;
+            if (totalRecords % 10000 == 0) {
+                totalPage = totalRecords / 50000;
+            } else {
+                totalPage = totalRecords / 50000 + 1;
+            }
+            for (int p = 0; p < totalPage; p++) {
+                
+                List rowList = jt1.querySP(searChsql, p * 50000 + 1, 50000);
+                String fields = "";
+                String params = "";
+                Iterator it = rowList.iterator();
+                int c=0;
+                String sql = "";
+                while (it.hasNext()) {
+
+                   final String[] themap = (String[]) it.next();
+                   String str = "";
+                    if(c==0){
+                        FileWriter fw = new FileWriter(saveDir + "\\excel\\" + tablename + "_" + p + ".txt");
+                         for (int i = 0; i < themap.length; i++) {
+                            fields += themap[i] + ",";
+                            params += "?,";
+                            if ((i + 1) == themap.length) {
+                                str += themap[i] + "\r\n";
+                            } else {
+                                str += themap[i] + "\t";
+                            }
+                        }
+                         fw.write(str);
+                         fw.close();
+                         sql = "insert into " + table + " (" + fields.substring(0, fields.length() - 1) + ") values (" + params.substring(0, params.length() - 1) + ")";
+                    }else{
+                       final FileWriter fw2 = new FileWriter(saveDir + "\\excel\\" + tablename + "_" + p + ".txt",true);
+                        jt2.execute(sql, new PreparedStatementCallback() {
+
+                            public Object doInPreparedStatement(PreparedStatement pStat) throws SQLException,
+                                    DataAccessException {
+
+                                String substr="";
+                                for (int i = 1; i <= themap.length; i++) {
+                                    
+                                    if (i == themap.length) {
+                                        substr += themap[i-1] + "\r\n";
+                                    } else {
+                                        substr += themap[i-1] + "\t";
+                                    }
+                                    try {
+                                        fw2.write(substr);
+                                        substr="";
+                                    } catch (IOException ex) {
+                                        Logger.getLogger(DBTool.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                    Object o = themap[i-1];
+                                    if (o instanceof Blob) {
+                                        pStat.setObject(i, ((Blob) o).getBytes(1, 100000000));//100mb
+                                    } else {
+                                        pStat.setObject(i, themap[i-1]);
+                                    }
+                                }
+                                pStat.execute();
+                                return null;
+                            }
+                        });
+                        fw2.close();
+                    }
+                     c++;
+                }
+                 if (p ==0) {
+                    ((DefaultListModel) (logList.getModel())).addElement("-------：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，需导出数据条数："+totalRecords);
+                    ((DefaultListModel) (logList.getModel())).addElement("正在导出------ " + p * 50000+" 至 "+(p+1) * 50000+"    生成文件:["+saveDir + "\\excel\\" + tablename + "_" + p + ".txt]");
+                } else {
+                    ((DefaultListModel) (logList.getModel())).addElement("正在导出------ " + p * 50000+" 至 "+(p+1) * 50000+"    生成文件:["+saveDir + "\\excel\\" + tablename + "_" + p + ".txt]");
+                }
+                
+                
+            }
+//            if (expType == 2) {
+//                    createExcelTable(table, stsc, saveDir, logList, expType);
+//                }
+        } catch (Exception e) {
+            e.printStackTrace();
+            expSuccessModel.removeElement(getTabCnnm(jt2, table));
+            if ("".trim().equals(errorTab)) {
+                errorTab = getTabCnnm(jt2, table);
+            } else {
+                errorTab += "," + getTabCnnm(jt2, table);
+            }
+            return false;
+        }
+        return true;
+    }
+
+     public boolean copyTablePSOnly(final String table, String stsc, String saveDir, JList logList, int expType, int version) {
+
+        String searChsql = "";
+        String countChsql = "";
+        if (isHaveStcdCol(table)) {
+            searChsql = "select * from " + table + " where stcd in(" + stsc + ")";
+            countChsql = "select count(*) from " + table + " where stcd in(" + stsc + ")";
+        } else {
+            searChsql = "select * from " + table;
+            countChsql = "select count(*) from " + table;
+        }
+        try {
+            if (expType != 0) {
+                clearTable(true, table);
+            }
+            /**
              * 计算分页信息，
              * 每页10000条数据
              */
@@ -752,7 +829,7 @@ public class DBTool {
                 totalPage = totalRecords / 50000 + 1;
             }
             for (int p = 0; p < totalPage; p++) {
-//                FileWriter fw = new FileWriter(saveDir + "\\excel\\" + tablename + "_" + p + ".txt");
+
                 List rowList = jt1.querySP(searChsql, p * 50000 + 1, 50000);
                 String fields = "";
                 String params = "";
@@ -760,7 +837,9 @@ public class DBTool {
                 int c=0;
                 String sql = "";
                 while (it.hasNext()) {
+
                    final String[] themap = (String[]) it.next();
+                   String str = "";
                     if(c==0){
                          for (int i = 0; i < themap.length; i++) {
                             fields += themap[i] + ",";
@@ -787,21 +866,18 @@ public class DBTool {
                     }
                      c++;
                 }
-                 if (p + 1 == totalPage) {
-                    ((DefaultListModel) (logList.getModel())).addElement("正在导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，导出：" + p * 50000+" 至 "+totalRecords);
+                 if (p ==0) {
+                    ((DefaultListModel) (logList.getModel())).addElement("正在导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，需导出数据条数："+totalRecords);
+                    ((DefaultListModel) (logList.getModel())).addElement("正在导出---------------------------- " + p * 50000+" 至 "+(p+1) * 50000);
                 } else {
-                    if(p==totalPage||p==0){
-                    ((DefaultListModel) (logList.getModel())).addElement("正在导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，导出：" + p * 50000+" 至 "+(p+1) * 50000);
-                    }else{
-                        ((DefaultListModel) (logList.getModel())).addElement("---------------------------------------------------------------- 导出：" + p * 50000+" 至 "+(p+1) * 50000);
-                    }
+                    ((DefaultListModel) (logList.getModel())).addElement("正在导出---------------------------- " + p * 50000+" 至 "+(p+1) * 50000);
                 }
-                
-                
+
+
             }
-            if (expType == 2) {
-                    createExcelTable(table, stsc, saveDir, logList, expType);
-                }
+//            if (expType == 2) {
+//                    createExcelTable(table, stsc, saveDir, logList, expType);
+//                }
         } catch (Exception e) {
             e.printStackTrace();
             expSuccessModel.removeElement(getTabCnnm(jt2, table));
@@ -814,4 +890,6 @@ public class DBTool {
         }
         return true;
     }
+
+
 }
