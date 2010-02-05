@@ -11,7 +11,7 @@ if("001".equals(emrole)){
 "    children:["+
 "        {text:'项目管理', id:'51', hrefTarget:'main', icon:'images/icons/xiugai.gif', href:'pj.do?action=list', leaf:true},"+
 "        {text:'部门管理', id:'52', hrefTarget:'main', icon:'images/icons/xiugai.gif', href:'depart.do?action=list', leaf:true},"+
-"        {text:'人员管理', id:'53', hrefTarget:'main', icon:'images/icons/xiugai.gif', href:'em.do?action=frame_infolist&manage=manage', leaf:true}"+
+"        {text:'用户管理', id:'53', hrefTarget:'main', icon:'images/icons/xiugai.gif', href:'em.do?action=frame_infolist', leaf:true}"+
 "        ]"+
 "    },";
 }
@@ -44,9 +44,15 @@ if("001".equals(emrole)||"002".equals(emrole)){
 "        {text:'承担任务情况', id:'23', hrefTarget:'main', icon:'images/icons/2.png', href:'pj.do?action=frame_cdrwqk', leaf:true}"+
 "        ]"+
 "    },"+
+"    {text:'人事管理', id:'7', leaf:false, icon:'images/icons/4.png',"+ 
+"    children:["+
+"        {text:'人员资料', id:'71', hrefTarget:'main', icon:'images/icons/4.png', href:'em.do?action=frame_manage', leaf:true}"+
+"        ]"+
+"    },"+
 "    {text:'费用管理', id:'3', leaf:false, icon:'images/icons/3.png',"+ 
 "    children:["+
-"        {text:'课题费用', id:'31', hrefTarget:'main', icon:'images/icons/3.png', href:'pj.do?action=cost', leaf:true}"+
+"        {text:'固定资产管理', id:'31', hrefTarget:'main', icon:'images/icons/3.png', href:'pj.do?action=cost', leaf:true},"+
+"        {text:'课题费用', id:'32', hrefTarget:'main', icon:'images/icons/3.png', href:'pj.do?action=cost', leaf:true}"+
 "        ]"+
 "    },";
 }

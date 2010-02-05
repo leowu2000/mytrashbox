@@ -23,25 +23,44 @@ public class EmployeeDAO extends CommonDAO{
 	}
 	
 	/**
-	 * 获取雇员信息
-	 * @param emid 雇员id
+	 * 获取人员信息
+	 * @param emid 人员id
 	 * @param departcode 部门编码
+	 * @param emname 模糊检索人员名称
+	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String emid, String departcode, int page){
-		Map mapEm = findByEmId(emid);
-		
+	public PageList findAll(String emid, String departcode, String emname, int page){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
+		List listChildDepart = getChildDepart(emid);
 		
-		if(!"003".equals(mapEm.get("ROLECODE").toString())){//管理员和领导看所选部门所有人员
-			sql = "select * from VIEW_EMP where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + departcode + "') order by DEPART,LEVEL";
-		}else {//普通员工看自己的
-			sql = "select * from VIEW_EMP where CODE='" + mapEm.get("CODE") + "' order by DEPART,LEVEL";
+		if("0".equals(departcode)){//全部部门
+			List listDepart = getChildDepart(emid);
+			String departs = "";
+			for(int i=0;i<listDepart.size();i++){
+				Map map = (Map)listDepart.get(i);
+				if(i==0){
+					departs = "'" + map.get("CODE").toString() + "'";
+				}else {
+					departs = departs + ",'" + map.get("CODE").toString() + "'";
+				}
+			}
+			if("".equals(emname)){//没有名字过滤
+				sql = "select * from VIEW_EMP where CODE in (select CODE from EMPLOYEE where DEPARTCODE in (" + departs + ")) order by DEPART desc,LEVEL";
+			}else {
+				sql = "select * from VIEW_EMP where CODE in (select CODE from EMPLOYEE where DEPARTCODE in (" + departs + ")) and NAME like '%" + emname + "%' order by DEPART desc,LEVEL ";
+			}
+		}else {
+			if("".equals(emname)){
+				sql = "select * from VIEW_EMP where CODE in (select CODE from EMPLOYEE where DEPARTCODE = '" + departcode + "') order by DEPART desc,LEVEL";
+			}else {
+				sql = "select * from VIEW_EMP where CODE in (select CODE from EMPLOYEE where DEPARTCODE = '" + departcode + "') and NAME like '%" + emname + "%' order by DEPART desc,LEVEL";
+			}
 		}
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
@@ -241,4 +260,5 @@ public class EmployeeDAO extends CommonDAO{
 		
 		return em;
 	}
+	
 }

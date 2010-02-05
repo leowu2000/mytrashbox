@@ -420,4 +420,41 @@ comment on column FUNCROLE.ROLECODE is
 comment on column FUNCROLE.FUNCCODE is
 '功能编码';
 
+/*==============================================================*/
+/* Table: ATTACHMENT                                            */
+/*==============================================================*/
+create table ATTACHMENT  (
+   ID                   VARCHAR(32)                     not null,
+   RTABLE               VARCHAR(50),
+   RCOLUMN              VARCHAR(50),
+   RVALUE               VARCHAR(50),
+   TYPE                 VARCHAR(20),
+   FNAME                VARCHAR(100),
+   FTYPE                VARCHAR(10),
+   CONTENT              BLOB,
+   constraint PK_ATTACHMENT primary key (ID)
+);
 
+comment on table ATTACHMENT is
+'附件表';
+
+comment on column ATTACHMENT.RTABLE is
+'关联表';
+
+comment on column ATTACHMENT.RCOLUMN is
+'关联字段';
+
+comment on column ATTACHMENT.RVALUE is
+'关联值';
+
+comment on column ATTACHMENT.TYPE is
+'附件类型(1:照片;2:文章)';
+
+comment on column ATTACHMENT.FNAME is
+'文件名';
+
+comment on column ATTACHMENT.FTYPE is
+'文件类型';
+
+comment on column ATTACHMENT.CONTENT is
+'文件内容';
