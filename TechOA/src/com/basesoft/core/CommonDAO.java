@@ -1,9 +1,25 @@
 package com.basesoft.core;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.support.AbstractLobCreatingPreparedStatementCallback;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobCreator;
+import org.springframework.jdbc.support.lob.LobHandler;
+import org.springframework.web.multipart.MultipartFile;
+
 
 public class CommonDAO {
 	public JdbcTemplate jdbcTemplate;
@@ -153,6 +169,85 @@ public class CommonDAO {
 	 */
 	public List getAllEmployee(){
 		return jdbcTemplate.queryForList("select NAME,CODE from EMPLOYEE order by DEPARTCODE");
+	}
+	
+	/**
+	 * 存储附件
+	 * @param rtable 关联表
+	 * @param rcolumn 关联字段
+	 * @param rvalue 关联值
+	 * @param type 类型
+	 * @param fname 文件名
+	 * @param f 文件
+	 */
+	public void addAttach(String rtable, String rcolumn, String rvalue, String type, String fname, MultipartFile f)throws Exception{
+		final InputStream is = f.getInputStream();
+		final int length = (int)f.getSize();
+		final String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+		final String r_table = rtable;
+		final String r_column = rcolumn;
+		final String r_value = rvalue;
+		final String _type = type;
+		final String f_name = fname;
+		final String f_type = fname.substring(fname.length()-3,fname.length());
+		
+		
+		final LobHandler lobHandler=new DefaultLobHandler();
+		jdbcTemplate.execute("insert into ATTACHMENT values (?,?,?,?,?,?,?,?)",
+			new AbstractLobCreatingPreparedStatementCallback(lobHandler){ 
+				protected void setValues(PreparedStatement pstmt,LobCreator lobCreator) throws SQLException{
+					pstmt.setString(1, uuid);
+					pstmt.setString(2, r_table);
+					pstmt.setString(3, r_column);
+					pstmt.setString(4, r_value);
+					pstmt.setString(5, _type);
+					pstmt.setString(6, f_name);
+					pstmt.setString(7, f_type);
+					lobCreator.setBlobAsBinaryStream(pstmt,8,is,length);
+				}
+			}
+		);
+		is.close();
+	}
+	
+	/**
+	 * 获取附件信息
+	 * @param rtable
+	 * @param rcolumn
+	 * @param rvalue
+	 * @return
+	 */
+	public List<?> getAttach(String rtable, String rcolumn, String rvalue){
+		return jdbcTemplate.queryForList("select * from ATTACHMENT where RTABLE='" + rtable + "' and RCOLUMN='" + rcolumn + "' and RVALUE='" + rvalue + "'");
+	}
+	
+	public Map getPhoto(String rtable, String rcolumn, String rvalue){
+		String sql = "select CONTENT from ATTACHMENT where RTABLE ='" + rtable + "' and RCOLUMN='" + rcolumn + "' and  RVALUE='" + rvalue + "'";
+		Map map = (Map) jdbcTemplate.execute(sql, new CallableStatementCallback() {   
+			public Object doInCallableStatement(CallableStatement stmt)throws SQLException,DataAccessException {   
+				ResultSet rs = stmt.executeQuery();   
+				Map map = new HashMap();   
+				InputStream inputStream = null;   
+				String name = "";   
+				
+				rs.next();
+				inputStream = rs.getBinaryStream("CONTENT");// 读取blob   
+				byte[] b = new byte[7500000];
+				try{
+					inputStream.read(b);
+					inputStream.close();
+				}catch(IOException e){
+					System.out.println(e);
+				}
+				map.put("lxzp", b);
+				
+				rs.close();
+				
+				return map;  
+			}   
+				  
+		});   
+		return map; 
 	}
 	
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate){
