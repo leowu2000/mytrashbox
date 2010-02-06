@@ -193,7 +193,7 @@ public class CommonDAO {
 		
 		
 		final LobHandler lobHandler=new DefaultLobHandler();
-		jdbcTemplate.execute("insert into ATTACHMENT values (?,?,?,?,?,?,?,?)",
+		jdbcTemplate.execute("insert into ATTACHMENT values (?,?,?,?,?,?,?,?,?)",
 			new AbstractLobCreatingPreparedStatementCallback(lobHandler){ 
 				protected void setValues(PreparedStatement pstmt,LobCreator lobCreator) throws SQLException{
 					pstmt.setString(1, uuid);
@@ -204,6 +204,7 @@ public class CommonDAO {
 					pstmt.setString(6, f_name);
 					pstmt.setString(7, f_type);
 					lobCreator.setBlobAsBinaryStream(pstmt,8,is,length);
+					pstmt.setInt(9, length);
 				}
 			}
 		);
@@ -217,13 +218,17 @@ public class CommonDAO {
 	 * @param rvalue
 	 * @return
 	 */
-	public List<?> getAttach(String rtable, String rcolumn, String rvalue){
-		return jdbcTemplate.queryForList("select * from ATTACHMENT where RTABLE='" + rtable + "' and RCOLUMN='" + rcolumn + "' and RVALUE='" + rvalue + "'");
+	public List<?> getAttachs(String rtable, String rcolumn, String rvalue, String type){
+		return jdbcTemplate.queryForList("select * from ATTACHMENT where RTABLE='" + rtable + "' and RCOLUMN='" + rcolumn + "' and RVALUE='" + rvalue + "' and TYPE='" + type + "'");
 	}
 	
-	public Map getPhoto(String rtable, String rcolumn, String rvalue){
-		String sql = "select CONTENT from ATTACHMENT where RTABLE ='" + rtable + "' and RCOLUMN='" + rcolumn + "' and  RVALUE='" + rvalue + "'";
-		Map map = (Map) jdbcTemplate.execute(sql, new CallableStatementCallback() {   
+	/**
+	 * 获取附件内容
+	 * @param contentSql
+	 * @return
+	 */
+	public Map getContent(String contentSql){
+		Map map = (Map) jdbcTemplate.execute(contentSql, new CallableStatementCallback() {   
 			public Object doInCallableStatement(CallableStatement stmt)throws SQLException,DataAccessException {   
 				ResultSet rs = stmt.executeQuery();   
 				Map map = new HashMap();   
@@ -232,14 +237,16 @@ public class CommonDAO {
 				
 				rs.next();
 				inputStream = rs.getBinaryStream("CONTENT");// 读取blob   
-				byte[] b = new byte[7500000];
+				byte[] b = new byte[rs.getInt("FSIZE")];
 				try{
 					inputStream.read(b);
 					inputStream.close();
 				}catch(IOException e){
 					System.out.println(e);
 				}
-				map.put("lxzp", b);
+				
+				map.put("FNAME", rs.getString("FNAME"));
+				map.put("ATTACH", b);
 				
 				rs.close();
 				

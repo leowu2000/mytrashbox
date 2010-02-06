@@ -30,7 +30,6 @@ String emname = request.getAttribute("emname").toString();
 	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
-			<td>详细信息</td>
 			<td>工号</td>
     		<td>姓名</td>
     		<td>部门</td>
@@ -40,9 +39,8 @@ String emname = request.getAttribute("emname").toString();
     	Map mapEm = (Map)listEm.get(i);
 %>    	
 		<tr align="center">
-			<td><a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>">查看并编辑</a></td>
-			<td>&nbsp;<%=mapEm.get("CODE")==null?"":mapEm.get("CODE") %></td>
-			<td>&nbsp;<%=mapEm.get("NAME")==null?"":mapEm.get("NAME") %></td>
+			<td>&nbsp;<a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>"><%=mapEm.get("CODE")==null?"":mapEm.get("CODE") %></a></td>
+			<td>&nbsp;<a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>"><%=mapEm.get("NAME")==null?"":mapEm.get("NAME") %></a></td>
 			<td>&nbsp;<%=mapEm.get("DEPART")==null?"":mapEm.get("DEPART") %></td>
 		</tr>
 <%  } %>

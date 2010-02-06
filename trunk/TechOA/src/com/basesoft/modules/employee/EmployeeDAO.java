@@ -1,10 +1,20 @@
 package com.basesoft.modules.employee;
 
+import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import org.springframework.jdbc.core.support.AbstractLobCreatingPreparedStatementCallback;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobCreator;
+import org.springframework.jdbc.support.lob.LobHandler;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.basesoft.core.CommonDAO;
 import com.basesoft.core.PageInfo;
@@ -261,4 +271,53 @@ public class EmployeeDAO extends CommonDAO{
 		return em;
 	}
 	
+	/**
+	 * 修改照片
+	 * @param rtable 关联表
+	 * @param rcolumn 关联字段
+	 * @param rvalue 关联值
+	 * @param type 类型
+	 * @param fname 文件名
+	 * @param f 文件
+	 */
+	public void updatePhoto(String rtable, String rcolumn, String rvalue, String type, String fname, MultipartFile f)throws Exception{
+		final InputStream is = f.getInputStream();
+		final int length = (int)f.getSize();
+		final String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+		final String r_table = rtable;
+		final String r_column = rcolumn;
+		final String r_value = rvalue;
+		final String _type = type;
+		final String f_name = fname;
+		final String f_type = fname.substring(fname.length()-3,fname.length());
+		
+		
+		final LobHandler lobHandler=new DefaultLobHandler();
+		jdbcTemplate.execute("update ATTACHMENT set FNAME=?, FTYPE=?, FSIZE=?, CONTENT=?  where RTABLE='" + r_table + "' and RCOLUMN='" + r_column + "' and RVALUE='" + r_value + "' and TYPE='" + _type + "'",
+			new AbstractLobCreatingPreparedStatementCallback(lobHandler){ 
+				protected void setValues(PreparedStatement pstmt,LobCreator lobCreator) throws SQLException{
+					pstmt.setString(1, f_name);
+					pstmt.setString(2, f_type);
+					pstmt.setInt(3, length);
+					lobCreator.setBlobAsBinaryStream(pstmt,4,is,length);
+				}
+			}
+		);
+		is.close();
+	}
+	
+	/**
+	 * 
+	 * @param emcode 人员编码
+	 * @return
+	 */
+	public boolean havaPhoto(String empcode){
+		int count = jdbcTemplate.queryForInt("select count(*)from ATTACHMENT where RTABLE='EMPLOYEE' and RCOLUMN='CODE' and RVALUE='" + empcode + "' and type='1'");
+		
+		if(count==1){
+			return true;
+		}else {
+			return false;
+		}
+	}
 }

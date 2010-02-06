@@ -46,13 +46,18 @@ if("001".equals(emrole)||"002".equals(emrole)){
 "    },"+
 "    {text:'人事管理', id:'7', leaf:false, icon:'images/icons/4.png',"+ 
 "    children:["+
-"        {text:'人员资料', id:'71', hrefTarget:'main', icon:'images/icons/4.png', href:'em.do?action=frame_manage', leaf:true}"+
+"        {text:'人事管理', id:'71', hrefTarget:'main', icon:'images/icons/4.png', href:'em.do?action=frame_manage', leaf:true}"+
+"        ]"+
+"    },"+
+"    {text:'固定资产', id:'8', leaf:false, icon:'images/icons/4.png',"+ 
+"    children:["+
+"        {text:'固定资产管理', id:'81', hrefTarget:'main', icon:'images/icons/4.png', href:'em.do?action=frame_manage', leaf:true},"+
+"        {text:'固定资产查询', id:'82', hrefTarget:'main', icon:'images/icons/4.png', href:'em.do?action=frame_manage', leaf:true}"+
 "        ]"+
 "    },"+
 "    {text:'费用管理', id:'3', leaf:false, icon:'images/icons/3.png',"+ 
 "    children:["+
-"        {text:'固定资产管理', id:'31', hrefTarget:'main', icon:'images/icons/3.png', href:'pj.do?action=cost', leaf:true},"+
-"        {text:'课题费用', id:'32', hrefTarget:'main', icon:'images/icons/3.png', href:'pj.do?action=cost', leaf:true}"+
+"        {text:'课题费用', id:'31', hrefTarget:'main', icon:'images/icons/3.png', href:'pj.do?action=cost', leaf:true}"+
 "        ]"+
 "    },";
 }

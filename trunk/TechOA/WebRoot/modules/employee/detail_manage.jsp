@@ -8,6 +8,7 @@ List listChildDepart = (List)request.getAttribute("listChildDepart");
 List listMajor = (List)request.getAttribute("listMajor");
 List listDegree = (List)request.getAttribute("listDegree");
 List listPro = (List)request.getAttribute("listPro");
+String havePhoto = request.getAttribute("havePhoto").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -57,7 +58,7 @@ Ext.onReady(function(){
     }
     
     function onPhotoClick(btn){
-    	action = url+'?action=attach&type=1&empcode=<%=mapEm.get("CODE") %>';
+    	action = url+'?action=addattach&type=1&empcode=<%=mapEm.get("CODE") %>';
     	win1.setTitle('添加/修改照片');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
@@ -82,11 +83,8 @@ Ext.onReady(function(){
 				Ext.get('depart').set({'value':data.item.departcode});
 				Ext.get('emname').set({'value':data.item.name});
 				Ext.get('mainjob').set({'value':data.item.mainjob});
-				Ext.get('secjob').set({'value':data.item.secjob});
 				Ext.get('level').set({'value':data.item.level});
 				Ext.get('email').set({'value':data.item.email});
-				Ext.get('blog').set({'value':data.item.blog});
-				Ext.get('selfweb').set({'value':data.item.selfweb});
 				Ext.get('stcphone').set({'value':data.item.stcphone});
 				Ext.get('mobphone').set({'value':data.item.mobphone});
 				Ext.get('address').set({'value':data.item.address});
@@ -117,7 +115,7 @@ Ext.onReady(function(){
     	<tr align="center" height="30">
     		<td bgcolor="#E0F1F8"  class="b_tr">姓名</td>
     		<td>&nbsp;<%=mapEm.get("NAME")==null?"":mapEm.get("NAME") %></td>
-    		<td bgcolor="#E0F1F8"  class="b_tr">人员编号</td>
+    		<td bgcolor="#E0F1F8"  class="b_tr">工号</td>
     		<td>&nbsp;<%=mapEm.get("CODE")==null?"":mapEm.get("CODE") %></td>
     	</tr>
     	<tr align="center" height="30">
@@ -160,18 +158,31 @@ Ext.onReady(function(){
     
     <table width="55%" align="center" vlign="middle" id="the-table">
       <tr height="30"  bgcolor="#E0F1F8"  class="b_tr" align="center">
-      	<td width="40%">照片</td>
+      	<td width="200">照片</td>
       	<td colspan="3">发表文章</td>
       </tr>
       <tr>
-      	<td height="200" rowspan="<%=listAttach.size() %>"><image src="em.do?action=photo&empcode=<%=mapEm.get("CODE") %>"></td>
+      	<td height="200" rowspan="<%=listAttach.size()+1 %>">
+<%
+	if("true".equals(havePhoto)){
+%>
+      		<image src="em.do?action=photo&empcode=<%=mapEm.get("CODE") %>"  height="200" width="200">
+<%
+	}else {
+%>
+			<image src="../../images/noPhoto.jpg" height="200" width="200">
+<%
+	}
+%>		
+      	</td>
+      	<td style="display:none;"></td>
       </tr>
 <%
 	for(int i=0;i<listAttach.size();i++){
 		Map mapAttach = (Map)listAttach.get(i);
 %>      
      <tr>
-     	<td>test</td>
+     	<td><a href="em.do?action=download&id=<%=mapAttach.get("ID") %>"><%=mapAttach.get("FNAME") %></a></td>
      </tr> 
 <%
 	}

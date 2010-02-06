@@ -1,5 +1,7 @@
 package com.basesoft.modules.employee;
 
+import java.io.BufferedOutputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +96,7 @@ public class EmployeeController extends CommonController {
 			
 			mv.addObject("listChildDepart", listChildDepart);
 			mv.addObject("depart", depart);
-		}else if("list_manage".equals(action)){
+		}else if("list_manage".equals(action)){//人事管理列表
 			mv = new ModelAndView("modules/employee/list_manage");
 			
 			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
@@ -105,7 +107,7 @@ public class EmployeeController extends CommonController {
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
-		}else if("manage".equals(action)){//人事管理
+		}else if("manage".equals(action)){//人事管理详细信息
 			mv = new ModelAndView("modules/employee/detail_manage");
 			
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
@@ -113,21 +115,22 @@ public class EmployeeController extends CommonController {
 			//获取人员信息
 			Map mapEm = emDAO.findByCode("VIEW_EMP", empcode);
 			//获取附件信息
-			List listAttach = emDAO.getAttach("EMPLOYEE", "CODE", empcode);
-			
+			List listAttach = emDAO.getAttachs("EMPLOYEE", "CODE", empcode, "2");
 			List listChildDepart = emDAO.getChildDepart(emid);
 			//获取专业、学位、职称列表
 			List listMajor = emDAO.getDICTByType("1");
 			List listDegree = emDAO.getDICTByType("2");
 			List listPro = emDAO.getDICTByType("3");
+			//获取是否有照片
+			boolean havaPhoto = emDAO.havaPhoto(empcode);
 			
 			mv.addObject("listChildDepart", listChildDepart);
 			mv.addObject("listMajor", listMajor);
 			mv.addObject("listDegree", listDegree);
 			mv.addObject("listPro", listPro);
-			
 			mv.addObject("mapEm", mapEm);
 			mv.addObject("listAttach", listAttach);
+			mv.addObject("havePhoto", havaPhoto);
 		}else if("query".equals(action)){//查找返回修改
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			Employee employee = emDAO.findById(id);
@@ -166,33 +169,56 @@ public class EmployeeController extends CommonController {
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", ""); 
 			response.sendRedirect("em.do?action=manage&empcode="+empcode);
 			return null;
-		}else if("addattach".equals(action)){
+		}else if("addattach".equals(action)){//新增附件
 			String type = ServletRequestUtils.getStringParameter(request, "type", "");  
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", ""); 
+			
+			boolean havePhoto = emDAO.havaPhoto(empcode);
 			
 			MultipartHttpServletRequest mpRequest = (MultipartHttpServletRequest)request;
 			MultipartFile file = mpRequest.getFile("file");
 			
 			if(file!=null){
 				if(file.getSize()!=0){
-					emDAO.addAttach("EMPLOYEE", "CODE", empcode, type, file.getOriginalFilename(), file);
+					if(havePhoto&&"1".equals(type)){
+						emDAO.updatePhoto("EMPLOYEE", "CODE", empcode, type, file.getOriginalFilename(), file);
+					}else {
+						emDAO.addAttach("EMPLOYEE", "CODE", empcode, type, file.getOriginalFilename(), file);
+					}
 				}
 			}
 			
 			response.sendRedirect("em.do?action=manage&empcode="+empcode);
 			return null;
-		}else if("photo".equals(action)){
+		}else if("photo".equals(action)){//image的src
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", ""); 
 			
-			Map map = emDAO.getPhoto("EMPLOYEE", "CODE", empcode);
+			Map map = emDAO.getContent("select * from ATTACHMENT where RTABLE ='EMPLOYEE' and RCOLUMN='CODE' and  RVALUE='" + empcode + "' and TYPE='1'");
 			
-			byte[] b = (byte[])map.get("photo");
+			byte[] b = (byte[])map.get("ATTACH");
 			
 			response.setHeader("Pragma", "No-cache");
 			response.setHeader("Cache-Control", "no-cache");
 			response.setDateHeader("Expiresponse", 0L);
 			response.setContentType("image/*");
 			response.getOutputStream().write(b);
+			response.getOutputStream().close();
+			return null;
+		}else if("download".equals(action)){//下载附件
+			String id = ServletRequestUtils.getStringParameter(request, "id", ""); 
+			
+			Map map = emDAO.getContent("select * from ATTACHMENT where ID='" + id + "'");
+			
+			byte[] b = (byte[])map.get("ATTACH");
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expiresponse", 0L);
+			response.setContentType("application/*");
+			response.setHeader("Content-Disposition", "attachment;filename=" + new String(map.get("FNAME").toString().getBytes("GBK"),"ISO8859-1"));
+
+			response.getOutputStream().write(b);
+			response.getOutputStream().flush();
 			response.getOutputStream().close();
 			return null;
 		}else if("frame_workcheck".equals(action)){//考勤frame
