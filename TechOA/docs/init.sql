@@ -432,6 +432,7 @@ create table ATTACHMENT  (
    FNAME                VARCHAR(100),
    FTYPE                VARCHAR(10),
    CONTENT              BLOB,
+   FSIZE				INTEGER,
    constraint PK_ATTACHMENT primary key (ID)
 );
 
@@ -458,3 +459,69 @@ comment on column ATTACHMENT.FTYPE is
 
 comment on column ATTACHMENT.CONTENT is
 '文件内容';
+
+comment on column ATTACHMENT.CONTENT is
+'文件大小';
+
+/*==============================================================*/
+/* Table: ASSETS                                                */
+/*==============================================================*/
+create table ASSETS  (
+   ID                   VARCHAR(32)                     not null,
+   CODE                 VARCHAR(20),
+   NAME                 VARCHAR(50),
+   MODEL                VARCHAR(50),
+   BUYDATE              DATE,
+   PRODUCDATE           DATE,
+   BUYCOST              NUMERIC(15,2),
+   NOWCOST              NUMERIC(15,2),
+   LIFE                 INTEGER,
+   STATUS               VARCHAR(10),
+   DEPARTCODE           VARCHAR(20),
+   EMPCODE              VARCHAR(20),
+   LENDDATE             DATE,
+   constraint PK_ASSETS primary key (ID)
+);
+
+comment on table ASSETS is
+'固定资产表';
+
+comment on column ASSETS.ID is
+'ID';
+
+comment on column ASSETS.CODE is
+'编码';
+
+comment on column ASSETS.NAME is
+'设备名称';
+
+comment on column ASSETS.MODEL is
+'设备型号';
+
+comment on column ASSETS.BUYDATE is
+'购买日期';
+
+comment on column ASSETS.PRODUCDATE is
+'出厂日期';
+
+comment on column ASSETS.BUYCOST is
+'购买价格';
+
+comment on column ASSETS.NOWCOST is
+'折旧价格';
+
+comment on column ASSETS.LIFE is
+'预计使用年限';
+
+comment on column ASSETS.STATUS is
+'设备状态(1:库中;2:借出;3:损坏)';
+
+comment on column ASSETS.DEPARTCODE is
+'借出部门';
+
+comment on column ASSETS.EMPCODE is
+'借出人';
+
+comment on column ASSETS.LENDDATE is
+'借出日期';
+

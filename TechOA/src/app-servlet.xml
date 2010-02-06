@@ -13,6 +13,7 @@
 				/pj.do=ProjectController
 				/workreport.do=WorkReportController
 				/depart.do=DepartmentController
+				/assets.do=AssetsController
 			</value>
 		</property>
 	</bean>
@@ -38,5 +39,6 @@
 	<bean name="ProjectController" class="com.basesoft.modules.project.ProjectController" />
 	<bean name="WorkReportController" class="com.basesoft.modules.workreport.WorkReportController" />
 	<bean name="DepartmentController" class="com.basesoft.modules.depart.DepartmentController" />
+	<bean name="AssetsController" class="com.basesoft.modules.assets.AssetsController"></bean>
 </beans>
 

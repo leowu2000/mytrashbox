@@ -23,7 +23,7 @@
   		tb.add('选择部门');
   		tb.add(document.getElementById('seldepart'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('按名称模糊查询');
+  		tb.add('按名字模糊查询');
   		tb.add(document.getElementById('emname'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
