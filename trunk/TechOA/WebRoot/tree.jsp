@@ -49,10 +49,10 @@ if("001".equals(emrole)||"002".equals(emrole)){
 "        {text:'人事管理', id:'71', hrefTarget:'main', icon:'images/icons/4.png', href:'em.do?action=frame_manage', leaf:true}"+
 "        ]"+
 "    },"+
-"    {text:'固定资产', id:'8', leaf:false, icon:'images/icons/4.png',"+ 
+"    {text:'固定资产', id:'8', leaf:false, icon:'images/icons/6.png',"+ 
 "    children:["+
-"        {text:'固定资产管理', id:'81', hrefTarget:'main', icon:'images/icons/4.png', href:'em.do?action=frame_manage', leaf:true},"+
-"        {text:'固定资产查询', id:'82', hrefTarget:'main', icon:'images/icons/4.png', href:'em.do?action=frame_manage', leaf:true}"+
+"        {text:'固定资产查询', id:'81', hrefTarget:'main', icon:'images/icons/6.png', href:'assets.do?action=frame_info&manage=0', leaf:true},"+
+"        {text:'固定资产管理', id:'82', hrefTarget:'main', icon:'images/icons/6.png', href:'assets.do?action=frame_info&manage=1', leaf:true}"+
 "        ]"+
 "    },"+
 "    {text:'费用管理', id:'3', leaf:false, icon:'images/icons/3.png',"+ 

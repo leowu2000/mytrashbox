@@ -274,6 +274,31 @@ public class EmployeeController extends CommonController {
 			
 			response.sendRedirect("em.do?action=workcheck&datepick=" + datepick + "&depart=" + depart);
 			return null;
+		}else if("departAjax".equals(action)){
+			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
+			
+			List listEm = emDAO.findEmployeeByDepart(depart, "00000");
+
+			StringBuffer sb = new StringBuffer();
+			
+			sb.append("<select name=\"empcode\">");
+			for(int i=0;i<listEm.size();i++){
+				Map mapEm = (Map)listEm.get(i);
+				sb.append("<OPTION VALUE=\"")
+				  .append(mapEm.get("CODE"))
+				  .append("\">")
+				  .append(mapEm.get("NAME"))
+				  .append("</OPTION>");
+			}
+			sb.append("</select>");
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=UTF-8");
+			response.getWriter().write(sb.toString());
+			response.getWriter().close();
+			return null;
 		}
 		
 		return mv;
