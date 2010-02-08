@@ -92,7 +92,7 @@ public class EmployeeDAO extends CommonDAO{
 	 * @param emid 员工id
 	 * @return
 	 */
-	public List<?> fingEmployeeByDepart(String depart, String emid){
+	public List<?> findEmployeeByDepart(String depart, String emid){
 		if("0".equals(depart)){
 			//获取下级部门列表
 			List listDepart = getChildDepart(emid);
@@ -149,7 +149,7 @@ public class EmployeeDAO extends CommonDAO{
 			
 			returnList.add(returnMap);
 		}else {//领导和管理员看整个部门的
-			List listEmployee = fingEmployeeByDepart(depart, emid);
+			List listEmployee = findEmployeeByDepart(depart, emid);
 			for(int i=0;i<listEmployee.size();i++){//循环部门中的雇员
 				Map returnMap = new HashMap();
 				Map mapEmployee = (Map)listEmployee.get(i);
