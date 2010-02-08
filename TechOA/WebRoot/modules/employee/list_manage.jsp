@@ -33,6 +33,11 @@ String emname = request.getAttribute("emname").toString();
 			<td>工号</td>
     		<td>姓名</td>
     		<td>部门</td>
+    		<td>职务</td>
+    		<td>描述</td>
+    		<td>专业</td>
+    		<td>学历</td>
+    		<td>职称</td>
     	</tr>
 <%
     for(int i=0;i<listEm.size();i++){
@@ -42,6 +47,11 @@ String emname = request.getAttribute("emname").toString();
 			<td>&nbsp;<a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>"><%=mapEm.get("CODE")==null?"":mapEm.get("CODE") %></a></td>
 			<td>&nbsp;<a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>"><%=mapEm.get("NAME")==null?"":mapEm.get("NAME") %></a></td>
 			<td>&nbsp;<%=mapEm.get("DEPART")==null?"":mapEm.get("DEPART") %></td>
+			<td>&nbsp;<%=mapEm.get("LEVEL")==null?"":mapEm.get("LEVEL") %></td>
+			<td>&nbsp;<%=mapEm.get("DESCRIBE")==null?"":mapEm.get("DESCRIBE") %></td>
+			<td>&nbsp;<%=mapEm.get("MAJOR")==null?"":mapEm.get("MAJOR") %></td>
+			<td>&nbsp;<%=mapEm.get("DEGREE")==null?"":mapEm.get("DEGREE") %></td>
+			<td>&nbsp;<%=mapEm.get("PRO")==null?"":mapEm.get("PRO") %></td>
 		</tr>
 <%  } %>
     </table>

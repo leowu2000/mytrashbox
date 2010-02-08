@@ -97,6 +97,7 @@ create table EMPLOYEE  (
    MAJORCODE            VARCHAR(20),
    DEGREECODE           VARCHAR(20),
    PROCODE              VARCHAR(20),
+   DESCRIBE             VARCHAR(500),
    constraint PK_EMPLOYEE primary key (ID)
 );
 
@@ -162,6 +163,10 @@ comment on column EMPLOYEE.DEGREECODE is
 
 comment on column EMPLOYEE.PROCODE is
 '÷∞≥∆±‡¬Î';
+
+comment on column EMPLOYEE.DESCRIBE is
+'√Ë ˆ';
+
 
 /*==============================================================*/
 /* Table: FUNCTION                                              */

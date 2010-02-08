@@ -167,11 +167,11 @@ Ext.onReady(function(){
     		<td>出厂日期</td>
     		<td>使用年限</td>
     		<td>购买价格</td>
-    		<td>折旧价格</td>
     		<td>状态</td>
     		<td>领用单位</td>
     		<td>领用人</td>
     		<td>领用时间</td>
+    		<td>历史情况</td>
     	</tr>
 <%
     for(int i=0;i<listAssets.size();i++){
@@ -205,11 +205,11 @@ Ext.onReady(function(){
 			<td>&nbsp;<%=mapAssets.get("PRODUCDATE")==null?"":mapAssets.get("PRODUCDATE") %></td>
 			<td>&nbsp;<%=mapAssets.get("LIFE")==null?"":mapAssets.get("LIFE") %></td>
 			<td>&nbsp;<%=mapAssets.get("BUYCOST")==null?"":mapAssets.get("BUYCOST") %></td>
-			<td>&nbsp;<%=mapAssets.get("NOWCOST")==null?"":mapAssets.get("NOWCOST") %></td>
 			<td>&nbsp;<%=statusname %></td>
 			<td>&nbsp;<%=departname %></td>
 			<td>&nbsp;<%=empname %></td>
 			<td>&nbsp;<%=mapAssets.get("LENDDATE")==null?"":mapAssets.get("LENDDATE") %></td>
+			<td><a href="modules/assets/history.jsp">查看</a></td>
 		</tr>
 <%  } %>
     </table>
@@ -250,10 +250,6 @@ Ext.onReady(function(){
 				  <tr>
 				    <td>购买价格</td>
 				    <td><input type="text" name="buycost" style="width:200"></td>
-				  </tr>
-				  <tr>
-				    <td>折旧价格</td>
-				    <td><input type="text" name="nowcost" style="width:200"></td>
 				  </tr>
 				</table>
 	        </form>

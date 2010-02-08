@@ -81,11 +81,11 @@ public class AssetsController extends CommonController {
 			String code = ServletRequestUtils.getStringParameter(request, "code", "");
 			String name = ServletRequestUtils.getStringParameter(request, "name", "");
 			String model = ServletRequestUtils.getStringParameter(request, "model", "");
-			String buydate = ServletRequestUtils.getStringParameter(request, "buydate", "");
-			String producdate = ServletRequestUtils.getStringParameter(request, "producdate", "");
-			String buycost = ServletRequestUtils.getStringParameter(request, "buycost", "");
-			String nowcost = ServletRequestUtils.getStringParameter(request, "nowcost", "");
-			String life = ServletRequestUtils.getStringParameter(request, "life", "");
+			String buydate = ServletRequestUtils.getStringParameter(request, "buydate", "2000-01-01");
+			String producdate = ServletRequestUtils.getStringParameter(request, "producdate", "2000-01-01");
+			String buycost = ServletRequestUtils.getStringParameter(request, "buycost", "0");
+			String nowcost = ServletRequestUtils.getStringParameter(request, "nowcost", "0");
+			String life = ServletRequestUtils.getStringParameter(request, "life", "10");
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			
 			String insertSql = "insert into ASSETS values('" + id + "', '" + code + "', '" + name + "', '" + model + "', '" + buydate + "', '" + producdate + "', " + buycost + ", " + nowcost + ", " + life + ", '1', null, null, null)";
