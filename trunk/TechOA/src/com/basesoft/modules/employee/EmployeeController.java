@@ -263,8 +263,8 @@ public class EmployeeController extends CommonController {
 			String emptyhour = ServletRequestUtils.getStringParameter(request, "emptyhour");
 			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
+			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
 			
-			String empcode = emDAO.findByEmId(emid).get("CODE").toString();
 			
 			if("".equals(emptyhour)){
 				emptyhour = "0";

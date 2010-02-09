@@ -129,6 +129,7 @@ public class EmployeeDAO extends CommonDAO{
 		if("003".equals(mapEm.get("ROLECODE").toString())){//普通员工只能看到自己的考勤
 			Map returnMap = new HashMap();
 			returnMap.put("NAME", mapEm.get("NAME"));
+			returnMap.put("EMPCODE", mapEm.get("CODE"));
 			for(int i=0;i<listDate.size();i++){//循环日期,给出这一个月的考勤记录，没有的放空
 				Date date = listDate.get(i);
 				
@@ -154,7 +155,7 @@ public class EmployeeDAO extends CommonDAO{
 				Map returnMap = new HashMap();
 				Map mapEmployee = (Map)listEmployee.get(i);
 				returnMap.put("NAME", mapEmployee.get("NAME"));
-				
+				returnMap.put("EMPCODE", mapEmployee.get("CODE"));
 				for(int j=0;j<listDate.size();j++){//循环日期,给出这一个月的考勤记录，没有的放空
 					Date date = listDate.get(j);
 					List l = jdbcTemplate.queryForList("select * from VIEW_WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE='" + StringUtil.DateToString(date, "yyyy-MM-dd") + "'");
@@ -182,6 +183,7 @@ public class EmployeeDAO extends CommonDAO{
 	
 	/**
 	 * 获取登陆用户的菜单列表
+	 * @param rolecode 角色code
 	 * @return
 	 */
 	public String getMenu(String rolecode){

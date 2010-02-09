@@ -128,7 +128,7 @@ Ext.onReady(function(){
                 <td>选　择</td>
                 <td>日  期</td>              
                 <td>名  称</td>
-                <td>项目名称</td>
+                <td>工作令</td>
                 <td>投入阶段</td>
                 <td>投入工时</td>
                 <td>备注</td>
@@ -185,7 +185,7 @@ for(int i=0;i<list.size();i++){
 				    <td><input type="text" name="reportname" style="width:200"></td>
 				  </tr>	
 				  <tr>
-				    <td>项目</td>
+				    <td>工作令</td>
 				    <td><select name="project" style="width:200">
 <%
 					for(int i=0;i<listProject.size();i++){

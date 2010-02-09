@@ -17,7 +17,7 @@ ProjectDAO projectDAO = (ProjectDAO)ctx.getBean("projectDAO");
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<title>项目管理</title>
+		<title>工作令管理</title>
 		<style type="text/css">
 		<!--
 		input{
@@ -114,9 +114,9 @@ Ext.onReady(function(){
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>选　择</td>
-                <td>项目名称</td>              
-                <td>项目状态</td>
-                <td>项目经理</td>
+                <td>工作令号</td>              
+                <td>工作令状态</td>
+                <td>工作令负责人</td>
                 <!-- <td>参与人员</td> -->
                 <td>计划工作量</td>
                 <!-- <td>投入工作量</td> -->
@@ -168,11 +168,11 @@ for(int i=0;i<listProject.size();i++){
 	        <input type="hidden" name="id" >
                 <table>
 				  <tr>
-				    <td>项目名称</td>
+				    <td>工作令号</td>
 				    <td><input type="text" name="pjname" style="width:200"></td>
 				  </tr>
 				  <tr>
-				    <td>项目状态</td>
+				    <td>工作令状态</td>
 				    <td><select name="status" style="width:200;">
 				    	<option value="0">关闭</option>
 				    	<option value="1">开启</option>
@@ -180,7 +180,7 @@ for(int i=0;i<listProject.size();i++){
 				    </select></td>
 				  </tr>
 				  <tr>
-				  	<td>项目经理</td>
+				  	<td>工作令负责人</td>
 				  	<td><select name="manager" style="width:200;">
 <%
 				for(int i=0;i<listEm.size();i++){

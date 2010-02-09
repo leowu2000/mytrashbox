@@ -11,6 +11,7 @@
 	String minDate = StringUtil.DateToString((Date)listDate.get(0),"yyyy-MM-dd");
 	String maxDate = StringUtil.DateToString((Date)listDate.get(listDate.size()-1),"yyyy-MM-dd");
 	
+	String emprole = session.getAttribute("EMROLE").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -32,7 +33,13 @@ var action;
 var url='/em.do';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
+<%  
+	if(!"003".equals(emprole)){	
+%>
 	tb.add({text: '填写考勤记录',cls: 'x-btn-text-icon add',handler: onAddClick});
+<%
+	}
+%>
 	
 	if(!win){
         win = new Ext.Window({
@@ -45,7 +52,13 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=addWorkcheck';
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+    	
+    	action = url+'?action=addWorkcheck&empcode='+selValue;
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -62,6 +75,13 @@ Ext.onReady(function(){
     <span>&nbsp;&nbsp;&nbsp;&nbsp;考勤年月：<%=datepick %></span>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center"  bgcolor="#E0F1F8" class="b_tr">
+<%  
+	if(!"003".equals(emprole)){	
+%>
+    		<td rowspan="2">选择</td>
+<%
+	}
+%>    		
     		<td rowspan="2">姓名</td>
 <%
 	int tempMonth = 0;
@@ -98,6 +118,13 @@ Ext.onReady(function(){
 		Map mapWorkCheck = (Map)listWorkCheck.get(i);
 %>    	
 		<tr align="center">
+<%  
+	if(!"003".equals(emprole)){	
+%>		
+			<td><input type="checkbox" name="check" value="<%=mapWorkCheck.get("EMPCODE") %>" class="ainput"></td>
+<%
+	}
+%>
 			<td nowrap="nowrap"><%=mapWorkCheck.get("NAME") %></td>
 <%
 		for(int j=0;j<listDate.size();j++){
@@ -116,7 +143,6 @@ Ext.onReady(function(){
   <div class="x-window-header">Dialog</div>
   <div class="x-window-body" id="dlg-body">
 	<form id="dataForm" name="dataForm" action="" method="post">
-	  <input type="hidden" name="id" >
 	  <input type="hidden" name="datepick" value="<%=datepick %>">
 	  <input type="hidden" name="depart" value="<%=depart %>">
         <table>
