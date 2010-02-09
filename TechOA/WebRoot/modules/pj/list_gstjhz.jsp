@@ -24,8 +24,7 @@
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
     		<td>序号</td>
-    		<td>项目编码</td>
-    		<td>项目名称</td>
+    		<td>工作令号</td>
     		<td>本月合计</td>
 <%
 	for(int i=0;i<listDepart.size();i++){
@@ -40,7 +39,6 @@
 %>
 		<tr align="center">
 			<td><%=i+1 %></td>
-			<td><%=mapGstjhz.get("CODE") %></td>
 			<td><%=mapGstjhz.get("NAME") %></td>
 			<td><%=mapGstjhz.get("totalCount") %></td>
 <%

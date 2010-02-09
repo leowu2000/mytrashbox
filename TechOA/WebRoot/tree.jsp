@@ -9,7 +9,7 @@ if("001".equals(emrole)){
 	treeNodes = treeNodes +
 "   {text:'系统维护', id:'5', leaf:false, icon:'images/icons/xiugai.gif',"+ 
 "    children:["+
-"        {text:'项目管理', id:'51', hrefTarget:'main', icon:'images/icons/xiugai.gif', href:'pj.do?action=list', leaf:true},"+
+"        {text:'工作令管理', id:'51', hrefTarget:'main', icon:'images/icons/xiugai.gif', href:'pj.do?action=list', leaf:true},"+
 "        {text:'部门管理', id:'52', hrefTarget:'main', icon:'images/icons/xiugai.gif', href:'depart.do?action=list', leaf:true},"+
 "        {text:'用户管理', id:'53', hrefTarget:'main', icon:'images/icons/xiugai.gif', href:'em.do?action=frame_infolist', leaf:true}"+
 "        ]"+
