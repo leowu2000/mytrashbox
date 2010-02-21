@@ -39,7 +39,7 @@
 	}
 	
 	function IFrameResize(){
-	 document.getElementById("list_info").height = document.body.offsetHeight - document.getElementById("list_info").offsetTop-10;
+	 document.getElementById("list_workcheck").height = document.body.offsetHeight - document.getElementById("list_workcheck").offsetTop-10;
 	}
 	</script>
   </head>

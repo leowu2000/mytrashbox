@@ -1,10 +1,17 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.modules.employee.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listEm = pageList.getList();
 List listChildDepart = (List)request.getAttribute("listChildDepart");
 String seldepart = request.getAttribute("seldepart").toString();
+
+int pagenum = pageList.getPageInfo().getCurPage();
+
+ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -80,7 +87,7 @@ Ext.onReady(function(){
     	Ext.Msg.confirm('确认','确实要删除记录么？',function(btn){
     		if(btn=='yes'){
     		   
-            	Ext.getDom('listForm').action=url+'?action=delete&seldepart=<%=seldepart %>';       
+            	Ext.getDom('listForm').action=url+'?action=delete&seldepart=<%=seldepart %>&page=<%=pagenum %>';       
             	Ext.getDom('listForm').submit();
     		}
     	});
@@ -106,12 +113,16 @@ Ext.onReady(function(){
 <%
     for(int i=0;i<listEm.size();i++){
     	Map mapEm = (Map)listEm.get(i);
+    	String departname = "";
+    	if(mapEm.get("DEPARTCODE")!=null){
+    		departname = employeeDAO.findNameByCode("DEPARTMENT",mapEm.get("DEPARTCODE").toString());
+    	}
 %>    	
 		<tr align="center">
 			<td><input type="checkbox" name="check" value="<%=mapEm.get("ID") %>" class="ainput"></td>
 			<td>&nbsp;<%=mapEm.get("CODE")==null?"":mapEm.get("CODE") %></td>
 			<td>&nbsp;<%=mapEm.get("NAME")==null?"":mapEm.get("NAME") %></td>
-			<td>&nbsp;<%=mapEm.get("DEPART")==null?"":mapEm.get("DEPART") %></td>
+			<td>&nbsp;<%=departname %></td>
 		</tr>
 <%  } %>
     </table>
@@ -120,7 +131,7 @@ Ext.onReady(function(){
     <div class="x-window-header">Dialog</div>
     <div class="x-window-body" id="dlg-body">
 	        <form id="dataForm" name="dataForm" action="" method="post">
-	        <input type="hidden" name="id" >
+	        	<input type="hidden" name="page" value="<%=pagenum %>">
                 <table>
                   <tr>
 				    <td>工号</td>
@@ -164,7 +175,7 @@ Ext.onReady(function(){
     <div class="x-window-header">Dialog</div>
     <div class="x-window-body" id="dlg-body">
 	        <form id="dataForm1" name="dataForm1" action="" method="post">
-	        <input type="hidden" name="id" >
+	        	<input type="hidden" name="page" value="<%=pagenum %>">
                 <table>
 				  <tr>
 				    <td>新密码</td>

@@ -7,6 +7,8 @@
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listEm = (List)request.getAttribute("listEm");
 
+int pagenum = pageList.getPageInfo().getCurPage();
+
 List listProject = pageList.getList();
 String emrole = session.getAttribute("EMROLE").toString();
 
@@ -80,7 +82,7 @@ Ext.onReady(function(){
 				Ext.get('startdate').set({'value':data.item.startdate});
 				Ext.get('enddate').set({'value':data.item.enddate});
 				Ext.get('note').set({'value':data.item.note});
-		    	action = url+'?action=update';
+		    	action = url+'?action=update&page=<%=pagenum %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -95,7 +97,7 @@ Ext.onReady(function(){
 		}
     	Ext.Msg.confirm('确认','确实要删除此工程？',function(btn){
     		if(btn=='yes'){
-            	Ext.getDom('listForm').action=url+'?action=delete';       
+            	Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>';       
             	Ext.getDom('listForm').submit();
     		}
     	});
@@ -165,7 +167,8 @@ for(int i=0;i<listProject.size();i++){
     <div class="x-window-header">Dialog</div>
     <div class="x-window-body" id="dlg-body">
 	        <form id="dataForm" name="dataForm" action="" method="post">
-	        <input type="hidden" name="id" >
+	        	<input type="hidden" name="id" >
+	        	<input type="hidden" name="page" value="<%=pagenum %>">
                 <table>
 				  <tr>
 				    <td>工作令号</td>

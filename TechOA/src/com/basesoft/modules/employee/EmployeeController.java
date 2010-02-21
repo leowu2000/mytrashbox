@@ -61,9 +61,9 @@ public class EmployeeController extends CommonController {
 			//生成id和code
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			emDAO.insert("insert into EMPLOYEE values('" + id + "','" + loginid + "','1','" + loginid + " ','" + rolecode + "','" + emname + "','" + depart + "','','','','','','','','','','','','','')");
+			emDAO.insert("insert into EMPLOYEE values('" + id + "','" + loginid + "','1','" + loginid + "','" + rolecode + "','" + emname + "','" + depart + "','','','','','','','','','','','','','')");
 			
-			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart="+seldepart);
+			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&page=" + page);
 			return null;
 		}else if("changepass".equals(action)){
 			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
@@ -73,7 +73,7 @@ public class EmployeeController extends CommonController {
 			
 			emDAO.update("update EMPLOYEE set PASSWORD='" + newpassword + "' where ID='" + id + "'");
 			
-			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart="+seldepart);
+			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&page=" + page);
 			return null;
 		}else if("delete".equals(action)){//用户删除操作
 			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
@@ -84,7 +84,7 @@ public class EmployeeController extends CommonController {
 				String deleteSql = "delete from EMPLOYEE where ID='" + check[i] + "'";
 				emDAO.delete(deleteSql);
 			}
-			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart="+seldepart);
+			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&page=" + page);
 			return null;
 		}else if("frame_manage".equals(action)){//人事管理frame
 			mv = new ModelAndView("modules/employee/frame_manage");
@@ -113,7 +113,32 @@ public class EmployeeController extends CommonController {
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
 			
 			//获取人员信息
-			Map mapEm = emDAO.findByCode("VIEW_EMP", empcode);
+			Map mapEm = emDAO.findByCode("EMPLOYEE", empcode);
+			//部门名称
+	    	String departname = "";
+	    	if(mapEm.get("DEPARTCODE")!=null){
+	    		departname = emDAO.findNameByCode("DEPARTMENT",mapEm.get("DEPARTCODE").toString());
+	    	}
+	    	//专业名称
+	    	String majorname = "";
+	    	if(mapEm.get("MAJORCODE")!=null){
+	    		majorname = emDAO.findNameByCode("DICT",mapEm.get("MAJORCODE").toString());
+	    	}
+	    	//学历名称
+	    	String degreename = "";
+	    	if(mapEm.get("DEGREECODE")!=null){
+	    		degreename = emDAO.findNameByCode("DICT",mapEm.get("DEGREECODE").toString());
+	    	}
+	    	//职称名称
+	    	String proname = "";
+	    	if(mapEm.get("PROCODE")!=null){
+	    		proname = emDAO.findNameByCode("DICT",mapEm.get("PROCODE").toString());
+	    	}
+	    	mapEm.put("DEPART", departname);
+	    	mapEm.put("MAJOR", majorname);
+	    	mapEm.put("DEGREE", degreename);
+	    	mapEm.put("PRO", proname);
+	    	
 			//获取附件信息
 			List listAttach = emDAO.getAttachs("EMPLOYEE", "CODE", empcode, "2");
 			List listChildDepart = emDAO.getChildDepart(emid);
