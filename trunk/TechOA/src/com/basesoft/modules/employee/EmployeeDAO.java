@@ -61,15 +61,15 @@ public class EmployeeDAO extends CommonDAO{
 				}
 			}
 			if("".equals(emname)){//没有名字过滤
-				sql = "select * from VIEW_EMP where CODE in (select CODE from EMPLOYEE where DEPARTCODE in (" + departs + ")) order by DEPART desc,LEVEL";
+				sql = "select * from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE in (" + departs + ")) order by DEPARTCODE desc,LEVEL";
 			}else {
-				sql = "select * from VIEW_EMP where CODE in (select CODE from EMPLOYEE where DEPARTCODE in (" + departs + ")) and NAME like '%" + emname + "%' order by DEPART desc,LEVEL ";
+				sql = "select * from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE in (" + departs + ")) and NAME like '%" + emname + "%' order by DEPARTCODE desc,LEVEL ";
 			}
 		}else {
 			if("".equals(emname)){
-				sql = "select * from VIEW_EMP where CODE in (select CODE from EMPLOYEE where DEPARTCODE = '" + departcode + "') order by DEPART desc,LEVEL";
+				sql = "select * from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE = '" + departcode + "') order by DEPARTCODE desc,LEVEL";
 			}else {
-				sql = "select * from VIEW_EMP where CODE in (select CODE from EMPLOYEE where DEPARTCODE = '" + departcode + "') and NAME like '%" + emname + "%' order by DEPART desc,LEVEL";
+				sql = "select * from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE = '" + departcode + "') and NAME like '%" + emname + "%' order by DEPARTCODE desc,LEVEL";
 			}
 		}
 		

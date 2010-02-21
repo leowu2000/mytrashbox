@@ -40,14 +40,6 @@ public class ProjectDAO extends CommonDAO{
 	}
 	
 	/**
-	 * 获取课题费用列表
-	 * @return
-	 */
-	public List<?> getCost(){
-		return jdbcTemplate.queryForList("select * from PJ_COST order by PJCODE,RQ");
-	}
-	
-	/**
 	 * 得到科研工时统计
 	 * @param start 起始时间
 	 * @param end 截止时间

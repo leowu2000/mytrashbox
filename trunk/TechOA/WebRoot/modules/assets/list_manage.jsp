@@ -10,6 +10,8 @@ String emp = request.getAttribute("emp").toString();
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listAssets = pageList.getList();
 
+int pagenum = pageList.getPageInfo().getCurPage();
+
 List listDepart = (List)request.getAttribute("listDepart");
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
@@ -83,7 +85,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确实要删除此设备？',function(btn){
     		if(btn=='yes'){
-            	Ext.getDom('listForm').action=url+'?action=delete';       
+            	Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>';       
             	Ext.getDom('listForm').submit();
     		}
     	});
@@ -96,7 +98,7 @@ Ext.onReady(function(){
 			return false;
 		}
     
-    	action = url+'?action=lend&id='+selValue;
+    	action = url+'?action=lend&id='+selValue+'&page=<%=pagenum %>';
     	win1.setTitle('领用');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
@@ -109,7 +111,7 @@ Ext.onReady(function(){
 			return false;
 		}
     
-    	Ext.getDom('listForm').action=url+'?action=return&id='+selValue;     
+    	Ext.getDom('listForm').action=url+'?action=return&id='+selValue+'&page=<%=pagenum %>'; 
         Ext.getDom('listForm').submit();
     }
     
@@ -122,7 +124,7 @@ Ext.onReady(function(){
     
     	Ext.Msg.confirm('确认','确实要报修此设备？',function(btn){
     		if(btn=='yes'){
-            	Ext.getDom('listForm').action=url+'?action=damage&id='+selValue;    
+            	Ext.getDom('listForm').action=url+'?action=damage&id='+selValue+'&page=<%=pagenum %>';   
        			Ext.getDom('listForm').submit();
     		}
     	});
@@ -222,6 +224,7 @@ Ext.onReady(function(){
 	        <input type="hidden" name="status" value="<%=status %>">
 	        <input type="hidden" name="depart" value="<%=depart %>">
 	        <input type="hidden" name="emp" value="<%=emp %>">
+	        <input type="hidden" name="page" value="<%=pagenum %>">
                 <table>
 				  <tr>
 				    <td>设备编码</td>
@@ -263,6 +266,7 @@ Ext.onReady(function(){
 	        <input type="hidden" name="status" value="<%=status %>">
 	        <input type="hidden" name="depart" value="<%=depart %>">
 	        <input type="hidden" name="emp" value="<%=emp %>">
+	        <input type="hidden" name="page" value="<%=pagenum %>">
                 <table>
 				  <tr>
 				    <td>领用单位</td>

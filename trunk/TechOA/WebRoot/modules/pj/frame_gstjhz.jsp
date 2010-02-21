@@ -32,7 +32,7 @@
 	  document.getElementById('list_gstjhz').src = "/pj.do?action=gstjhz&datepick="+datepick;
 	}
 	function IFrameResize(){
-	 document.getElementById("list_info").height = document.body.offsetHeight - document.getElementById("list_info").offsetTop-10;
+	 document.getElementById("list_gstjhz").height = document.body.offsetHeight - document.getElementById("list_gstjhz").offsetTop-10;
 	}
 	</script>
   </head>

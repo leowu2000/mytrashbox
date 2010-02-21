@@ -43,12 +43,6 @@ public class ProjectController extends CommonController {
 			mv.addObject("listDepart", listDepart);
 			mv.addObject("listGstjhz", listGstjhz);
 			
-		}else if("cost".equals(action)){//课题费用
-			mv = new ModelAndView("modules/pj/list_cost");
-			
-			List listCost = projectDAO.getCost();
-			
-			mv.addObject("listCost", listCost);
 		}else if("frame_kygstj".equals(action)){//科研工时统计frame
 			mv = new ModelAndView("modules/pj/frame_kygstj");
 			
@@ -138,7 +132,7 @@ public class ProjectController extends CommonController {
 			
 			projectDAO.insert("insert into PROJECT values('" + id + "','" + code + "','" + pjname + "','" + status + "','" + manager + "','" + manager + "'," + planedworkload + ",0," + startdate + "," + enddate + ",'" + note + "')");
 			
-			response.sendRedirect("pj.do?action=list");
+			response.sendRedirect("pj.do?action=list&page=" + page);
 			return null;
 		}else if("query".equals(action)){//查找返回修改
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
@@ -165,7 +159,7 @@ public class ProjectController extends CommonController {
 			
 			projectDAO.update("update PROJECT set NAME='" + pjname + "',STATUS='" + status + "',MANAGER='" + manager + "',planedworkload=" + planedworkload + ",startdate='" + startdate + "',enddate='" + enddate + "',note='" + note + "' where ID='" + id + "'");
 			
-			response.sendRedirect("pj.do?action=list");
+			response.sendRedirect("pj.do?action=list&page=" + page);
 			return null;
 		}else if("delete".equals(action)){//删除操作
 			String[] check=request.getParameterValues("check");
@@ -174,7 +168,7 @@ public class ProjectController extends CommonController {
 				String deleteSql = "delete from PROJECT where ID='" + check[i] + "'";
 				projectDAO.delete(deleteSql);
 			}
-			response.sendRedirect("pj.do?action=list");
+			response.sendRedirect("pj.do?action=list&page=" + page);
 			return null;
 		}
 		

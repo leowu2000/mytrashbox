@@ -57,7 +57,7 @@ if("001".equals(emrole)||"002".equals(emrole)){
 "    },"+
 "    {text:'费用管理', id:'3', leaf:false, icon:'images/icons/3.png',"+ 
 "    children:["+
-"        {text:'课题费用', id:'31', hrefTarget:'main', icon:'images/icons/3.png', href:'pj.do?action=cost', leaf:true}"+
+"        {text:'课题费用', id:'31', hrefTarget:'main', icon:'images/icons/3.png', href:'cost.do?action=list', leaf:true}"+
 "        ]"+
 "    },";
 }

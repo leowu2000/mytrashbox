@@ -1,11 +1,16 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.modules.employee.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listEm = pageList.getList();
 
 String seldepart = request.getAttribute("seldepart").toString();
 String emname = request.getAttribute("emname").toString();
+
+ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -42,16 +47,36 @@ String emname = request.getAttribute("emname").toString();
 <%
     for(int i=0;i<listEm.size();i++){
     	Map mapEm = (Map)listEm.get(i);
+    	//部门名称
+    	String departname = "";
+    	if(mapEm.get("DEPARTCODE")!=null){
+    		departname = employeeDAO.findNameByCode("DEPARTMENT",mapEm.get("DEPARTCODE").toString());
+    	}
+    	//专业名称
+    	String majorname = "";
+    	if(mapEm.get("MAJORCODE")!=null){
+    		majorname = employeeDAO.findNameByCode("DICT",mapEm.get("MAJORCODE").toString());
+    	}
+    	//学历名称
+    	String degreename = "";
+    	if(mapEm.get("DEGREECODE")!=null){
+    		degreename = employeeDAO.findNameByCode("DICT",mapEm.get("DEGREECODE").toString());
+    	}
+    	//职称名称
+    	String proname = "";
+    	if(mapEm.get("PROCODE")!=null){
+    		proname = employeeDAO.findNameByCode("DICT",mapEm.get("PROCODE").toString());
+    	}
 %>    	
 		<tr align="center">
 			<td>&nbsp;<a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>"><%=mapEm.get("CODE")==null?"":mapEm.get("CODE") %></a></td>
 			<td>&nbsp;<a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>"><%=mapEm.get("NAME")==null?"":mapEm.get("NAME") %></a></td>
-			<td>&nbsp;<%=mapEm.get("DEPART")==null?"":mapEm.get("DEPART") %></td>
+			<td>&nbsp;<%=departname %></td>
 			<td>&nbsp;<%=mapEm.get("LEVEL")==null?"":mapEm.get("LEVEL") %></td>
 			<td>&nbsp;<%=mapEm.get("DESCRIBE")==null?"":mapEm.get("DESCRIBE") %></td>
-			<td>&nbsp;<%=mapEm.get("MAJOR")==null?"":mapEm.get("MAJOR") %></td>
-			<td>&nbsp;<%=mapEm.get("DEGREE")==null?"":mapEm.get("DEGREE") %></td>
-			<td>&nbsp;<%=mapEm.get("PRO")==null?"":mapEm.get("PRO") %></td>
+			<td>&nbsp;<%=majorname %></td>
+			<td>&nbsp;<%=degreename %></td>
+			<td>&nbsp;<%=proname %></td>
 		</tr>
 <%  } %>
     </table>

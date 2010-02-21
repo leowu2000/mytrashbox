@@ -53,4 +53,5 @@
 	<bean id="workReportDAO" class="com.basesoft.modules.workreport.WorkReportDAO"></bean>
 	<bean id="departmentDAO" class="com.basesoft.modules.depart.DepartmentDAO"></bean>
 	<bean id="assetsDAO" class="com.basesoft.modules.assets.AssetsDAO"></bean>
+	<bean id="costDAO" class="com.basesoft.modules.cost.CostDAO"></bean>
 </beans>

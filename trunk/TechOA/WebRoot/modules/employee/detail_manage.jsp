@@ -150,8 +150,10 @@ Ext.onReady(function(){
     		<td>&nbsp;<%=mapEm.get("DEGREE")==null?"":mapEm.get("DEGREE") %></td>
     	</tr>
     	<tr align="center" height="30">
-    		<td bgcolor="#E0F1F8"  class="b_tr" colspan="2">职称</td>
-    		<td colspan="2">&nbsp;<%=mapEm.get("PRO")==null?"":mapEm.get("PRO") %></td>
+    		<td bgcolor="#E0F1F8"  class="b_tr">职称</td>
+    		<td>&nbsp;<%=mapEm.get("PRO")==null?"":mapEm.get("PRO") %></td>
+    		<td bgcolor="#E0F1F8"  class="b_tr"></td>
+    		<td>&nbsp;</td>
     	</tr>
     </table>
     </form>

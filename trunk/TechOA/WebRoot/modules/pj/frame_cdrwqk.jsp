@@ -38,7 +38,7 @@ List listDepart = (List)request.getAttribute("listDepart");
 	  document.getElementById('list_cdrwqk').src = "/pj.do?action=cdrwqk&datepick="+datepick+"&depart="+depart;
 	}
 	function IFrameResize(){
-	 document.getElementById("list_info").height = document.body.offsetHeight - document.getElementById("list_info").offsetTop-10;
+	 document.getElementById("list_cdrwqk").height = document.body.offsetHeight - document.getElementById("list_cdrwqk").offsetTop-10;
 	}
 	</script>
   </head>
