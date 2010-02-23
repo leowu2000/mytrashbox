@@ -208,13 +208,13 @@ comment on column FUNCTION.STATUS is
 /*==============================================================*/
 create table PJ_COST  (
    ID                   VARCHAR(32)                     not null,
-   PJCODE               VARCHAR(20),
    RQ                   DATE,
-   BILLCODE             VARCHAR(20),
+   DJBH                 VARCHAR(20),
+   GZLH                 VARCHAR(20),
    FXT                  VARCHAR(20),
    ZJH                  VARCHAR(20),
+   BM                   VARCHAR(20),
    XHGG                 VARCHAR(20),
-   CODE                 VARCHAR(20),
    DW                   VARCHAR(20),
    SL                   INTEGER,
    JE                   NUMERIC(10,2),
@@ -231,14 +231,14 @@ comment on table PJ_COST is
 comment on column PJ_COST.ID is
 'ID';
 
-comment on column PJ_COST.PJCODE is
-'工程编码';
-
 comment on column PJ_COST.RQ is
 '日期';
 
-comment on column PJ_COST.BILLCODE is
+comment on column PJ_COST.DJBH is
 '单据编号';
+
+comment on column PJ_COST.GZLH is
+'工作令号';
 
 comment on column PJ_COST.FXT is
 '分系统';
@@ -246,11 +246,11 @@ comment on column PJ_COST.FXT is
 comment on column PJ_COST.ZJH is
 '整件号';
 
+comment on column PJ_COST.BM is
+'编码';
+
 comment on column PJ_COST.XHGG is
 '型号规格';
-
-comment on column PJ_COST.CODE is
-'编码';
 
 comment on column PJ_COST.DW is
 '单位';
@@ -272,6 +272,7 @@ comment on column PJ_COST.JSDW is
 
 comment on column PJ_COST.YT is
 '用途';
+
 
 /*==============================================================*/
 /* Table: PROJECT                                               */
