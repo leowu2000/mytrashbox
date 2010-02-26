@@ -1,3 +1,107 @@
+/*==============================================================*/
+/* Table: ASSETS                                                */
+/*==============================================================*/
+create table ASSETS  (
+   ID                   VARCHAR(32)                     not null,
+   CODE                 VARCHAR(20),
+   NAME                 VARCHAR(50),
+   MODEL                VARCHAR(50),
+   BUYDATE              DATE,
+   PRODUCDATE           DATE,
+   BUYCOST              NUMERIC(15,2),
+   NOWCOST              NUMERIC(15,2),
+   LIFE                 INTEGER,
+   STATUS               VARCHAR(10),
+   DEPARTCPDE           VARCHAR(20),
+   EMPCODE              VARCHAR(20),
+   LENDDATE             DATE,
+   constraint PK_ASSETS primary key (ID)
+);
+
+comment on table ASSETS is
+'固定资产表';
+
+comment on column ASSETS.ID is
+'ID';
+
+comment on column ASSETS.CODE is
+'编码';
+
+comment on column ASSETS.NAME is
+'设备名称';
+
+comment on column ASSETS.MODEL is
+'设备型号';
+
+comment on column ASSETS.BUYDATE is
+'购买日期';
+
+comment on column ASSETS.PRODUCDATE is
+'出厂日期';
+
+comment on column ASSETS.BUYCOST is
+'购买价格';
+
+comment on column ASSETS.NOWCOST is
+'折旧价格';
+
+comment on column ASSETS.LIFE is
+'预计使用年限';
+
+comment on column ASSETS.STATUS is
+'设备状态(1:库中;2:借出;3:损坏)';
+
+comment on column ASSETS.DEPARTCPDE is
+'借出部门';
+
+comment on column ASSETS.EMPCODE is
+'借出人';
+
+comment on column ASSETS.LENDDATE is
+'借出日期';
+
+/*==============================================================*/
+/* Table: ATTACHMENT                                            */
+/*==============================================================*/
+create table ATTACHMENT  (
+   ID                   VARCHAR(32)                     not null,
+   RTABLE               VARCHAR(50),
+   RCOLUMN              VARCHAR(50),
+   RVALUE               VARCHAR(50),
+   TYPE                 VARCHAR(20),
+   FNAME                VARCHAR(100),
+   FTYPE                VARCHAR(10),
+   CONTENT              BLOB,
+   FSIZE                INTEGER,
+   constraint PK_ATTACHMENT primary key (ID)
+);
+
+comment on table ATTACHMENT is
+'附件表';
+
+comment on column ATTACHMENT.RTABLE is
+'关联表';
+
+comment on column ATTACHMENT.RCOLUMN is
+'关联字段';
+
+comment on column ATTACHMENT.RVALUE is
+'关联值';
+
+comment on column ATTACHMENT.TYPE is
+'附件类型(1:照片;2:文章)';
+
+comment on column ATTACHMENT.FNAME is
+'文件名';
+
+comment on column ATTACHMENT.FTYPE is
+'文件类型';
+
+comment on column ATTACHMENT.CONTENT is
+'文件内容';
+
+comment on column ATTACHMENT.FSIZE is
+'文件大小';
 
 /*==============================================================*/
 /* Table: DEPARTMENT                                            */
@@ -32,8 +136,6 @@ comment on column DEPARTMENT.ALLPARENTS is
 
 comment on column DEPARTMENT."LEVEL" is
 '等级';
-
-
 
 /*==============================================================*/
 /* Table: DEP_PJ                                                */
@@ -167,41 +269,43 @@ comment on column EMPLOYEE.PROCODE is
 comment on column EMPLOYEE.DESCRIBE is
 '描述';
 
-
 /*==============================================================*/
-/* Table: FUNCTION                                              */
+/* Table: MENU                                                  */
 /*==============================================================*/
-create table FUNCTION  (
-   FUNCCODE             VARCHAR(20)                     not null,
-   FUNCNAME             VARCHAR(50),
-   FUNCTYPE             VARCHAR(1),
-   FUNCURL              VARCHAR(100),
+create table MENU  (
+   MENUCODE             VARCHAR(20)                     not null,
+   MENUNAME             VARCHAR(50),
+   MENUTYPE             VARCHAR(1),
+   MENUURL              VARCHAR(100),
    ORDERCODE            INTEGER,
    STATUS               VARCHAR(1),
-   constraint PK_FUNCTION primary key (FUNCCODE)
+   PARENT               VARCHAR(20),
+   constraint PK_MENU primary key (MENUCODE)
 );
 
-comment on table FUNCTION is
-'功能表';
+comment on table MENU is
+'菜单表';
 
-comment on column FUNCTION.FUNCCODE is
-'功能编码';
+comment on column MENU.MENUCODE is
+'菜单编码';
 
-comment on column FUNCTION.FUNCNAME is
-'功能名称';
+comment on column MENU.MENUNAME is
+'菜单名称';
 
-comment on column FUNCTION.FUNCTYPE is
-'功能类型(1:菜单功能项;2:其他)';
+comment on column MENU.MENUTYPE is
+'菜单类型(1:菜单功能项;2:父菜单项;3:其他)';
 
-comment on column FUNCTION.FUNCURL is
+comment on column MENU.MENUURL is
 '功能链接';
 
-comment on column FUNCTION.ORDERCODE is
+comment on column MENU.ORDERCODE is
 '排序号';
 
-comment on column FUNCTION.STATUS is
+comment on column MENU.STATUS is
 '功能状态(0:关闭;1:开启)';
 
+comment on column MENU.PARENT is
+'父功能编码';
 
 /*==============================================================*/
 /* Table: PJ_COST                                               */
@@ -273,7 +377,6 @@ comment on column PJ_COST.JSDW is
 comment on column PJ_COST.YT is
 '用途';
 
-
 /*==============================================================*/
 /* Table: PROJECT                                               */
 /*==============================================================*/
@@ -328,6 +431,26 @@ comment on column PROJECT.ENDDATE is
 comment on column PROJECT.NOTE is
 '项目描述';
 
+/*==============================================================*/
+/* Table: USER_MENU                                             */
+/*==============================================================*/
+create table USER_MENU  (
+   EMPCODE              VARCHAR(20),
+   MENUCODE             VARCHAR(20),
+   TYPE                 VARCHAR(1)
+);
+
+comment on table USER_MENU is
+'用户菜单表';
+
+comment on column USER_MENU.EMPCODE is
+'人员编号';
+
+comment on column USER_MENU.MENUCODE is
+'菜单编码';
+
+comment on column USER_MENU.TYPE is
+'类别(1:正常菜单;2:收藏菜单)';
 
 /*==============================================================*/
 /* Table: WORKCHECK                                             */
@@ -353,7 +476,6 @@ comment on column WORKCHECK.CHECKRESULT is
 
 comment on column WORKCHECK.EMPTYHOURS is
 '缺勤小结(小时)';
-
 
 /*==============================================================*/
 /* Table: WORKREPORT                                            */
@@ -404,130 +526,7 @@ comment on column WORKREPORT.BZ is
 '备注';
 
 comment on column WORKREPORT.FLAG is
-'审批状态(0:待审批;1:审批通过;2:审批退回)';
+'审批状态(0:未提交;1:待审批;2:审批通过3:审批退回)';
 
 comment on column WORKREPORT.DEPARTCODE is
 '部门编码';
-
-/*==============================================================*/
-/* Table: FUNCROLE                                              */
-/*==============================================================*/
-create table FUNCROLE  (
-   ROLECODE             VARCHAR(20),
-   FUNCCODE             VARCHAR(20)
-);
-
-comment on table FUNCROLE is
-'角色功能表';
-
-comment on column FUNCROLE.ROLECODE is
-'角色编码';
-
-comment on column FUNCROLE.FUNCCODE is
-'功能编码';
-
-/*==============================================================*/
-/* Table: ATTACHMENT                                            */
-/*==============================================================*/
-create table ATTACHMENT  (
-   ID                   VARCHAR(32)                     not null,
-   RTABLE               VARCHAR(50),
-   RCOLUMN              VARCHAR(50),
-   RVALUE               VARCHAR(50),
-   TYPE                 VARCHAR(20),
-   FNAME                VARCHAR(100),
-   FTYPE                VARCHAR(10),
-   CONTENT              BLOB,
-   FSIZE				INTEGER,
-   constraint PK_ATTACHMENT primary key (ID)
-);
-
-comment on table ATTACHMENT is
-'附件表';
-
-comment on column ATTACHMENT.RTABLE is
-'关联表';
-
-comment on column ATTACHMENT.RCOLUMN is
-'关联字段';
-
-comment on column ATTACHMENT.RVALUE is
-'关联值';
-
-comment on column ATTACHMENT.TYPE is
-'附件类型(1:照片;2:文章)';
-
-comment on column ATTACHMENT.FNAME is
-'文件名';
-
-comment on column ATTACHMENT.FTYPE is
-'文件类型';
-
-comment on column ATTACHMENT.CONTENT is
-'文件内容';
-
-comment on column ATTACHMENT.CONTENT is
-'文件大小';
-
-/*==============================================================*/
-/* Table: ASSETS                                                */
-/*==============================================================*/
-create table ASSETS  (
-   ID                   VARCHAR(32)                     not null,
-   CODE                 VARCHAR(20),
-   NAME                 VARCHAR(50),
-   MODEL                VARCHAR(50),
-   BUYDATE              DATE,
-   PRODUCDATE           DATE,
-   BUYCOST              NUMERIC(15,2),
-   NOWCOST              NUMERIC(15,2),
-   LIFE                 INTEGER,
-   STATUS               VARCHAR(10),
-   DEPARTCODE           VARCHAR(20),
-   EMPCODE              VARCHAR(20),
-   LENDDATE             DATE,
-   constraint PK_ASSETS primary key (ID)
-);
-
-comment on table ASSETS is
-'固定资产表';
-
-comment on column ASSETS.ID is
-'ID';
-
-comment on column ASSETS.CODE is
-'编码';
-
-comment on column ASSETS.NAME is
-'设备名称';
-
-comment on column ASSETS.MODEL is
-'设备型号';
-
-comment on column ASSETS.BUYDATE is
-'购买日期';
-
-comment on column ASSETS.PRODUCDATE is
-'出厂日期';
-
-comment on column ASSETS.BUYCOST is
-'购买价格';
-
-comment on column ASSETS.NOWCOST is
-'折旧价格';
-
-comment on column ASSETS.LIFE is
-'预计使用年限';
-
-comment on column ASSETS.STATUS is
-'设备状态(1:库中;2:借出;3:损坏)';
-
-comment on column ASSETS.DEPARTCODE is
-'借出部门';
-
-comment on column ASSETS.EMPCODE is
-'借出人';
-
-comment on column ASSETS.LENDDATE is
-'借出日期';
-
