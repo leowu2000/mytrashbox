@@ -56,6 +56,7 @@ public class LoginController extends CommonController {
 					request.getSession().setAttribute("EMID", mapEm.get("ID").toString());
 					request.getSession().setAttribute("EMROLE", mapEm.get("ROLECODE").toString());
 					request.getSession().setAttribute("EMNAME", mapEm.get("NAME").toString());
+					request.getSession().setAttribute("EMCODE", mapEm.get("CODE").toString());
 					
 					mv = new ModelAndView("index");
 					

@@ -12,9 +12,13 @@ String emname = session.getAttribute("EMNAME").toString();
 <script type="text/javascript">
 <!--
 Ext.BLANK_IMAGE_URL = 'ext-2.2.1/resources/images/default/s.gif';
-var treeloader = new Ext.tree.TreeLoader({
-                    dataUrl:'tree.jsp'
+var treeloader1 = new Ext.tree.TreeLoader({
+                    dataUrl:'menu.do?action=favorite'
 });
+var treeloader2 = new Ext.tree.TreeLoader({
+                    dataUrl:'menu.do?action=defult'
+});
+
 Ext.onReady(function(){
        var viewport = new Ext.Viewport({
             layout:'border',
@@ -30,9 +34,7 @@ Ext.onReady(function(){
                 }, {
                     region:'west',
                     contentEl:'west',
-                    width: 205,
-            		minSize: 100,
-            		maxSize: 300
+                    width: 205
                 }, {
                     region:'center',
                     contentEl:'main',
@@ -47,29 +49,38 @@ Ext.onReady(function(){
             iconCls:'tag_wand',
             title:'<%=emname %>',
             border: false,   
+            collapsible: true,  
             layout:'accordion',
+            defaults: {
+        		bodyStyle: 'border:0px;'
+    		},
             layoutConfig: {
-                   animate: true //动画效果启用
+                animate: true
             },
             items:[{
-                     title:'收藏',
-                     html:'菜单2的内容'
-                    }, {
-                     title:'全部',
-                     id:'tree',
+                     title:'收藏菜单',
+                     id:'tree1',
                      xtype: 'treepanel',
                      autoScroll: true,
                      autoHeight:true,
-                     loader: treeloader,
+                     loader: treeloader1,
                      rootVisible:false,
-                     root: new Ext.tree.AsyncTreeNode({text:'功能演示'}),
-                     split:true,
-                     collapsible: true
-                    }]
+                     root: new Ext.tree.AsyncTreeNode({text:'功能演示'})
+                   },{
+                     title:'默认菜单',
+                     id:'tree2',
+                     xtype: 'treepanel',
+                     autoScroll: true,
+                     autoHeight:true,
+                     loader: treeloader2,
+                     rootVisible:false,
+                     root: new Ext.tree.AsyncTreeNode({text:'功能演示'})
+                   }]
       });
         
         
-Ext.getCmp('tree').expandAll();
+Ext.getCmp('tree1').expandAll();
+Ext.getCmp('tree2').expandAll();
 });
 
 //-->
