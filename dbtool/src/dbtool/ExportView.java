@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /*
  * ExportTool.java
  *
@@ -945,19 +944,19 @@ public class ExportView extends JFrame {
             .addGroup(ExpDataLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(ExpDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ExpDataLayout.createSequentialGroup()
-                        .addComponent(MessageLabel)
-                        .addGap(277, 277, 277)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE)
+                    .addGroup(ExpDataLayout.createSequentialGroup()
+                        .addComponent(MessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(MessageLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                        .addComponent(MessageLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(58, 58, 58)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(MessageLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
                         .addComponent(btnExportPerStep)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnExport)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(exitBtn))
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE))
+                        .addComponent(exitBtn)))
                 .addContainerGap())
         );
         ExpDataLayout.setVerticalGroup(
@@ -965,21 +964,16 @@ public class ExportView extends JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ExpDataLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(ExpDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(ExpDataLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(ExpDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(exitBtn)
-                            .addComponent(btnExport)
-                            .addComponent(btnExportPerStep))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ExpDataLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                        .addGroup(ExpDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(MessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(MessageLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(MessageLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                    .addGroup(ExpDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnExportPerStep)
+                        .addComponent(btnExport)
+                        .addComponent(exitBtn))
+                    .addComponent(MessageLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MessageLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         tbMainSelect.addTab(resourceMap.getString("ExpData.TabConstraints.tabTitle"), ExpData); // NOI18N
@@ -1290,7 +1284,7 @@ public class ExportView extends JFrame {
             txtPort.setText("1433");
         }
         if (driveClassIndex == 2) {//sysbase
-            txtPort.setText("5077");
+            txtPort.setText("5000");
         }
         if (driveClassIndex == 3) {//oracle
             txtPort.setText("1521");
@@ -1342,16 +1336,17 @@ public class ExportView extends JFrame {
                             jComboBox1.setEnabled(true);
                         }
                         try {
-                            File saveFile = new File(txtDataDir.getText()+"\\excel");
+//                            File saveFile = new File(txtDataDir.getText()+"\\excel");
                             boolean flg=false;
-                            if(saveFile.exists()){
-                               int k =  JOptionPane.showConfirmDialog(null, "导出数据文件目录:["+txtDataDir.getText()+"\\excel]已经存在,是否删除?\n"
-                                       +" 点击确定删除文件，点击取消修改目录！", "提示", JOptionPane.OK_CANCEL_OPTION);
-                               if(k==0){
+//                            if(saveFile.exists()){
+//                               int k =  JOptionPane.showConfirmDialog(null, "导出数据文件目录:["+txtDataDir.getText()+"\\excel]已经存在,是否删除?\n"
+//                                       +" 点击确定删除文件，点击取消修改目录！", "提示", JOptionPane.OK_CANCEL_OPTION);
+//                               if(k==0){
                                    flg = FileAccess.deleteDirectory(txtDataDir.getText());
-                               }
-                            }else
-                                flg = true;
+//                               }
+//                            }else{
+//                                flg = true;
+//                            }
                             if (flg) {
                                 dbTool = new DBTool(DiverClass, JdbcUrl, txtUser.getText(),
                                         txtPass.getText(), txtDataDir.getText());
@@ -1361,7 +1356,6 @@ public class ExportView extends JFrame {
                                  JdbcTemplate jt_Target = dbTool.getJt2();
                                 if(flg){
                                     if (Version.getSelectedIndex() == 1) {//符合4.0的标准
-
                                         for (String sql : InitTargetDB.createTab) {
                                             jt_Target.execute(sql);
                                         }
@@ -1419,8 +1413,8 @@ public class ExportView extends JFrame {
                                         List<HY_STSC_ABean> resultList = null;
 
                                         while (rs.next()) {
-                                            stscNameModel_source.addElement(rs.getString("stnm").trim());
-                                            listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + rs.getString("stnm").trim());
+                                            stscNameModel_source.addElement(rs.getString("stnm"));
+                                            listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + rs.getString("stnm"));
                                             liststscModel_source.addElement(rs.getString("stcd").trim());
                                         }
                                         return resultList;
@@ -1448,43 +1442,6 @@ public class ExportView extends JFrame {
                                 }
                                 listStsc.setModel(listParamModel_source);
                                 SelectedStsc.setModel(selectedSnameModel);
-
-                                //开始读取源数据库并生成相应的索引信息
-                                /**
-                                List<DataIndexBean> dataindexList = DataIndexDao.getDataIndexBean(selectedStscModel, dbTool);
-                                if (dataindexList != null && dataindexList.size() > 0) {
-                                int k = 0;
-                                for (DataIndexBean bean : dataindexList) {
-                                bean = dataindexList.get(k);
-                                String SLS="";
-                                String JS = "";
-                                String SW="";
-                                String ZF="";
-                                String BL = "";
-                                String CW = "";
-                                String DATE = "";
-
-                                if (bean.getSLS() > 0)
-                                SLS = "Y";
-                                if (bean.getJS() > 0)
-                                JS = "Y";
-                                if (bean.getSW() > 0)
-                                SW = "Y";
-                                if (bean.getZF() > 0)
-                                ZF = "Y";
-                                if (bean.getBL() > 0)
-                                BL = "Y";
-                                if (bean.getCW() > 0)
-                                CW = "Y";
-                                DATE = bean.getQZYEAR();
-                                String INSERT_index_SQL = "INSERT INTO DATA_INDEX_S (ASTCD,BSTNM,CSLS,DJS,ESW,HZF,GBL,FCW,EDATE)VALUES('"
-                                +bean.getSTCD()+"','"
-                                + HY_DBTP_JDao.getStscName(bean.getSTCD(), dbTool)+"','"
-                                + SLS+"','"+JS+"','"+SW+"','"+ZF+"','"+BL+"','"+CW+"','"+DATE+"')";
-                                dbTool.getJt2().execute(INSERT_index_SQL);
-                                k++;
-                                }
-                                }*/
                             } else {
                                 if(dbTool!=null){
                                     dbTool.shutdown();
