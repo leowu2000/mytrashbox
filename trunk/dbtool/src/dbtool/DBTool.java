@@ -36,6 +36,7 @@ public class DBTool {
     Connection cnSource, cnTarget;
 //    JdbcTemplate jt1, jt2;
     PageTemplate jt1, jt2;
+    String saveDirs="";
     DefaultListModel expSuccessModel = new DefaultListModel();
     String errorTab = "";
 
@@ -60,7 +61,6 @@ public class DBTool {
         p.setProperty("target.datasource.jdbcUrl", "jdbc:h2:file:" + tDataDir + "/app");
         p.setProperty("target.datasource.username", "sa");
         p.setProperty("target.datasource.password", "");
-
         this.config(p);
     }
 
@@ -68,13 +68,13 @@ public class DBTool {
 
         String searChsql = "";
         if (isHaveStcdCol(table)) {
-            searChsql = "select * from " + table + " where stcd in(" + stsc + ")";
+            searChsql = "select * from " + table.toUpperCase() + " where STCD in(" + stsc + ")";
         } else {
-            searChsql = "select * from " + table;
+            searChsql = "select * from " + table.toUpperCase();
         }
         try {
             if (expType != 0) {
-                clearTable(true, table);
+                clearTable(true, table.toUpperCase());
             }
 
             jt1.query(searChsql, new RowMapper() {
@@ -88,7 +88,7 @@ public class DBTool {
                         fields += meta.getColumnName(i + 1) + ",";
                         params += "?,";
                     }
-                    String sql = "insert into " + table + " (" + fields.substring(0, fields.length() - 1) + ") values (" + params.substring(0, params.length() - 1) + ")";
+                    String sql = "insert into " + table.toUpperCase() + " (" + fields.substring(0, fields.length() - 1) + ") values (" + params.substring(0, params.length() - 1) + ")";
                     jt2.execute(sql, new PreparedStatementCallback() {
 
                         public Object doInPreparedStatement(PreparedStatement pStat) throws SQLException,
@@ -109,7 +109,7 @@ public class DBTool {
                 }
             });
 
-            ((DefaultListModel) (logList.getModel())).addElement("正在导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，导出条数：" + getCount(jt2, table));
+            ((DefaultListModel) (logList.getModel())).addElement("正在导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table.toUpperCase()) + "，导出条数：" + getCount(jt2, table.toUpperCase()));
             if (expType == 2) {
                 createExcelTable(table, stsc, saveDir, logList, expType);
             }
@@ -122,6 +122,7 @@ public class DBTool {
             } else {
                 errorTab += "," + getTabCnnm(jt2, table);
             }
+            outputError(table, "=copyTable=",e.getMessage());
             return false;
         }
         return true;
@@ -129,7 +130,7 @@ public class DBTool {
 
     public boolean isHaveStcdCol(String table) {
         boolean flag = false;
-        if ("HY_STSC_A".trim().equalsIgnoreCase(table)||"HY_DATBDL_I".trim().equalsIgnoreCase(table) || "STHD".trim().equalsIgnoreCase(table) || "ADDV".trim().equalsIgnoreCase(table)) {
+        if ("HY_STSC_A".trim().equalsIgnoreCase(table) || "HY_DATBDL_I".trim().equalsIgnoreCase(table) || "STHD".trim().equalsIgnoreCase(table) || "ADDV".trim().equalsIgnoreCase(table)) {
             flag = false;
         } else {
             List rows = jt2.queryForList("select * from HY_DBFP_J WHERE TBID='" + table + "' and upper(FLID)='STCD'");
@@ -142,9 +143,9 @@ public class DBTool {
 
     public String getIndexFiled(String table) {
         Map colmap = null;
-        if("HY_STSC_A".trim().equals(table)||"STHD".trim().equals(table)){
+        if ("HY_STSC_A".trim().equals(table) || "STHD".trim().equals(table)) {
             return "";
-        }else{
+        } else {
             try {
                 colmap = jt2.queryForMap("select FILDID from INDEX_DESC where TBENNM='" + table + "'");
             } catch (EmptyResultDataAccessException e) {
@@ -189,6 +190,7 @@ public class DBTool {
             this.cnSource = DriverManager.getConnection(p.getProperty("source.datasource.jdbcUrl"), p.getProperty("source.datasource.username"), p.getProperty("source.datasource.password"));
             this.cnTarget = DriverManager.getConnection(p.getProperty("target.datasource.jdbcUrl"), p.getProperty("target.datasource.username"), p.getProperty("target.datasource.password"));
         } catch (SQLException e) {
+            
             e.printStackTrace();
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -197,6 +199,7 @@ public class DBTool {
         } catch (ClassNotFoundException e) {
             JOptionPane.showMessageDialog(null, "未发现此数据库驱动类型，请与开发商联系！", "提示", 0);
         }
+        this.saveDirs=p.getProperty("target.datasource.dataDir");
         this.jt1 = new PageTemplate(new SingleConnectionDataSource(cnSource, false));
         this.jt2 = new PageTemplate(new SingleConnectionDataSource(cnTarget, false));
 
@@ -207,19 +210,19 @@ public class DBTool {
     }
 
     public Integer getCount(JdbcTemplate jdbcTemplate, String table) {
-        return jdbcTemplate.queryForInt("select count(*) from " + table);
+        return jdbcTemplate.queryForInt("select count(*) from " + table.toUpperCase());
     }
 
     public Integer getCountToExcel(JdbcTemplate jdbcTemplate, String table, String stsc, boolean flg) {
         if (flg) {
-            return jdbcTemplate.queryForInt("select count(*) from " + table + " where stcd in(" + stsc + ")");
+            return jdbcTemplate.queryForInt("select count(*) from " + table.toUpperCase() + " where STCD in(" + stsc + ")");
         } else {
-            return jdbcTemplate.queryForInt("select count(*) from " + table);
+            return jdbcTemplate.queryForInt("select count(*) from " + table.toUpperCase());
         }
     }
 
     public Integer getCountForStsc(JdbcTemplate jdbcTemplate, String table, String stsc) {
-        return jdbcTemplate.queryForInt("select count(*) from " + table + " where stcd like'%" + stsc + "%'");
+        return jdbcTemplate.queryForInt("select count(*) from " + table.toUpperCase() + " where STCD like'%" + stsc + "%'");
     }
 
     public String getTabCnnm(JdbcTemplate jdbcTemplate, String table) {
@@ -236,7 +239,7 @@ public class DBTool {
         Map map = null;
         try {
 
-            map = jdbcTemplate.queryForMap("select stnm from TABLE_STCD where stcd='" + stcd + "'");
+            map = jdbcTemplate.queryForMap("select stnm from TABLE_STCD where STCD='" + stcd + "'");
         } catch (Exception e) {
             return "";
         }
@@ -247,9 +250,9 @@ public class DBTool {
         Map map = null;
         String searchSQL = "";
         if (version == 0) {
-            searchSQL = "select stnm from STHD where stcd='" + stcd + "'";
+            searchSQL = "select stnm from STHD where STCD='" + stcd + "'";
         } else {
-            searchSQL = "select stnm from HY_STSC_A where stcd='" + stcd + "'";
+            searchSQL = "select stnm from HY_STSC_A where STCD='" + stcd + "'";
         }
         try {
             map = jdbcTemplate.queryForMap(searchSQL);
@@ -261,7 +264,7 @@ public class DBTool {
 
     public void clearTable(boolean isTarget, String table) {
         if (isTarget) {
-            jt2.execute("delete from " + table);
+            jt2.execute("delete from " + table.toUpperCase());
         }
     }
 
@@ -338,7 +341,7 @@ public class DBTool {
             Long indexsdate = System.currentTimeMillis();
 
             insertDataIndexTable_New(table, stscStr, stnameStr, logList, version, expType, saveDir);
-            outputLog(table,saveDir,sdate,indexsdate,true);
+            outputLog(table, saveDir, sdate, indexsdate, true);
             if (i == tables.length) {
                 ((DefaultListModel) (logList.getModel())).addElement("正在生成导出报告 ......");
             }
@@ -346,8 +349,9 @@ public class DBTool {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(DBTool.class.getName()).log(Level.SEVERE, null, ex);
+                outputError("", "===process=Thread=",ex.getMessage());
             }
-           outputLog(table,saveDir,sdate,indexsdate,false);
+            outputLog(table, saveDir, sdate, indexsdate, false);
         }
         //保存导出报告
         ExcelService.createReportHtml(saveDir, expSuccessModel, errorTab, dbTool, selectedStscModel, selectedSnameModel, listTablesModel, expType, stscStr);
@@ -441,6 +445,7 @@ public class DBTool {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
+                 outputError(table, "===insertDataIndexTable=",ex.getMessage());
             }
         }
     }
@@ -451,7 +456,7 @@ public class DBTool {
         if (!indexFiled.trim().equals("")) {//首先保证这张表可以生成数据索引
             try {
 //                int row = jt1.queryForInt("select count(*) from " + table + " where stcd in(" + stcdStr + ")");
-                int row = jt1.queryForInt("select count(*) from " + table);
+                int row = jt1.queryForInt("select count(*) from " + table.toUpperCase());
                 if (row > 0) {
 //                    ((DefaultListModel) (logList.getModel())).addElement("正在生成表【" + getTabCnnm(jt2, table) + "】的数据索引 ......");
                     Map colmap = null;
@@ -464,11 +469,11 @@ public class DBTool {
                         String fltp = colmap.get("FILDTPL").toString().trim();
                         String searchSQL = "";
                         if (fltp.trim().equals("T")) {
-                            searchSQL = "SELECT DISTINCT STCD,datepart (yyyy," + indexFiled + ") as years,COUNT(*) AS TOTAL from " + table
+                            searchSQL = "SELECT DISTINCT STCD,datepart (yyyy," + indexFiled + ") as years,COUNT(*) AS TOTAL from " + table.toUpperCase()
                                     + " GROUP BY STCD,datepart (yyyy," + indexFiled + ")"
                                     + " ORDER BY STCD,YEARS ASC ";
                         } else {
-                            searchSQL = "SELECT DISTINCT STCD," + indexFiled + " as years,COUNT(*) AS TOTAL from " + table
+                            searchSQL = "SELECT DISTINCT STCD," + indexFiled + " as years,COUNT(*) AS TOTAL from " + table.toUpperCase()
                                     + " GROUP BY STCD," + indexFiled
                                     + " ORDER BY STCD,YEARS ASC ";
                         }
@@ -482,13 +487,13 @@ public class DBTool {
                         }
                         List afterList = ToOrder.toOrder(beforList);
                         if (expType == 0 || expType == 2) {
-                            outPutIndexToFile(table, saveDir, afterList,version);
+                            outPutIndexToFile(table, saveDir, afterList, version);
                         }
                         if (expType == 1 || expType == 2) {
                             if (afterList != null && afterList.size() > 0) {
                                 for (int w = 0; w < afterList.size(); w++) {
                                     String[] values = ((String) afterList.get(w).toString()).split(",");
-                                    String insertSql = "INSERT INTO DATA_INDEX_A(TBID,ATBCNM,BSTCD,CSTNM,DTOTAL,EYEAR)VALUES('"+table+"','"
+                                    String insertSql = "INSERT INTO DATA_INDEX_A(TBID,ATBCNM,BSTCD,CSTNM,DTOTAL,EYEAR)VALUES('" + table + "','"
                                             + getTabCnnm(jt2, table) + "'," + values[0] + ",'" + getStscName2(jt1, values[0], version) + "','" + values[2] + "','" + values[1] + "')";
                                     jt2.execute(insertSql);
                                 }
@@ -502,6 +507,7 @@ public class DBTool {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
+                outputError(table, "===insertDataIndexTable_new=",ex.getMessage());
             }
         }
     }
@@ -513,7 +519,9 @@ public class DBTool {
     public Connection getCnTarget() {
         return cnTarget;
     }
-
+    public String getSaveDirs() {
+        return saveDirs;
+    }
     public JdbcTemplate getJt1() {
         return jt1;
     }
@@ -548,26 +556,25 @@ public class DBTool {
         String searChsql = "";
         String countChsql = "";
         if (isHaveStcdCol(table)) {
-            searChsql = "select * from " + table + " where stcd in(" + stsc + ")";
-            countChsql = "select count(*) from " + table + " where stcd in(" + stsc + ")";
+            searChsql = "select * from " + table.toUpperCase() + " where STCD in(" + stsc + ")";
+            countChsql = "select count(*) from " + table.toUpperCase() + " where STCD in(" + stsc + ")";
         } else {
-            searChsql = "select * from " + table;
-            countChsql = "select count(*) from " + table;
+            searChsql = "select * from " + table.toUpperCase();
+            countChsql = "select count(*) from " + table.toUpperCase();
         }
         try {
 //            if (expType != 0) {
 //                clearTable(true, table);
 //            }
             final String tablename = getTabCnnm(jt2, table);
-            
+
             /**
              * 计算分页信息，
              * 每页10000条数据
              */
             //总记录数
-
             int totalRecords = jt1.queryForInt(countChsql);
-            
+
             int totalPage = 1;
             if (totalRecords % 10000 == 0) {
                 totalPage = totalRecords / 50000;
@@ -615,12 +622,13 @@ public class DBTool {
             } else {
                 errorTab += "," + getTabCnnm(jt2, table);
             }
+            outputError(table, "===createExcelTable=",e.getMessage());
             return false;
         }
         return true;
     }
 
-    public void outPutIndexToFile(String table, String saveDir, List afterList,int version) {
+    public void outPutIndexToFile(String table, String saveDir, List afterList, int version) {
         try {
             File files = new File(saveDir + "\\excel\\dataIndex.txt");
             FileWriter fw = null;
@@ -632,11 +640,11 @@ public class DBTool {
             }
             for (int i = 0; i < afterList.size(); i++) {
                 String[] values = ((String) afterList.get(i).toString()).split(",");
-                String str = table+"\t"+getTabCnnm(jt2, table) + "\t";
+                String str = table + "\t" + getTabCnnm(jt2, table) + "\t";
                 for (int k = 0; k < values.length; k++) {
-                    if(k==0){
-                         str += getStscName2(jt1,values[0],version)+"\t"+values[k]+"\t";
-                    }else{
+                    if (k == 0) {
+                        str += getStscName2(jt1, values[0], version) + "\t" + values[k] + "\t";
+                    } else {
                         if ((k + 1) == values.length) {
                             str += values[k] + "\r\n";
                         } else {
@@ -655,36 +663,53 @@ public class DBTool {
             ex.printStackTrace();
         }
     }
-    public void outputLog(String table, String saveDir,long sdate,long indexsdate,boolean flg){
+
+    public void outputLog(String table, String saveDir, long sdate, long indexsdate, boolean flg) {
         try {
             File files = new File(saveDir + "\\excel\\expLog.txt");
             FileWriter fw = null;
             BigDecimal nowdate = new BigDecimal(String.valueOf(System.currentTimeMillis()));
-            if (files.exists())
+            if (files.exists()) {
                 fw = new FileWriter(saveDir + "\\excel\\expLog.txt", true);
-             else
+            } else {
                 fw = new FileWriter(saveDir + "\\excel\\expLog.txt");
+            }
 //            Date date = Calendar.getInstance().getTime();
 //            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
 //            String sDate = sdf.format(date);
-                if(flg){
-                    fw.write("生成索引----:" + getTabCnnm(jt2,table)+ "\r\n");
-                    fw.write("用时----:"+nowdate.subtract(new BigDecimal(indexsdate)) + "--毫秒\r\n");
-                }
-                else{
-                    fw.write("导出数据----:" + getTabCnnm(jt2,table)+ "\r\n");
-                    fw.write("用时----:"+nowdate.subtract(new BigDecimal(sdate)) + "--毫秒\r\n");
-                }
+            if (flg) {
+                fw.write("生成索引----:" + getTabCnnm(jt2, table) + "\r\n");
+                fw.write("用时----:" + nowdate.subtract(new BigDecimal(indexsdate)) + "--毫秒\r\n");
+            } else {
+                fw.write("导出数据----:" + getTabCnnm(jt2, table) + "\r\n");
+                fw.write("用时----:" + nowdate.subtract(new BigDecimal(sdate)) + "--毫秒\r\n");
+            }
             fw.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
+    public void outputError(String table, String methodname, String errormsg) {
+         String saveDir=this.getSaveDirs();
+        try {
+            File files = new File(saveDir + "\\excel\\expErrorLog.txt");
+            FileWriter fw = null;
+            if (files.exists()) {
+                fw = new FileWriter(saveDir + "\\excel\\expErrorLog.txt", true);
+            } else {
+                fw = new FileWriter(saveDir + "\\excel\\expErrorLog.txt");
+            }
+            fw.write(getTabCnnm(jt2, table) + "\r\n");
+            fw.write(methodname + "\r\n");
+            fw.write(errormsg);
+            fw.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
-
-
-     public boolean copyTablePS(final String table, String stsc, String saveDir, JList logList, int expType, int version) {
+    public boolean copyTablePS(final String table, String stsc, String saveDir, JList logList, int expType, int version) {
 
         String searChsql = "";
         String countChsql = "";
@@ -706,8 +731,9 @@ public class DBTool {
              */
             //总记录数
             int totalRecords = jt1.queryForInt(countChsql);
-            if(totalRecords==0)
+            if (totalRecords == 0) {
                 ((DefaultListModel) (logList.getModel())).addElement("-------：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，需导出数据条数：0");
+            }
             int totalPage = 1;
             if (totalRecords % 10000 == 0) {
                 totalPage = totalRecords / 50000;
@@ -715,20 +741,20 @@ public class DBTool {
                 totalPage = totalRecords / 50000 + 1;
             }
             for (int p = 0; p < totalPage; p++) {
-                
+
                 List rowList = jt1.querySP(searChsql, p * 50000 + 1, 50000);
                 String fields = "";
                 String params = "";
                 Iterator it = rowList.iterator();
-                int c=0;
+                int c = 0;
                 String sql = "";
                 while (it.hasNext()) {
 
-                   final String[] themap = (String[]) it.next();
-                   String str = "";
-                    if(c==0){
+                    final String[] themap = (String[]) it.next();
+                    String str = "";
+                    if (c == 0) {
                         FileWriter fw = new FileWriter(saveDir + "\\excel\\" + tablename + "_" + p + ".txt");
-                         for (int i = 0; i < themap.length; i++) {
+                        for (int i = 0; i < themap.length; i++) {
                             fields += themap[i] + ",";
                             params += "?,";
                             if ((i + 1) == themap.length) {
@@ -737,35 +763,35 @@ public class DBTool {
                                 str += themap[i] + "\t";
                             }
                         }
-                         fw.write(str);
-                         fw.close();
-                         sql = "insert into " + table + " (" + fields.substring(0, fields.length() - 1) + ") values (" + params.substring(0, params.length() - 1) + ")";
-                    }else{
-                       final FileWriter fw2 = new FileWriter(saveDir + "\\excel\\" + tablename + "_" + p + ".txt",true);
+                        fw.write(str);
+                        fw.close();
+                        sql = "insert into " + table + " (" + fields.substring(0, fields.length() - 1) + ") values (" + params.substring(0, params.length() - 1) + ")";
+                    } else {
+                        final FileWriter fw2 = new FileWriter(saveDir + "\\excel\\" + tablename + "_" + p + ".txt", true);
                         jt2.execute(sql, new PreparedStatementCallback() {
 
                             public Object doInPreparedStatement(PreparedStatement pStat) throws SQLException,
                                     DataAccessException {
 
-                                String substr="";
+                                String substr = "";
                                 for (int i = 1; i <= themap.length; i++) {
-                                    
+
                                     if (i == themap.length) {
-                                        substr += themap[i-1] + "\r\n";
+                                        substr += themap[i - 1] + "\r\n";
                                     } else {
-                                        substr += themap[i-1] + "\t";
+                                        substr += themap[i - 1] + "\t";
                                     }
                                     try {
                                         fw2.write(substr);
-                                        substr="";
+                                        substr = "";
                                     } catch (IOException ex) {
                                         Logger.getLogger(DBTool.class.getName()).log(Level.SEVERE, null, ex);
                                     }
-                                    Object o = themap[i-1];
+                                    Object o = themap[i - 1];
                                     if (o instanceof Blob) {
                                         pStat.setObject(i, ((Blob) o).getBytes(1, 100000000));//100mb
                                     } else {
-                                        pStat.setObject(i, themap[i-1]);
+                                        pStat.setObject(i, themap[i - 1]);
                                     }
                                 }
                                 pStat.execute();
@@ -774,16 +800,16 @@ public class DBTool {
                         });
                         fw2.close();
                     }
-                     c++;
+                    c++;
                 }
-                 if (p ==0) {
-                    ((DefaultListModel) (logList.getModel())).addElement("-------：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，需导出数据条数："+totalRecords);
-                    ((DefaultListModel) (logList.getModel())).addElement("正在导出------ " + p * 50000+" 至 "+(p+1) * 50000+"    生成文件:["+saveDir + "\\excel\\" + tablename + "_" + p + ".txt]");
+                if (p == 0) {
+                    ((DefaultListModel) (logList.getModel())).addElement("-------：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，需导出数据条数：" + totalRecords);
+                    ((DefaultListModel) (logList.getModel())).addElement("正在导出------ " + p * 50000 + " 至 " + (p + 1) * 50000 + "    生成文件:[" + saveDir + "\\excel\\" + tablename + "_" + p + ".txt]");
                 } else {
-                    ((DefaultListModel) (logList.getModel())).addElement("正在导出------ " + p * 50000+" 至 "+(p+1) * 50000+"    生成文件:["+saveDir + "\\excel\\" + tablename + "_" + p + ".txt]");
+                    ((DefaultListModel) (logList.getModel())).addElement("正在导出------ " + p * 50000 + " 至 " + (p + 1) * 50000 + "    生成文件:[" + saveDir + "\\excel\\" + tablename + "_" + p + ".txt]");
                 }
-                
-                
+
+
             }
 //            if (expType == 2) {
 //                    createExcelTable(table, stsc, saveDir, logList, expType);
@@ -796,12 +822,13 @@ public class DBTool {
             } else {
                 errorTab += "," + getTabCnnm(jt2, table);
             }
+             outputError(table, "===copyTablePS=",e.getMessage());
             return false;
         }
         return true;
     }
 
-     public boolean copyTablePSOnly(final String table, String stsc, String saveDir, JList logList, int expType, int version) {
+    public boolean copyTablePSOnly(final String table, String stsc, String saveDir, JList logList, int expType, int version) {
 
         String searChsql = "";
         String countChsql = "";
@@ -834,29 +861,29 @@ public class DBTool {
                 String fields = "";
                 String params = "";
                 Iterator it = rowList.iterator();
-                int c=0;
+                int c = 0;
                 String sql = "";
                 while (it.hasNext()) {
 
-                   final String[] themap = (String[]) it.next();
-                   String str = "";
-                    if(c==0){
-                         for (int i = 0; i < themap.length; i++) {
+                    final String[] themap = (String[]) it.next();
+                    String str = "";
+                    if (c == 0) {
+                        for (int i = 0; i < themap.length; i++) {
                             fields += themap[i] + ",";
                             params += "?,";
                         }
-                         sql = "insert into " + table + " (" + fields.substring(0, fields.length() - 1) + ") values (" + params.substring(0, params.length() - 1) + ")";
-                    }else{
+                        sql = "insert into " + table + " (" + fields.substring(0, fields.length() - 1) + ") values (" + params.substring(0, params.length() - 1) + ")";
+                    } else {
                         jt2.execute(sql, new PreparedStatementCallback() {
 
                             public Object doInPreparedStatement(PreparedStatement pStat) throws SQLException,
                                     DataAccessException {
                                 for (int i = 1; i <= themap.length; i++) {
-                                    Object o = themap[i-1];
+                                    Object o = themap[i - 1];
                                     if (o instanceof Blob) {
                                         pStat.setObject(i, ((Blob) o).getBytes(1, 100000000));//100mb
                                     } else {
-                                        pStat.setObject(i, themap[i-1]);
+                                        pStat.setObject(i, themap[i - 1]);
                                     }
                                 }
                                 pStat.execute();
@@ -864,13 +891,13 @@ public class DBTool {
                             }
                         });
                     }
-                     c++;
+                    c++;
                 }
-                 if (p ==0) {
-                    ((DefaultListModel) (logList.getModel())).addElement("正在导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，需导出数据条数："+totalRecords);
-                    ((DefaultListModel) (logList.getModel())).addElement("正在导出---------------------------- " + p * 50000+" 至 "+(p+1) * 50000);
+                if (p == 0) {
+                    ((DefaultListModel) (logList.getModel())).addElement("正在导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，需导出数据条数：" + totalRecords);
+                    ((DefaultListModel) (logList.getModel())).addElement("正在导出---------------------------- " + p * 50000 + " 至 " + (p + 1) * 50000);
                 } else {
-                    ((DefaultListModel) (logList.getModel())).addElement("正在导出---------------------------- " + p * 50000+" 至 "+(p+1) * 50000);
+                    ((DefaultListModel) (logList.getModel())).addElement("正在导出---------------------------- " + p * 50000 + " 至 " + (p + 1) * 50000);
                 }
 
 
@@ -886,10 +913,9 @@ public class DBTool {
             } else {
                 errorTab += "," + getTabCnnm(jt2, table);
             }
+            outputError(table, "===copyTablePSOnly=",e.getMessage());
             return false;
         }
         return true;
     }
-
-
 }

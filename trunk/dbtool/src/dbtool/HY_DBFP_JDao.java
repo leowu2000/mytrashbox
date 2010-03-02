@@ -32,19 +32,19 @@ public class HY_DBFP_JDao {
         String sSQL="";
         String checkSQL = "";
         if(version==0){
-            checkSQL = "select * from fields WHERE tablename='" + tbid + "' and fielde='STCD'";
+            checkSQL = "select * from FIELDS WHERE tablename='" + tbid + "' and fielde='STCD'";
         }else{
             checkSQL = "select * from HY_DBFP_J WHERE TBID='" + tbid + "' and upper(FLID)='STCD'";
         }
 
         List rows = conn.queryForList(checkSQL);
         if ("HY_STSC_A".trim().equalsIgnoreCase(tbid)||"STHD".trim().equalsIgnoreCase(tbid)||"HY_DATBDL_I".trim().equalsIgnoreCase(tbid)) {
-            sSQL = "select top 500 " + colSql + " from " + tbid;
+            sSQL = "select top 500 " + colSql + " from " + tbid.toUpperCase();
         } else {
             if (rows != null && rows.size() > 0) {
-                sSQL = "select top 500 " + colSql + " from " + tbid + " WHERE STCD IN(" + subSql + ")";
+                sSQL = "select top 500 " + colSql + " from " + tbid.toUpperCase() + " WHERE STCD IN(" + subSql + ")";
             } else {
-                sSQL = "select top 500 " + colSql + " from " + tbid;
+                sSQL = "select top 500 " + colSql + " from " + tbid.toUpperCase();
             }
         }
         List rows2 = conn.queryForList(sSQL);
@@ -82,12 +82,12 @@ public class HY_DBFP_JDao {
             String checkSql = "select * from HY_DBFP_J WHERE TBID='" + tbid + "' and FLID='STCD'";
             ResultSet rss = stmt.executeQuery(checkSql);
             if ("HY_STSC_A".trim().equalsIgnoreCase(tbid)) {
-                sSQL = "select " + colSql + " from " + tbid;
+                sSQL = "select " + colSql + " from " + tbid.toUpperCase();
             } else {
                 if (rss.next()) {
-                    sSQL = "select " + colSql + " from " + tbid + " WHERE STCD IN(" + subSql + ")";
+                    sSQL = "select " + colSql + " from " + tbid.toUpperCase() + " WHERE STCD IN(" + subSql + ")";
                 } else {
-                    sSQL = "select " + colSql + " from " + tbid;
+                    sSQL = "select " + colSql + " from " + tbid.toUpperCase();
                 }
             }
 //            System.out.println("==HY_DBFP_JDao:findAllList::" + sSQL);

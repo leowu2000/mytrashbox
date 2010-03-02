@@ -59,6 +59,7 @@ public static boolean deleteDirectory(String dir){
 
        //删除当前目录
        if(dirFile.delete()){
+           System.out.println("删除目录成功");
             return true;
         }else{
            return false;
