@@ -16,6 +16,7 @@
 				/assets.do=AssetsController
 				/cost.do=CostController
 				/menu.do=MenuController
+				/plan.do=PlanController
 			</value>
 		</property>
 	</bean>
@@ -44,5 +45,6 @@
 	<bean name="AssetsController" class="com.basesoft.modules.assets.AssetsController"></bean>
 	<bean name="CostController" class="com.basesoft.modules.cost.CostController"></bean>
 	<bean name="MenuController" class="com.basesoft.modules.menu.MenuController"></bean>
+	<bean name="PlanController" class="com.basesoft.modules.plan.PlanController"></bean>
 </beans>
 

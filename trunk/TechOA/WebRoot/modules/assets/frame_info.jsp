@@ -43,6 +43,18 @@
 	  
 	  var manage = '<%=manage %>';
 	  
+	  if(status=='2'){
+	  	document.getElementById('seldepart').style.display = '';
+	  	document.getElementById('selemp').style.display = '';
+	  	document.getElementById('bumen').style.display = '';
+	  	document.getElementById('renyuan').style.display = '';
+	  }else {
+	  	document.getElementById('seldepart').style.display = 'none';
+	  	document.getElementById('selemp').style.display = 'none';
+	  	document.getElementById('bumen').style.display = 'none';
+	  	document.getElementById('renyuan').style.display = 'none';
+	  }
+	  
 	  if(manage==0){
 	  	document.getElementById('list_info').src = "/assets.do?action=list_info&status=" + status + "&depart=" + depart + "&emp=" + emp;
 	  }else if(manage==1){
@@ -72,8 +84,7 @@
 	function init(){
 	  document.getElementById('selstatus').value = '<%=status %>';
 	  document.getElementById('seldepart').value = '<%=depart %>';
-	  
-	  if(document.getElementById('selstatus').value==2){
+	  if(document.getElementById('selstatus').value=='2'){
 	  	document.getElementById('seldepart').style.display = '';
 	  	document.getElementById('selemp').style.display = '';
 	  	document.getElementById('bumen').style.display = '';

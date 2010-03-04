@@ -123,11 +123,20 @@ public class CommonDAO {
 	}
 	
 	/**
-	 * 获取项目列表
+	 * 获取工作令号列表
 	 * @return
 	 */
 	public List<?> getProject(){
 		return jdbcTemplate.queryForList("select * from PROJECT");
+	}
+	
+	/**
+	 * 获取分系统列表
+	 * @param pjcode 工作令号
+	 * @return
+	 */
+	public List<?> getProject_d(String pjcode){
+		return jdbcTemplate.queryForList("select * from PROJECT_D where PJCODE='" + pjcode + "'");
 	}
 	
 	/**
