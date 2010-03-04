@@ -72,6 +72,7 @@ public class DBTool {
         } else {
             searChsql = "select * from " + table.toUpperCase();
         }
+        outputError(table,"copyTable=searChsql:",searChsql);
         try {
             if (expType != 0) {
                 clearTable(true, table.toUpperCase());
@@ -445,7 +446,7 @@ public class DBTool {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                 outputError(table, "===insertDataIndexTable=",ex.getMessage());
+                 outputError(table, "===insertDataIndexTable=数据索引",ex.getMessage());
             }
         }
     }
@@ -477,6 +478,7 @@ public class DBTool {
                                     + " GROUP BY STCD," + indexFiled
                                     + " ORDER BY STCD,YEARS ASC ";
                         }
+                        outputError(table,"insertDataIndexTable_New=s数据索引:",searchSQL);
                         List rows = jt1.queryForList(searchSQL);
                         ToOrder order = new ToOrder();
                         List beforList = new ArrayList();
@@ -562,6 +564,8 @@ public class DBTool {
             searChsql = "select * from " + table.toUpperCase();
             countChsql = "select count(*) from " + table.toUpperCase();
         }
+        outputError(table,"createExcelTable=searChsql:",searChsql);
+        outputError(table,"createExcelTable=countChsql:",countChsql);
         try {
 //            if (expType != 0) {
 //                clearTable(true, table);
