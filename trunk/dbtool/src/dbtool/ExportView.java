@@ -1372,6 +1372,7 @@ public class ExportView extends JFrame {
                                     for (String initstscsql : initStscTab) {
                                         if (initstscsql != null && !initstscsql.trim().equals("null")) {
                                             jt_Target.execute(initstscsql);
+//                                            System.out.println(initstscsql);
                                         }
                                     }
 
@@ -1388,7 +1389,7 @@ public class ExportView extends JFrame {
                                     int i = 0;
                                     for (HY_DBTP_JBean bean : tabList) {
                                         bean = (HY_DBTP_JBean) tabList.get(i);
-                                        selectedTablesModel.addElement(bean.getTBCNNM());
+                                        selectedTablesModel.addElement(bean.getTBCNNM().trim());
                                         i++;
                                     }
                                 }
@@ -1413,8 +1414,8 @@ public class ExportView extends JFrame {
                                         List<HY_STSC_ABean> resultList = null;
 
                                         while (rs.next()) {
-                                            stscNameModel_source.addElement(rs.getString("stnm"));
-                                            listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + rs.getString("stnm"));
+                                            stscNameModel_source.addElement(rs.getString("stnm").trim());
+                                            listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + rs.getString("stnm").trim());
                                             liststscModel_source.addElement(rs.getString("stcd").trim());
                                         }
                                         return resultList;
@@ -1576,9 +1577,7 @@ public class ExportView extends JFrame {
     private void SelectedTablesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SelectedTablesMouseClicked
         if (evt.getClickCount() == 2) {
             DefaultListModel model = (DefaultListModel) ListTables.getModel();
-
             model.addElement(SelectedTables.getSelectedValue());
-
             selectedTablesModel.remove(SelectedTables.getSelectedIndex());
         }
     }//GEN-LAST:event_SelectedTablesMouseClicked
@@ -1654,9 +1653,9 @@ public class ExportView extends JFrame {
 
             if (Version.getSelectedIndex() == 1) //符合4.0的标准
             {
-                queryStcdSQL = "select *  from HY_STSC_A where stnm like '%" + selectedValue + "%'";
+                queryStcdSQL = "select *  from HY_STSC_A where stnm like '%" + selectedValue.trim() + "%'";
             } else {
-                queryStcdSQL = "select *  from STHD where stnm like '%" + selectedValue + "%'";
+                queryStcdSQL = "select *  from STHD where stnm like '%" + selectedValue.trim() + "%'";
             }
             if (!"".trim().equals(expStsc)) {
                 queryStcdSQL += " and stcd not in('" + expStsc + "')";

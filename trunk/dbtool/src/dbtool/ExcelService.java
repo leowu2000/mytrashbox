@@ -470,11 +470,11 @@ public class ExcelService {
             HSSFCell cell_indexflp = row_Val.getCell((short) 4);
             try {
                 stcdList[i - 1] = "INSERT INTO INDEX_DESC(TBCNNM,TBENNM,TBTYPE,FILDID,FILDTPL)VALUES('"
-                        + getStringCellValue(cell_tbcnnm) + "','"
-                        + getStringCellValue(cell_tbennm) + "','"
-                        + getStringCellValue(cell_tbtype) + "','"
-                        + getStringCellValue(cell_indexf) + "','"
-                        +getStringCellValue(cell_indexflp) + "')";
+                        + getStringCellValue(cell_tbcnnm).trim() + "','"
+                        + getStringCellValue(cell_tbennm).trim()  + "','"
+                        + getStringCellValue(cell_tbtype).trim()  + "','"
+                        + getStringCellValue(cell_indexf).trim()  + "','"
+                        +getStringCellValue(cell_indexflp).trim()  + "')";
             } catch (Exception e) {
                 continue;
             }
