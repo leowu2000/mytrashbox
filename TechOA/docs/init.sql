@@ -12,9 +12,11 @@ create table ASSETS  (
    NOWCOST              NUMERIC(15,2),
    LIFE                 INTEGER,
    STATUS               VARCHAR(10),
-   DEPARTCPDE           VARCHAR(20),
+   DEPARTCODE           VARCHAR(20),
    EMPCODE              VARCHAR(20),
    LENDDATE             DATE,
+   CHECKDATE            DATE,
+   CHECKYEAR            INTEGER,
    constraint PK_ASSETS primary key (ID)
 );
 
@@ -51,7 +53,7 @@ comment on column ASSETS.LIFE is
 comment on column ASSETS.STATUS is
 '设备状态(1:库中;2:借出;3:损坏)';
 
-comment on column ASSETS.DEPARTCPDE is
+comment on column ASSETS.DEPARTCODE is
 '借出部门';
 
 comment on column ASSETS.EMPCODE is
@@ -59,6 +61,12 @@ comment on column ASSETS.EMPCODE is
 
 comment on column ASSETS.LENDDATE is
 '借出日期';
+
+comment on column ASSETS.CHECKDATE is
+'上次检查时间';
+
+comment on column ASSETS.CHECKYEAR is
+'检查间隔';
 
 /*==============================================================*/
 /* Table: ATTACHMENT                                            */
@@ -136,23 +144,6 @@ comment on column DEPARTMENT.ALLPARENTS is
 
 comment on column DEPARTMENT."LEVEL" is
 '等级';
-
-/*==============================================================*/
-/* Table: DEP_PJ                                                */
-/*==============================================================*/
-create table DEP_PJ  (
-   DEPCODE              VARCHAR(20),
-   PJCODE               VARCHAR(20)
-);
-
-comment on table DEP_PJ is
-'工程-部门表';
-
-comment on column DEP_PJ.DEPCODE is
-'部门编码';
-
-comment on column DEP_PJ.PJCODE is
-'项目编码';
 
 /*==============================================================*/
 /* Table: DICT                                                  */
@@ -280,6 +271,7 @@ create table MENU  (
    ORDERCODE            INTEGER,
    STATUS               VARCHAR(1),
    PARENT               VARCHAR(20),
+   ICON                 INTEGER,
    constraint PK_MENU primary key (MENUCODE)
 );
 
@@ -306,6 +298,10 @@ comment on column MENU.STATUS is
 
 comment on column MENU.PARENT is
 '父功能编码';
+
+comment on column MENU.ICON is
+'图标号';
+
 
 /*==============================================================*/
 /* Table: PJ_COST                                               */
@@ -378,6 +374,52 @@ comment on column PJ_COST.YT is
 '用途';
 
 /*==============================================================*/
+/* Table: PLAN                                                  */
+/*==============================================================*/
+create table PLAN  (
+   ID                   VARCHAR(32)                     not null,
+   EMPCODE              VARCHAR(20),
+   PJCODE               VARCHAR(20),
+   PJCODE_D             VARCHAR(20),
+   STAGECODE            VARCHAR(20),
+   STARTDATE            DATE,
+   ENDDATE              DATE,
+   PLANEDWORKLOAD       INTEGER,
+   NOTE                 VARCHAR(500),
+   constraint PK_PLAN primary key (ID)
+);
+
+comment on table PLAN is
+'计划表';
+
+comment on column PLAN.ID is
+'ID';
+
+comment on column PLAN.EMPCODE is
+'人员编码';
+
+comment on column PLAN.PJCODE is
+'工作令号';
+
+comment on column PLAN.PJCODE_D is
+'分系统编码';
+
+comment on column PLAN.STAGECODE is
+'阶段编码';
+
+comment on column PLAN.STARTDATE is
+'计划起始时间';
+
+comment on column PLAN.ENDDATE is
+'计划截止时间';
+
+comment on column PLAN.PLANEDWORKLOAD is
+'计划工时';
+
+comment on column PLAN.NOTE is
+'计划描述';
+
+/*==============================================================*/
 /* Table: PROJECT                                               */
 /*==============================================================*/
 create table PROJECT  (
@@ -430,6 +472,52 @@ comment on column PROJECT.ENDDATE is
 
 comment on column PROJECT.NOTE is
 '项目描述';
+
+/*==============================================================*/
+/* Table: PROJECT_D                                             */
+/*==============================================================*/
+create table PROJECT_D  (
+   ID                   VARCHAR(32)                     not null,
+   PJCODE               VARCHAR(20),
+   CODE                 VARCHAR(20),
+   NAME                 VARCHAR(50),
+   MANAGER              VARCHAR(20),
+   STARTDATE            DATE,
+   ENDDATE              DATE,
+   PLANEDWORKLOAD       INTEGER,
+   NOTE                 VARCHAR(500),
+   constraint PK_PROJECT_D primary key (ID)
+);
+
+comment on table PROJECT_D is
+'分系统表';
+
+comment on column PROJECT_D.ID is
+'ID';
+
+comment on column PROJECT_D.PJCODE is
+'工作令号';
+
+comment on column PROJECT_D.CODE is
+'分系统编码';
+
+comment on column PROJECT_D.NAME is
+'分系统名称';
+
+comment on column PROJECT_D.MANAGER is
+'分系统负责人';
+
+comment on column PROJECT_D.STARTDATE is
+'起始日期';
+
+comment on column PROJECT_D.ENDDATE is
+'截止日期';
+
+comment on column PROJECT_D.PLANEDWORKLOAD is
+'计划工时';
+
+comment on column PROJECT_D.NOTE is
+'备注';
 
 /*==============================================================*/
 /* Table: USER_MENU                                             */
@@ -487,6 +575,7 @@ create table WORKREPORT  (
    STARTDATE            DATE,
    ENDDATE              DATE,
    PJCODE               VARCHAR(20),
+   PJCODE_D             VARCHAR(20),
    STAGECODE            VARCHAR(20),
    AMOUNT               INTEGER,
    BZ                   VARCHAR(2000),
@@ -514,7 +603,10 @@ comment on column WORKREPORT.ENDDATE is
 '截止日期';
 
 comment on column WORKREPORT.PJCODE is
-'工程编码';
+'工作令号';
+
+comment on column WORKREPORT.PJCODE_D is
+'分系统编码';
 
 comment on column WORKREPORT.STAGECODE is
 '阶段编码';

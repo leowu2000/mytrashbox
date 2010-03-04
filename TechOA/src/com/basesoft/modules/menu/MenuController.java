@@ -141,7 +141,7 @@ public class MenuController extends CommonController {
 			mv= new ModelAndView("modules/menu/list_favor");
 			
 			PageList pageList = menuDAO.findAllFavor(emcode, page);
-			List listChild = menuDAO.findChilds(emcode);
+			List listChild = menuDAO.findChilds(emcode, emrole);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("listChild", listChild);

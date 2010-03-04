@@ -33,8 +33,36 @@ Ext.onReady(function(){
                     height: 20
                 }, {
                     region:'west',
-                    contentEl:'west',
-                    width: 205
+                    width: 205,
+                    minSize: 200,   
+            		maxSize: 400,   
+            		collapsible: true,   
+            		iconCls:'tag_wand',
+            		title:'<%=emname %>',
+            		collapsible: true,  
+            		layout:'accordion',
+		            layoutConfig: {
+        		        animate: true
+            		},
+            		items:[{
+                    	title:'收藏菜单',
+                     	id:'tree1',
+    	                xtype: 'treepanel',
+        	            autoScroll: true,
+            	        border: false,   
+                	    loader: treeloader1,
+                    	rootVisible:false,
+                   	  	root: new Ext.tree.AsyncTreeNode({text:'功能演示'})
+                   	},{
+                     	title:'默认菜单',
+                     	id:'tree2',
+                     	xtype: 'treepanel',
+                     	autoScroll: true,
+                     	border: false,   
+                     	loader: treeloader2,
+                     	rootVisible:false,
+                     	root: new Ext.tree.AsyncTreeNode({text:'功能演示'})
+                   	}]
                 }, {
                     region:'center',
                     contentEl:'main',
@@ -43,40 +71,6 @@ Ext.onReady(function(){
              ]
         });
         
-        new Ext.Panel({//创建一个面板
-            renderTo:'west',
-            contentEl:'west',
-            iconCls:'tag_wand',
-            title:'<%=emname %>',
-            border: false,   
-            collapsible: true,  
-            layout:'accordion',
-            defaults: {
-        		bodyStyle: 'border:0px;'
-    		},
-            layoutConfig: {
-                animate: true
-            },
-            items:[{
-                     title:'收藏菜单',
-                     id:'tree1',
-                     xtype: 'treepanel',
-                     autoScroll: true,
-                     autoHeight:true,
-                     loader: treeloader1,
-                     rootVisible:false,
-                     root: new Ext.tree.AsyncTreeNode({text:'功能演示'})
-                   },{
-                     title:'默认菜单',
-                     id:'tree2',
-                     xtype: 'treepanel',
-                     autoScroll: true,
-                     autoHeight:true,
-                     loader: treeloader2,
-                     rootVisible:false,
-                     root: new Ext.tree.AsyncTreeNode({text:'功能演示'})
-                   }]
-      });
         
         
 Ext.getCmp('tree1').expandAll();

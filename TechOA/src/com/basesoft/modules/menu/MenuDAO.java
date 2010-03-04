@@ -95,8 +95,8 @@ public class MenuDAO extends CommonDAO {
 	 * 取得未收藏的子菜单列表
 	 * @return
 	 */
-	public List findChilds(String empcode){
-		String sql = "select * from MENU where MENUTYPE='1' and STATUS='1' and MENUCODE not in (select MENUCODE from USER_MENU where EMPCODE='" + empcode + "' and TYPE='2') order by ordercode";
+	public List findChilds(String empcode, String emrole){
+		String sql = "select * from MENU where MENUTYPE='1' and STATUS='1' and MENUCODE not in (select MENUCODE from USER_MENU where EMPCODE='" + empcode + "' and TYPE='2') and MENUCODE in (select MENUCODE from USER_MENU where EMPCODE='" + emrole + "') order by ordercode";
 		
 		return jdbcTemplate.queryForList(sql);
 	}
@@ -150,7 +150,7 @@ public class MenuDAO extends CommonDAO {
 			  .append("',id:'")
 			  .append(mapParent.get("MENUCODE"))
 			  .append("',leaf:false,icon:'images/icons/")
-			  .append(i+1)
+			  .append(mapParent.get("ICON"))
 			  .append(".png',children:[");
 			
 			//取子菜单
@@ -166,11 +166,9 @@ public class MenuDAO extends CommonDAO {
 				  .append("',id:'")
 				  .append(mapChild.get("MENUCODE"))
 				  .append("',leaf:true,hrefTarget:'main',icon:'images/icons/")
-				  .append(i+1)
+				  .append(mapChild.get("ICON"))
 				  .append(".png',href:'")
 				  .append(mapChild.get("MENUURL"))
-				  .append("&menucode=")
-				  .append(mapParent.get("MENUCODE"))
 				  .append("'}");
 				if(j<listChild.size()-1){
 					sb.append(",");

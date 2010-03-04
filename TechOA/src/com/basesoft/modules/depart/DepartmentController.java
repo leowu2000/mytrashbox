@@ -11,7 +11,7 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
-import com.basesoft.modules.workreport.WorkReport;
+import com.basesoft.util.CheckBoxTree;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
@@ -100,7 +100,7 @@ public class DepartmentController extends CommonController {
 				response.sendRedirect("depart.do?action=list");
 				return null;
 			}
-		}else if("validate".equals(action)){
+		}else if("validate".equals(action)){//验证
 			String ids = ServletRequestUtils.getStringParameter(request, "ids", "");
 			String[] id = ids.split(",");
 			
@@ -120,6 +120,26 @@ public class DepartmentController extends CommonController {
 			response.getWriter().write(String.valueOf(b));
 			response.getWriter().close();
 			return null;
+		}else if("departempTree".equals(action)){//部门_人员下拉树
+			//封装成checkboxtree
+			List<CheckBoxTree> checkBoxTreeList = departDAO.getTree();
+			//循环转换为json格式
+			StringBuffer sb = new StringBuffer();
+			sb.append("[");
+			for (int i = 0; i < checkBoxTreeList.size(); i++) {
+				if (i != 0) {
+					sb.append(",");
+				}
+				sb.append(checkBoxTreeList.get(i).toJSONStringNoChecked());
+			}
+			sb.append("]");
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=GBK");
+			response.getWriter().write(sb.toString());
+			response.getWriter().close();
 		}
 		
 		return mv;
