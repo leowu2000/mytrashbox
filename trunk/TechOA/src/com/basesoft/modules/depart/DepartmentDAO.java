@@ -69,9 +69,10 @@ public class DepartmentDAO extends CommonDAO{
 	
 	/**
 	 * 生成tree  list
+	 * @param state 1:只有部门;2:部门加人员
 	 * @return
 	 */
-	public List<CheckBoxTree> getTree() {
+	public List<CheckBoxTree> getDepartEmpTree(String state) {
 		List<CheckBoxTree> treeList = new ArrayList<CheckBoxTree>();
 		
 		List<?> listDepart = getChild("0");
@@ -100,6 +101,7 @@ public class DepartmentDAO extends CommonDAO{
 				leaf.setText(mapChild.get("NAME").toString());
 				leaf.setLeaf(false);
 				
+				
 				leafListDepart.add(leaf);
 				
 				//装有下级部门及本部门人员的list
@@ -117,7 +119,11 @@ public class DepartmentDAO extends CommonDAO{
 					CheckBoxTree leaf2 = new CheckBoxTree();
 					leaf2.setId(mapChild2.get("CODE").toString());
 					leaf2.setText(mapChild2.get("NAME").toString());
-					leaf2.setLeaf(false);
+					if("1".equals(state)){
+						leaf2.setLeaf(false);
+					}else if("2".equals(state)){
+						leaf2.setLeaf(true);
+					}
 					
 					//设置部门下人员
 					List<CheckBoxTree> leafListEMP3 = getLeafEMP(mapChild2.get("CODE").toString());
@@ -128,14 +134,18 @@ public class DepartmentDAO extends CommonDAO{
 				}
 				
 				//添加本部门人员和下级部门
-				leafList2.addAll(leafListEMP2);
+				if("1".equals(state)){
+					leafList2.addAll(leafListEMP2);
+				}
 				leafList2.addAll(leafListDepart2);
 				
 				leaf.setChildren(leafList2);
 			}
 				
 			//添加本部门和下级部门
-			leafList.addAll(leafListEMP);
+			if("1".equals(state)){
+				leafList.addAll(leafListEMP);
+			}
 			leafList.addAll(leafListDepart);
 			
 			tree.setChildren(leafList);
@@ -144,7 +154,7 @@ public class DepartmentDAO extends CommonDAO{
 		}
 		return treeList;
 	}
-	
+
 	/**
 	 * 设置部门下人员
 	 * @param departcode 部门编码

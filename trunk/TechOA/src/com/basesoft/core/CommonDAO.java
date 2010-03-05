@@ -104,7 +104,7 @@ public class CommonDAO {
 	public List getChildDepart(String emid){
 		Map mapEm = jdbcTemplate.queryForMap("select * from EMPLOYEE where ID='" + emid + "'");
 		
-		if("001".equals(mapEm.get("ROLECODE").toString())){//管理员
+		if("001".equals(mapEm.get("ROLECODE").toString())||"000".equals(mapEm.get("ROLECODE").toString())){//管理员
 			return jdbcTemplate.queryForList("select * from DEPARTMENT order by LEVEL");
 		}else if("002".equals(mapEm.get("ROLECODE").toString())){//领导
 			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + mapEm.get("DEPARTCODE") + "' or ALLPARENTS like '%" + mapEm.get("DEPARTCODE") + "%' order by LEVEL");

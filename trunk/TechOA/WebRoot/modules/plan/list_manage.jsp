@@ -240,6 +240,10 @@ for(int i=0;i<listPlan.size();i++){
 				    </select></td>
 				  </tr>	
 				  <tr>
+				    <td>工作内容</td>
+				    <td><input type="text" name="note" style="width:200"></td>
+				  </tr>
+				  <tr>
 				    <td>负责人</td>
 				    <td><span id="selemp" name="selemp"></span></td>
 				  </tr>	
@@ -254,10 +258,6 @@ for(int i=0;i<listPlan.size();i++){
 				  <tr>
 				    <td>投入工时</td>
 				    <td><input type="text" name="planedworkload" style="width:200"></td>
-				  </tr>	
-				  <tr>
-				    <td>工作内容</td>
-				    <td><input type="text" name="note" style="width:200"></td>
 				  </tr>	
 				</table>
 	        </form>
