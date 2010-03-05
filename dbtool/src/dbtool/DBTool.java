@@ -77,42 +77,48 @@ public class DBTool {
             if (expType != 0) {
                 clearTable(true, table.toUpperCase());
             }
-
-            jt1.query(searChsql, new RowMapper() {
-
-                public Object mapRow(final ResultSet rs, int rowNum) throws SQLException {
-                    ResultSetMetaData meta = rs.getMetaData();
-                    final int cols = meta.getColumnCount();
-                    String fields = "";
-                    String params = "";
-                    for (int i = 0; i < cols; i++) {
-                        fields += meta.getColumnName(i + 1) + ",";
-                        params += "?,";
-                    }
-                    String sql = "insert into " + table.toUpperCase() + " (" + fields.substring(0, fields.length() - 1) + ") values (" + params.substring(0, params.length() - 1) + ")";
-                    jt2.execute(sql, new PreparedStatementCallback() {
-
-                        public Object doInPreparedStatement(PreparedStatement pStat) throws SQLException,
-                                DataAccessException {
-                            for (int i = 1; i <= cols; i++) {
-                                Object o = rs.getObject(i);
-                                if (o instanceof Blob) {
-                                    pStat.setObject(i, ((Blob) o).getBytes(1, 100000000));//100mb
-                                } else {
-                                    pStat.setObject(i, rs.getObject(i));
+            String result[] = makeFiledsAndParamets(table);
+            if(result==null){
+                ((DefaultListModel) (logList.getModel())).addElement("::数据表：" + table + "  【" + getTabCnnm(jt2, table) + "】数据为空系统跳过 ");
+                outputError(table, "=copyTable=",getTabCnnm(jt2, table)+"数据表数据为空系统跳过");
+            }
+            else{
+                final String fields = result[0];
+                final String params = result[1];
+                jt1.query(searChsql, new RowMapper() {
+                    public Object mapRow(final ResultSet rs, int rowNum) throws SQLException {
+                        ResultSetMetaData meta = rs.getMetaData();
+                        final int cols = meta.getColumnCount();
+    //                    String fields = "";
+    //                    String params = "";
+    //                    for (int i = 0; i < cols; i++) {
+    //                        fields += meta.getColumnName(i + 1) + ",";
+    //                        params += "?,";
+    //                    }
+                        String sql = "insert into " + table.toUpperCase() + " (" + fields.substring(0, fields.length() - 1) + ") values (" + params.substring(0, params.length() - 1) + ")";
+                        jt2.execute(sql, new PreparedStatementCallback() {
+                            public Object doInPreparedStatement(PreparedStatement pStat) throws SQLException,
+                                    DataAccessException {
+                                for (int i = 1; i <= cols; i++) {
+                                    Object o = rs.getObject(i);
+                                    if (o instanceof Blob) {
+                                        pStat.setObject(i, ((Blob) o).getBytes(1, 100000000));//100mb
+                                    } else {
+                                        pStat.setObject(i, rs.getObject(i));
+                                    }
                                 }
+                                pStat.execute();
+                                return null;
                             }
-                            pStat.execute();
-                            return null;
-                        }
-                    });
-                    return null;
-                }
-            });
+                        });
+                        return null;
+                    }
+                });
 
-            ((DefaultListModel) (logList.getModel())).addElement("正在导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table.toUpperCase()) + "，导出条数：" + getCount(jt2, table.toUpperCase()));
-            if (expType == 2) {
-                createExcelTable(table, stsc, saveDir, logList, expType);
+                ((DefaultListModel) (logList.getModel())).addElement("正在导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table.toUpperCase()) + "，导出条数：" + getCount(jt2, table.toUpperCase()));
+                if (expType == 2) {
+                    createExcelTable(table, stsc, saveDir, logList, expType);
+                }
             }
 
         } catch (Exception e) {
@@ -269,9 +275,7 @@ public class DBTool {
         }
     }
 
-    public static void main(String[] args) {
-        DBTool dbTool = new DBTool("c://config.properties");
-    }
+   
 
     public void shutdown() {
         getJt2().execute("SHUTDOWN");
@@ -456,10 +460,8 @@ public class DBTool {
         String indexFiled = getIndexFiled(table);
         if (!indexFiled.trim().equals("")) {//首先保证这张表可以生成数据索引
             try {
-//                int row = jt1.queryForInt("select count(*) from " + table + " where stcd in(" + stcdStr + ")");
                 int row = jt1.queryForInt("select count(*) from " + table.toUpperCase());
                 if (row > 0) {
-//                    ((DefaultListModel) (logList.getModel())).addElement("正在生成表【" + getTabCnnm(jt2, table) + "】的数据索引 ......");
                     Map colmap = null;
                     try {
                         colmap = jt2.queryForMap("select FILDTPL from INDEX_DESC where TBENNM='" + table + "'");
@@ -567,9 +569,6 @@ public class DBTool {
         outputError(table,"createExcelTable=searChsql:",searChsql);
         outputError(table,"createExcelTable=countChsql:",countChsql);
         try {
-//            if (expType != 0) {
-//                clearTable(true, table);
-//            }
             final String tablename = getTabCnnm(jt2, table);
 
             /**
@@ -658,10 +657,6 @@ public class DBTool {
                 }
                 fw.write(str);
             }
-//            Date date = Calendar.getInstance().getTime();
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS.SSS");
-//            String sDate = sdf.format(date);
-//            fw.write("\r\n" + sDate + "\r\n");
             fw.close();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -678,9 +673,6 @@ public class DBTool {
             } else {
                 fw = new FileWriter(saveDir + "\\excel\\expLog.txt");
             }
-//            Date date = Calendar.getInstance().getTime();
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-//            String sDate = sdf.format(date);
             if (flg) {
                 fw.write("生成索引----:" + getTabCnnm(jt2, table) + "\r\n");
                 fw.write("用时----:" + nowdate.subtract(new BigDecimal(indexsdate)) + "--毫秒\r\n");
@@ -815,9 +807,6 @@ public class DBTool {
 
 
             }
-//            if (expType == 2) {
-//                    createExcelTable(table, stsc, saveDir, logList, expType);
-//                }
         } catch (Exception e) {
             e.printStackTrace();
             expSuccessModel.removeElement(getTabCnnm(jt2, table));
@@ -906,9 +895,6 @@ public class DBTool {
 
 
             }
-//            if (expType == 2) {
-//                    createExcelTable(table, stsc, saveDir, logList, expType);
-//                }
         } catch (Exception e) {
             e.printStackTrace();
             expSuccessModel.removeElement(getTabCnnm(jt2, table));
@@ -921,5 +907,50 @@ public class DBTool {
             return false;
         }
         return true;
+    }
+    /**
+     * 比对字段名称YR和YEAR
+     * 如果字段为YR并且描述中有YR字段，那么返回YR
+     * 否则查看数据库中是否有YEAR字段，如果有则反回YEAR
+     */
+    public String compareYearColumn(String table){
+        List rows = jt2.queryForList("select * from HY_DBFP_J WHERE TBID='" + table + "' and upper(FLID)='YR'");
+        if(rows.size()>0)
+            return "YR";
+        else{
+            List rows2 = jt2.queryForList("select * from HY_DBFP_J WHERE TBID='" + table + "' and upper(FLID)='YEAR'");
+            if(rows2.size()>0)
+                return "YEAR";
+            else
+                return "";
+        }
+    }
+    public String[] makeFiledsAndParamets(final String tablename){
+        List rows = jt1.query("select top 1 * from "+tablename.toUpperCase(), new RowMapper() {
+                public Object mapRow(final ResultSet rs, int rowNum) throws SQLException {
+                    String result[] = new String[2];
+                    String fields="";
+                    String params="";
+                    ResultSetMetaData meta = rs.getMetaData();
+                    final int cols = meta.getColumnCount();
+                    for (int i = 0; i < cols; i++) {
+                        String colname = meta.getColumnName(i + 1);
+                        if(colname.toUpperCase().equals("YR"))
+                            colname = compareYearColumn(tablename);
+                        fields += colname + ",";
+                        params += "?,";
+                    }
+                    result[0]=fields;
+                    result[1]=params;
+                    return result;
+                }
+        });
+        if(rows.size()==0)
+            return null;
+        else
+            return (String[])rows.get(0);
+    }
+     public static void main(String[] args) {
+        DBTool dbTool = new DBTool("c://config.properties");
     }
 }

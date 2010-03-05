@@ -1372,7 +1372,7 @@ public class ExportView extends JFrame {
                                     for (String initstscsql : initStscTab) {
                                         if (initstscsql != null && !initstscsql.trim().equals("null")) {
                                             jt_Target.execute(initstscsql);
-//                                            System.out.println(initstscsql);
+                                            System.out.println(initstscsql);
                                         }
                                     }
 
@@ -1412,12 +1412,9 @@ public class ExportView extends JFrame {
 
                                     public List<HY_STSC_ABean> mapRow(final ResultSet rs, int rowNum) throws SQLException {
                                         List<HY_STSC_ABean> resultList = null;
-
-                                        while (rs.next()) {
-                                            stscNameModel_source.addElement(rs.getString("stnm").trim());
-                                            listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + rs.getString("stnm").trim());
-                                            liststscModel_source.addElement(rs.getString("stcd").trim());
-                                        }
+                                        stscNameModel_source.addElement(rs.getString("stnm").trim());
+                                        listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + rs.getString("stnm").trim());
+                                        liststscModel_source.addElement(rs.getString("stcd").trim());
                                         return resultList;
                                     }
                                 });
@@ -1436,11 +1433,12 @@ public class ExportView extends JFrame {
                                         }
                                     }
                                 }
-                                if (!selectedSnameModel.isEmpty()) {
-                                    for (int k = 0; k < selectedSnameModel.size(); k++) {
-                                        listParamModel_source.removeElement(selectedSnameModel.get(k));
-                                    }
-                                }
+                                //同一个站名对应多个编码的时候有问题，所以注释掉
+//                                if (!selectedSnameModel.isEmpty()) {
+//                                    for (int k = 0; k < selectedSnameModel.size(); k++) {
+//                                        listParamModel_source.removeElement(selectedSnameModel.get(k));
+//                                    }
+//                                }
                                 listStsc.setModel(listParamModel_source);
                                 SelectedStsc.setModel(selectedSnameModel);
                             } else {
@@ -1637,7 +1635,6 @@ public class ExportView extends JFrame {
         if (!"".trim().equals(selectedValue)) {
 
             int point = selectedValue.lastIndexOf("]");
-            String expStsc = selectedValue.substring(1, point);
             if (selectedValue.indexOf("~") > 0) {
                 point++;
             }
@@ -1657,20 +1654,15 @@ public class ExportView extends JFrame {
             } else {
                 queryStcdSQL = "select *  from STHD where stnm like '%" + selectedValue.trim() + "%'";
             }
-            if (!"".trim().equals(expStsc)) {
-                queryStcdSQL += " and stcd not in('" + expStsc + "')";
-            }
             listParamModel_source.removeAllElements();
             liststscModel_source.removeAllElements();
             jt_stsc.query(queryStcdSQL, new RowMapper() {
 
                 public List<HY_STSC_ABean> mapRow(final ResultSet rs, int rowNum) throws SQLException {
                     List<HY_STSC_ABean> resultList = null;
-                    while (rs.next()) {
-                        stscNameModel_source.addElement(rs.getString("stnm").trim());
-                        listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + rs.getString("stnm").trim());
-                        liststscModel_source.addElement(rs.getString("stcd").trim());
-                    }
+                    stscNameModel_source.addElement(rs.getString("stnm").trim());
+                    listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + rs.getString("stnm").trim());
+                    liststscModel_source.addElement(rs.getString("stcd").trim());
                     return resultList;
                 }
             });
