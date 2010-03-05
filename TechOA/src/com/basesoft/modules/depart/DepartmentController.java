@@ -122,7 +122,27 @@ public class DepartmentController extends CommonController {
 			return null;
 		}else if("departempTree".equals(action)){//部门_人员下拉树
 			//封装成checkboxtree
-			List<CheckBoxTree> checkBoxTreeList = departDAO.getTree();
+			List<CheckBoxTree> checkBoxTreeList = departDAO.getDepartEmpTree("1");
+			//循环转换为json格式
+			StringBuffer sb = new StringBuffer();
+			sb.append("[");
+			for (int i = 0; i < checkBoxTreeList.size(); i++) {
+				if (i != 0) {
+					sb.append(",");
+				}
+				sb.append(checkBoxTreeList.get(i).toJSONStringNoChecked());
+			}
+			sb.append("]");
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=GBK");
+			response.getWriter().write(sb.toString());
+			response.getWriter().close();
+		}else if("departTree".equals(action)){//部门下拉树
+			//封装成checkboxtree
+			List<CheckBoxTree> checkBoxTreeList = departDAO.getDepartEmpTree("2");
 			//循环转换为json格式
 			StringBuffer sb = new StringBuffer();
 			sb.append("[");

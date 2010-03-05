@@ -1,8 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="com.basesoft.util.StringUtil" %>
-<html>
-<head>
-<title></title>
 <%
 	String user = StringUtil.nullToSpace((String) request.getAttribute("user"));
 	String errorMessage = StringUtil.nullToSpace((String) request.getAttribute("errorMessage"));
@@ -10,62 +7,34 @@
 		errorMessage = new String(StringUtil.nullToSpace(request.getParameter("errorMessage")).getBytes("ISO8859-1"), "UTF-8");
 	}
 %>
-<title>项目管理系统</title>
+<html>
+<head>
+<title>科研项目管理系统</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <style type="text/css">
 <!--
 body {
-	margin-left: 0px;
-	margin-top: 0px;
-	margin-right: 0px;
-	margin-bottom: 0px;
-	background-image: url(images/bg1.jpg);
-	font-size: 9px;	
+	background-image: url(images/login_01.gif);
+	background-repeat:repeat-x;
+	
 }
-div {
-	font-size: 9px;
-	height: 20px;
-	width: 100px;
+.STYLE1 {color: #000000}
+.style2 {
+	font-size: 12px;
+	color: #FFFFFF;
 }
 input {
-	font-size: 12px;
-	border: 1px solid #A9CCDE;
-	background-color: #E4F4FD;
 	height: 20px;
-	line-height: normal;
-	width: 120px;
+	width: 130px;
 }
-.style2 {
-	COLOR: #ffffff;
+.color {
 	font-size: 12px;
+	color:#FF0000;
+	font-weight:bold;
 }
 -->
 </style>
-<script language="JavaScript" type="text/JavaScript">
-<!--
-function MM_swapImgRestore() { //v3.0
-  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
-}
-
-function MM_preloadImages() { //v3.0
-  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
-    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
-    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
-}
-
-function MM_findObj(n, d) { //v4.01
-  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
-    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
-  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
-  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
-  if(!x && d.getElementById) x=d.getElementById(n); return x;
-}
-
-function MM_swapImage() { //v3.0
-  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
-   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
-}
-//-->
-
+<script type="text/javascript">
 function toLogin(){
 	var username = document.getElementById('user').value;
 	var password = document.getElementById('password').value;
@@ -81,44 +50,43 @@ function toLogin(){
 }
 </script>
 </head>
-
-<body onload="MM_preloadImages('images/denglu_b.gif','images/quxiao_b.gif')" scroll="no" >
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" scroll="no">
 <form id="listForm" name="listForm" action="/login.do?action=login" method="post">
-<table width="100%" height="640" border="0" cellspacing="0">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td align="center" valign="middle"><table width="629" height="335" border="0" cellspacing="0">
-      <tr>
-        <td align="center" background="images/login.jpg"><table width="548" border="0">
+    <td align="center" valign="top"><table border="0" cellspacing="0" cellpadding="0">
+      <tr align="left" valign="top">
+        <td><img src="images/login_02.gif" width="451" height="111"></td>
+        <td><img src="images/login_03.jpg" width="290" height="111"></td>
+      </tr>
+      <tr align="left" valign="top">
+        <td><img src="images/login_06.gif" width="451" height="515"></td>
+        <td valign="middle" background="images/login_07.gif"><table width="100%" height="125" border="0" cellspacing="2" class="back1">
           <tr>
-            <td width="186" height="119">&nbsp;</td>
-            <td width="54">&nbsp;</td>
-            <td width="132">&nbsp;</td>
-            <td colspan="2">&nbsp;</td>
+    	<td height="10" align="center" class="color" colspan="4"><%= errorMessage %></td>
+  	  </tr>
+          <tr align="left" valign="bottom">
+            <td width="20%" height="32" align="right" valign="bottom"><span class="style2"><span class="style2">用户名</span>：</span></td>
+            <td width="2%" align="center" valign="bottom">&nbsp;</td>
+            <td width="53%" valign="bottom" class="STYLE1"><input name="user" id="user" type="text" size="25" /></td>
+            <td width="25%" valign="bottom" class="STYLE1">&nbsp;</td>
           </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td align="center"><span class="style2">用户名：</span></td>
-            <td align="right"><input name="user" id="user" type="text" size="25" /></td>
-            <td colspan="2">&nbsp;</td>
+          <tr align="left" valign="top">
+            <td align="right" valign="middle"><span class="style2">密　码：</span></td>
+            <td align="center" valign="middle">&nbsp;</td>
+            <td height="43" valign="middle"><input name="password" id="password" type="password" size="25" /></td>
+            <td height="43" valign="middle">&nbsp;</td>
           </tr>
-          <tr>
-            <td height="27">&nbsp;</td>
-            <td align="center"><span class="style2">密　码：</span></td>
-            <td align="right"><input name="password" id="password" type="password" size="25" /></td>
-            <td colspan="2">&nbsp;</td>
-          </tr>          
-          <tr>
-            <td height="42">&nbsp;</td>
-            <td height="42" colspan="2">&nbsp;</td>
-            <td colspan="2">&nbsp;</td>
-          </tr>
-          <tr>
-            <td height="14">&nbsp;</td>
-            <td height="48" colspan="2">&nbsp;</td>
-            <td width="72"><input type="image" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image1','','images/denglu_b.gif',1)" src="images/denglu_a.gif" style="width: 68;height: 24;" border="0" name="Image1"></td>
-            <td width="82"><a href="#" onclick="document.getElementById('listForm').reset();" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image2','','images/quxiao_b.gif',1)"><img src="images/quxiao_a.gif" name="Image2" width="68" height="24" border="0" id="Image2" /></a></td>
+          <tr align="left" valign="top">
+            <td align="right" valign="middle">&nbsp;</td>
+            <td height="34" colspan="2" align="left" valign="middle"><input type="image" src="images/denglu.gif" STYLE="width:61;height:21;"  border="0">&nbsp;&nbsp;&nbsp;<a href="#" onclick="document.getElementById('listForm').reset();"><img src="images/quxiao.gif" width="61" height="21" border="0"></a></td>
+            <td height="34" align="center" valign="middle">&nbsp;</td>
           </tr>
         </table></td>
+      </tr>
+      <tr align="left" valign="top">
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
       </tr>
     </table></td>
   </tr>
