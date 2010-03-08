@@ -164,6 +164,22 @@ public class StringUtil {
 		
 	}
 	
+	/**
+	 * 第n天前的日期
+	 * @param date
+	 * @return
+	 */
+	public static Date getBeforeDate(Date date, int n) {
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		
+		int day = cal.get(Calendar.DAY_OF_MONTH);
+		cal.set(Calendar.DAY_OF_MONTH, day - n);
+		return cal.getTime();
+		
+	}
+	
 	public static List<Date> getDateList(String start, String end){
 		List returnList = new ArrayList<String>();
 		
@@ -183,5 +199,23 @@ public class StringUtil {
 		cal.roll(cal.DATE, -1);
 		
 		return cal.getTime();
+	}
+	
+	/**
+	 * 是否达到提醒日期
+	 * @param date 需要检查的日期
+	 * @param i 提前i天提醒
+	 * @return
+	 */
+	public static boolean isRemind(Date date, int i){
+		boolean b = false;
+		
+		date = getBeforeDate(date, i);
+		
+		if(date.compareTo(new Date())>=0){
+			b = true;
+		}
+		
+		return b;
 	}
 }

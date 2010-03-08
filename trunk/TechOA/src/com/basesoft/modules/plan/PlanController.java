@@ -145,7 +145,9 @@ public class PlanController extends CommonController {
 			
 			response.sendRedirect("plan.do?action=list&pjcode=" + f_pjcode + "&stagecode=" + f_stagecode + "&empname=" + f_empname + "&page=" + page);
 		}else if("remind".equals(action)){//计划提醒
+			mv = new ModelAndView("modules/plan/frame_remind");
 			
+			return mv;
 		}
 		
 		return null;

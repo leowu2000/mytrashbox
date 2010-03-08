@@ -86,9 +86,12 @@ public class AssetsController extends CommonController {
 			String buycost = ServletRequestUtils.getStringParameter(request, "buycost", "0");
 			String nowcost = ServletRequestUtils.getStringParameter(request, "nowcost", "0");
 			String life = ServletRequestUtils.getStringParameter(request, "life", "10");
+			String checkdate = ServletRequestUtils.getStringParameter(request, "checkdate", "1");
+			String checkyear = ServletRequestUtils.getStringParameter(request, "checkyear", "1");
+			
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			String insertSql = "insert into ASSETS values('" + id + "', '" + code + "', '" + name + "', '" + model + "', '" + buydate + "', '" + producdate + "', " + buycost + ", " + nowcost + ", " + life + ", '1', null, null, null)";
+			String insertSql = "insert into ASSETS values('" + id + "', '" + code + "', '" + name + "', '" + model + "', '" + buydate + "', '" + producdate + "', " + buycost + ", " + nowcost + ", " + life + ", '1', null, null, null,'" + checkdate + "', " + checkyear + ")";
 			assetsDAO.insert(insertSql);
 			
 			response.sendRedirect("assets.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
@@ -121,7 +124,7 @@ public class AssetsController extends CommonController {
 			
 			response.sendRedirect("assets.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
-		}else if("return".equals(action)){
+		}else if("return".equals(action)){//归还
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
@@ -133,7 +136,7 @@ public class AssetsController extends CommonController {
 			
 			response.sendRedirect("assets.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
-		}else if("damage".equals(action)){
+		}else if("damage".equals(action)){//报修
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
@@ -141,6 +144,19 @@ public class AssetsController extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
 			String updateSql = "update ASSETS set STATUS='3', DEPARTCODE=null, EMPCODE=null, LENDDATE=null where ID='" + id + "'";
+			assetsDAO.update(updateSql);
+			
+			response.sendRedirect("assets.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
+			return null;
+		}else if("check".equals(action)){//年检
+			String status = ServletRequestUtils.getStringParameter(request, "status", "");
+			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
+			String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
+			String checkdate = ServletRequestUtils.getStringParameter(request, "checkdate", "1");
+			
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			
+			String updateSql = "update ASSETS set CHECKDATE='" + checkdate + "' where ID='" + id + "'";
 			assetsDAO.update(updateSql);
 			
 			response.sendRedirect("assets.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
