@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.util.*" %>
 <%@ page import="com.basesoft.modules.assets.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
@@ -37,6 +38,7 @@ AssetsDAO assetsDAO = (AssetsDAO)ctx.getBean("assetsDAO");
 <!--
 var win;
 var win1;
+var win2;
 var action;
 var url='/assets.do';
 var vali = "";
@@ -48,10 +50,11 @@ Ext.onReady(function(){
 	tb.add({text: '领用',cls: 'x-btn-text-icon jieyue',handler: onLendClick});
 	tb.add({text: '归还',cls: 'x-btn-text-icon guihuan',handler: onReturnClick});
 	tb.add({text: '报修',cls: 'x-btn-text-icon xiugai',handler: onDamageClick});
+	tb.add({text: '年检',cls: 'x-btn-text-icon xiugai',handler: onCheckClick});
 	
     if(!win){
         win = new Ext.Window({
-        	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+        	el:'dlg',width:320,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
 	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
 	        {text:'关闭',handler: function(){win.hide();}}
@@ -65,6 +68,16 @@ Ext.onReady(function(){
 	        buttons: [
 	        {text:'提交',handler: function(){Ext.getDom('dataForm1').action=action; Ext.getDom('dataForm1').submit();}},
 	        {text:'关闭',handler: function(){win1.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
 	        ]
         });
     }
@@ -129,6 +142,19 @@ Ext.onReady(function(){
     		}
     	});
     }
+    
+    function onCheckClick(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+    
+    	action = url+'?action=check&id='+selValue+'&page=<%=pagenum %>';
+    	win2.setTitle('年检');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
+    }
 });
 
 //-->
@@ -173,7 +199,9 @@ Ext.onReady(function(){
     		<td>领用单位</td>
     		<td>领用人</td>
     		<td>领用时间</td>
-    		<td>历史情况</td>
+    		<!-- <td>历史情况</td> -->
+    		<td>上次年检时间</td>
+    		<td>下次年检时间</td>
     	</tr>
 <%
     for(int i=0;i<listAssets.size();i++){
@@ -197,6 +225,13 @@ Ext.onReady(function(){
     	if(mapAssets.get("EMPCODE")!=null){
     		empname = assetsDAO.findNameByCode("EMPLOYEE", mapAssets.get("EMPCODE").toString());
     	}
+    	
+    	String checkdate = mapAssets.get("CHECKDATE").toString();
+    	int year = Integer.parseInt(checkdate.substring(0,4));
+    	int checkyear = Integer.parseInt(mapAssets.get("CHECKYEAR").toString());
+    	String nextcheckdate = (year + checkyear) + checkdate.substring(4);
+    	
+    	boolean isRemind = StringUtil.isRemind(StringUtil.StringToDate(nextcheckdate,"yyyy-MM-dd"),15);
 %>    	
 		<tr align="center">
 			<td><input type="checkbox" name="check" value="<%=mapAssets.get("ID") %>" class="ainput"></td>
@@ -211,7 +246,19 @@ Ext.onReady(function(){
 			<td>&nbsp;<%=departname %></td>
 			<td>&nbsp;<%=empname %></td>
 			<td>&nbsp;<%=mapAssets.get("LENDDATE")==null?"":mapAssets.get("LENDDATE") %></td>
-			<td><a href="modules/assets/history.jsp">查看</a></td>
+			<!-- <td><a href="modules/assets/history.jsp">查看</a></td> -->
+			<td>&nbsp;<%=checkdate %></td>
+<%
+		if(isRemind){
+%>
+			<td>&nbsp;<%=nextcheckdate %></td>
+<%
+		}else { 
+%>			
+			<td>&nbsp;<font color="red"><%=nextcheckdate %></font></td>
+<%
+		}
+%>
 		</tr>
 <%  } %>
     </table>
@@ -240,11 +287,11 @@ Ext.onReady(function(){
 				  </tr>
 				  <tr>
 				    <td>购买日期</td>
-				    <td><input type="text" name="buydate" style="width:200" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"></td>
+				    <td><input type="text" name="buydate" style="width:200" onclick="WdatePicker()"></td>
 				  </tr>
 				  <tr>
 				    <td>出厂日期</td>
-				    <td><input type="text" name="producdate" style="width:200" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"></td>
+				    <td><input type="text" name="producdate" style="width:200" onclick="WdatePicker()"></td>
 				  </tr>
 				  <tr>
 				    <td>使用年限</td>
@@ -253,6 +300,14 @@ Ext.onReady(function(){
 				  <tr>
 				    <td>购买价格</td>
 				    <td><input type="text" name="buycost" style="width:200"></td>
+				  </tr>
+				  <tr name="checktr" id="checktr">
+				    <td>上次年检时间</td>
+				    <td><input type="text" name="checkdate" style="width:200" onclick="WdatePicker()"></td>
+				  </tr>
+				  <tr>
+				    <td>年检间隔</td>
+				    <td><input type="text" name="checkyear" style="width:200"></td>
 				  </tr>
 				</table>
 	        </form>
@@ -284,6 +339,24 @@ Ext.onReady(function(){
 				  <tr>
 				    <td>领用人</td>
 				    <td><span id="empspan" name="empspan"></span></td>
+				  </tr>
+				</table>
+	        </form>
+    </div>
+</div>
+
+<div id="dlg2" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm2" name="dataForm2" action="" method="post">
+	        <input type="hidden" name="status" value="<%=status %>">
+	        <input type="hidden" name="depart" value="<%=depart %>">
+	        <input type="hidden" name="emp" value="<%=emp %>">
+	        <input type="hidden" name="page" value="<%=pagenum %>">
+                <table>
+				  <tr>
+				    <td>年检日期</td>
+					<td><input type="text" name="checkdate" style="width:200" onclick="WdatePicker()"></td>
 				  </tr>
 				</table>
 	        </form>

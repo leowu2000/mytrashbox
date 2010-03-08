@@ -34,10 +34,6 @@ public class EmployeeController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		if("frame_infolist".equals(action)){//人员frame
 			mv = new ModelAndView("modules/employee/frame_info");
-			//获取下级部门列表
-			List listChildDepart = emDAO.getChildDepart(emid);
-			
-			mv.addObject("listChildDepart", listChildDepart);
 		}else if("infolist".equals(action)){//人员基本信息
 			mv = new ModelAndView("modules/employee/list_info");
 			
@@ -88,14 +84,6 @@ public class EmployeeController extends CommonController {
 			return null;
 		}else if("frame_manage".equals(action)){//人事管理frame
 			mv = new ModelAndView("modules/employee/frame_manage");
-			
-			String depart = ServletRequestUtils.getStringParameter(request, "depart", "0");
-			
-			//获取下级部门列表
-			List listChildDepart = emDAO.getChildDepart(emid);
-			
-			mv.addObject("listChildDepart", listChildDepart);
-			mv.addObject("depart", depart);
 		}else if("list_manage".equals(action)){//人事管理列表
 			mv = new ModelAndView("modules/employee/list_manage");
 			

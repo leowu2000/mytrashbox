@@ -45,10 +45,6 @@ public class ProjectController extends CommonController {
 			
 		}else if("frame_kygstj".equals(action)){//科研工时统计frame
 			mv = new ModelAndView("modules/pj/frame_kygstj");
-			
-			List listDepart = projectDAO.getChildDepart(emid);
-			
-			mv.addObject("listDepart", listDepart);
 		}else if("kygstj".equals(action)){//科研工时统计
 			mv = new ModelAndView("modules/pj/list_kygstj");
 			
@@ -71,10 +67,6 @@ public class ProjectController extends CommonController {
 			
 		}else if("frame_cdrwqk".equals(action)){//承担任务情况frame
 			mv = new ModelAndView("modules/pj/frame_cdrwqk");
-			
-			List listDepart = projectDAO.getChildDepart(emid);
-			
-			mv.addObject("listDepart", listDepart);
 		}else if("cdrwqk".equals(action)){//工程技术人员承担任务情况
 			mv = new ModelAndView("modules/pj/list_cdrwqk");
 			

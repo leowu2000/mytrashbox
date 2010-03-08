@@ -1,9 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-	List listChildDepart = (List)request.getAttribute("listChildDepart");
-	String depart = request.getAttribute("depart").toString();
-%>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -65,7 +60,7 @@
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
   		
-  		comboBoxTree.setValue({id:'<%=depart %>',text:'请选择...'});
+  		comboBoxTree.setValue({id:'0',text:'请选择...'});
   		
   		var emname = document.getElementById('emname').value;
 	    document.getElementById('list_manage').src = "/em.do?action=list_manage&seldepart=" + comboBoxTree.getValue() + "&emname=" + emname;
