@@ -236,10 +236,6 @@ public class EmployeeController extends CommonController {
 			return null;
 		}else if("frame_workcheck".equals(action)){//考勤frame
 			mv = new ModelAndView("modules/employee/frame_workcheck");
-			
-			List listDepart = emDAO.getChildDepart(emid);
-			mv.addObject("listDepart", listDepart);
-			
 		}else if("workcheck".equals(action)){//考勤结果
 			mv = new ModelAndView("modules/employee/list_workcheck");
 			
