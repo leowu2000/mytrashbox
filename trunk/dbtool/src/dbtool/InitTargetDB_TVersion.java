@@ -107,7 +107,7 @@ String[] dropTab = new String[]{
         "CREATE TABLE msun(stcd char(8) not null ,field_id char(6) ,chineseunit char(20) ,englishunit char(10))",
         "CREATE TABLE idix(id char(6) ,idcode char(1) ,chinesename char(30) ,englishname char(50) ,numbertype char(10) ,chineseunit char(20) ,englishunit char(10))"
     };
-    String[] insertTables=new String[]{
+    String[] insertTables=new String[]{//
         "INSERT INTO HY_DBTP_J (TBNO,TBID,TBCNNM,TBENNM)VALUES(999,'DATA_INDEX_A','数据索引表','DATA_INDEX_A')",
         "INSERT INTO HY_DBTP_J (TBNO,TBID,TBCNNM,TBENNM)VALUES(999,'DATA_INDEX_S','数据一览表','DATA_INDEX_S')",
 //        "INSERT INTO HY_DBTP_J (TBNO,TBID,TBCNNM,TBENNM)VALUES(999,'crosstable','日表交叉表格式','crosstable')",
@@ -1007,7 +1007,7 @@ String[] dropTab = new String[]{
         "INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('DATA_INDEX_A','ATBCNM','报表名称','ATBCNM',0)",
         "INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('DATA_INDEX_A','EYEAR','起止年份','EYEAR',0)",
         "INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('DATA_INDEX_A','DTOTAL','数据量','DTOTAL',0)",
-        "INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('DATA_INDEX_A','TBID','表编号','TBID',0)",
+        "INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('DATA_INDEX_A','TBID','表编号','TBID',0)"
 
     };
     String[] initStscTab=new String[]{

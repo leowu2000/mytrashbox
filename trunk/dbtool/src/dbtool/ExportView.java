@@ -1372,7 +1372,7 @@ public class ExportView extends JFrame {
                                     for (String initstscsql : initStscTab) {
                                         if (initstscsql != null && !initstscsql.trim().equals("null")) {
                                             jt_Target.execute(initstscsql);
-                                            System.out.println(initstscsql);
+//                                            System.out.println(initstscsql);
                                         }
                                     }
 
@@ -1785,6 +1785,7 @@ public class ExportView extends JFrame {
     private void listPreviewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listPreviewMouseClicked
         // TODO add your handling code here:
         String colStr = "";
+        int type = jComboBox1.getSelectedIndex();
         List<HY_DBFP_JBean> colList = null;
         List<List<Map<String, String>>> resulstList = null;
         try {
@@ -1807,7 +1808,7 @@ public class ExportView extends JFrame {
                     }
                 }
                 stscStr = HY_DBFP_JDao.getStscd(stscStr);
-                resulstList = HY_DBFP_JDao.findAllList(tabid, colAndNameStri[0], stscStr, 0);
+               resulstList =  HY_DBFP_JDao.findAllList(tabid, colAndNameStri[0], stscStr, type, dbTool, Version.getSelectedIndex());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
