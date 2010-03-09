@@ -64,55 +64,7 @@ public class HY_DBFP_JDao {
         return resultList;
     }
 
-    /**
-     * @param tbid
-     * @return
-     */
-    public static List<List<Map<String, String>>> findAllList(String tbid, String colSql, String subSql, int type) {
-        List<List<Map<String, String>>> resultList = new ArrayList<List<Map<String, String>>>();
-        Connection conn = null;
-        try {
-            if (type == 0) {
-                conn = ConnectionPool.getConnection();
-            } else {
-                conn = ConnectionPool.getTargetConnection();
-            }
-            Statement stmt = conn.createStatement();
-            String sSQL = "";
-            String checkSql = "select * from HY_DBFP_J WHERE TBID='" + tbid + "' and FLID='STCD'";
-            ResultSet rss = stmt.executeQuery(checkSql);
-            if ("HY_STSC_A".trim().equalsIgnoreCase(tbid)) {
-                sSQL = "select " + colSql + " from " + tbid.toUpperCase();
-            } else {
-                if (rss.next()) {
-                    sSQL = "select " + colSql + " from " + tbid.toUpperCase() + " WHERE STCD IN(" + subSql + ")";
-                } else {
-                    sSQL = "select " + colSql + " from " + tbid.toUpperCase();
-                }
-            }
-//            System.out.println("==HY_DBFP_JDao:findAllList::" + sSQL);
-            ResultSet rs = stmt.executeQuery(sSQL);
-            while (rs.next()) {
-                String arr[] = colSql.split(",");
-                List<Map<String, String>> colList = new ArrayList<Map<String, String>>();
-                for (int i = 0; i < arr.length; i++) {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put(arr[i], rs.getString(arr[i]) == null ? "" : rs.getString(arr[i]));
-                    colList.add(map);
-                }
-                resultList.add(colList);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                ConnectionPool.freeConnection(conn);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-        return resultList;
-    }
+   
 
     /**
      *

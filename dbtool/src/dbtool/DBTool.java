@@ -34,8 +34,8 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 public class DBTool {
 
     Connection cnSource, cnTarget;
-//    JdbcTemplate jt1, jt2;
-    PageTemplate jt1, jt2;
+    JdbcTemplate jt1, jt2;
+//    PageTemplate jt1, jt2;
     String saveDirs="";
     DefaultListModel expSuccessModel = new DefaultListModel();
     String errorTab = "";
@@ -68,7 +68,7 @@ public class DBTool {
 
         String searChsql = "";
         if (isHaveStcdCol(table)) {
-            searChsql = "select * from " + table.toUpperCase() + " where STCD in(" + stsc + ")";
+            searChsql = "select * from " + table.toUpperCase() + makeStcdSqlCol(stsc);
         } else {
             searChsql = "select * from " + table.toUpperCase();
         }
@@ -89,12 +89,6 @@ public class DBTool {
                     public Object mapRow(final ResultSet rs, int rowNum) throws SQLException {
                         ResultSetMetaData meta = rs.getMetaData();
                         final int cols = meta.getColumnCount();
-    //                    String fields = "";
-    //                    String params = "";
-    //                    for (int i = 0; i < cols; i++) {
-    //                        fields += meta.getColumnName(i + 1) + ",";
-    //                        params += "?,";
-    //                    }
                         String sql = "insert into " + table.toUpperCase() + " (" + fields.substring(0, fields.length() - 1) + ") values (" + params.substring(0, params.length() - 1) + ")";
                         jt2.execute(sql, new PreparedStatementCallback() {
                             public Object doInPreparedStatement(PreparedStatement pStat) throws SQLException,
@@ -146,6 +140,17 @@ public class DBTool {
             }
         }
         return flag;
+    }
+
+    public String makeStcdSqlCol(String stsc) {
+        String stscSql = "";
+        for(String val:stsc.split(",")){
+            if(stscSql.trim().equals(""))
+                stscSql = " where stcd="+val;
+            else
+                stscSql +=" or stcd="+val;
+        }
+        return stscSql;
     }
 
     public String getIndexFiled(String table) {
@@ -546,22 +551,20 @@ public class DBTool {
             DefaultListModel selectedSnameModel, String stsc) {
         selectedSnameModel.removeElement("数据索引表");
         selectedSnameModel.removeElement("数据一览表");
-//        selectedSnameModel.removeElement("测站编码表");
         int realCount = getCountToExcel(jt1, table, stsc, isHaveStcdCol(table));
         if (realCount == 0) {
             ((DefaultListModel) (logList.getModel())).addElement("              此表可导出数据为空，放弃处理！");
-//            ((DefaultListModel) (logList.getModel())).addElement("成功结束导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】");
         } else {
             ((DefaultListModel) (logList.getModel())).addElement("成功结束导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，导出条数：" + realCount);
         }
     }
 
-    public boolean createExcelTable(final String table, String stsc, String saveDir, JList logList, int expType) {
+    public boolean createExcelTable(final String table, String stsc, String saveDir, final JList logList, int expType) {
         String searChsql = "";
         String countChsql = "";
         if (isHaveStcdCol(table)) {
-            searChsql = "select * from " + table.toUpperCase() + " where STCD in(" + stsc + ")";
-            countChsql = "select count(*) from " + table.toUpperCase() + " where STCD in(" + stsc + ")";
+            searChsql = "select * from " + table.toUpperCase() + makeStcdSqlCol(stsc );
+            countChsql = "select count(*) from " + table.toUpperCase() + makeStcdSqlCol(stsc );
         } else {
             searChsql = "select * from " + table.toUpperCase();
             countChsql = "select count(*) from " + table.toUpperCase();
@@ -570,24 +573,84 @@ public class DBTool {
         outputError(table,"createExcelTable=countChsql:",countChsql);
         try {
             final String tablename = getTabCnnm(jt2, table);
-
-            /**
-             * 计算分页信息，
-             * 每页10000条数据
-             */
             //总记录数
-            int totalRecords = jt1.queryForInt(countChsql);
-
-            int totalPage = 1;
-            if (totalRecords % 10000 == 0) {
+            final int totalRecords = jt1.queryForInt(countChsql);
+           int totalPage = 1;
+            if (totalRecords % 50000 == 0) {
                 totalPage = totalRecords / 50000;
             } else {
                 totalPage = totalRecords / 50000 + 1;
             }
+            final String path = saveDir;
+            final int allpage = totalPage;
+            if(totalRecords>0){
+                jt1.query(searChsql,  new RowMapper() {
+                    int p=0;
+                    FileWriter fw = null;
+                    public Object mapRow(final ResultSet rs, int rowNum) throws SQLException {
 
+                        StringBuffer fields = new StringBuffer("");
+                        ResultSetMetaData meta = rs.getMetaData();
+                        int cols = meta.getColumnCount();
+                        if(rowNum%50000==0){
+                            try{
+                                fw = new FileWriter(path + "\\excel\\" + tablename +"_"+p+".txt");
+
+                                if (p + 1 == allpage) {
+                                    ((DefaultListModel) (logList.getModel())).addElement("           ...正在处理  " + p * 50000 + "  至   " + totalRecords + "  条记录，文件名称：【" + path + "\\excel\\" + tablename + "_" + p + ".txt】");
+                                } else {
+                                    ((DefaultListModel) (logList.getModel())).addElement("           ...正在处理  " + p * 50000 + "  至   " + (p + 1) * 50000 + "  条记录，文件名称：【" + path + "\\excel\\" + tablename + "_" + p + ".txt】");
+                                }
+                                p++;
+                                for (int i = 1; i <=cols; i++) {
+                                    if (fields.toString().trim().equals("")) {
+                                        fields = new StringBuffer(meta.getColumnName(i));
+                                    } else {
+                                        fields = new StringBuffer(fields + "\t" + meta.getColumnName(i));
+                                    }
+                                }
+                            fw.write(fields.toString() + "\r\n");
+                            fields=new StringBuffer("");
+                            for (int i = 1; i <= cols; i++) {
+                                 Object obj = rs.getObject(i);
+                                 obj=obj==null?"null":obj;
+                                if (fields.toString().trim().equals("")) {
+                                    fields = new StringBuffer(obj.toString());
+                                } else {
+                                    fields = new StringBuffer(fields + "\t" + obj.toString());
+                                }
+                            }
+                            fw.write(fields.toString() + "\r\n");
+                            fields=new StringBuffer("");
+
+                            }catch(Exception ex){ex.printStackTrace();}
+                        }else{
+                            for (int i = 1; i <= cols; i++) {
+                                 Object obj = rs.getObject(i);
+                                 obj=obj==null?"null":obj;
+                                if (fields.toString().trim().equals("")) {
+                                    fields = new StringBuffer(obj.toString());
+                                } else {
+                                    fields = new StringBuffer(fields + "\t" + obj.toString());
+                                }
+                            }
+                            try {
+                                    fw.write(fields.toString() + "\r\n");
+                                    fields=new StringBuffer("");
+                                } catch (IOException ex) {
+                                     ex.printStackTrace();
+                                }
+                        }
+                         return null;
+                    }
+                });
+            }
+
+            /**
             for (int p = 0; p < totalPage; p++) {
 
                 FileWriter fw = new FileWriter(saveDir + "\\excel\\" + tablename + "_" + p + ".txt");
+                
                 List rowList = jt1.querySP(searChsql, p * 50000 + 1, 50000);
 
                 Iterator it = rowList.iterator();
@@ -615,7 +678,7 @@ public class DBTool {
                 } catch (InterruptedException ex) {
                     Logger.getLogger(DBTool.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
+            }*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -704,7 +767,7 @@ public class DBTool {
             ex.printStackTrace();
         }
     }
-
+/**
     public boolean copyTablePS(final String table, String stsc, String saveDir, JList logList, int expType, int version) {
 
         String searChsql = "";
@@ -721,10 +784,6 @@ public class DBTool {
                 clearTable(true, table);
             }
             final String tablename = getTabCnnm(jt2, table);
-            /**
-             * 计算分页信息，
-             * 每页10000条数据
-             */
             //总记录数
             int totalRecords = jt1.queryForInt(countChsql);
             if (totalRecords == 0) {
@@ -820,7 +879,8 @@ public class DBTool {
         }
         return true;
     }
-
+**/
+    /**
     public boolean copyTablePSOnly(final String table, String stsc, String saveDir, JList logList, int expType, int version) {
 
         String searChsql = "";
@@ -836,10 +896,6 @@ public class DBTool {
             if (expType != 0) {
                 clearTable(true, table);
             }
-            /**
-             * 计算分页信息，
-             * 每页10000条数据
-             */
             //总记录数
             int totalRecords = jt1.queryForInt(countChsql);
             int totalPage = 1;
@@ -848,6 +904,7 @@ public class DBTool {
             } else {
                 totalPage = totalRecords / 50000 + 1;
             }
+            outputError(table, "===取得有效数据条数=",String.valueOf(totalPage));
             for (int p = 0; p < totalPage; p++) {
 
                 List rowList = jt1.querySP(searChsql, p * 50000 + 1, 50000);
@@ -908,6 +965,7 @@ public class DBTool {
         }
         return true;
     }
+     * */
     /**
      * 比对字段名称YR和YEAR
      * 如果字段为YR并且描述中有YR字段，那么返回YR
