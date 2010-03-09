@@ -575,33 +575,27 @@ public class DBTool {
             final String tablename = getTabCnnm(jt2, table);
             //总记录数
             final int totalRecords = jt1.queryForInt(countChsql);
-           int totalPage = 1;
-            if (totalRecords % 50000 == 0) {
-                totalPage = totalRecords / 50000;
-            } else {
-                totalPage = totalRecords / 50000 + 1;
-            }
+//           int totalPage = 1;
+//            if (totalRecords % 50000 == 0) {
+//                totalPage = totalRecords / 50000;
+//            } else {
+//                totalPage = totalRecords / 50000 + 1;
+//            }
             final String path = saveDir;
-            final int allpage = totalPage;
+//            final int allpage = totalPage;
             if(totalRecords>0){
+                final FileWriter fw = new FileWriter(path + "\\excel\\" + tablename +".txt");
+                ((DefaultListModel) (logList.getModel())).addElement("           ...正在写入文件：【" + saveDir + "\\excel\\" + tablename + ".txt】,请等待...");
                 jt1.query(searChsql,  new RowMapper() {
-                    int p=0;
-                    FileWriter fw = null;
+                    
+                    int k=0;
                     public Object mapRow(final ResultSet rs, int rowNum) throws SQLException {
 
                         StringBuffer fields = new StringBuffer("");
                         ResultSetMetaData meta = rs.getMetaData();
                         int cols = meta.getColumnCount();
-                        if(rowNum%50000==0){
+                        if(k==0){
                             try{
-                                fw = new FileWriter(path + "\\excel\\" + tablename +"_"+p+".txt");
-
-                                if (p + 1 == allpage) {
-                                    ((DefaultListModel) (logList.getModel())).addElement("           ...正在处理  " + p * 50000 + "  至   " + totalRecords + "  条记录，文件名称：【" + path + "\\excel\\" + tablename + "_" + p + ".txt】");
-                                } else {
-                                    ((DefaultListModel) (logList.getModel())).addElement("           ...正在处理  " + p * 50000 + "  至   " + (p + 1) * 50000 + "  条记录，文件名称：【" + path + "\\excel\\" + tablename + "_" + p + ".txt】");
-                                }
-                                p++;
                                 for (int i = 1; i <=cols; i++) {
                                     if (fields.toString().trim().equals("")) {
                                         fields = new StringBuffer(meta.getColumnName(i));
@@ -641,9 +635,12 @@ public class DBTool {
                                      ex.printStackTrace();
                                 }
                         }
+                        k++;
                          return null;
                     }
+
                 });
+                fw.close();
             }
 
             /**
