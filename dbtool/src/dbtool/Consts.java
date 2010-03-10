@@ -33,7 +33,7 @@ public interface Consts {
             "南坪","南坪2"
         };
         String[] jdbcclass=new String[]{"--选择数据库类型--","Microsoft SQL Server","Sybase",
-        "Oracle","FoxPro"};
+        "Oracle","ODBC数据源"};
 
          String[] SLS_tables = new String[]{"HY_DZ_C","HY_DQ_C","HY_DCS_C","HY_DQS_C",
                                             "HY_DCZ_D","HY_DCQ_D","HY_DCCS_D","HY_DCQS_D",
