@@ -40,30 +40,30 @@ public class ExcelService {
             String filename = savePath + "\\excel\\" + reportName + ".xls";
 
             HSSFWorkbook workbook = new HSSFWorkbook();
-            // åœ¨ Excel å·¥ä½œç°¿ä¸­å»ºåˆ›ä¸€ä¸ªå·¥ä½œè¡¨,å…¶åä¸ºç¼ºçœå€¼ sheet1
+            // ÔÚ Excel ¹¤×÷²¾ÖĞ½¨´´Ò»¸ö¹¤×÷±í,ÆäÃûÎªÈ±Ê¡Öµ sheet1
             HSSFSheet sheet = workbook.createSheet();
-            // åˆ›å»ºå­—ä½“
+            // ´´½¨×ÖÌå
             HSSFFont font = workbook.createFont();
-            // æŠŠå­—ä½“é¢œè‰²è®¾ ç½®
+            // °Ñ×ÖÌåÑÕÉ«Éè ÖÃ
             font.setColor(HSSFColor.BLUE.index);
-            // æŠŠå­—ä½“è®¾ç½®ä¸ºç²—ä½“
-            // åˆ›å»ºæ ¼å¼
+            // °Ñ×ÖÌåÉèÖÃÎª´ÖÌå
+            // ´´½¨¸ñÊ½
             HSSFCellStyle cellStyle = workbook.createCellStyle();
-            // æŠŠåˆ›å»ºçš„å­—ä½“ä»˜åŠ äºæ ¼å¼
-            cellStyle.setLocked(true);// é”å®šå•å…ƒæ ¼
+            // °Ñ´´½¨µÄ×ÖÌå¸¶¼ÓÓÚ¸ñÊ½
+            cellStyle.setLocked(true);// Ëø¶¨µ¥Ôª¸ñ
             cellStyle.setFont(font);
-            cellStyle.setWrapText(true);// å•å…ƒæ ¼æ ¹æ®å†…å®¹è‡ªåŠ¨è°ƒæ•´
+            cellStyle.setWrapText(true);// µ¥Ôª¸ñ¸ù¾İÄÚÈİ×Ô¶¯µ÷Õû
             cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            //å·¥ä½œè¡¨ä¸­åˆ›å»ºä¸€è¡Œ
+            //¹¤×÷±íÖĞ´´½¨Ò»ĞĞ
             HSSFRow row_Title = sheet.createRow(0);
             row_Title.setHeight((short) 600);
             HSSFCell cell_title = row_Title.createCell((short) 0);
             HSSFCellStyle titleStyle = workbook.createCellStyle();
             titleStyle.setFillBackgroundColor(HSSFColor.YELLOW.index);
-            HSSFFont titleFont = workbook.createFont(); // åˆ›å»ºå­—ä½“æ ¼å¼
+            HSSFFont titleFont = workbook.createFont(); // ´´½¨×ÖÌå¸ñÊ½
             titleFont.setColor(HSSFColor.BLUE.index);
 
-            titleFont.setFontHeight((short) 400); // è®¾ç½®å­—ä½“å¤§å°
+            titleFont.setFontHeight((short) 400); // ÉèÖÃ×ÖÌå´óĞ¡
             titleStyle.setFont(titleFont);
 
             titleStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
@@ -74,7 +74,7 @@ public class ExcelService {
             sheet.addMergedRegion(new Region(0, (short) 0, 0,
                     (short) (codeArr.length)));
 
-            //å·¥ä½œè¡¨ä¸­åˆ›å»ºä¸€è¡Œ
+            //¹¤×÷±íÖĞ´´½¨Ò»ĞĞ
             HSSFRow row_Code = sheet.createRow(1);
             row_Code.setHeight((short) 0);
 
@@ -82,19 +82,19 @@ public class ExcelService {
             row_Code.setHeight((short) 0);
 
             for (int i = 0; i < codeArr.length; i++) {
-                // åœ¨ä¸€è¡Œä¸­åˆ›å»ºä¸€ä¸ªè¡¨æ ¼ row_ENM
+                // ÔÚÒ»ĞĞÖĞ´´½¨Ò»¸ö±í¸ñ row_ENM
                 HSSFCell cell_code = row_Code.createCell((short) i);
                 HSSFCell cell_cnnm = row_Name.createCell((short) i);
-                // æŠŠä¸Šé¢çš„æ ¼å¼ä»˜åŠ äºä¸€ä¸ªå•å…ƒæ ¼
+                // °ÑÉÏÃæµÄ¸ñÊ½¸¶¼ÓÓÚÒ»¸öµ¥Ôª¸ñ
                 cell_cnnm.setCellStyle(cellStyle);
                 cell_code.setCellStyle(cellStyle);
-                // è®¾ç½®æ­¤å•å…ƒæ ¼ä¸­å­˜å…¥çš„æ˜¯å­—ç¬¦ä¸²
+                // ÉèÖÃ´Ëµ¥Ôª¸ñÖĞ´æÈëµÄÊÇ×Ö·û´®
                 cell_cnnm.setCellType(HSSFCell.CELL_TYPE_STRING);
                 cell_code.setCellType(HSSFCell.CELL_TYPE_STRING);
-                // è®¾ç½®ç¼–ç  è¿™ä¸ªæ˜¯ç”¨æ¥å¤„ç†ä¸­æ–‡é—®é¢˜çš„
+                // ÉèÖÃ±àÂë Õâ¸öÊÇÓÃÀ´´¦ÀíÖĞÎÄÎÊÌâµÄ
                 cell_cnnm.setEncoding(HSSFCell.ENCODING_UTF_16);
                 cell_code.setEncoding(HSSFCell.ENCODING_UTF_16);
-                // å‘æ­¤å•å…ƒæ ¼ä¸­æ”¾å…¥å€¼
+                // Ïò´Ëµ¥Ôª¸ñÖĞ·ÅÈëÖµ
                 cell_cnnm.setCellValue(new HSSFRichTextString(nameArr[i]));
                 cell_code.setCellValue(new HSSFRichTextString(codeArr[i]));
             }
@@ -140,56 +140,56 @@ public class ExcelService {
 
     public static void saveExportReport(String savePath, JList logList) {
         DefaultListModel model = (DefaultListModel) logList.getModel();
-        String filename = savePath + "\\excel\\å¯¼å‡ºæŠ¥å‘Š.xls";
+        String filename = savePath + "\\excel\\µ¼³ö±¨¸æ.xls";
 
         HSSFWorkbook workbook = new HSSFWorkbook();
-        // åœ¨ Excel å·¥ä½œç°¿ä¸­å»ºåˆ›ä¸€ä¸ªå·¥ä½œè¡¨,å…¶åä¸ºç¼ºçœå€¼ sheet1
+        // ÔÚ Excel ¹¤×÷²¾ÖĞ½¨´´Ò»¸ö¹¤×÷±í,ÆäÃûÎªÈ±Ê¡Öµ sheet1
         HSSFSheet sheet = workbook.createSheet();
-        // åˆ›å»ºå­—ä½“
+        // ´´½¨×ÖÌå
         HSSFFont font = workbook.createFont();
-        // æŠŠå­—ä½“é¢œè‰²è®¾ ç½®
+        // °Ñ×ÖÌåÑÕÉ«Éè ÖÃ
         font.setColor(HSSFColor.BLUE.index);
-        // æŠŠå­—ä½“è®¾ç½®ä¸ºç²—ä½“
-        // åˆ›å»ºæ ¼å¼
+        // °Ñ×ÖÌåÉèÖÃÎª´ÖÌå
+        // ´´½¨¸ñÊ½
         HSSFCellStyle cellStyle = workbook.createCellStyle();
-        // æŠŠåˆ›å»ºçš„å­—ä½“ä»˜åŠ äºæ ¼å¼
-        cellStyle.setLocked(true);// é”å®šå•å…ƒæ ¼
+        // °Ñ´´½¨µÄ×ÖÌå¸¶¼ÓÓÚ¸ñÊ½
+        cellStyle.setLocked(true);// Ëø¶¨µ¥Ôª¸ñ
         cellStyle.setFont(font);
-        cellStyle.setWrapText(true);// å•å…ƒæ ¼æ ¹æ®å†…å®¹è‡ªåŠ¨è°ƒæ•´
+        cellStyle.setWrapText(true);// µ¥Ôª¸ñ¸ù¾İÄÚÈİ×Ô¶¯µ÷Õû
         cellStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-        //å·¥ä½œè¡¨ä¸­åˆ›å»ºä¸€è¡Œ
+        //¹¤×÷±íÖĞ´´½¨Ò»ĞĞ
         HSSFRow row_Title = sheet.createRow(0);
         row_Title.setHeight((short) 600);
         HSSFCell cell_title = row_Title.createCell((short) 0);
         HSSFCellStyle titleStyle = workbook.createCellStyle();
         titleStyle.setFillBackgroundColor(HSSFColor.YELLOW.index);
-        HSSFFont titleFont = workbook.createFont(); // åˆ›å»ºå­—ä½“æ ¼å¼
+        HSSFFont titleFont = workbook.createFont(); // ´´½¨×ÖÌå¸ñÊ½
         titleFont.setColor(HSSFColor.BLUE.index);
 
-        titleFont.setFontHeight((short) 400); // è®¾ç½®å­—ä½“å¤§å°
+        titleFont.setFontHeight((short) 400); // ÉèÖÃ×ÖÌå´óĞ¡
         titleStyle.setFont(titleFont);
 
         titleStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 
         cell_title.setCellStyle(titleStyle);
         cell_title.setEncoding(HSSFCell.ENCODING_UTF_16);
-        cell_title.setCellValue("æ•°æ®å¯¼å‡ºæŠ¥å‘Š");
+        cell_title.setCellValue("Êı¾İµ¼³ö±¨¸æ");
         sheet.addMergedRegion(new Region(0, (short) 0, 0,
                 (short) (8)));
         if (!model.isEmpty()) {
             int beginRow = 1;
             for (int i = 0; i < model.size(); i++) {
-                //å·¥ä½œè¡¨ä¸­åˆ›å»ºä¸€è¡Œ
+                //¹¤×÷±íÖĞ´´½¨Ò»ĞĞ
                 HSSFRow row_val = sheet.createRow(beginRow);
-                // åœ¨ä¸€è¡Œä¸­åˆ›å»ºä¸€ä¸ªè¡¨æ ¼ row_ENM
+                // ÔÚÒ»ĞĞÖĞ´´½¨Ò»¸ö±í¸ñ row_ENM
                 HSSFCell cell_code = row_val.createCell((short) 0);
-                // æŠŠä¸Šé¢çš„æ ¼å¼ä»˜åŠ äºä¸€ä¸ªå•å…ƒæ ¼
+                // °ÑÉÏÃæµÄ¸ñÊ½¸¶¼ÓÓÚÒ»¸öµ¥Ôª¸ñ
                 cell_code.setCellStyle(cellStyle);
-                // è®¾ç½®æ­¤å•å…ƒæ ¼ä¸­å­˜å…¥çš„æ˜¯å­—ç¬¦ä¸²
+                // ÉèÖÃ´Ëµ¥Ôª¸ñÖĞ´æÈëµÄÊÇ×Ö·û´®
                 cell_code.setCellType(HSSFCell.CELL_TYPE_STRING);
-                // è®¾ç½®ç¼–ç  è¿™ä¸ªæ˜¯ç”¨æ¥å¤„ç†ä¸­æ–‡é—®é¢˜çš„
+                // ÉèÖÃ±àÂë Õâ¸öÊÇÓÃÀ´´¦ÀíÖĞÎÄÎÊÌâµÄ
                 cell_code.setEncoding(HSSFCell.ENCODING_UTF_16);
-                // å‘æ­¤å•å…ƒæ ¼ä¸­æ”¾å…¥å€¼
+                // Ïò´Ëµ¥Ôª¸ñÖĞ·ÅÈëÖµ
                 cell_code.setCellValue(new HSSFRichTextString(model.getElementAt(i).toString()));
                 sheet.addMergedRegion(new Region(beginRow, (short) 0, beginRow,
                         (short) (8)));
@@ -237,31 +237,31 @@ public class ExcelService {
                 tables[i] = HY_DBTP_JDao.getTabid(expSuccessModel.get(i).toString(), dbTool);
             }
         }
-        listTabModel.removeElement("æ•°æ®ç´¢å¼•è¡¨");
+        listTabModel.removeElement("Êı¾İË÷Òı±í");
         String desFile = savePath + "\\excel\\Report.html";
-        StringBuffer strContent_head = new StringBuffer("<html><head><title>REPORT</title><meta http-equiv='Content-Type' content='text/html; charset=utf-8'></head>");
+        StringBuffer strContent_head = new StringBuffer("<html><head><title>REPORT</title><meta http-equiv='Content-Type' content='text/html; charset=gbk'></head>");
         strContent_head.append("<style type='text/css'>");
         strContent_head.append(".title {font-size: 10pt;padding-top: 2px;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:center;}</style><body>");
         StringBuffer strContent_table = new StringBuffer("<table width='85%' align='center' border='0' 'cellspacing='1' bgcolor='#CCCCCC'>");
-        strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 14pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:center;' colspan='5'>æ•°æ®å¯¼å‡ºæŠ¥å‘Š</td></tr>");
+        strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 14pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:center;' colspan='5'>Êı¾İµ¼³ö±¨¸æ</td></tr>");
         if (!listTabModel.isEmpty()) {
-            strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 10pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;' colspan='5'>ä»¥ä¸‹ä¸ºæœªé€‰æ‹©æŠ¥è¡¨</td></tr>");
+            strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 10pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;' colspan='5'>ÒÔÏÂÎªÎ´Ñ¡Ôñ±¨±í</td></tr>");
             for (int i = 0; i < listTabModel.size(); i++) {
                 strContent_table.append("<tr bgcolor='#FFFFFF'><td >" + HY_DBTP_JDao.getTabid(listTabModel.get(i).toString(), dbTool) + "</td><td colspan='3'>" + listTabModel.get(i) + "</td></tr>");
             }
         }
         if (errorTab != null && errorTab.length() > 0) {
-            strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 10pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;' colspan='5'>ä»¥ä¸‹æŠ¥è¡¨å’Œå¯¼å‡ºç»“æ„æ ‡å‡†ä¸ä¸€è‡´æœªèƒ½æˆåŠŸå¯¼å‡º</td></tr>");
+            strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 10pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;' colspan='5'>ÒÔÏÂ±¨±íºÍµ¼³ö½á¹¹±ê×¼²»Ò»ÖÂÎ´ÄÜ³É¹¦µ¼³ö</td></tr>");
             for (int i = 0; i < errorTab.split(",").length; i++) {
                 strContent_table.append("<tr bgcolor='#FFFFFF'><td colspan='2'>" + errorTab.split(",")[i] + "</td><td colspan='3'>" + dbTool.getTabCnnm(jt2, errorTab.split(",")[i]) + "</td></tr>");
             }
         }
         strContent_table.append("<tr bgcolor='#E8EFFF' height='30'>");
-        strContent_table.append("<td class='title'>è¡¨ç¼–å·</td>");
-        strContent_table.append("<td class='title'>è¡¨åç§°</td>");
-//        strContent_table.append("<td class='title'>æµ‹ç«™åç§°</td>");
-        strContent_table.append("<td class='title'>æºæ•°æ®æ¡æ•°</td>");
-        strContent_table.append("<td class='title'>å¯¼å‡ºæ•°æ®æ¡æ•°</td>");
+        strContent_table.append("<td class='title'>±í±àºÅ</td>");
+        strContent_table.append("<td class='title'>±íÃû³Æ</td>");
+//        strContent_table.append("<td class='title'>²âÕ¾Ãû³Æ</td>");
+        strContent_table.append("<td class='title'>Ô´Êı¾İÌõÊı</td>");
+        strContent_table.append("<td class='title'>µ¼³öÊı¾İÌõÊı</td>");
         strContent_table.append("</tr>");
         if (tables != null && tables.length > 0) {
             for (String table : tables) {
@@ -324,30 +324,30 @@ public class ExcelService {
             String filename = savePath + "\\excel\\" + reportName + ".xls";
 
             HSSFWorkbook workbook = new HSSFWorkbook();
-            // åœ¨ Excel å·¥ä½œç°¿ä¸­å»ºåˆ›ä¸€ä¸ªå·¥ä½œè¡¨,å…¶åä¸ºç¼ºçœå€¼ sheet1
+            // ÔÚ Excel ¹¤×÷²¾ÖĞ½¨´´Ò»¸ö¹¤×÷±í,ÆäÃûÎªÈ±Ê¡Öµ sheet1
             HSSFSheet sheet = workbook.createSheet();
-            // åˆ›å»ºå­—ä½“
+            // ´´½¨×ÖÌå
             HSSFFont font = workbook.createFont();
-            // æŠŠå­—ä½“é¢œè‰²è®¾ ç½®
+            // °Ñ×ÖÌåÑÕÉ«Éè ÖÃ
             font.setColor(HSSFColor.BLUE.index);
-            // æŠŠå­—ä½“è®¾ç½®ä¸ºç²—ä½“
-            // åˆ›å»ºæ ¼å¼
+            // °Ñ×ÖÌåÉèÖÃÎª´ÖÌå
+            // ´´½¨¸ñÊ½
             HSSFCellStyle cellStyle = workbook.createCellStyle();
-            // æŠŠåˆ›å»ºçš„å­—ä½“ä»˜åŠ äºæ ¼å¼
-            cellStyle.setLocked(true);// é”å®šå•å…ƒæ ¼
+            // °Ñ´´½¨µÄ×ÖÌå¸¶¼ÓÓÚ¸ñÊ½
+            cellStyle.setLocked(true);// Ëø¶¨µ¥Ôª¸ñ
             cellStyle.setFont(font);
-            cellStyle.setWrapText(true);// å•å…ƒæ ¼æ ¹æ®å†…å®¹è‡ªåŠ¨è°ƒæ•´
+            cellStyle.setWrapText(true);// µ¥Ôª¸ñ¸ù¾İÄÚÈİ×Ô¶¯µ÷Õû
             cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            //å·¥ä½œè¡¨ä¸­åˆ›å»ºä¸€è¡Œ
+            //¹¤×÷±íÖĞ´´½¨Ò»ĞĞ
             HSSFRow row_Title = sheet.createRow(0);
             row_Title.setHeight((short) 600);
             HSSFCell cell_title = row_Title.createCell((short) 0);
             HSSFCellStyle titleStyle = workbook.createCellStyle();
             titleStyle.setFillBackgroundColor(HSSFColor.YELLOW.index);
-            HSSFFont titleFont = workbook.createFont(); // åˆ›å»ºå­—ä½“æ ¼å¼
+            HSSFFont titleFont = workbook.createFont(); // ´´½¨×ÖÌå¸ñÊ½
             titleFont.setColor(HSSFColor.BLUE.index);
 
-            titleFont.setFontHeight((short) 400); // è®¾ç½®å­—ä½“å¤§å°
+            titleFont.setFontHeight((short) 400); // ÉèÖÃ×ÖÌå´óĞ¡
             titleStyle.setFont(titleFont);
 
             titleStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
@@ -358,19 +358,19 @@ public class ExcelService {
             sheet.addMergedRegion(new Region(0, (short) 0, 0,
                     (short) (codeArr.length)));
 
-            //å·¥ä½œè¡¨ä¸­åˆ›å»ºä¸€è¡Œ
+            //¹¤×÷±íÖĞ´´½¨Ò»ĞĞ
             HSSFRow row_Code = sheet.createRow(1);
 
             for (int i = 0; i < codeArr.length; i++) {
-                // åœ¨ä¸€è¡Œä¸­åˆ›å»ºä¸€ä¸ªè¡¨æ ¼ row_ENM
+                // ÔÚÒ»ĞĞÖĞ´´½¨Ò»¸ö±í¸ñ row_ENM
                 HSSFCell cell_code = row_Code.createCell((short) i);
-                // æŠŠä¸Šé¢çš„æ ¼å¼ä»˜åŠ äºä¸€ä¸ªå•å…ƒæ ¼
+                // °ÑÉÏÃæµÄ¸ñÊ½¸¶¼ÓÓÚÒ»¸öµ¥Ôª¸ñ
                 cell_code.setCellStyle(cellStyle);
-                // è®¾ç½®æ­¤å•å…ƒæ ¼ä¸­å­˜å…¥çš„æ˜¯å­—ç¬¦ä¸²
+                // ÉèÖÃ´Ëµ¥Ôª¸ñÖĞ´æÈëµÄÊÇ×Ö·û´®
                 cell_code.setCellType(HSSFCell.CELL_TYPE_STRING);
-                // è®¾ç½®ç¼–ç  è¿™ä¸ªæ˜¯ç”¨æ¥å¤„ç†ä¸­æ–‡é—®é¢˜çš„
+                // ÉèÖÃ±àÂë Õâ¸öÊÇÓÃÀ´´¦ÀíÖĞÎÄÎÊÌâµÄ
                 cell_code.setEncoding(HSSFCell.ENCODING_UTF_16);
-                // å‘æ­¤å•å…ƒæ ¼ä¸­æ”¾å…¥å€¼
+                // Ïò´Ëµ¥Ôª¸ñÖĞ·ÅÈëÖµ
                 cell_code.setCellValue(new HSSFRichTextString(codeArr[i] == null ? "" : codeArr[i].toString()));
             }
             int beginRow = 2;
@@ -428,9 +428,9 @@ public class ExcelService {
         fis = new FileInputStream(filepath);
         POIFSFileSystem pss = new POIFSFileSystem(fis);
         HSSFWorkbook workbook = new HSSFWorkbook(pss);
-        //è¯»å–Sheet
+        //¶ÁÈ¡Sheet
         HSSFSheet sheet = workbook.getSheetAt(0);
-        //è¯»å–è¡Œå·
+        //¶ÁÈ¡ĞĞºÅ
         int rows = sheet.getPhysicalNumberOfRows();
 
         String[] stcdList = new String[rows - 1];
@@ -455,9 +455,9 @@ public class ExcelService {
         fis = new FileInputStream(filepath);
         POIFSFileSystem pss = new POIFSFileSystem(fis);
         HSSFWorkbook workbook = new HSSFWorkbook(pss);
-        //è¯»å–Sheet
+        //¶ÁÈ¡Sheet
         HSSFSheet sheet = workbook.getSheetAt(0);
-        //è¯»å–è¡Œå·
+        //¶ÁÈ¡ĞĞºÅ
         int rows = sheet.getPhysicalNumberOfRows();
 
         String[] stcdList = new String[rows - 1];

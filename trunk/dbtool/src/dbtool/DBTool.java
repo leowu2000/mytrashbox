@@ -79,10 +79,11 @@ public class DBTool {
             }
             String result[] = makeFiledsAndParamets(table);
             if(result==null){
-                ((DefaultListModel) (logList.getModel())).addElement("::æ•°æ®è¡¨ï¼š" + table + "  ã€" + getTabCnnm(jt2, table) + "ã€‘æ•°æ®ä¸ºç©ºç³»ç»Ÿè·³è¿‡ ");
-                outputError(table, "=copyTable=",getTabCnnm(jt2, table)+"æ•°æ®è¡¨æ•°æ®ä¸ºç©ºç³»ç»Ÿè·³è¿‡");
+//                ((DefaultListModel) (logList.getModel())).addElement("::Êı¾İ±í£º" + table + "  ¡¾" + getTabCnnm(jt2, table) + "¡¿Êı¾İÎª¿ÕÏµÍ³Ìø¹ı ");
+                outputError(table, "=copyTable=",getTabCnnm(jt2, table)+"Êı¾İ±íÊı¾İÎª¿ÕÏµÍ³Ìø¹ı");
             }
             else{
+                ((DefaultListModel) (logList.getModel())).addElement("ÕıÔÚ·ÖÎö±í" + table + "  ¡¾" + getTabCnnm(jt2, table) + "¡¿µÄÊı¾İ ......");
                 final String fields = result[0];
                 final String params = result[1];
                 jt1.query(searChsql, new RowMapper() {
@@ -109,7 +110,7 @@ public class DBTool {
                     }
                 });
 
-                ((DefaultListModel) (logList.getModel())).addElement("æ­£åœ¨å¯¼å‡ºè¡¨ï¼š" + table + "  ã€" + getTabCnnm(jt2, table) + "ã€‘   å…±æœ‰æ•°æ®æ¡æ•°ï¼š" + getCount(jt1, table.toUpperCase()) + "ï¼Œå¯¼å‡ºæ¡æ•°ï¼š" + getCount(jt2, table.toUpperCase()));
+                ((DefaultListModel) (logList.getModel())).addElement("           ...ÕıÔÚµ¼³ö±í£º" + table + "  ¡¾" + getTabCnnm(jt2, table) + "¡¿ µÄÊı¾İ£¬ÇëµÈ´ı...");
                 if (expType == 2) {
                     createExcelTable(table, stsc, saveDir, logList, expType);
                 }
@@ -202,14 +203,14 @@ public class DBTool {
             this.cnSource = DriverManager.getConnection(p.getProperty("source.datasource.jdbcUrl"), p.getProperty("source.datasource.username"), p.getProperty("source.datasource.password"));
             this.cnTarget = DriverManager.getConnection(p.getProperty("target.datasource.jdbcUrl"), p.getProperty("target.datasource.username"), p.getProperty("target.datasource.password"));
         } catch (SQLException e) {
-            
+
             e.printStackTrace();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "æœªå‘ç°æ­¤æ•°æ®åº“é©±åŠ¨ç±»å‹ï¼Œè¯·ä¸å¼€å‘å•†è”ç³»ï¼", "æç¤º", 0);
+            JOptionPane.showMessageDialog(null, "Î´·¢ÏÖ´ËÊı¾İ¿âÇı¶¯ÀàĞÍ£¬ÇëÓë¿ª·¢ÉÌÁªÏµ£¡", "ÌáÊ¾", 0);
         }
         this.saveDirs=p.getProperty("target.datasource.dataDir");
         this.jt1 = new PageTemplate(new SingleConnectionDataSource(cnSource, false));
@@ -280,7 +281,7 @@ public class DBTool {
         }
     }
 
-   
+
 
     public void shutdown() {
         getJt2().execute("SHUTDOWN");
@@ -300,11 +301,11 @@ public class DBTool {
         if (!selectedSnameModel.isEmpty()) {
 
             for (int i = 0; i < selectedSnameModel.size(); i++) {
-                //è¿”å›å†…å®¹ä¸ºç¼–ç ï¼‹åç§°ï¼Œå¤„ç†åå¾—åˆ°ç¼–ç 
+                //·µ»ØÄÚÈİÎª±àÂë£«Ãû³Æ£¬´¦ÀíºóµÃµ½±àÂë
                 String stcdandname = selectedSnameModel.get(i).toString();
                 int poi = stcdandname.lastIndexOf("]");
-                String stcd = stcdandname.substring(1, poi);//ç¼–ç 
-                String stname = stcdandname.substring(poi + 1, stcdandname.length());//åç§°
+                String stcd = stcdandname.substring(1, poi);//±àÂë
+                String stname = stcdandname.substring(poi + 1, stcdandname.length());//Ãû³Æ
                 if (stscStr.trim().equals("")) {
                     stscStr = "'" + stcd + "'";
                     stnameStr = stname;
@@ -320,9 +321,9 @@ public class DBTool {
             }
         }
         if (expType != 0) {
-            ((DefaultListModel) (logList.getModel())).addElement("æ¸…ç©ºç›®æ ‡æ•°æ®åº“å®Œæˆ");
+            ((DefaultListModel) (logList.getModel())).addElement("Çå¿ÕÄ¿±êÊı¾İ¿âÍê³É");
         }
-        // æ‹·è´æ•°æ®
+        // ¿½±´Êı¾İ
         int i = 0;
         for (String table : tables) {
             i++;
@@ -330,7 +331,7 @@ public class DBTool {
 
             boolean flg = false;
             if (expType == 0) {
-                ((DefaultListModel) (logList.getModel())).addElement("æ­£åœ¨åˆ†æè¡¨" + table + "  ã€" + getTabCnnm(jt2, table) + "ã€‘çš„æ•°æ® ......");
+                ((DefaultListModel) (logList.getModel())).addElement("ÕıÔÚ·ÖÎö±í" + table + "  ¡¾" + getTabCnnm(jt2, table) + "¡¿µÄÊı¾İ ......");
                 flg = createExcelTable(table, stscStr, saveDir, logList, expType);
 
             } else {
@@ -338,22 +339,22 @@ public class DBTool {
 //                if(expType==1){
 //                    flg = copyTable(table, stscStr, saveDir, logList, expType, version);
 //                }else{
-//                    ((DefaultListModel) (logList.getModel())).addElement("æ­£åœ¨åˆ†æè¡¨" + table + "  ã€" + getTabCnnm(jt2, table) + "ã€‘çš„æ•°æ® ......");
+//                    ((DefaultListModel) (logList.getModel())).addElement("ÕıÔÚ·ÖÎö±í" + table + "  ¡¾" + getTabCnnm(jt2, table) + "¡¿µÄÊı¾İ ......");
 //                    flg = copyTablePS(table, stscStr, saveDir, logList, expType, version);
 //                }
             }
             if (flg) {
-                if (expType == 0) {
+//                if (expType == 0) {
                     outputInfoExcel(table, logList, selectedStscModel, selectedSnameModel, stscStr);
-                }
+//                }
             }
-            //ç”Ÿæˆæ•°æ®ç´¢å¼•
+            //Éú³ÉÊı¾İË÷Òı
             Long indexsdate = System.currentTimeMillis();
 
             insertDataIndexTable_New(table, stscStr, stnameStr, logList, version, expType, saveDir);
             outputLog(table, saveDir, sdate, indexsdate, true);
             if (i == tables.length) {
-                ((DefaultListModel) (logList.getModel())).addElement("æ­£åœ¨ç”Ÿæˆå¯¼å‡ºæŠ¥å‘Š ......");
+                ((DefaultListModel) (logList.getModel())).addElement("ÕıÔÚÉú³Éµ¼³ö±¨¸æ ......");
             }
             try {
                 Thread.sleep(100);
@@ -363,8 +364,9 @@ public class DBTool {
             }
             outputLog(table, saveDir, sdate, indexsdate, false);
         }
-        //ä¿å­˜å¯¼å‡ºæŠ¥å‘Š
+        //±£´æµ¼³ö±¨¸æ
         ExcelService.createReportHtml(saveDir, expSuccessModel, errorTab, dbTool, selectedStscModel, selectedSnameModel, listTablesModel, expType, stscStr);
+        ((DefaultListModel) (logList.getModel())).addElement("==µ¼³ö¹¤×÷³É¹¦½áÊø£¡==");
     }
 
     public void insertDataIndexTable(String table, String stcdStr,
@@ -372,11 +374,11 @@ public class DBTool {
         String stcd[] = stcdStr.split(",");
         String stname[] = stnameStr.split(",");
         String indexFiled = getIndexFiled(table);
-        if (!indexFiled.trim().equals("")) {//é¦–å…ˆä¿è¯è¿™å¼ è¡¨å¯ä»¥ç”Ÿæˆæ•°æ®ç´¢å¼•
+        if (!indexFiled.trim().equals("")) {//Ê×ÏÈ±£Ö¤ÕâÕÅ±í¿ÉÒÔÉú³ÉÊı¾İË÷Òı
             try {
                 int row = jt1.queryForInt("select count(*) from " + table + " where stcd in(" + stcdStr + ")");
                 if (row > 0) {
-                    ((DefaultListModel) (logList.getModel())).addElement("æ­£åœ¨ç”Ÿæˆè¡¨ã€" + getTabCnnm(jt2, table) + "ã€‘çš„æ•°æ®ç´¢å¼• ......");
+                    ((DefaultListModel) (logList.getModel())).addElement("ÕıÔÚÉú³É±í¡¾" + getTabCnnm(jt2, table) + "¡¿µÄÊı¾İË÷Òı ......");
 
                     for (int i = 0; i < stcd.length; i++) {
                         int stcdrow = jt1.queryForInt("select count(*) from " + table + " where stcd =" + stcd[i] + "");
@@ -450,12 +452,12 @@ public class DBTool {
                             }
                         }
                     }
-                    ((DefaultListModel) (logList.getModel())).addElement("æˆåŠŸç”Ÿæˆè¡¨ã€" + getTabCnnm(jt2, table) + "ã€‘çš„æ•°æ®ç´¢å¼•");
+                    ((DefaultListModel) (logList.getModel())).addElement("³É¹¦Éú³É±í¡¾" + getTabCnnm(jt2, table) + "¡¿µÄÊı¾İË÷Òı");
 
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                 outputError(table, "===insertDataIndexTable=æ•°æ®ç´¢å¼•",ex.getMessage());
+                 outputError(table, "===insertDataIndexTable=Êı¾İË÷Òı",ex.getMessage());
             }
         }
     }
@@ -463,7 +465,7 @@ public class DBTool {
     public void insertDataIndexTable_New(String table, String stcdStr,
             String stnameStr, JList logList, int version, int expType, String saveDir) {
         String indexFiled = getIndexFiled(table);
-        if (!indexFiled.trim().equals("")) {//é¦–å…ˆä¿è¯è¿™å¼ è¡¨å¯ä»¥ç”Ÿæˆæ•°æ®ç´¢å¼•
+        if (!indexFiled.trim().equals("")) {//Ê×ÏÈ±£Ö¤ÕâÕÅ±í¿ÉÒÔÉú³ÉÊı¾İË÷Òı
             try {
                 int row = jt1.queryForInt("select count(*) from " + table.toUpperCase());
                 if (row > 0) {
@@ -485,7 +487,7 @@ public class DBTool {
                                     + " GROUP BY STCD," + indexFiled
                                     + " ORDER BY STCD,YEARS ASC ";
                         }
-                        outputError(table,"insertDataIndexTable_New=sæ•°æ®ç´¢å¼•:",searchSQL);
+                        outputError(table,"insertDataIndexTable_New=sÊı¾İË÷Òı:",searchSQL);
                         List rows = jt1.queryForList(searchSQL);
                         ToOrder order = new ToOrder();
                         List beforList = new ArrayList();
@@ -511,7 +513,7 @@ public class DBTool {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-//                    ((DefaultListModel) (logList.getModel())).addElement("æˆåŠŸç”Ÿæˆè¡¨ã€" + getTabCnnm(jt2, table) + "ã€‘çš„æ•°æ®ç´¢å¼•");
+//                    ((DefaultListModel) (logList.getModel())).addElement("³É¹¦Éú³É±í¡¾" + getTabCnnm(jt2, table) + "¡¿µÄÊı¾İË÷Òı");
 
                 }
             } catch (Exception ex) {
@@ -540,22 +542,22 @@ public class DBTool {
     }
 
     private void outputInfo(String table, JList logList, DefaultListModel selectedStscModel, DefaultListModel selectedSnameModel) {
-        selectedSnameModel.removeElement("æ•°æ®ç´¢å¼•è¡¨");
-        selectedSnameModel.removeElement("æ•°æ®ä¸€è§ˆè¡¨");
+        selectedSnameModel.removeElement("Êı¾İË÷Òı±í");
+        selectedSnameModel.removeElement("Êı¾İÒ»ÀÀ±í");
 
-        ((DefaultListModel) (logList.getModel())).addElement("æ­£åœ¨å¯¼å‡ºè¡¨ï¼š" + table + "  ã€" + getTabCnnm(jt2, table) + "ã€‘   å…±æœ‰æ•°æ®æ¡æ•°ï¼š" + getCount(jt1, table) + "ï¼Œå¯¼å‡ºæ¡æ•°ï¼š" + getCount(jt2, table));
+        ((DefaultListModel) (logList.getModel())).addElement("ÕıÔÚµ¼³ö±í£º" + table + "  ¡¾" + getTabCnnm(jt2, table) + "¡¿   ¹²ÓĞÊı¾İÌõÊı£º" + getCount(jt1, table) + "£¬µ¼³öÌõÊı£º" + getCount(jt2, table));
 
     }
 
     private void outputInfoExcel(String table, JList logList, DefaultListModel selectedStscModel,
             DefaultListModel selectedSnameModel, String stsc) {
-        selectedSnameModel.removeElement("æ•°æ®ç´¢å¼•è¡¨");
-        selectedSnameModel.removeElement("æ•°æ®ä¸€è§ˆè¡¨");
+        selectedSnameModel.removeElement("Êı¾İË÷Òı±í");
+        selectedSnameModel.removeElement("Êı¾İÒ»ÀÀ±í");
         int realCount = getCountToExcel(jt1, table, stsc, isHaveStcdCol(table));
         if (realCount == 0) {
-            ((DefaultListModel) (logList.getModel())).addElement("              æ­¤è¡¨å¯å¯¼å‡ºæ•°æ®ä¸ºç©ºï¼Œæ”¾å¼ƒå¤„ç†ï¼");
+            ((DefaultListModel) (logList.getModel())).addElement("Êı¾İ±í£º" + table + "  ¡¾" + getTabCnnm(jt2, table) + "¡¿¿Éµ¼³öÊı¾İÎª¿Õ£¡");
         } else {
-            ((DefaultListModel) (logList.getModel())).addElement("æˆåŠŸç»“æŸå¯¼å‡ºè¡¨ï¼š" + table + "  ã€" + getTabCnnm(jt2, table) + "ã€‘   å…±æœ‰æ•°æ®æ¡æ•°ï¼š" + getCount(jt1, table) + "ï¼Œå¯¼å‡ºæ¡æ•°ï¼š" + realCount);
+            ((DefaultListModel) (logList.getModel())).addElement("³É¹¦½áÊøµ¼³ö±í£º" + table + "  ¡¾" + getTabCnnm(jt2, table) + "¡¿   ¹²ÓĞÊı¾İÌõÊı£º" + getCount(jt1, table) + "£¬µ¼³öÌõÊı£º" + realCount);
         }
     }
 
@@ -573,21 +575,15 @@ public class DBTool {
         outputError(table,"createExcelTable=countChsql:",countChsql);
         try {
             final String tablename = getTabCnnm(jt2, table);
-            //æ€»è®°å½•æ•°
+            //×Ü¼ÇÂ¼Êı
             final int totalRecords = jt1.queryForInt(countChsql);
-//           int totalPage = 1;
-//            if (totalRecords % 50000 == 0) {
-//                totalPage = totalRecords / 50000;
-//            } else {
-//                totalPage = totalRecords / 50000 + 1;
-//            }
             final String path = saveDir;
 //            final int allpage = totalPage;
             if(totalRecords>0){
                 final FileWriter fw = new FileWriter(path + "\\excel\\" + tablename +".txt");
-                ((DefaultListModel) (logList.getModel())).addElement("           ...æ­£åœ¨å†™å…¥æ–‡ä»¶ï¼šã€" + saveDir + "\\excel\\" + tablename + ".txtã€‘,è¯·ç­‰å¾…...");
+                ((DefaultListModel) (logList.getModel())).addElement("           ...ÕıÔÚĞ´ÈëÎÄ¼ş£º¡¾" + saveDir + "\\excel\\" + tablename + ".txt¡¿,ÇëµÈ´ı...");
                 jt1.query(searChsql,  new RowMapper() {
-                    
+
                     int k=0;
                     public Object mapRow(final ResultSet rs, int rowNum) throws SQLException {
 
@@ -647,7 +643,7 @@ public class DBTool {
             for (int p = 0; p < totalPage; p++) {
 
                 FileWriter fw = new FileWriter(saveDir + "\\excel\\" + tablename + "_" + p + ".txt");
-                
+
                 List rowList = jt1.querySP(searChsql, p * 50000 + 1, 50000);
 
                 Iterator it = rowList.iterator();
@@ -666,9 +662,9 @@ public class DBTool {
                 }
                 fw.close();
                 if (p + 1 == totalPage) {
-                    ((DefaultListModel) (logList.getModel())).addElement("           ...æ­£åœ¨å¤„ç†  " + p * 50000 + "  è‡³   " + totalRecords + "  æ¡è®°å½•ï¼Œæ–‡ä»¶åç§°ï¼šã€" + saveDir + "\\excel\\" + tablename + "_" + p + ".txtã€‘");
+                    ((DefaultListModel) (logList.getModel())).addElement("           ...ÕıÔÚ´¦Àí  " + p * 50000 + "  ÖÁ   " + totalRecords + "  Ìõ¼ÇÂ¼£¬ÎÄ¼şÃû³Æ£º¡¾" + saveDir + "\\excel\\" + tablename + "_" + p + ".txt¡¿");
                 } else {
-                    ((DefaultListModel) (logList.getModel())).addElement("           ...æ­£åœ¨å¤„ç†  " + p * 50000 + "  è‡³   " + (p + 1) * 50000 + "  æ¡è®°å½•ï¼Œæ–‡ä»¶åç§°ï¼šã€" + saveDir + "\\excel\\" + tablename + "_" + p + ".txtã€‘");
+                    ((DefaultListModel) (logList.getModel())).addElement("           ...ÕıÔÚ´¦Àí  " + p * 50000 + "  ÖÁ   " + (p + 1) * 50000 + "  Ìõ¼ÇÂ¼£¬ÎÄ¼şÃû³Æ£º¡¾" + saveDir + "\\excel\\" + tablename + "_" + p + ".txt¡¿");
                 }
                 try {
                     Thread.sleep(100);
@@ -699,7 +695,7 @@ public class DBTool {
                 fw = new FileWriter(saveDir + "\\excel\\dataIndex.txt", true);
             } else {
                 fw = new FileWriter(saveDir + "\\excel\\dataIndex.txt");
-                fw.write("è¡¨ç¼–å·\tè¡¨åç§°\tæµ‹ç«™åç§°\tæµ‹ç«™ç¼–ç \tå¹´ä»½\tæ•°æ®é‡\r\n");
+                fw.write("±í±àºÅ\t±íÃû³Æ\t²âÕ¾Ãû³Æ\t²âÕ¾±àÂë\tÄê·İ\tÊı¾İÁ¿\r\n");
             }
             for (int i = 0; i < afterList.size(); i++) {
                 String[] values = ((String) afterList.get(i).toString()).split(",");
@@ -734,11 +730,11 @@ public class DBTool {
                 fw = new FileWriter(saveDir + "\\excel\\expLog.txt");
             }
             if (flg) {
-                fw.write("ç”Ÿæˆç´¢å¼•----:" + getTabCnnm(jt2, table) + "\r\n");
-                fw.write("ç”¨æ—¶----:" + nowdate.subtract(new BigDecimal(indexsdate)) + "--æ¯«ç§’\r\n");
+                fw.write("Éú³ÉË÷Òı----:" + getTabCnnm(jt2, table) + "\r\n");
+                fw.write("ÓÃÊ±----:" + nowdate.subtract(new BigDecimal(indexsdate)) + "--ºÁÃë\r\n");
             } else {
-                fw.write("å¯¼å‡ºæ•°æ®----:" + getTabCnnm(jt2, table) + "\r\n");
-                fw.write("ç”¨æ—¶----:" + nowdate.subtract(new BigDecimal(sdate)) + "--æ¯«ç§’\r\n");
+                fw.write("µ¼³öÊı¾İ----:" + getTabCnnm(jt2, table) + "\r\n");
+                fw.write("ÓÃÊ±----:" + nowdate.subtract(new BigDecimal(sdate)) + "--ºÁÃë\r\n");
             }
             fw.close();
         } catch (Exception ex) {
@@ -781,10 +777,10 @@ public class DBTool {
                 clearTable(true, table);
             }
             final String tablename = getTabCnnm(jt2, table);
-            //æ€»è®°å½•æ•°
+            //×Ü¼ÇÂ¼Êı
             int totalRecords = jt1.queryForInt(countChsql);
             if (totalRecords == 0) {
-                ((DefaultListModel) (logList.getModel())).addElement("-------ï¼š" + table + "  ã€" + getTabCnnm(jt2, table) + "ã€‘   å…±æœ‰æ•°æ®æ¡æ•°ï¼š" + getCount(jt1, table) + "ï¼Œéœ€å¯¼å‡ºæ•°æ®æ¡æ•°ï¼š0");
+                ((DefaultListModel) (logList.getModel())).addElement("-------£º" + table + "  ¡¾" + getTabCnnm(jt2, table) + "¡¿   ¹²ÓĞÊı¾İÌõÊı£º" + getCount(jt1, table) + "£¬Ğèµ¼³öÊı¾İÌõÊı£º0");
             }
             int totalPage = 1;
             if (totalRecords % 10000 == 0) {
@@ -855,10 +851,10 @@ public class DBTool {
                     c++;
                 }
                 if (p == 0) {
-                    ((DefaultListModel) (logList.getModel())).addElement("-------ï¼š" + table + "  ã€" + getTabCnnm(jt2, table) + "ã€‘   å…±æœ‰æ•°æ®æ¡æ•°ï¼š" + getCount(jt1, table) + "ï¼Œéœ€å¯¼å‡ºæ•°æ®æ¡æ•°ï¼š" + totalRecords);
-                    ((DefaultListModel) (logList.getModel())).addElement("æ­£åœ¨å¯¼å‡º------ " + p * 50000 + " è‡³ " + (p + 1) * 50000 + "    ç”Ÿæˆæ–‡ä»¶:[" + saveDir + "\\excel\\" + tablename + "_" + p + ".txt]");
+                    ((DefaultListModel) (logList.getModel())).addElement("-------£º" + table + "  ¡¾" + getTabCnnm(jt2, table) + "¡¿   ¹²ÓĞÊı¾İÌõÊı£º" + getCount(jt1, table) + "£¬Ğèµ¼³öÊı¾İÌõÊı£º" + totalRecords);
+                    ((DefaultListModel) (logList.getModel())).addElement("ÕıÔÚµ¼³ö------ " + p * 50000 + " ÖÁ " + (p + 1) * 50000 + "    Éú³ÉÎÄ¼ş:[" + saveDir + "\\excel\\" + tablename + "_" + p + ".txt]");
                 } else {
-                    ((DefaultListModel) (logList.getModel())).addElement("æ­£åœ¨å¯¼å‡º------ " + p * 50000 + " è‡³ " + (p + 1) * 50000 + "    ç”Ÿæˆæ–‡ä»¶:[" + saveDir + "\\excel\\" + tablename + "_" + p + ".txt]");
+                    ((DefaultListModel) (logList.getModel())).addElement("ÕıÔÚµ¼³ö------ " + p * 50000 + " ÖÁ " + (p + 1) * 50000 + "    Éú³ÉÎÄ¼ş:[" + saveDir + "\\excel\\" + tablename + "_" + p + ".txt]");
                 }
 
 
@@ -893,7 +889,7 @@ public class DBTool {
             if (expType != 0) {
                 clearTable(true, table);
             }
-            //æ€»è®°å½•æ•°
+            //×Ü¼ÇÂ¼Êı
             int totalRecords = jt1.queryForInt(countChsql);
             int totalPage = 1;
             if (totalRecords % 10000 == 0) {
@@ -901,7 +897,7 @@ public class DBTool {
             } else {
                 totalPage = totalRecords / 50000 + 1;
             }
-            outputError(table, "===å–å¾—æœ‰æ•ˆæ•°æ®æ¡æ•°=",String.valueOf(totalPage));
+            outputError(table, "===È¡µÃÓĞĞ§Êı¾İÌõÊı=",String.valueOf(totalPage));
             for (int p = 0; p < totalPage; p++) {
 
                 List rowList = jt1.querySP(searChsql, p * 50000 + 1, 50000);
@@ -941,10 +937,10 @@ public class DBTool {
                     c++;
                 }
                 if (p == 0) {
-                    ((DefaultListModel) (logList.getModel())).addElement("æ­£åœ¨å¯¼å‡ºè¡¨ï¼š" + table + "  ã€" + getTabCnnm(jt2, table) + "ã€‘   å…±æœ‰æ•°æ®æ¡æ•°ï¼š" + getCount(jt1, table) + "ï¼Œéœ€å¯¼å‡ºæ•°æ®æ¡æ•°ï¼š" + totalRecords);
-                    ((DefaultListModel) (logList.getModel())).addElement("æ­£åœ¨å¯¼å‡º---------------------------- " + p * 50000 + " è‡³ " + (p + 1) * 50000);
+                    ((DefaultListModel) (logList.getModel())).addElement("ÕıÔÚµ¼³ö±í£º" + table + "  ¡¾" + getTabCnnm(jt2, table) + "¡¿   ¹²ÓĞÊı¾İÌõÊı£º" + getCount(jt1, table) + "£¬Ğèµ¼³öÊı¾İÌõÊı£º" + totalRecords);
+                    ((DefaultListModel) (logList.getModel())).addElement("ÕıÔÚµ¼³ö---------------------------- " + p * 50000 + " ÖÁ " + (p + 1) * 50000);
                 } else {
-                    ((DefaultListModel) (logList.getModel())).addElement("æ­£åœ¨å¯¼å‡º---------------------------- " + p * 50000 + " è‡³ " + (p + 1) * 50000);
+                    ((DefaultListModel) (logList.getModel())).addElement("ÕıÔÚµ¼³ö---------------------------- " + p * 50000 + " ÖÁ " + (p + 1) * 50000);
                 }
 
 
@@ -964,9 +960,9 @@ public class DBTool {
     }
      * */
     /**
-     * æ¯”å¯¹å­—æ®µåç§°YRå’ŒYEAR
-     * å¦‚æœå­—æ®µä¸ºYRå¹¶ä¸”æè¿°ä¸­æœ‰YRå­—æ®µï¼Œé‚£ä¹ˆè¿”å›YR
-     * å¦åˆ™æŸ¥çœ‹æ•°æ®åº“ä¸­æ˜¯å¦æœ‰YEARå­—æ®µï¼Œå¦‚æœæœ‰åˆ™åå›YEAR
+     * ±È¶Ô×Ö¶ÎÃû³ÆYRºÍYEAR
+     * Èç¹û×Ö¶ÎÎªYR²¢ÇÒÃèÊöÖĞÓĞYR×Ö¶Î£¬ÄÇÃ´·µ»ØYR
+     * ·ñÔò²é¿´Êı¾İ¿âÖĞÊÇ·ñÓĞYEAR×Ö¶Î£¬Èç¹ûÓĞÔò·´»ØYEAR
      */
     public String compareYearColumn(String table){
         List rows = jt2.queryForList("select * from HY_DBFP_J WHERE TBID='" + table + "' and upper(FLID)='YR'");

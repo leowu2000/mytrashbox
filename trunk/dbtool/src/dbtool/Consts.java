@@ -30,33 +30,33 @@ public interface Consts {
             "10000001","10000002"
         };
         String[] stname = new String[]{
-            "å—åª","å—åª2"
+            "ÄÏÆº","ÄÏÆº2"
         };
-        String[] jdbcclass=new String[]{"--é€‰æ‹©æ•°æ®åº“ç±»åž‹--","Microsoft SQL Server","Sybase",
-        "Oracle"};
+        String[] jdbcclass=new String[]{"--Ñ¡ÔñÊý¾Ý¿âÀàÐÍ--","Microsoft SQL Server","Sybase",
+        "Oracle","FoxPro"};
 
          String[] SLS_tables = new String[]{"HY_DZ_C","HY_DQ_C","HY_DCS_C","HY_DQS_C",
                                             "HY_DCZ_D","HY_DCQ_D","HY_DCCS_D","HY_DCQS_D",
                                             "HY_MTZ_E","HY_MTQ_E","HY_MTCS_E","HY_MTQS_E",
                                             "HY_YRZ_F","HY_YRQ_F","HY_YRCS_F","HY_YRQS_F",};
-         //æ—¥å¹³å‡æ°´ä½è¡¨ã€æ—¥å¹³å‡æµé‡è¡¨ã€æ—¥å¹³å‡å«æ²™é‡è¡¨ã€æ—¥å¹³å‡è¾“æ²™çŽ‡è¡¨ã€
-         //æ—¬å¹³å‡æ°´ä½è¡¨ã€æ—¬å¹³å‡æµé‡è¡¨ã€æ—¬å¹³å‡å«æ²™é‡è¡¨ã€æ—¬å¹³å‡è¾“æ²™çŽ‡è¡¨ã€
-         //æœˆæ°´ä½è¡¨ã€æœˆæµé‡è¡¨ã€æœˆå«æ²™é‡è¡¨ã€æœˆè¾“æ²™çŽ‡è¡¨ã€
-         //å¹´æ°´ä½è¡¨ã€å¹´æµé‡è¡¨ã€å¹´å«æ²™é‡è¡¨ã€å¹´è¾“æ²™çŽ‡è¡¨
+         //ÈÕÆ½¾ùË®Î»±í¡¢ÈÕÆ½¾ùÁ÷Á¿±í¡¢ÈÕÆ½¾ùº¬É³Á¿±í¡¢ÈÕÆ½¾ùÊäÉ³ÂÊ±í¡¢
+         //Ñ®Æ½¾ùË®Î»±í¡¢Ñ®Æ½¾ùÁ÷Á¿±í¡¢Ñ®Æ½¾ùº¬É³Á¿±í¡¢Ñ®Æ½¾ùÊäÉ³ÂÊ±í¡¢
+         //ÔÂË®Î»±í¡¢ÔÂÁ÷Á¿±í¡¢ÔÂº¬É³Á¿±í¡¢ÔÂÊäÉ³ÂÊ±í¡¢
+         //ÄêË®Î»±í¡¢ÄêÁ÷Á¿±í¡¢Äêº¬É³Á¿±í¡¢ÄêÊäÉ³ÂÊ±í
          String[] JS_tables = new String[]{"HY_DP_C","HY_DCP_D","HY_MTP_E","HY_YRP_F"};
-         //æ—¥é™æ°´é‡è¡¨ã€æ—¬é™æ°´è¡¨ã€æœˆé™æ°´é‡è¡¨ã€å¹´é™æ°´é‡è¡¨
+         //ÈÕ½µË®Á¿±í¡¢Ñ®½µË®±í¡¢ÔÂ½µË®Á¿±í¡¢Äê½µË®Á¿±í
          String[] SW_tables = new String[]{"HY_DWT_C","HY_DCWT_D","HY_MTWT_E","HY_YRWT_F"};
-         //æ—¥æ°´æ¸©è¡¨ã€æ—¬å¹³å‡æ°´æ¸©è¡¨ã€æœˆæ°´æ¸©è¡¨ã€å¹´æ°´æ¸©è¡¨
+         //ÈÕË®ÎÂ±í¡¢Ñ®Æ½¾ùË®ÎÂ±í¡¢ÔÂË®ÎÂ±í¡¢ÄêË®ÎÂ±í
          String[] ZF_tables = new String[]{"HY_DWE_C","HY_DWEAP_C","HY_DCWE_D","HY_DCWEAP_D",
                                             "HY_MTWE_E","HY_MTWEAP_E","HY_YRWE_F"//,"HY_YRWEAP_F"
          };
-         //æ—¥æ°´é¢è’¸å‘é‡è¡¨ã€æ—¥æ°´é¢è’¸å‘é‡è¾…åŠ©è¡¨ã€æ—¬æ°´é¢è’¸å‘é‡è¡¨ã€æ—¬æ°´é¢è’¸å‘é‡è¾…åŠ©è¡¨
-         //æœˆæ°´é¢è’¸å‘é‡è¡¨ã€æœˆæ°´é¢è’¸å‘é‡è¾…åŠ©è¡¨ã€å¹´æ°´é¢è’¸å‘é‡è¡¨ã€å¹´æ°´é¢è’¸å‘é‡è¾…åŠ©è¡¨
+         //ÈÕË®ÃæÕô·¢Á¿±í¡¢ÈÕË®ÃæÕô·¢Á¿¸¨Öú±í¡¢Ñ®Ë®ÃæÕô·¢Á¿±í¡¢Ñ®Ë®ÃæÕô·¢Á¿¸¨Öú±í
+         //ÔÂË®ÃæÕô·¢Á¿±í¡¢ÔÂË®ÃæÕô·¢Á¿¸¨Öú±í¡¢ÄêË®ÃæÕô·¢Á¿±í¡¢ÄêË®ÃæÕô·¢Á¿¸¨Öú±í
          String[] BL_tables = new String[]{"HY_DIQ_C","HY_MTIQ_E","HY_YRICCO_F"//,"HY_YRIQ_F",
          };
-         //æ—¥å¹³å‡å†°æµé‡è¡¨ã€æœˆå†°æµé‡è¡¨ã€å¹´å†°æƒ…è¡¨ã€å¹´å†°æµé‡è¡¨
+         //ÈÕÆ½¾ù±ùÁ÷Á¿±í¡¢ÔÂ±ùÁ÷Á¿±í¡¢Äê±ùÇé±í¡¢Äê±ùÁ÷Á¿±í
          String[] CW_tables = new String[]{"HY_HLTDZ_B","HY_MTTDZ_E","HY_YRTDZ_F"};
-         //é€æ½®é«˜ä½Žæ½®ä½è¡¨ã€æœˆæ½®ä½è¡¨ã€å¹´æ½®ä½è¡¨
+         //Öð³±¸ßµÍ³±Î»±í¡¢ÔÂ³±Î»±í¡¢Äê³±Î»±í
 
 
 }

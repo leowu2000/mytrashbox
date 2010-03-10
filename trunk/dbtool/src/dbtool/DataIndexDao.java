@@ -20,16 +20,16 @@ public class DataIndexDao {
 
     public static List<DataIndexBean> getDataIndexBean(DefaultListModel stscmodel, DBTool dbTool) {
         List dataindexBean = new ArrayList();
-        
+
         JdbcTemplate jtm_source = dbTool.getJt1();
         JdbcTemplate jtm_Target = dbTool.getJt2();
         if (!stscmodel.isEmpty()) {
-            
+
             for (int i = 0; i < stscmodel.size(); i++) {
                 String[] year = new String[]{"0", "0"};
                 DataIndexBean bean = new DataIndexBean();
                 bean.setSTCD(stscmodel.get(i).toString());
-                //æ°´ä½ã€æµé‡ã€å«æ²™é‡ã€è¾“æ²™çŽ‡
+                //Ë®Î»¡¢Á÷Á¿¡¢º¬É³Á¿¡¢ÊäÉ³ÂÊ
                 for (int k = 0; k < Consts.SLS_tables.length; k++) {
                     int count = jtm_source.queryForInt("select count(*) from " + Consts.SLS_tables[k] + " where stcd='" + stscmodel.get(i).toString() + "'");
                     String datecol = "";
@@ -70,7 +70,7 @@ public class DataIndexDao {
 //                        break;
                     }
                 }
-                //é™æ°´
+                //½µË®
                 for (int k = 0; k < Consts.JS_tables.length; k++) {
                     int count = jtm_source.queryForInt("select count(*) from " + Consts.JS_tables[k] + " where stcd='" + stscmodel.get(i).toString() + "'");
                     String datecol = "";
@@ -88,7 +88,7 @@ public class DataIndexDao {
                         Iterator it = rows.iterator();
                         while (it.hasNext()) {
                             Map map = (Map) it.next();
-                            
+
                             if (map.get("minyear") != null && map.get("minyear").toString().length() > 0) {
                                 String val1 = map.get("minyear").toString().substring(0, 4);
                                 String val2=map.get("maxyear").toString().substring(0, 4);
@@ -114,7 +114,7 @@ public class DataIndexDao {
 //                        break;
                     }
                 }
-                //"æ°´æ¸©"
+                //"Ë®ÎÂ"
                 for (int k = 0; k < Consts.SW_tables.length; k++) {
                     int count = jtm_source.queryForInt("select count(*) from " + Consts.SW_tables[k] + " where stcd='" + stscmodel.get(i).toString() + "'");
                     String datecol = "";
@@ -153,7 +153,7 @@ public class DataIndexDao {
 //                        break;
                     }
                 }
-                //è’¸å‘
+                //Õô·¢
                 for (int k = 0; k < Consts.ZF_tables.length; k++) {
                     int count = jtm_source.queryForInt("select count(*) from " + Consts.ZF_tables[k] + " where stcd='" + stscmodel.get(i).toString() + "'");
                     String datecol = "";
@@ -192,7 +192,7 @@ public class DataIndexDao {
 //                        break;
                     }
                 }
-                // å†°å‡Œ
+                // ±ùÁè
                 for (int k = 0; k < Consts.BL_tables.length; k++) {
                     int count = jtm_source.queryForInt("select count(*) from " + Consts.BL_tables[k] + " where stcd='" + stscmodel.get(i).toString() + "'");
                     String datecol = "";
@@ -231,7 +231,7 @@ public class DataIndexDao {
 //                        break;
                     }
                 }
-                //æ½®ä½ã€æ½®æµé‡
+                //³±Î»¡¢³±Á÷Á¿
                 for (int k = 0; k < Consts.CW_tables.length; k++) {
                     int count = jtm_source.queryForInt("select count(*) from " + Consts.CW_tables[k] + " where stcd='" + stscmodel.get(i).toString() + "'");
                     String datecol = "";
@@ -270,7 +270,7 @@ public class DataIndexDao {
 //                        break;
                     }
                 }
-                //å¹´ä»½
+                //Äê·Ý
                 if("0".trim().equals(year[0]))
                     bean.setQZYEAR("");
                 else
