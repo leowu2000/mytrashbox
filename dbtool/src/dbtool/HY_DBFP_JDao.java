@@ -42,7 +42,7 @@ public class HY_DBFP_JDao {
             sSQL = "select top 500 " + colSql + " from " + tbid.toUpperCase();
         } else {
             if (rows != null && rows.size() > 0) {
-                sSQL = "select top 500 " + colSql + " from " + tbid.toUpperCase() + " WHERE STCD IN(" + subSql + ")";
+                sSQL = "select top 500 " + colSql + " from " + tbid.toUpperCase() + dbTool.makeStcdSqlCol(subSql).toUpperCase();
             } else {
                 sSQL = "select top 500 " + colSql + " from " + tbid.toUpperCase();
             }
@@ -64,7 +64,7 @@ public class HY_DBFP_JDao {
         return resultList;
     }
 
-   
+
 
     /**
      *
@@ -516,8 +516,8 @@ public class HY_DBFP_JDao {
     }
 
     /**
-     * æ„é€ æ•°æ®è¡¨ä¿¡æ¯
-     * @param IDs,tbidå­—ç¬¦ä¸²
+     * ¹¹ÔìÊı¾İ±íĞÅÏ¢
+     * @param IDs,tbid×Ö·û´®
      * @author wzhang
      * @version
      */
@@ -589,14 +589,14 @@ public class HY_DBFP_JDao {
     }
 
     /**
-     * ä»excelå¯¼å…¥çš„æ•°æ®æ’å…¥æ•°æ®åº“ï¼Œè¿”å›æœªèƒ½é¡ºåˆ©å…¥åº“çš„list
+     * ´Óexcelµ¼ÈëµÄÊı¾İ²åÈëÊı¾İ¿â£¬·µ»ØÎ´ÄÜË³ÀûÈë¿âµÄlist
      * @param insertList
-     * insertList[0]:è¡¨åç§°_TBID
-     * insertList[1]:è¡¨å­—æ®µåç§°_FLID
-     * insertList[2]:è¡¨å­—æ®µç±»å‹_FLTP
-     * insertList[4]:è¡¨å­—æ®µç±»å‹å’Œé•¿åº¦_FLTPL
-     * insertList[5]:è¡¨å­—æ®µä¸­æ–‡åç§°_FLCNNM
-     * insertList[6]:å®é™…æ•°æ®List<String[]>
+     * insertList[0]:±íÃû³Æ_TBID
+     * insertList[1]:±í×Ö¶ÎÃû³Æ_FLID
+     * insertList[2]:±í×Ö¶ÎÀàĞÍ_FLTP
+     * insertList[4]:±í×Ö¶ÎÀàĞÍºÍ³¤¶È_FLTPL
+     * insertList[5]:±í×Ö¶ÎÖĞÎÄÃû³Æ_FLCNNM
+     * insertList[6]:Êµ¼ÊÊı¾İList<String[]>
      * @return List<String[]>
      */
     public static List<String[]> insertDBFromExcel(List<?> insertList, String realPath, String savePath) {
@@ -618,11 +618,11 @@ public class HY_DBFP_JDao {
                 String flid[] = (String[]) insertList.get(1);
                 sSQL += " " + Arrays.toString(flid);
 
-                String fltp[] = (String[]) insertList.get(2);//å­—æ®µç±»å‹
+                String fltp[] = (String[]) insertList.get(2);//×Ö¶ÎÀàĞÍ
 
-                String fltpl[] = (String[]) insertList.get(3);//å­—æ®µç±»å‹å’Œé•¿åº¦
+                String fltpl[] = (String[]) insertList.get(3);//×Ö¶ÎÀàĞÍºÍ³¤¶È
 
-                String cnnm[] = (String[]) insertList.get(4);//å­—æ®µä¸­æ–‡æè¿°
+                String cnnm[] = (String[]) insertList.get(4);//×Ö¶ÎÖĞÎÄÃèÊö
 
                 List<?> valueList = (List<?>) insertList.get(5);
                 Map<String, Object> errorMap = new HashMap<String, Object>();
@@ -642,7 +642,7 @@ public class HY_DBFP_JDao {
 //					System.out.println(insertSql);
 //					List<?> resuList = checkValuesTPL(PKname,flid,fltp,fltpl,cnnm,value);
 //					System.out.println(resuList.size());
-                    //é”™è¯¯å¤„ç†
+                    //´íÎó´¦Àí
 //					if(resuList!=null && resuList.size()>0){
 //						if(isCreate){
 //							errorMap.put("tbid", name[0]);
@@ -659,11 +659,11 @@ public class HY_DBFP_JDao {
 //						stmt.addBatch(insertSql);
 //					}
                 }
-                //å°†é”™è¯¯çš„æ•°æ®å†™å…¥excel errVal errDesc
+                //½«´íÎóµÄÊı¾İĞ´Èëexcel errVal errDesc
 //				errorMap.put("errVal", errVal);
 //				errorMap.put("errDesc", errDesc);
 //				ExcelService.writeErrorToXLS(realPath+"/dbfiles/error/",errorMap);
-                //å°†æ­£ç¡®æ•°æ®å…¥åº“
+                //½«ÕıÈ·Êı¾İÈë¿â
                 stmt.executeBatch();
                 stmt.close();
             }
@@ -681,7 +681,7 @@ public class HY_DBFP_JDao {
     }
 
     /**
-     * æ£€éªŒå¯¼å…¥æ•°æ®æ˜¯å¦ç¬¦åˆè§„èŒƒï¼Œ
+     * ¼ìÑéµ¼ÈëÊı¾İÊÇ·ñ·ûºÏ¹æ·¶£¬
      * @param flid[]
      * @param fltp[]
      * @param fltpl[]
@@ -690,7 +690,7 @@ public class HY_DBFP_JDao {
      */
     public static List<Map<String, String>> checkValuesTPL(String pkname, String[] flid, String fltp[], String[] fltpl, String cnnm[], String[] value) {
         List<Map<String, String>> arrayList = new ArrayList<Map<String, String>>();
-        //æ£€éªŒä¸»é”®æ˜¯å¦ä¸ºç©º
+        //¼ìÑéÖ÷¼üÊÇ·ñÎª¿Õ
         if (pkname != null && pkname.length() > 0) {
             String pks[] = pkname.split(";");
             for (int i = 0; i < pks.length; i++) {
@@ -702,14 +702,14 @@ public class HY_DBFP_JDao {
                     if (value[k] == null || value[k].trim().equalsIgnoreCase("null") || value[k].trim().equals("")) {
                         Map<String, String> map = new HashMap<String, String>();
                         map.put("index", flid[k]);
-                        map.put("desc", "ä¸»é”®--" + cnnm[k] + "--ä¸ºç©º");
+                        map.put("desc", "Ö÷¼ü--" + cnnm[k] + "--Îª¿Õ");
                         arrayList.add(map);
                         return arrayList;
                     }
                 }
             }
         }
-        //æ£€éªŒå­—æ®µç±»å‹å’Œé•¿åº¦æ˜¯å¦ç¬¦åˆæ•°æ®è§„èŒƒ
+        //¼ìÑé×Ö¶ÎÀàĞÍºÍ³¤¶ÈÊÇ·ñ·ûºÏÊı¾İ¹æ·¶
         for (int i = 0; i < flid.length; i++) {
             value[i] = value[i].replaceAll("'", "").trim();
             String len = HY_DBFP_JDao.getColLenth(fltpl[i]);
@@ -719,7 +719,7 @@ public class HY_DBFP_JDao {
                     if (value[i].length() > new Integer(len).intValue()) {
                         Map<String, String> map = new HashMap<String, String>();
                         map.put("index", flid[i]);
-                        map.put("desc", "å­—æ®µ--" + cnnm[i] + "--é•¿åº¦è¶…è¿‡é™åˆ¶");
+                        map.put("desc", "×Ö¶Î--" + cnnm[i] + "--³¤¶È³¬¹ıÏŞÖÆ");
                         arrayList.add(map);
                         return arrayList;
                     }
@@ -730,7 +730,7 @@ public class HY_DBFP_JDao {
                     if (value[i].indexOf("-") < 0) {
                         Map<String, String> map = new HashMap<String, String>();
                         map.put("index", flid[i]);
-                        map.put("desc", "å­—æ®µ--" + cnnm[i] + "--æ—¥æœŸæ ¼å¼é”™è¯¯");
+                        map.put("desc", "×Ö¶Î--" + cnnm[i] + "--ÈÕÆÚ¸ñÊ½´íÎó");
                         arrayList.add(map);
                         return arrayList;
                     }
@@ -742,27 +742,27 @@ public class HY_DBFP_JDao {
                 } catch (Exception ex) {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("index", flid[i]);
-                    map.put("desc", "å­—æ®µ--" + cnnm[i] + "--åº”è¯¥æ˜¯æ•°å€¼å‹æ•°æ®");
+                    map.put("desc", "×Ö¶Î--" + cnnm[i] + "--Ó¦¸ÃÊÇÊıÖµĞÍÊı¾İ");
                     arrayList.add(map);
                     return arrayList;
                 }
                 String lens[] = len.split(",");
-                if (lens.length > 0) {//è§„èŒƒä¸­å…è®¸æœ‰å°æ•°
+                if (lens.length > 0) {//¹æ·¶ÖĞÔÊĞíÓĞĞ¡Êı
                     if (value[i].length() > new Integer(lens[0]).intValue()) {
                         Map<String, String> map = new HashMap<String, String>();
                         map.put("index", flid[i]);
-                        map.put("desc", "å­—æ®µ--" + cnnm[i] + "--é•¿åº¦è¶…è¿‡é™åˆ¶");
+                        map.put("desc", "×Ö¶Î--" + cnnm[i] + "--³¤¶È³¬¹ıÏŞÖÆ");
                         arrayList.add(map);
                         return arrayList;
                     }
-                    if (value[i].lastIndexOf(".") > 0) {//è¾“å…¥ä¸­æœ‰å°æ•°
-                        //å–å°æ•°
+                    if (value[i].lastIndexOf(".") > 0) {//ÊäÈëÖĞÓĞĞ¡Êı
+                        //È¡Ğ¡Êı
                         int poi = value[i].lastIndexOf(".");
                         String temp = value[i].substring(poi, value[i].length());
                         if (temp.length() > new Integer(lens[1]).intValue()) {
                             Map<String, String> map = new HashMap<String, String>();
                             map.put("index", flid[i]);
-                            map.put("desc", "å­—æ®µ--" + cnnm[i] + "--å°æ•°ä½æ•°è¿‡é•¿");
+                            map.put("desc", "×Ö¶Î--" + cnnm[i] + "--Ğ¡ÊıÎ»Êı¹ı³¤");
                             arrayList.add(map);
                             return arrayList;
                         }

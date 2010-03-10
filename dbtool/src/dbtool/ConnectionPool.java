@@ -69,16 +69,36 @@ public class ConnectionPool {
 //            String url = "jdbc:oracle:thin:@192.168.2.19:1521:oracl";
 //            Connection conn = DriverManager
 //                            .getConnection(url, "nyb", "nyb");
-            Class.forName("net.sourceforge.jtds.jdbc.Driver"); // ORACLE
-            String url = "jdbc:jtds:sqlserver://127.0.0.1:3533/OLDVERSION_SWDB";
-            Connection conn = DriverManager
-                            .getConnection(url, "sa", "1");
-            Statement stmt = conn.createStatement();
-            String sSQL = "select tablename,fielde,fieldc,format from fields";
-            ResultSet rs = stmt.executeQuery(sSQL);
+//            Class.forName("net.sourceforge.jtds.jdbc.Driver"); // ORACLE
+//            String url = "jdbc:jtds:sqlserver://127.0.0.1:3533/OLDVERSION_SWDB";
+//            Connection conn = DriverManager
+//                            .getConnection(url, "sa", "1");
+//            Statement stmt = conn.createStatement();
+//            String sSQL = "select tablename,fielde,fieldc,format from fields";
+//            ResultSet rs = stmt.executeQuery(sSQL);
+//            while (rs.next()) {
+//                    System.out.println("\"INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('"+rs.getString("tablename")+"','"+rs.getString("fielde")+"','"+rs.getString("fieldc")+"','"+rs.getString("fielde")+"',"+rs.getString("format")+")\",");
+//            }
+
+            Connection con;
+             Statement statement;
+             ResultSet rs;
+
+//            Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+//            String dburl = "jdbc:odbc:driver={Microsoft Access Driver (*.mdb)};DBQ=f:\\hpjdb.mdb";
+             String Driver="jdbc:odbc:driver={Microsoft Visual FoxPro Driver};SourceType=DBF;SourceDB=D:\\Microsoft Visual Studio\\Vfp98";
+            Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+            String dburl = "jdbc:odbc:hydb";
+            String user="";
+            String password="";
+
+            con = DriverManager.getConnection(Driver,user,password);
+            statement=con.createStatement();
+            rs = statement.executeQuery("SELECT * from STHD");
             while (rs.next()) {
-                    System.out.println("\"INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('"+rs.getString("tablename")+"','"+rs.getString("fielde")+"','"+rs.getString("fieldc")+"','"+rs.getString("fielde")+"',"+rs.getString("format")+")\",");
-            }
+                String name = rs.getString("stnm");
+			System.out.println(name);
+		}
 
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -21,16 +21,16 @@ public class PageTemplate extends JdbcTemplate {
     private DataSource dataSource;
 
     /**
-     * é»˜è®¤æ„é€ å™¨ï¼Œè°ƒç”¨æ­¤æ–¹æ³•åˆå§‹åŒ–ï¼Œéœ€è¦è°ƒç”¨setDataSourceè®¾ç½®æ•°æ®æº
+     * Ä¬ÈÏ¹¹ÔìÆ÷£¬µ÷ÓÃ´Ë·½·¨³õÊ¼»¯£¬ĞèÒªµ÷ÓÃsetDataSourceÉèÖÃÊı¾İÔ´
      */
     public PageTemplate() {
     }
 
     /**
-     * åˆå§‹æ„é€ å™¨
+     * ³õÊ¼¹¹ÔìÆ÷
      *
      * @param dataSource
-     * æ•°æ®æº
+     * Êı¾İÔ´
      */
     public PageTemplate(SingleConnectionDataSource dataSource) {
         this.dataSource = dataSource;
@@ -38,16 +38,16 @@ public class PageTemplate extends JdbcTemplate {
     }
 
     /**
-     * æ™®é€šåˆ†é¡µæŸ¥è¯¢<br>
-     * <b>å¦‚æœç»“æœç»“åˆæ¯”è¾ƒå¤§åº”è¯¥è°ƒç”¨setFetchsize() å’ŒsetMaxRowä¸¤ä¸ªæ–¹æ³•æ¥æ§åˆ¶ä¸€ä¸‹ï¼Œå¦åˆ™ä¼šå†…å­˜æº¢å‡º</b>
+     * ÆÕÍ¨·ÖÒ³²éÑ¯<br>
+     * <b>Èç¹û½á¹û½áºÏ±È½Ï´óÓ¦¸Ãµ÷ÓÃsetFetchsize() ºÍsetMaxRowÁ½¸ö·½·¨À´¿ØÖÆÒ»ÏÂ£¬·ñÔò»áÄÚ´æÒç³ö</b>
      * @see #setFetchSize(int)
      * @see #setMaxRows(int)
      * @param sql
-     * æŸ¥è¯¢çš„sqlè¯­å¥
+     * ²éÑ¯µÄsqlÓï¾ä
      * @param startRow
-     * èµ·å§‹è¡Œ
+     * ÆğÊ¼ĞĞ
      * @param rowsCount
-     * è·å–çš„è¡Œæ•°
+     * »ñÈ¡µÄĞĞÊı
      * @return
      * @throws DataAccessException
      */
@@ -58,18 +58,18 @@ public class PageTemplate extends JdbcTemplate {
     }
 
     /**
-     * è‡ªå®šä¹‰è¡ŒåŒ…è£…å™¨æŸ¥è¯¢<br>
-     * <b>å¦‚æœç»“æœç»“åˆæ¯”è¾ƒå¤§åº”è¯¥è°ƒç”¨setFetchsize() å’ŒsetMaxRowä¸¤ä¸ªæ–¹æ³•æ¥æ§åˆ¶ä¸€ä¸‹ï¼Œå¦åˆ™ä¼šå†…å­˜æº¢å‡º</b>
+     * ×Ô¶¨ÒåĞĞ°ü×°Æ÷²éÑ¯<br>
+     * <b>Èç¹û½á¹û½áºÏ±È½Ï´óÓ¦¸Ãµ÷ÓÃsetFetchsize() ºÍsetMaxRowÁ½¸ö·½·¨À´¿ØÖÆÒ»ÏÂ£¬·ñÔò»áÄÚ´æÒç³ö</b>
      * @see #setFetchSize(int)
      * @see #setMaxRows(int)
      * @param sql
-     * æŸ¥è¯¢çš„sqlè¯­å¥
+     * ²éÑ¯µÄsqlÓï¾ä
      * @param startRow
-     * èµ·å§‹è¡Œ
+     * ÆğÊ¼ĞĞ
      * @param rowsCount
-     * è·å–çš„è¡Œæ•°
+     * »ñÈ¡µÄĞĞÊı
      * @param rowMapper
-     * è¡ŒåŒ…è£…å™¨
+     * ĞĞ°ü×°Æ÷
      * @return
      * @throws DataAccessException
      */

@@ -20,9 +20,9 @@ import org.springframework.util.Assert;
  */
 public class SplitPageResultSetExtractor implements ResultSetExtractor {
 
-    private final int start;// èµ·å§‹è¡Œå·
-    private final int len;// ç»“æœé›†åˆçš„é•¿åº¦
-    private final RowMapper rowMapper;// è¡ŒåŒ…è£…å™¨
+    private final int start;// ÆğÊ¼ĞĞºÅ
+    private final int len;// ½á¹û¼¯ºÏµÄ³¤¶È
+    private final RowMapper rowMapper;// ĞĞ°ü×°Æ÷
     public SplitPageResultSetExtractor(RowMapper rowMapper, int start, int len) {
         Assert.notNull(rowMapper, "RowMapper is required");
         this.rowMapper = rowMapper;
@@ -31,7 +31,7 @@ public class SplitPageResultSetExtractor implements ResultSetExtractor {
     }
 
     /**
-     * å¤„ç†ç»“æœé›†åˆ,è¢«æ¥å£è‡ªåŠ¨è°ƒç”¨ï¼Œè¯¥ç±»å¤–è¾¹ä¸åº”è¯¥è°ƒç”¨
+     * ´¦Àí½á¹û¼¯ºÏ,±»½Ó¿Ú×Ô¶¯µ÷ÓÃ£¬¸ÃÀàÍâ±ß²»Ó¦¸Ãµ÷ÓÃ
      */
     public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
         List result = new ArrayList();

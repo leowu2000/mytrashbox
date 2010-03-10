@@ -36,13 +36,13 @@ import org.springframework.jdbc.core.RowMapper;
 public class ExportView extends JFrame {
 
     private DefaultListModel logModel = new DefaultListModel();
-    DefaultListModel selectedTablesModel = new DefaultListModel();//å…¨å±€å˜é‡ï¼Œå³ä¾§jListç”¨æ¥å­˜å‚¨å·²ç»é€‰æ‹©çš„æ‰€æœ‰æŠ¥è¡¨åç§°
-    private DefaultListModel selectedStscModel = new DefaultListModel();//å…¨å±€å˜é‡ï¼Œå³ä¾§jLiist ç”¨æ¥å­˜å‚¨å·²ç»é€‰æ‹©çš„æ‰€æœ‰æµ‹ç«™ç¼–ç 
-    private DefaultListModel selectedSnameModel = new DefaultListModel();//å…¨å±€å˜é‡ï¼Œå³ä¾§jList ç”¨æ¥å­˜å‚¨å·²ç»é€‰æ‹©çš„æ‰€æœ‰ï¼ã€æµ‹ç«™ç¼–ç ã€‘æµ‹ç«™åç§°
+    DefaultListModel selectedTablesModel = new DefaultListModel();//È«¾Ö±äÁ¿£¬ÓÒ²àjListÓÃÀ´´æ´¢ÒÑ¾­Ñ¡ÔñµÄËùÓĞ±¨±íÃû³Æ
+    private DefaultListModel selectedStscModel = new DefaultListModel();//È«¾Ö±äÁ¿£¬ÓÒ²àjLiist ÓÃÀ´´æ´¢ÒÑ¾­Ñ¡ÔñµÄËùÓĞ²âÕ¾±àÂë
+    private DefaultListModel selectedSnameModel = new DefaultListModel();//È«¾Ö±äÁ¿£¬ÓÒ²àjList ÓÃÀ´´æ´¢ÒÑ¾­Ñ¡ÔñµÄËùÓĞ£½¡¾²âÕ¾±àÂë¡¿²âÕ¾Ãû³Æ
     private DefaultListModel selectedYearsModel = new DefaultListModel();
     final DefaultListModel stscNameModel_source = new DefaultListModel();
-    final DefaultListModel listParamModel_source = new DefaultListModel();//å…¨å±€å˜é‡ï¼Œå·¦ä¾§jList ç”¨æ¥å­˜å‚¨å·²ç»é€‰æ‹©çš„æ‰€æœ‰ï¼ã€æµ‹ç«™ç¼–ç ã€‘æµ‹ç«™åç§°
-    final DefaultListModel liststscModel_source = new DefaultListModel();//å…¨å±€å˜é‡ï¼Œå·¦ä¾§jList ç”¨æ¥å­˜å‚¨å·²ç»é€‰æ‹©çš„æ‰€æœ‰æµ‹ç«™ç¼–ç 
+    final DefaultListModel listParamModel_source = new DefaultListModel();//È«¾Ö±äÁ¿£¬×ó²àjList ÓÃÀ´´æ´¢ÒÑ¾­Ñ¡ÔñµÄËùÓĞ£½¡¾²âÕ¾±àÂë¡¿²âÕ¾Ãû³Æ
+    final DefaultListModel liststscModel_source = new DefaultListModel();//È«¾Ö±äÁ¿£¬×ó²àjList ÓÃÀ´´æ´¢ÒÑ¾­Ñ¡ÔñµÄËùÓĞ²âÕ¾±àÂë
     DBTool dbTool = null;
     String JdbcUrl = "";
     String DiverClass = "";
@@ -54,28 +54,28 @@ public class ExportView extends JFrame {
     private int byteread;
 
     /**
-     * å…¨å±€å˜é‡ï¼šæºæ•°æ®åº“å‚æ•°
-     * å–å¾—è¿™ä¸ªçª—å£ä¸Šçš„å‚æ•°æ•°æ®
-     * å¯¹è±¡åç§°ï¼šcbDriver:ï¼šæ•°æ®åº“é©±åŠ¨ç±»å‹
-     * å¯¹è±¡åç§°ï¼štxtIP:ï¼šæœåŠ¡å™¨ipåœ°å€
-     * å¯¹è±¡åç§°ï¼štxtUser:ï¼šç”¨æˆ·å
-     * å¯¹è±¡åç§°ï¼štxtPassï¼š:å¯†ç 
-     * å¯¹è±¡åç§°ï¼štxtDataDir:ï¼šå¯¼å‡ºç›®å½•
-     * å¯¹è±¡åç§°ï¼štxtDBName:ï¼šæ•°æ®åº“åç§°
+     * È«¾Ö±äÁ¿£ºÔ´Êı¾İ¿â²ÎÊı
+     * È¡µÃÕâ¸ö´°¿ÚÉÏµÄ²ÎÊıÊı¾İ
+     * ¶ÔÏóÃû³Æ£ºcbDriver:£ºÊı¾İ¿âÇı¶¯ÀàĞÍ
+     * ¶ÔÏóÃû³Æ£ºtxtIP:£º·şÎñÆ÷ipµØÖ·
+     * ¶ÔÏóÃû³Æ£ºtxtUser:£ºÓÃ»§Ãû
+     * ¶ÔÏóÃû³Æ£ºtxtPass£º:ÃÜÂë
+     * ¶ÔÏóÃû³Æ£ºtxtDataDir:£ºµ¼³öÄ¿Â¼
+     * ¶ÔÏóÃû³Æ£ºtxtDBName:£ºÊı¾İ¿âÃû³Æ
      */
     /** Creates new form ExportTool */
     @SuppressWarnings("unchecked")
     public ExportView() {
         initComponents();
 
-        tbMainSelect.remove(ExpView);//åˆ é™¤åä¸å†æ˜¾ç¤º
-        tbMainSelect.remove(SelectTable);//é€‰æ‹©å¯¼å‡ºè¡¨çš„ï¼Œä¸‹ä¸€æ­¥çš„æ—¶å€™åŠ è½½å‡ºæ¥ã€‚
-        tbMainSelect.remove(SelectStsc);//é€‰æ‹©æµ‹ç«™ç¼–ç çš„é¡µé¢ï¼Œé€‰æ‹©æŠ¥è¡¨åï¼Œä¸‹ä¸€æ­¥çš„æ—¶å€™åŠ è½½
-        tbMainSelect.remove(ExpData);//å¯¼å‡ºæ•°æ®çš„é¡µé¢ï¼Œé€‰æ‹©æµ‹ç«™åï¼Œç‚¹å¼€å§‹å¯¼å‡ºæŒ‰é’®çš„æ—¶å€™åŠ è½½
-        tbMainSelect.remove(ExpModelSet);//å¯¼å‡ºæ¨¡å¼è®¾ç½®ï¼Œæ˜¯å…¨éƒ¨å¯¼å‡ºï¼Œè¿˜æ˜¯æŒ‰å¹´ä»½å¯¼å‡º
-        tbMainSelect.remove(DataView);//æ•°æ®æŸ¥çœ‹çš„é¡µé¢ï¼Œåœ¨æ²¡æœ‰è®¾ç½®å‚æ•°çš„æ—¶å€™ä¸æ˜¾ç¤º
-        tbMainSelect.remove(dataIndexPanel);//æ•°æ®ç´¢å¼•é¡µé¢ï¼Œè®¾ç½®æ•°æ®åº“åˆå§‹å‚æ•°åï¼Œä¸€ç›´æ˜¾ç¤º
-        jButton5.setVisible(false);//éšè—â€œé‡æ–°è¯»å–â€çš„æŒ‰é’®
+        tbMainSelect.remove(ExpView);//É¾³ıºó²»ÔÙÏÔÊ¾
+        tbMainSelect.remove(SelectTable);//Ñ¡Ôñµ¼³ö±íµÄ£¬ÏÂÒ»²½µÄÊ±ºò¼ÓÔØ³öÀ´¡£
+        tbMainSelect.remove(SelectStsc);//Ñ¡Ôñ²âÕ¾±àÂëµÄÒ³Ãæ£¬Ñ¡Ôñ±¨±íºó£¬ÏÂÒ»²½µÄÊ±ºò¼ÓÔØ
+        tbMainSelect.remove(ExpData);//µ¼³öÊı¾İµÄÒ³Ãæ£¬Ñ¡Ôñ²âÕ¾ºó£¬µã¿ªÊ¼µ¼³ö°´Å¥µÄÊ±ºò¼ÓÔØ
+        tbMainSelect.remove(ExpModelSet);//µ¼³öÄ£Ê½ÉèÖÃ£¬ÊÇÈ«²¿µ¼³ö£¬»¹ÊÇ°´Äê·İµ¼³ö
+        tbMainSelect.remove(DataView);//Êı¾İ²é¿´µÄÒ³Ãæ£¬ÔÚÃ»ÓĞÉèÖÃ²ÎÊıµÄÊ±ºò²»ÏÔÊ¾
+        tbMainSelect.remove(dataIndexPanel);//Êı¾İË÷ÒıÒ³Ãæ£¬ÉèÖÃÊı¾İ¿â³õÊ¼²ÎÊıºó£¬Ò»Ö±ÏÔÊ¾
+        jButton5.setVisible(false);//Òş²Ø¡°ÖØĞÂ¶ÁÈ¡¡±µÄ°´Å¥
         exportType.setSelectedIndex(2);
         ButtonGroup bgroup = new ButtonGroup();
         bgroup.add(jRadioButtonAll);
@@ -106,8 +106,8 @@ public class ExportView extends JFrame {
         for (String t : Consts.jdbcclass) {
             comboxModel.addElement(t);
         }
-
         cbDriver.setModel(comboxModel);
+        
         File file = new File("c://stcd.xls");
         if (!file.exists()) {
             try {
@@ -358,7 +358,7 @@ public class ExportView extends JFrame {
         });
 
         exportType.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
-            "åªå¯¼å‡ºæ–‡æœ¬æ–‡ä»¶","åªå¯¼å‡ºæ•°æ®åº“æ–‡ä»¶","åŒæ—¶å¯¼å‡ºæ–‡æœ¬æ–‡ä»¶å’Œæ•°æ®åº“æ–‡ä»¶"
+            "Ö»µ¼³öÎÄ±¾ÎÄ¼ş","Ö»µ¼³öÊı¾İ¿âÎÄ¼ş","Í¬Ê±µ¼³öÎÄ±¾ÎÄ¼şºÍÊı¾İ¿âÎÄ¼ş"
         }));
         exportType.setName("exportType"); // NOI18N
         exportType.addActionListener(new java.awt.event.ActionListener() {
@@ -845,7 +845,7 @@ public class ExportView extends JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "å­—æ®µ1", "Title 2", "Title 3", "Title 4"
+                "×Ö¶Î1", "Title 2", "Title 3", "Title 4"
             }
         ));
         preViewTable.setName("preViewTable"); // NOI18N
@@ -980,7 +980,7 @@ public class ExportView extends JFrame {
 
         DataView.setName("DataView"); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "å¯¼å…¥æ¥æºæ•°æ®æŸ¥çœ‹", "å¯¼å‡ºç»“æœæŸ¥çœ‹" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "µ¼ÈëÀ´Ô´Êı¾İ²é¿´", "µ¼³ö½á¹û²é¿´" }));
         jComboBox1.setName("jComboBox1"); // NOI18N
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1230,7 +1230,7 @@ public class ExportView extends JFrame {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "æµ‹ç«™åç§°", "æ°´æµæ²™", "é™æ°´", "æ°´æ¸©", "è’¸å‘", "å†°å‡Œ", "æ½®ä½", "èµ·æ­¢å¹´ä»½"
+                "²âÕ¾Ãû³Æ", "Ë®Á÷É³", "½µË®", "Ë®ÎÂ", "Õô·¢", "±ùÁè", "³±Î»", "ÆğÖ¹Äê·İ"
             }
         ) {
             Class[] types = new Class [] {
@@ -1281,13 +1281,27 @@ public class ExportView extends JFrame {
         int driveClassIndex = cbDriver.getSelectedIndex();
 
         if (driveClassIndex == 1) {//sqlserver
+            txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
             txtPort.setText("1433");
+            jLabel11.setText(" ·şÎñÃû£º");
         }
         if (driveClassIndex == 2) {//sysbase
+            txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
             txtPort.setText("5000");
+            jLabel11.setText(" ·şÎñÃû£º");
         }
         if (driveClassIndex == 3) {//oracle
+            txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
             txtPort.setText("1521");
+            jLabel11.setText(" ·şÎñÃû£º");
+        }
+        if(driveClassIndex == 4){//foxpro
+            txtPort.setText("0000");
+            exportType.setSelectedIndex(0);
+            exportType.setEnabled(false);
+            txtPort.setEnabled(false);
+            txtIP.setEnabled(false);
+            jLabel11.setText(" Êı¾İÔ´£º");
         }
 }//GEN-LAST:event_cbDriverActionPerformed
 
@@ -1300,22 +1314,22 @@ public class ExportView extends JFrame {
     }//GEN-LAST:event_DataNameActionPerformed
     @SuppressWarnings("unchecked")
     private void NextBtnOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextBtnOneActionPerformed
-        int driveClassIndex = cbDriver.getSelectedIndex();
+         int driveClassIndex = cbDriver.getSelectedIndex();
         String serverPort = txtPort.getText();
         String ipAddress = txtIP.getText();
         String dbname = DataName.getText();
 
         if (driveClassIndex == 0) {
-            JOptionPane.showMessageDialog(null, "è¯·é€‰æ‹©æ•°æ®åº“ç±»å‹ï¼", "æç¤º", 0);
+            JOptionPane.showMessageDialog(null, "ÇëÑ¡ÔñÊı¾İ¿âÀàĞÍ£¡", "ÌáÊ¾", 0);
         } else {
             if (serverPort.trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "æ•°æ®åº“ç«¯å£å·ä¸èƒ½ä¸ºç©ºï¼", "æç¤º", 0);
+                JOptionPane.showMessageDialog(null, "Êı¾İ¿â¶Ë¿ÚºÅ²»ÄÜÎª¿Õ£¡", "ÌáÊ¾", 0);
             } else {
                 if ("".trim().equals(ipAddress)) {
-                    JOptionPane.showMessageDialog(null, "æœåŠ¡å™¨ipåœ°å€ä¸èƒ½ä¸ºç©ºï¼", "æç¤º", 0);
+                    JOptionPane.showMessageDialog(null, "·şÎñÆ÷ipµØÖ·²»ÄÜÎª¿Õ£¡", "ÌáÊ¾", 0);
                 } else {
                     if ("".trim().equals(dbname)) {
-                        JOptionPane.showMessageDialog(null, "æœåŠ¡åä¸èƒ½ä¸ºç©ºï¼", "æç¤º", 0);
+                        JOptionPane.showMessageDialog(null, "·şÎñÃû²»ÄÜÎª¿Õ£¡", "ÌáÊ¾", 0);
                     } else {
                         expType = exportType.getSelectedIndex();
                         if (driveClassIndex == 1) {//sqlserver
@@ -1330,6 +1344,10 @@ public class ExportView extends JFrame {
                             DiverClass = "oracle.jdbc.driver.OracleDriver";
                             JdbcUrl = "jdbc:oracle:thin:@" + txtIP.getText() + ":" + serverPort + ":" + DataName.getText();
                         }
+                        if (driveClassIndex == 4) {//foxpro
+                            DiverClass = "sun.jdbc.odbc.JdbcOdbcDriver";
+                            JdbcUrl = "jdbc:odbc:hydb";
+                        }
                         if (exportType.getSelectedIndex() == 0) {
                             jComboBox1.setEnabled(false);
                         } else {
@@ -1339,8 +1357,8 @@ public class ExportView extends JFrame {
 //                            File saveFile = new File(txtDataDir.getText()+"\\excel");
                             boolean flg=false;
 //                            if(saveFile.exists()){
-//                               int k =  JOptionPane.showConfirmDialog(null, "å¯¼å‡ºæ•°æ®æ–‡ä»¶ç›®å½•:["+txtDataDir.getText()+"\\excel]å·²ç»å­˜åœ¨,æ˜¯å¦åˆ é™¤?\n"
-//                                       +" ç‚¹å‡»ç¡®å®šåˆ é™¤æ–‡ä»¶ï¼Œç‚¹å‡»å–æ¶ˆä¿®æ”¹ç›®å½•ï¼", "æç¤º", JOptionPane.OK_CANCEL_OPTION);
+//                               int k =  JOptionPane.showConfirmDialog(null, "µ¼³öÊı¾İÎÄ¼şÄ¿Â¼:["+txtDataDir.getText()+"\\excel]ÒÑ¾­´æÔÚ,ÊÇ·ñÉ¾³ı?\n"
+//                                       +" µã»÷È·¶¨É¾³ıÎÄ¼ş£¬µã»÷È¡ÏûĞŞ¸ÄÄ¿Â¼£¡", "ÌáÊ¾", JOptionPane.OK_CANCEL_OPTION);
 //                               if(k==0){
                                    flg = FileAccess.deleteDirectory(txtDataDir.getText());
 //                               }
@@ -1351,16 +1369,16 @@ public class ExportView extends JFrame {
                                 dbTool = new DBTool(DiverClass, JdbcUrl, txtUser.getText(),
                                         txtPass.getText(), txtDataDir.getText());
                                 tbMainSelect.remove(ParametSet);
-                                tbMainSelect.add("æ•°æ®é€‰æ‹©", SelectTable);
-                                //åˆå§‹åŒ–æ•°æ®åº“
+                                tbMainSelect.add("Êı¾İÑ¡Ôñ", SelectTable);
+                                //³õÊ¼»¯Êı¾İ¿â
                                  JdbcTemplate jt_Target = dbTool.getJt2();
                                 if(flg){
-                                    if (Version.getSelectedIndex() == 1) {//ç¬¦åˆ4.0çš„æ ‡å‡†
+                                    if (Version.getSelectedIndex() == 1) {//·ûºÏ4.0µÄ±ê×¼
                                         for (String sql : InitTargetDB.createTab) {
                                             jt_Target.execute(sql);
                                         }
                                         jt_Target.batchUpdate(InitTargetDB.insertTables);
-                                    } else {//ç¬¦åˆ3.0çš„æ ‡å‡†
+                                    } else {//·ûºÏ3.0µÄ±ê×¼
                                         for (String sql : InitTargetDB_TVersion.createTab) {
                                             jt_Target.execute(sql);
                                         }
@@ -1397,11 +1415,11 @@ public class ExportView extends JFrame {
                                 ListTables.setModel(model);
                                 SelectedTables.setModel(selectedTablesModel);
 
-                                //ä»æºæ•°æ®åº“ä¸­è¯»å–æµ‹ç«™åŸºæœ¬ä¿¡æ¯
+                                //´ÓÔ´Êı¾İ¿âÖĞ¶ÁÈ¡²âÕ¾»ù±¾ĞÅÏ¢
 
-                                JdbcTemplate jt_stsc = dbTool.getJt1();//ä»æºæ•°æ®åº“ä¸­å–å¾—æµ‹ç«™åç§°ä¿¡æ¯
+                                JdbcTemplate jt_stsc = dbTool.getJt1();//´ÓÔ´Êı¾İ¿âÖĞÈ¡µÃ²âÕ¾Ãû³ÆĞÅÏ¢
                                 String queryStcdSQL = "";
-                                if (Version.getSelectedIndex() == 1) {//ç¬¦åˆ4.0çš„æ ‡å‡†
+                                if (Version.getSelectedIndex() == 1) {//·ûºÏ4.0µÄ±ê×¼
                                     queryStcdSQL = "select *  from HY_STSC_A";
                                 } else {
                                     queryStcdSQL = "select *  from STHD";
@@ -1412,14 +1430,18 @@ public class ExportView extends JFrame {
 
                                     public List<HY_STSC_ABean> mapRow(final ResultSet rs, int rowNum) throws SQLException {
                                         List<HY_STSC_ABean> resultList = null;
-                                        stscNameModel_source.addElement(rs.getString("stnm").trim());
-                                        listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + rs.getString("stnm").trim());
-                                        liststscModel_source.addElement(rs.getString("stcd").trim());
+//                                        System.out.println(rs.getString("stnm").trim());
+                                        String stnm = rs.getString("stnm");
+                                        String stcd = rs.getString("stcd");
+                                        stnm=stnm==null?"":stnm;
+                                        stscNameModel_source.addElement(stnm.trim());
+                                        listParamModel_source.addElement("[" + stcd.trim() + "]" + stnm.trim());
+                                        liststscModel_source.addElement(stcd.trim());
                                         return resultList;
                                     }
                                 });
 
-                                //æ£€éªŒå¹¶è¿‡æ»¤æ‰ä¸ç¬¦åˆå¯¼å‡ºæ¡ä»¶çš„æµ‹ç«™
+                                //¼ìÑé²¢¹ıÂËµô²»·ûºÏµ¼³öÌõ¼şµÄ²âÕ¾
                                 JdbcTemplate jt_target = dbTool.getJt2();
                                 selectedSnameModel.removeAllElements();
                                 selectedStscModel.removeAllElements();
@@ -1433,7 +1455,7 @@ public class ExportView extends JFrame {
                                         }
                                     }
                                 }
-                                //åŒä¸€ä¸ªç«™åå¯¹åº”å¤šä¸ªç¼–ç çš„æ—¶å€™æœ‰é—®é¢˜ï¼Œæ‰€ä»¥æ³¨é‡Šæ‰
+                                //Í¬Ò»¸öÕ¾Ãû¶ÔÓ¦¶à¸ö±àÂëµÄÊ±ºòÓĞÎÊÌâ£¬ËùÒÔ×¢ÊÍµô
 //                                if (!selectedSnameModel.isEmpty()) {
 //                                    for (int k = 0; k < selectedSnameModel.size(); k++) {
 //                                        listParamModel_source.removeElement(selectedSnameModel.get(k));
@@ -1446,15 +1468,15 @@ public class ExportView extends JFrame {
                                     dbTool.shutdown();
                                 }
                                 tbMainSelect.remove(SelectTable);
-                                tbMainSelect.add("å‚æ•°è®¾ç½®", ParametSet);
+                                tbMainSelect.add("²ÎÊıÉèÖÃ", ParametSet);
                             }
 
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            JOptionPane.showMessageDialog(null, "æ•°æ®åº“è¿æ¥å¤±è´¥ï¼Œè¯·ç¡®è®¤å‚æ•°è®¾ç½®ï¼", "æç¤º", 0);
+                            JOptionPane.showMessageDialog(null, "Êı¾İ¿âÁ¬½ÓÊ§°Ü£¬ÇëÈ·ÈÏ²ÎÊıÉèÖÃ£¡", "ÌáÊ¾", 0);
                             dbTool.shutdown();
                             tbMainSelect.remove(SelectTable);
-                            tbMainSelect.add("å‚æ•°è®¾ç½®", ParametSet);
+                            tbMainSelect.add("²ÎÊıÉèÖÃ", ParametSet);
                         }
                     }
                 }
@@ -1465,22 +1487,22 @@ public class ExportView extends JFrame {
     @SuppressWarnings("unchecked")
     private void btnTableNextStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTableNextStepActionPerformed
         if (selectedTablesModel.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "æ‚¨æ²¡æœ‰é€‰æ‹©ä»»ä½•æ•°æ®è¡¨ï¼Œè¯·é€‰æ‹©ï¼", "æç¤º", 0);
+            JOptionPane.showMessageDialog(null, "ÄúÃ»ÓĞÑ¡ÔñÈÎºÎÊı¾İ±í£¬ÇëÑ¡Ôñ£¡", "ÌáÊ¾", 0);
         } else {
             exportTabList.setModel(selectedTablesModel);
             tbMainSelect.remove(SelectTable);
 
-            tbMainSelect.add("æµ‹ç«™é€‰æ‹©", SelectStsc);
+            tbMainSelect.add("²âÕ¾Ñ¡Ôñ", SelectStsc);
         }
     }//GEN-LAST:event_btnTableNextStepActionPerformed
 
     private void NextBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextBtnActionPerformed
-        if (selectedSnameModel.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "æ‚¨æ²¡æœ‰é€‰æ‹©ä»»ä½•æµ‹ç«™ï¼Œè¯·é€‰æ‹©ï¼", "æç¤º", 0);
+         if (selectedSnameModel.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "ÄúÃ»ÓĞÑ¡ÔñÈÎºÎ²âÕ¾£¬ÇëÑ¡Ôñ£¡", "ÌáÊ¾", 0);
         } else {
             tbMainSelect.remove(SelectStsc);
-            tbMainSelect.add("æ•°æ®å¯¼å‡º", ExpData);
-            tbMainSelect.add("æ•°æ®æŸ¥çœ‹", DataView);
+            tbMainSelect.add("Êı¾İµ¼³ö", ExpData);
+            tbMainSelect.add("Êı¾İ²é¿´", DataView);
         }
     }//GEN-LAST:event_NextBtnActionPerformed
 
@@ -1490,14 +1512,14 @@ public class ExportView extends JFrame {
     @SuppressWarnings("unchecked")
     private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
 
-//        t.start();
+        btnExportPerStep.setEnabled(false);
         btnExport.setEnabled(false);
         File dirFile = new File(txtDataDir.getText() + "\\excel\\");
         boolean bFile = dirFile.exists();
         if (bFile == true) {
             File[] files = dirFile.listFiles();
             for (int i = 0; i < files.length; i++) {
-                //åˆ é™¤å­æ–‡ä»¶
+                //É¾³ı×ÓÎÄ¼ş
                 if (files[i].isFile()) {
                     File file = new File(files[i].getAbsolutePath());
                     if (file.isFile() && file.exists()) {
@@ -1519,24 +1541,25 @@ public class ExportView extends JFrame {
                 DefaultListModel allTablesmodel = (DefaultListModel) ListTables.getModel();
                 dbTool.process(logList, allTablesmodel, selectedTablesModel, selectedStscModel, selectedYearsModel,
                         selectedSnameModel, dbTool, txtDataDir.getText(), expType, Version.getSelectedIndex());
-                MessageLabel.setText("ç³»ç»Ÿæ¶ˆæ¯ï¼šå¯¼å‡ºæˆåŠŸç»“æŸ,å¯¼å‡ºæ•°æ®å’ŒæŠ¥å‘Šå·²æˆåŠŸä¿å­˜è‡³[");
+                MessageLabel.setText("ÏµÍ³ÏûÏ¢£ºµ¼³ö³É¹¦½áÊø,µ¼³öÊı¾İºÍ±¨¸æÒÑ³É¹¦±£´æÖÁ[");
                 MessageLabel1.setText("<html><a href='file:///" + txtDataDir.getText() + "'>" + txtDataDir.getText() + "\\excel</a></html>");
-                MessageLabel2.setText("]è¯·æŸ¥çœ‹ï¼");
+                MessageLabel2.setText("]Çë²é¿´£¡");
                 MessageLabel1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 MessageLabel.setVisible(true);
                 MessageLabel1.setVisible(true);
                 MessageLabel2.setVisible(true);
                 exitBtn.setVisible(true);
                 btnExport.setEnabled(true);
+                btnExportPerStep.setEnabled(true);
             }
         }.start();
     }//GEN-LAST:event_btnExportActionPerformed
 
-    /**
-     * é€‰æ‹©itemåï¼Œé€šè¿‡æŒ‰é’®è¿›è¡Œæ“ä½œï¼Œ
-     * å®ç°ä»å·¦å‘å³çš„ç§»åŠ¨
-     * ä»å·¦ä¾§ç§»å‡ºæ¡ç›®
-     * å³ä¾§å¢åŠ ç§»å‡ºçš„æ¡ç›®
+   /**
+     * Ñ¡Ôñitemºó£¬Í¨¹ı°´Å¥½øĞĞ²Ù×÷£¬
+     * ÊµÏÖ´Ó×óÏòÓÒµÄÒÆ¶¯
+     * ´Ó×ó²àÒÆ³öÌõÄ¿
+     * ÓÒ²àÔö¼ÓÒÆ³öµÄÌõÄ¿
      * @param evt
      */
     private void AddBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddBtnActionPerformed
@@ -1555,8 +1578,8 @@ public class ExportView extends JFrame {
         }
 
     }//GEN-LAST:event_AddBtnActionPerformed
-    /**
-     * åŒå‡»äº‹ä»¶ï¼ŒåŒå‡»itemè‡ªåŠ¨ç§»åŠ¨ä»å·¦å‘å³çš„ç§»åŠ¨
+   /**
+     * Ë«»÷ÊÂ¼ş£¬Ë«»÷item×Ô¶¯ÒÆ¶¯´Ó×óÏòÓÒµÄÒÆ¶¯
      * @param evt
      */
     private void ListTablesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ListTablesMouseClicked
@@ -1569,7 +1592,7 @@ public class ExportView extends JFrame {
         }
     }//GEN-LAST:event_ListTablesMouseClicked
     /**
-     * åŒå‡»äº‹ä»¶ï¼ŒåŒå‡»itemè‡ªåŠ¨ç§»åŠ¨ä»å³å‘å·¦çš„ç§»åŠ¨
+     * Ë«»÷ÊÂ¼ş£¬Ë«»÷item×Ô¶¯ÒÆ¶¯´ÓÓÒÏò×óµÄÒÆ¶¯
      * @param evt
      */
     private void SelectedTablesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SelectedTablesMouseClicked
@@ -1580,10 +1603,10 @@ public class ExportView extends JFrame {
         }
     }//GEN-LAST:event_SelectedTablesMouseClicked
     /**
-     * é€‰æ‹©itemåï¼Œé€šè¿‡æŒ‰é’®è¿›è¡Œæ“ä½œï¼Œ
-     * å®ç°ä»å³å‘å·¦çš„ç§»åŠ¨
-     * ä»å³ä¾§ç§»å‡ºæ¡ç›®
-     * å·¦ä¾§å¢åŠ ç§»å‡ºçš„æ¡ç›®
+     * Ñ¡Ôñitemºó£¬Í¨¹ı°´Å¥½øĞĞ²Ù×÷£¬
+     * ÊµÏÖ´ÓÓÒÏò×óµÄÒÆ¶¯
+     * ´ÓÓÒ²àÒÆ³öÌõÄ¿
+     * ×ó²àÔö¼ÓÒÆ³öµÄÌõÄ¿
      * @param evt
      */
     private void CancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelBtnActionPerformed
@@ -1601,9 +1624,9 @@ public class ExportView extends JFrame {
         }
     }//GEN-LAST:event_CancelBtnActionPerformed
     /**
-     * é€‰æ‹©æµ‹ç«™ç¼–ç è¿‡æ»¤æ¡ä»¶
-     * é¼ æ ‡ç‚¹å‡»çš„æ—¶å€™è§¦å‘
-     * åŒå‡»ç§»åŠ¨ä»å·¦ä¾§åˆ°å³ä¾§
+     * Ñ¡Ôñ²âÕ¾±àÂë¹ıÂËÌõ¼ş
+     * Êó±êµã»÷µÄÊ±ºò´¥·¢
+     * Ë«»÷ÒÆ¶¯´Ó×ó²àµ½ÓÒ²à
      *
      * @param evt
      */
@@ -1616,21 +1639,15 @@ public class ExportView extends JFrame {
             model.remove(listStsc.getSelectedIndex());
         }
     }//GEN-LAST:event_listStscMouseClicked
-    /**
-     * é€‰æ‹©æµ‹ç«™ç¼–ç è¿‡æ»¤æ¡ä»¶
-     * é¼ æ ‡ç‚¹å‡»çš„æ—¶å€™è§¦å‘
-     * åŒå‡»ç§»åŠ¨ä»å³ä¾§åˆ°å·¦ä¾§
+     /**
+     * Ñ¡Ôñ²âÕ¾±àÂë¹ıÂËÌõ¼ş
+     * Êó±êµã»÷µÄÊ±ºò´¥·¢
+     * Ë«»÷ÒÆ¶¯´ÓÓÒ²àµ½×ó²à
      *
      * @param evt
      */
     private void SelectedStscMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SelectedStscMouseClicked
-//        if (evt.getClickCount() == 2) {
-//            DefaultListModel model = (DefaultListModel) listStsc.getModel();
-//            model.addElement(SelectedStsc.getSelectedValue());
-//            selectedStscModel.remove(SelectedStsc.getSelectedIndex());
-//        }else{
-//            DefaultListModel model = (DefaultListModel) listStsc.getModel();
-        String selectedValue = SelectedStsc.getSelectedValue().toString();
+         String selectedValue = SelectedStsc.getSelectedValue().toString();
 
         if (!"".trim().equals(selectedValue)) {
 
@@ -1644,11 +1661,11 @@ public class ExportView extends JFrame {
                 selectedValue = selectedValue.substring(point + 1, selectedValue.length());
             }
             SearchText.setText(selectedValue);
-            //ä»æºæ•°æ®åº“ä¸­æŸ¥è¯¢æ•°æ®åº“ï¼Œå¹¶ä¸”è¿”å›æµ‹ç«™ç¼–ç ä¸åœ¨å³ä¾§listé€‰é¡¹æ¡†ä¸­çš„æ•°æ®
-            JdbcTemplate jt_stsc = dbTool.getJt1();//ä»æºæ•°æ®åº“ä¸­å–å¾—æµ‹ç«™åç§°ä¿¡æ¯
+            //´ÓÔ´Êı¾İ¿âÖĞ²éÑ¯Êı¾İ¿â£¬²¢ÇÒ·µ»Ø²âÕ¾±àÂë²»ÔÚÓÒ²àlistÑ¡Ïî¿òÖĞµÄÊı¾İ
+            JdbcTemplate jt_stsc = dbTool.getJt1();//´ÓÔ´Êı¾İ¿âÖĞÈ¡µÃ²âÕ¾Ãû³ÆĞÅÏ¢
             String queryStcdSQL = "";
 
-            if (Version.getSelectedIndex() == 1) //ç¬¦åˆ4.0çš„æ ‡å‡†
+            if (Version.getSelectedIndex() == 1) //·ûºÏ4.0µÄ±ê×¼
             {
                 queryStcdSQL = "select *  from HY_STSC_A where stnm like '%" + selectedValue.trim() + "%'";
             } else {
@@ -1669,12 +1686,11 @@ public class ExportView extends JFrame {
             listStsc.setModel(listParamModel_source);
 
         }
-//        }
 
     }//GEN-LAST:event_SelectedStscMouseClicked
     /**
-     * ç‚¹å‡»åŠ å…¥æŒ‰é’®è§¦å‘
-     * å°†é€‰ä¸­çš„æµ‹ç«™itemç§»åŠ¨åˆ°å³ä¾§
+     * µã»÷¼ÓÈë°´Å¥´¥·¢
+     * ½«Ñ¡ÖĞµÄ²âÕ¾itemÒÆ¶¯µ½ÓÒ²à
      * @param evt
      */
     private void AddStstBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddStstBtnActionPerformed
@@ -1692,8 +1708,8 @@ public class ExportView extends JFrame {
         }
     }//GEN-LAST:event_AddStstBtnActionPerformed
     /**
-     * ç‚¹å‡»å–æ¶ˆæµ‹ç«™æŒ‰é’®è§¦å‘
-     * å°†é€‰ä¸­çš„æµ‹ç«™itemç§»åŠ¨åˆ°å·¦ä¾§
+     * µã»÷È¡Ïû²âÕ¾°´Å¥´¥·¢
+     * ½«Ñ¡ÖĞµÄ²âÕ¾itemÒÆ¶¯µ½×ó²à
      * @param evt
      */
     private void CancelStscBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelStscBtnActionPerformed
@@ -1722,9 +1738,9 @@ public class ExportView extends JFrame {
             model.removeAllElements();
         }
     }//GEN-LAST:event_AddBtnAllTablesActionPerformed
-    /**
-     * å–æ¶ˆå·²ç»é€‰æ‹©çš„æ‰€æœ‰tables
-     * å°†å³ä¾§æ¡ç›®å…¨éƒ¨ç§»åŠ¨åˆ°å·¦ä¾§
+     /**
+     * È¡ÏûÒÑ¾­Ñ¡ÔñµÄËùÓĞtables
+     * ½«ÓÒ²àÌõÄ¿È«²¿ÒÆ¶¯µ½×ó²à
      * @param evt
      */
     private void CancelBtnAllTablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelBtnAllTablesActionPerformed
@@ -1738,8 +1754,8 @@ public class ExportView extends JFrame {
         }
     }//GEN-LAST:event_CancelBtnAllTablesActionPerformed
     /**
-     * æµ‹ç«™é€‰æ‹©å…¨éƒ¨ç§»åŠ¨
-     * ä»å·¦ä¾§åˆ°å³ä¾§
+     * ²âÕ¾Ñ¡ÔñÈ«²¿ÒÆ¶¯
+     * ´Ó×ó²àµ½ÓÒ²à
      * @param evt
      */
     private void AddStstBtnAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddStstBtnAllActionPerformed
@@ -1755,9 +1771,9 @@ public class ExportView extends JFrame {
             model.removeAllElements();
         }
     }//GEN-LAST:event_AddStstBtnAllActionPerformed
-    /**
-     * å–æ¶ˆå·²ç»é€‰æ‹©çš„æ‰€æœ‰æµ‹ç«™
-     * å®ç°ä»å³ä¾§åˆ°å·¦ä¾§çš„ç§»åŠ¨
+     /**
+     * È¡ÏûÒÑ¾­Ñ¡ÔñµÄËùÓĞ²âÕ¾
+     * ÊµÏÖ´ÓÓÒ²àµ½×ó²àµÄÒÆ¶¯
      * @param evt
      */
     private void CancelStscBtnAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelStscBtnAllActionPerformed
@@ -1770,16 +1786,9 @@ public class ExportView extends JFrame {
             selectedSnameModel.removeAllElements();
         }
     }//GEN-LAST:event_CancelStscBtnAllActionPerformed
+
     /**
-     * å°†æ‰€æœ‰å¹´ä»½ä»å·¦ä¾§ç§»åŠ¨åˆ°å³ä¾§
-     * @param evt
-     */
-    /**
-     * å°†å·²é€‰æ‹©çš„å¹´ä»½ä»å³ä¾§å…¨éƒ¨ç§»åŠ¨åˆ°å·¦ä¾§
-     * @param evt
-     */
-    /**
-     * ç‚¹å‡»æŠ¥è¡¨åç§°åï¼Œé‡æ–°åŠ è½½å³ä¾§è¡¨ä¿¡æ¯
+     * µã»÷±¨±íÃû³Æºó£¬ÖØĞÂ¼ÓÔØÓÒ²à±íĞÅÏ¢
      * @param evt
      */
     private void listPreviewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listPreviewMouseClicked
@@ -1792,7 +1801,7 @@ public class ExportView extends JFrame {
             colList = HY_DBFP_JDao.colColumnBeanList(listPreview.getSelectedValue().toString(), "", "FLID");
             colStr = HY_DBFP_JDao.colSqlFactory(listPreview.getSelectedValue().toString(), "FLID");
             if (colStr == null || colStr.trim().equals(";")) {
-                JOptionPane.showMessageDialog(null, "æ²¡æœ‰å–å¾—è¡¨ç»“æ„ä¿¡æ¯ï¼", "æç¤º", 0);
+                JOptionPane.showMessageDialog(null, "Ã»ÓĞÈ¡µÃ±í½á¹¹ĞÅÏ¢£¡", "ÌáÊ¾", 0);
             } else {
                 String colAndNameStri[] = colStr.split(";");
                 String tabid = HY_DBTP_JDao.getTabid(listPreview.getSelectedValue().toString());
@@ -1814,7 +1823,7 @@ public class ExportView extends JFrame {
             ex.printStackTrace();
         }
         if (colStr == null || colStr.trim().equals(";")) {
-            JOptionPane.showMessageDialog(null, "æ²¡æœ‰å–å¾—è¡¨ç»“æ„ä¿¡æ¯ï¼", "æç¤º", 0);
+            JOptionPane.showMessageDialog(null, "Ã»ÓĞÈ¡µÃ±í½á¹¹ĞÅÏ¢£¡", "ÌáÊ¾", 0);
         } else {
             String colcode[] = colStr.split(";")[0].split(",");
             if (colList != null && colList.size() > 0) {
@@ -1833,13 +1842,14 @@ public class ExportView extends JFrame {
                         }
                     }
                 }
-                //å¼€å§‹é‡æ„jtable
+                //¿ªÊ¼ÖØ¹¹jtable
                 DefaultTableModel tabModel = new DefaultTableModel(
                         valueArr, title);
                 preViewTable.setModel(tabModel);
                 preViewTable.setAutoResizeMode(preViewTable.AUTO_RESIZE_OFF);
             }
         }
+
 
     }//GEN-LAST:event_listPreviewMouseClicked
 
@@ -1854,7 +1864,7 @@ public class ExportView extends JFrame {
             colList = HY_DBFP_JDao.colColumnBeanList(exportTabList.getSelectedValue().toString(), "", "FLID", dbTool);
             colStr = HY_DBFP_JDao.colSqlFactory(exportTabList.getSelectedValue().toString(), "FLID", dbTool);
             if (colStr == null || colStr.trim().equals(";")) {
-                JOptionPane.showMessageDialog(null, "æ²¡æœ‰å–å¾—è¡¨ç»“æ„ä¿¡æ¯ï¼", "æç¤º", 0);
+                JOptionPane.showMessageDialog(null, "Ã»ÓĞÈ¡µÃ±í½á¹¹ĞÅÏ¢£¡", "ÌáÊ¾", 0);
             } else {
                 String colAndNameStri[] = colStr.split(";");
                 String tabid = HY_DBTP_JDao.getTabid(exportTabList.getSelectedValue().toString(), dbTool);
@@ -1862,10 +1872,10 @@ public class ExportView extends JFrame {
                 if (!selectedSnameModel.isEmpty()) {
 
                     for (int i = 0; i < selectedSnameModel.size(); i++) {
-                        //è¿”å›å†…å®¹ä¸ºç¼–ç ï¼‹åç§°ï¼Œå¤„ç†åå¾—åˆ°ç¼–ç 
+                        //·µ»ØÄÚÈİÎª±àÂë£«Ãû³Æ£¬´¦ÀíºóµÃµ½±àÂë
                         String stcdandname = selectedSnameModel.get(i).toString();
                         int poi = stcdandname.lastIndexOf("]");
-                        String stcd = stcdandname.substring(1, poi);//ç¼–ç 
+                        String stcd = stcdandname.substring(1, poi);//±àÂë
                         if (stscStr.trim().equals("")) {
                             stscStr = "'" + stcd + "'";
                         } else {
@@ -1879,7 +1889,7 @@ public class ExportView extends JFrame {
             ex.printStackTrace();
         }
         if (colStr == null || colStr.trim().equals(";")) {
-            JOptionPane.showMessageDialog(null, "æ²¡æœ‰å–å¾—è¡¨ç»“æ„ä¿¡æ¯ï¼", "æç¤º", 0);
+            JOptionPane.showMessageDialog(null, "Ã»ÓĞÈ¡µÃ±í½á¹¹ĞÅÏ¢£¡", "ÌáÊ¾", 0);
         } else {
             String colcode[] = colStr.split(";")[0].split(",");
             if (colList != null && colList.size() > 0) {
@@ -1899,7 +1909,7 @@ public class ExportView extends JFrame {
                         }
                     }
                 }
-                //å¼€å§‹é‡æ„jtable
+                //¿ªÊ¼ÖØ¹¹jtable
                 DefaultTableModel tabModel = new DefaultTableModel(
                         valueArr, title);
                 resultViewTable.setModel(tabModel);
@@ -2025,16 +2035,15 @@ public class ExportView extends JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
-        tbMainSelect.remove(ExpModelSet);//å¯¼å‡ºæ¨¡å¼è®¾ç½®ï¼Œæ˜¯å…¨éƒ¨å¯¼å‡ºï¼Œè¿˜æ˜¯æŒ‰å¹´ä»½å¯¼å‡º
+        tbMainSelect.remove(ExpModelSet);//µ¼³öÄ£Ê½ÉèÖÃ£¬ÊÇÈ«²¿µ¼³ö£¬»¹ÊÇ°´Äê·İµ¼³ö
         tbMainSelect.remove(DataView);
         tbMainSelect.remove(dataIndexPanel);
         MessageLabel.setVisible(false);
         MessageLabel1.setVisible(false);
         MessageLabel2.setVisible(false);
         exitBtn.setVisible(false);
-        tbMainSelect.add("æ•°æ®å¯¼å‡º", ExpData);
-        tbMainSelect.add("æ•°æ®æŸ¥çœ‹", DataView);
-        //tbMainSelect.add("æ•°æ®ç´¢å¼•", dataIndexPanel);
+        tbMainSelect.add("Êı¾İµ¼³ö", ExpData);
+        tbMainSelect.add("Êı¾İ²é¿´", DataView);
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jComboBox1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jComboBox1PropertyChange
@@ -2043,10 +2052,10 @@ public class ExportView extends JFrame {
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-        if (jComboBox1.getSelectedIndex() == 1) {
-            selectedTablesModel.addElement("æ•°æ®ç´¢å¼•è¡¨");
+       if (jComboBox1.getSelectedIndex() == 1) {
+            selectedTablesModel.addElement("Êı¾İË÷Òı±í");
         } else {
-            selectedTablesModel.removeElement("æ•°æ®ç´¢å¼•è¡¨");
+            selectedTablesModel.removeElement("Êı¾İË÷Òı±í");
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
@@ -2060,7 +2069,7 @@ public class ExportView extends JFrame {
         // TODO add your handling code here:
         dbTool.shutdown();
         tbMainSelect.remove(SelectTable);
-        tbMainSelect.add("å‚æ•°è®¾ç½®", ParametSet);
+        tbMainSelect.add("²ÎÊıÉèÖÃ", ParametSet);
     }//GEN-LAST:event_btnTablePerStepActionPerformed
 
     private void jRadioButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton2MouseClicked
@@ -2069,9 +2078,12 @@ public class ExportView extends JFrame {
 
     private void btnExportPerStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportPerStepActionPerformed
         // TODO add your handling code here:
+        MessageLabel.setText("");
+        MessageLabel1.setText("");
+        MessageLabel2.setText("");
         tbMainSelect.remove(ExpData);
         tbMainSelect.remove(DataView);
-        tbMainSelect.add("æµ‹ç«™é€‰æ‹©", SelectStsc);
+        tbMainSelect.add("²âÕ¾Ñ¡Ôñ", SelectStsc);
     }//GEN-LAST:event_btnExportPerStepActionPerformed
 
     private void jRadioButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton1MouseClicked
@@ -2100,19 +2112,19 @@ public class ExportView extends JFrame {
         // TODO add your handling code here:
 
         tbMainSelect.remove(SelectStsc);
-        tbMainSelect.add("æ•°æ®é€‰æ‹©", SelectTable);
+        tbMainSelect.add("Êı¾İÑ¡Ôñ", SelectTable);
     }//GEN-LAST:event_NextBtn1ActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         // TODO add your handling code here:
-        String selectedValue = SearchText.getText();
+         String selectedValue = SearchText.getText();
 
 
-        //ä»æºæ•°æ®åº“ä¸­æŸ¥è¯¢æ•°æ®åº“ï¼Œå¹¶ä¸”è¿”å›æµ‹ç«™ç¼–ç ä¸åœ¨å³ä¾§listé€‰é¡¹æ¡†ä¸­çš„æ•°æ®
-        JdbcTemplate jt_stsc = dbTool.getJt1();//ä»æºæ•°æ®åº“ä¸­å–å¾—æµ‹ç«™åç§°ä¿¡æ¯
+        //´ÓÔ´Êı¾İ¿âÖĞ²éÑ¯Êı¾İ¿â£¬²¢ÇÒ·µ»Ø²âÕ¾±àÂë²»ÔÚÓÒ²àlistÑ¡Ïî¿òÖĞµÄÊı¾İ
+        JdbcTemplate jt_stsc = dbTool.getJt1();//´ÓÔ´Êı¾İ¿âÖĞÈ¡µÃ²âÕ¾Ãû³ÆĞÅÏ¢
         String queryStcdSQL = "";
 
-        if (Version.getSelectedIndex() == 1) {//ç¬¦åˆ4.0çš„æ ‡å‡†
+        if (Version.getSelectedIndex() == 1) {//·ûºÏ4.0µÄ±ê×¼
             queryStcdSQL = "select *  from HY_STSC_A where stnm like '%" + selectedValue + "%'";
         } else {
             queryStcdSQL = "select *  from STHD where stnm like '%" + selectedValue + "%'";
@@ -2148,22 +2160,22 @@ public class ExportView extends JFrame {
 
     private void TestConnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TestConnActionPerformed
         // TODO add your handling code here:
-        int driveClassIndex = cbDriver.getSelectedIndex();
+         int driveClassIndex = cbDriver.getSelectedIndex();
         String serverPort = txtPort.getText();
         String ipAddress = txtIP.getText();
         String dbname = DataName.getText();
 
         if (driveClassIndex == 0) {
-            JOptionPane.showMessageDialog(null, "è¯·é€‰æ‹©æ•°æ®åº“ç±»å‹ï¼", "æç¤º", 0);
+            JOptionPane.showMessageDialog(null, "ÇëÑ¡ÔñÊı¾İ¿âÀàĞÍ£¡", "ÌáÊ¾", 0);
         } else {
             if (serverPort.trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "æ•°æ®åº“ç«¯å£å·ä¸èƒ½ä¸ºç©ºï¼", "æç¤º", 0);
+                JOptionPane.showMessageDialog(null, "Êı¾İ¿â¶Ë¿ÚºÅ²»ÄÜÎª¿Õ£¡", "ÌáÊ¾", 0);
             } else {
                 if ("".trim().equals(ipAddress)) {
-                    JOptionPane.showMessageDialog(null, "æœåŠ¡å™¨ipåœ°å€ä¸èƒ½ä¸ºç©ºï¼", "æç¤º", 0);
+                    JOptionPane.showMessageDialog(null, "·şÎñÆ÷ipµØÖ·²»ÄÜÎª¿Õ£¡", "ÌáÊ¾", 0);
                 } else {
                     if ("".trim().equals(dbname)) {
-                        JOptionPane.showMessageDialog(null, "æœåŠ¡åä¸èƒ½ä¸ºç©ºï¼", "æç¤º", 0);
+                        JOptionPane.showMessageDialog(null, "·şÎñÃû²»ÄÜÎª¿Õ£¡", "ÌáÊ¾", 0);
                     } else {
                         expType = exportType.getSelectedIndex();
                         if (driveClassIndex == 1) {//sqlserver
@@ -2184,11 +2196,11 @@ public class ExportView extends JFrame {
                     dbTool = new DBTool(DiverClass, JdbcUrl, txtUser.getText(),
                                             txtPass.getText(), txtDataDir.getText());
                     dbTool.shutdown();
-                    JOptionPane.showMessageDialog(null, "è¿æ¥æˆåŠŸ!", "æç¤º",JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Á¬½Ó³É¹¦!", "ÌáÊ¾",JOptionPane.INFORMATION_MESSAGE);
 
                 }catch(Exception ex){
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "è¿æ¥å¤±è´¥ï¼Œè¯·æ£€æŸ¥è¿æ¥å‚æ•°", "é”™è¯¯", 0);
+                    JOptionPane.showMessageDialog(null, "Á¬½ÓÊ§°Ü£¬Çë¼ì²éÁ¬½Ó²ÎÊı", "´íÎó", 0);
                 }
             }
         }

@@ -3,38 +3,38 @@ package dbtool;
 import java.sql.ResultSet;
 
 /**
- * æµ‹ç«™ä¸€è§ˆè¡¨
- * æ­¤è¡¨å•ç‹¬å¤„ç†ï¼Œä»¥æé«˜æ•ˆç‡
+ * ²âÕ¾Ò»ÀÀ±í
+ * ´Ë±íµ¥¶À´¦Àí£¬ÒÔÌá¸ßĞ§ÂÊ
  * @author wzhang
  *
  */
 public class HY_STSC_ABean {
-	
-	private String STCD;	//ç«™ç 
-	private String STNM;	//ç«™å
-	private String STCT;	//ç«™åˆ«
-	private String BSHNCD;	//æµåŸŸåç§°
-	private String HNNM;	//æ°´ç³»åç§°
-	private String RVNM;	//æ²³æµåç§°
-	private String OBITMCD;	//å®æµ‹é¡¹ç›®ç 
-	private String ADDVCD;	//è¡Œæ”¿åŒºåˆ’ç 
-	private String WRRGCD;	//æ°´èµ„æºåˆ†åŒºç 
-	private String ESSTYR;	//è®¾ç«™å¹´ä»½
-	private String ESSTMTH;	//è®¾ç«™æœˆä»½
-	private String WDSTYR;	//æ’¤ç«™å¹´ä»½
-	private String WDSTMTH;	//æ’¤ç«™æœˆä»½
-	private String DRAR;	//é›†æ°´é¢ç§¯
-	private String FLTO;	//æµå…¥ä½•å¤„
-	private String DSTRVM;	//è‡³æ²³å£è·ç¦»
-	private String FDTMNM;	//åŸºå‡†åŸºé¢åç§°
-	private String ADMAG;	//é¢†å¯¼æœºå…³
-	private String ADMNST;	//ç®¡ç†å•ä½
-	private String STLC;	//ç«™å€
-	private String LGTD;	//ä¸œç»
-	private String LTTD;	//åŒ—çº¬
-	private String STGRD;	//æµ‹ç«™ç­‰çº§
-	private String FRGRD;	//æŠ¥æ±›ç«™ç­‰çº§
-	private String NT;	//å¤‡æ³¨
+
+	private String STCD;	//Õ¾Âë
+	private String STNM;	//Õ¾Ãû
+	private String STCT;	//Õ¾±ğ
+	private String BSHNCD;	//Á÷ÓòÃû³Æ
+	private String HNNM;	//Ë®ÏµÃû³Æ
+	private String RVNM;	//ºÓÁ÷Ãû³Æ
+	private String OBITMCD;	//Êµ²âÏîÄ¿Âë
+	private String ADDVCD;	//ĞĞÕşÇø»®Âë
+	private String WRRGCD;	//Ë®×ÊÔ´·ÖÇøÂë
+	private String ESSTYR;	//ÉèÕ¾Äê·İ
+	private String ESSTMTH;	//ÉèÕ¾ÔÂ·İ
+	private String WDSTYR;	//³·Õ¾Äê·İ
+	private String WDSTMTH;	//³·Õ¾ÔÂ·İ
+	private String DRAR;	//¼¯Ë®Ãæ»ı
+	private String FLTO;	//Á÷ÈëºÎ´¦
+	private String DSTRVM;	//ÖÁºÓ¿Ú¾àÀë
+	private String FDTMNM;	//»ù×¼»ùÃæÃû³Æ
+	private String ADMAG;	//Áìµ¼»ú¹Ø
+	private String ADMNST;	//¹ÜÀíµ¥Î»
+	private String STLC;	//Õ¾Ö·
+	private String LGTD;	//¶«¾­
+	private String LTTD;	//±±Î³
+	private String STGRD;	//²âÕ¾µÈ¼¶
+	private String FRGRD;	//±¨Ñ´Õ¾µÈ¼¶
+	private String NT;	//±¸×¢
 	public String getSTCD() {
 		return STCD;
 	}
@@ -185,7 +185,7 @@ public class HY_STSC_ABean {
 	public void setNT(String nT) {
 		NT = nT;
 	}
-	
+
 	public static HY_STSC_ABean getBeanFromRs(ResultSet rs){
 		HY_STSC_ABean bean =  new HY_STSC_ABean();
 		try{
@@ -219,5 +219,5 @@ public class HY_STSC_ABean {
 		}
 		return bean;
 	}
-	
+
 }
