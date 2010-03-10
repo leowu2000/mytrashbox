@@ -563,8 +563,8 @@ public class DBTool {
         String searChsql = "";
         String countChsql = "";
         if (isHaveStcdCol(table)) {
-            searChsql = "select * from " + table.toUpperCase() + makeStcdSqlCol(stsc );
-            countChsql = "select count(*) from " + table.toUpperCase() + makeStcdSqlCol(stsc );
+            searChsql = "select * from " + table.toUpperCase() + makeStcdSqlCol(stsc ).toUpperCase();
+            countChsql = "select count(*) from " + table.toUpperCase() + makeStcdSqlCol(stsc ).toUpperCase();
         } else {
             searChsql = "select * from " + table.toUpperCase();
             countChsql = "select count(*) from " + table.toUpperCase();
