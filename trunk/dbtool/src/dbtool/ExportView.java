@@ -1346,7 +1346,7 @@ public class ExportView extends JFrame {
                         }
                         if (driveClassIndex == 4) {//foxpro
                             DiverClass = "sun.jdbc.odbc.JdbcOdbcDriver";
-                            JdbcUrl = "jdbc:odbc:hydb";
+                            JdbcUrl = "jdbc:odbc:"+DataName.getText();
                         }
                         if (exportType.getSelectedIndex() == 0) {
                             jComboBox1.setEnabled(false);
