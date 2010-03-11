@@ -41,7 +41,7 @@ public class DepartmentController extends CommonController {
 				String id = UUID.randomUUID().toString().replaceAll("-", "");
 				int code = departDAO.findTotalCount("DEPARTMENT") + 1;
 				
-				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "',1,'')");
+				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "','',1)");
 				
 				response.sendRedirect("depart.do?action=list");
 				return null;
@@ -53,7 +53,7 @@ public class DepartmentController extends CommonController {
 				String id = UUID.randomUUID().toString().replaceAll("-", "");
 				int code = departDAO.findTotalCount("DEPARTMENT") + 1;
 				
-				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "'," + level + ",'" + allParents + "')");
+				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "','" + allParents + "'," + level + ")");
 				
 				response.sendRedirect("depart.do?action=list");
 				return null;

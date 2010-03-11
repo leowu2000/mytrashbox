@@ -8,6 +8,7 @@ public class Department {
 	public String parent;
 	public String level;
 	public String allparent;
+	public String parentname;
 	
 	public String getId() {
 		return id;
@@ -55,5 +56,13 @@ public class Department {
 	
 	public void setAllparent(String allparent) {
 		this.allparent = allparent;
+	}
+
+	public String getParentname() {
+		return parentname;
+	}
+
+	public void setParentname(String parentname) {
+		this.parentname = parentname;
 	}
 }

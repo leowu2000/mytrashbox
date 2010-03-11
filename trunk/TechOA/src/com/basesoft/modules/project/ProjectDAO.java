@@ -186,7 +186,7 @@ public class ProjectDAO extends CommonDAO{
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		sql = "select * from PROJECT";
+		sql = "select * from PROJECT order by code";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -223,6 +223,35 @@ public class ProjectDAO extends CommonDAO{
 		pj.setEnddate(mapPj.get("ENDDATE").toString());
 		pj.setNote(mapPj.get("NOTE").toString());
 		
+		String managername = findNameByCode("EMPLOYEE", mapPj.get("MANAGER").toString());
+		pj.setManagername(managername);
+		
 		return pj;
+	}
+	
+	/**
+	 * 根据id获取实体
+	 * @param id
+	 * @return
+	 */
+	public Project_d findById_d(String id){
+		Project_d pj_d = new Project_d();
+		
+		Map mapPj = jdbcTemplate.queryForMap("select * from PROJECT_D where ID='" + id + "'");
+		
+		pj_d.setId(id);
+		pj_d.setCode(mapPj.get("CODE").toString());
+		pj_d.setName(mapPj.get("NAME").toString());
+		pj_d.setPjcode(mapPj.get("PJCODE").toString());
+		pj_d.setManager(mapPj.get("MANAGER").toString());
+		pj_d.setPlanedworkload(Integer.parseInt(mapPj.get("PLANEDWORKLOAD").toString()));
+		pj_d.setStartdate(mapPj.get("STARTDATE").toString());
+		pj_d.setEnddate(mapPj.get("ENDDATE").toString());
+		pj_d.setNote(mapPj.get("NOTE").toString());
+		
+		String managername = findNameByCode("EMPLOYEE", mapPj.get("MANAGER").toString());
+		pj_d.setManagername(managername);
+		
+		return pj_d;
 	}
 }

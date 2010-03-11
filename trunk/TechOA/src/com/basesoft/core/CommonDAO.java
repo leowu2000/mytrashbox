@@ -136,7 +136,7 @@ public class CommonDAO {
 	 * @return
 	 */
 	public List<?> getProject_d(String pjcode){
-		return jdbcTemplate.queryForList("select * from PROJECT_D where PJCODE='" + pjcode + "'");
+		return jdbcTemplate.queryForList("select a.*, b.NAME as MANAGERNAME from PROJECT_D a, EMPLOYEE b where PJCODE='" + pjcode + "' and b.CODE=a.MANAGER order by a.CODE");
 	}
 	
 	/**

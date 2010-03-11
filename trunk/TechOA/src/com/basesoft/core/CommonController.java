@@ -19,7 +19,7 @@ public abstract class CommonController extends AbstractController {
 		ModelAndView mv = null;
 		try {
 			mv = beforeHandleRequestInternal(request, response, mv);
-			if (mv == null) {
+			if(mv==null){
 				mv = doHandleRequestInternal(request, response, mv);
 			}
 			mv = afterHandleRequestInternal(request, response, mv);
@@ -36,14 +36,6 @@ public abstract class CommonController extends AbstractController {
 	
 	private ModelAndView beforeHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
-		
-		String enId = (String) request.getSession().getAttribute("EMID");
-		String path = request.getServletPath();
-		
-		if (enId == null && !"/login.do".equals(path)) {
-			mv = new ModelAndView("sessionout");
-			mv.addObject("errorMessage", "您还没有登录或者登录超时，请登录！");
-		}
 		return mv;
 	}
 	
