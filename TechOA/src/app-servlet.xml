@@ -11,6 +11,7 @@
 				/login.do=LoginController
 				/em.do=EmployeeController
 				/pj.do=ProjectController
+				/pj_d.do=ProjectController_d
 				/workreport.do=WorkReportController
 				/depart.do=DepartmentController
 				/assets.do=AssetsController
@@ -40,6 +41,7 @@
 	<bean name="LoginController" class="com.basesoft.modules.login.LoginController" />
 	<bean name="EmployeeController" class="com.basesoft.modules.employee.EmployeeController" />
 	<bean name="ProjectController" class="com.basesoft.modules.project.ProjectController" />
+	<bean name="ProjectController_d" class="com.basesoft.modules.project.ProjectController_d" />
 	<bean name="WorkReportController" class="com.basesoft.modules.workreport.WorkReportController" />
 	<bean name="DepartmentController" class="com.basesoft.modules.depart.DepartmentController" />
 	<bean name="AssetsController" class="com.basesoft.modules.assets.AssetsController"></bean>

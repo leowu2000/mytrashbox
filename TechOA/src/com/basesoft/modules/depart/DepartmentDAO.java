@@ -26,6 +26,9 @@ public class DepartmentDAO extends CommonDAO{
 		depart.setLevel(mapDepart.get("CODE").toString());
 		depart.setAllparent(mapDepart.get("ALLPARENTS").toString());
 		
+		String parentname = findNameByCode("DEPARTMENT", mapDepart.get("PARENT").toString());
+		depart.setParentname(parentname);
+		
 		return depart;
 	}
 	

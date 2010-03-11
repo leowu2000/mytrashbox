@@ -1,5 +1,6 @@
 package com.basesoft.modules.plan;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -110,5 +111,17 @@ public class PlanDAO extends CommonDAO {
 		plan.setEmpname(this.findNameByCode("EMPLOYEE", plan.getEmpcode()));
 		
 		return plan;
+	}
+	
+	/**
+	 * 计划是否需要提醒
+	 * @param plan 计划
+	 * @param i 
+	 * @return
+	 */
+	public boolean isRemind(Plan plan, int i){
+		boolean b = false;
+		
+		return b;
 	}
 }

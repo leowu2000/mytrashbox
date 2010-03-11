@@ -4,16 +4,11 @@
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%@ page import="com.basesoft.modules.project.*" %>
 <%
-PageList pageList = (PageList)request.getAttribute("pageList");
-List listEm = (List)request.getAttribute("listEm");
-
-int pagenum = pageList.getPageInfo().getCurPage();
-
-List listProject = pageList.getList();
+List listPj_d = (List)request.getAttribute("listPj_d");
 String emrole = session.getAttribute("EMROLE").toString();
 
-ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-ProjectDAO projectDAO = (ProjectDAO)ctx.getBean("projectDAO");
+int pagenum = Integer.parseInt(request.getAttribute("page").toString());
+String pjcode = request.getAttribute("pjcode").toString();
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -40,7 +35,7 @@ ProjectDAO projectDAO = (ProjectDAO)ctx.getBean("projectDAO");
 <!--
 var win;
 var action;
-var url='/pj.do';
+var url='/pj_d.do';
 Ext.onReady(function(){
 	var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'selemp',
@@ -82,6 +77,7 @@ Ext.onReady(function(){
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
 
     if(!win){
         win = new Ext.Window({
@@ -94,7 +90,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add';
+    	action = url+'?action=add&pjcode=<%=pjcode %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -112,14 +108,13 @@ Ext.onReady(function(){
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
-				Ext.get('pjname').set({'value':data.item.name});
-				Ext.get('status').set({'value':data.item.status});
+				Ext.get('name').set({'value':data.item.name});
 				comboBoxTree.setValue({id:data.item.manager,text:data.item.managername});
 				Ext.get('planedworkload').set({'value':data.item.planedworkload});
 				Ext.get('startdate').set({'value':data.item.startdate});
 				Ext.get('enddate').set({'value':data.item.enddate});
 				Ext.get('note').set({'value':data.item.note});
-		    	action = url+'?action=update&page=<%=pagenum %>';
+		    	action = url+'?action=update&pjcode=<%=pjcode %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -134,10 +129,14 @@ Ext.onReady(function(){
 		}
     	Ext.Msg.confirm('确认','确实要删除此工程？',function(btn){
     		if(btn=='yes'){
-            	Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>';       
+            	Ext.getDom('listForm').action=url+'?action=delete&pjcode=<%=pjcode %>';       
             	Ext.getDom('listForm').submit();
     		}
     	});
+    }
+    
+    function onBackClick(btn){
+    	window.location.href = "/pj.do?action=list&page=<%=pagenum %>";
     }
 });
 
@@ -149,50 +148,31 @@ Ext.onReady(function(){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("pj.do?action=list") %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>选　择</td>
-                <td>工作令号</td>              
-                <td>工作令状态</td>
-                <td>工作令负责人</td>
-                <!-- <td>参与人员</td> -->
+                <td>分系统编码</td>              
+                <td>分系统名称</td>
+                <td>分系统负责人</td>
                 <td>计划工作量</td>
-                <!-- <td>投入工作量</td> -->
                 <td>开始时间</td>
                 <td>截止时间</td>
                 <td>描述</td>
             </tr>
 <%
-for(int i=0;i<listProject.size();i++){
-	Map mapProject = (Map)listProject.get(i);
-	String status = mapProject.get("STATUS").toString();
+for(int i=0;i<listPj_d.size();i++){
+	Map mapPj_d = (Map)listPj_d.get(i);
 	
-	//获得项目状态信息
-	if("0".equals(status)){
-		status = "关闭";
-	}else if("1".equals(status)){
-		status = "正常";
-	}else{
-		status = "挂起";
-	}
-	
-	//获得项目经理名称
-	Map mapManager = projectDAO.findByCode("EMPLOYEE", mapProject.get("MANAGER").toString());
-	//获得参与人员名称
-	String members = projectDAO.findNamesByCodes("EMPLOYEE",mapProject.get("MEMBER").toString());
 %>
             <tr align="center">
-                <td><input type="checkbox" name="check" value="<%=mapProject.get("ID") %>" class="ainput"></td>
-                <td>&nbsp;<a href="/pj_d.do?action=list&pjcode=<%=mapProject.get("CODE") %>"><%=mapProject.get("NAME") %></a></td>
-                <td>&nbsp;<%=status %></td>
-                <td>&nbsp;<%=mapManager.get("NAME") %></td>
-                <!-- <td>&nbsp;<%=members %></td> -->
-                <td>&nbsp;<%=mapProject.get("PLANEDWORKLOAD") %></td>
-                <!-- <td>&nbsp;<%=mapProject.get("NOWWORKLOAD") %></td> -->
-                <td>&nbsp;<%=mapProject.get("STARTDATE") %></td>
-                <td>&nbsp;<%=mapProject.get("ENDDATE") %></td>
-                <td>&nbsp;<%=mapProject.get("NOTE") %></td>
+                <td><input type="checkbox" name="check" value="<%=mapPj_d.get("ID") %>" class="ainput"></td>
+                <td>&nbsp;<%=mapPj_d.get("CODE") %></td>
+                <td>&nbsp;<%=mapPj_d.get("NAME") %></td>
+                <td>&nbsp;<%=mapPj_d.get("MANAGERNAME") %></td>
+                <td>&nbsp;<%=mapPj_d.get("PLANEDWORKLOAD") %></td>
+                <td>&nbsp;<%=mapPj_d.get("STARTDATE") %></td>
+                <td>&nbsp;<%=mapPj_d.get("ENDDATE") %></td>
+                <td>&nbsp;<%=mapPj_d.get("NOTE") %></td>
             </tr>
 <%} %>            
 </table>
@@ -205,28 +185,15 @@ for(int i=0;i<listProject.size();i++){
     <div class="x-window-body" id="dlg-body">
 	        <form id="dataForm" name="dataForm" action="" method="post">
 	        	<input type="hidden" name="id" >
-	        	<input type="hidden" name="page" value="<%=pagenum %>">
                 <table>
 				  <tr>
-				    <td>工作令号</td>
-				    <td><input type="text" name="pjname" style="width:200"></td>
-				  </tr>
-				  <tr>
-				    <td>工作令状态</td>
-				    <td><select name="status" style="width:200;">
-				    	<option value="0">关闭</option>
-				    	<option value="1">开启</option>
-				    	<option value="2">挂起</option>
-				    </select></td>
+				    <td>分系统名称</td>
+				    <td><input type="text" name="name" style="width:200"></td>
 				  </tr>
 				  <tr>
 				  	<td>负责人</td>
 				  	<td><span id="selemp" name="selemp"></span></td>
 				  </tr>
-				  <!-- <tr>
-				  	<td>参与人员</td>
-				  	<td></td>
-				  </tr> -->	
 				  <tr>
 				  	<td>计划工作量</td>
 				  	<td><input type="text" name="planedworkload" style="width:200"></td>

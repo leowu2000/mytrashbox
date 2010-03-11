@@ -1,19 +1,15 @@
 package com.basesoft.modules.project;
 
-import java.util.Date;
-
-public class Project {
+public class Project_d {
 
 	public String id;
+	public String pjcode;
 	public String code;
 	public String name;
-	public String status;
 	public String manager;
-	public String member;
-	public int planedworkload;
-	public int nowworkload;
 	public String startdate;
 	public String enddate;
+	public int planedworkload;
 	public String note;
 	public String managername;
 	
@@ -23,6 +19,14 @@ public class Project {
 	
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public String getPjcode() {
+		return pjcode;
+	}
+	
+	public void setPjcode(String pjcode) {
+		this.pjcode = pjcode;
 	}
 	
 	public String getCode() {
@@ -41,45 +45,12 @@ public class Project {
 		this.name = name;
 	}
 	
-	public String getStatus() {
-	
-		return status;
-	}
-	
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	
 	public String getManager() {
 		return manager;
 	}
 	
 	public void setManager(String manager) {
 		this.manager = manager;
-	}
-	
-	public String getMember() {
-		return member;
-	}
-	
-	public void setMember(String member) {
-		this.member = member;
-	}
-	
-	public int getPlanedworkload() {
-		return planedworkload;
-	}
-	
-	public void setPlanedworkload(int planedworkload) {
-		this.planedworkload = planedworkload;
-	}
-	
-	public int getNowworkload() {
-		return nowworkload;
-	}
-	
-	public void setNowworkload(int nowworkload) {
-		this.nowworkload = nowworkload;
 	}
 	
 	public String getStartdate() {
@@ -96,6 +67,14 @@ public class Project {
 	
 	public void setEnddate(String enddate) {
 		this.enddate = enddate;
+	}
+	
+	public int getPlanedworkload() {
+		return planedworkload;
+	}
+	
+	public void setPlanedworkload(int planedworkload) {
+		this.planedworkload = planedworkload;
 	}
 	
 	public String getNote() {

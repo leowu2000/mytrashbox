@@ -144,8 +144,24 @@ public class PlanController extends CommonController {
 			String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
 			
 			response.sendRedirect("plan.do?action=list&pjcode=" + f_pjcode + "&stagecode=" + f_stagecode + "&empname=" + f_empname + "&page=" + page);
-		}else if("remind".equals(action)){//计划提醒
+		}else if("remind_frame".equals(action)){//计划提醒frame
 			mv = new ModelAndView("modules/plan/frame_remind");
+			
+			List listPj = planDAO.findPjList();
+			List listStage = planDAO.findStageList();
+			
+			mv.addObject("listStage", listStage);
+			mv.addObject("listPj", listPj);
+			
+			return mv;
+		}else if("remind_list".equals(action)){//计划提醒列表
+			mv = new ModelAndView("modules/plan/list_remind");
+			
+			String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
+			String stagecode = ServletRequestUtils.getStringParameter(request, "stagecode", "");
+			String empname = ServletRequestUtils.getStringParameter(request, "empname", "");
+			
+			
 			
 			return mv;
 		}

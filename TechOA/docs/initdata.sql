@@ -193,7 +193,7 @@ INSERT INTO MENU VALUES('007','考勤管理','2','',21,'1','0','7');
 INSERT INTO MENU VALUES('071','员工考勤记录','1','em.do?action=frame_workcheck',22,'1','007','7');
 INSERT INTO MENU VALUES('008','绩效管理','2','',23,'1','0','8');
 INSERT INTO MENU VALUES('081','计划管理','1','plan.do?action=list_frame',24,'1','008','8');
-INSERT INTO MENU VALUES('082','绩效提醒','1','plan.do?action=remind',25,'1','008','8');
+INSERT INTO MENU VALUES('082','绩效提醒','1','plan.do?action=remind_frame',25,'1','008','8');
 INSERT INTO MENU VALUES('009','收藏管理','2','',26,'1','0','9');
 INSERT INTO MENU VALUES('091','收藏菜单','1','menu.do?action=manage_favor',27,'1','009','9');
 
