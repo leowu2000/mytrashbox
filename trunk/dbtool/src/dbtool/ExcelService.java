@@ -253,7 +253,7 @@ public class ExcelService {
         if (errorTab != null && errorTab.length() > 0) {
             strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 10pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;' colspan='5'>以下报表和导出结构标准不一致未能成功导出</td></tr>");
             for (int i = 0; i < errorTab.split(",").length; i++) {
-                strContent_table.append("<tr bgcolor='#FFFFFF'><td colspan='2'>" + errorTab.split(",")[i] + "</td><td colspan='3'>" + dbTool.getTabCnnm(jt2, errorTab.split(",")[i]) + "</td></tr>");
+                strContent_table.append("<tr bgcolor='#FFFFFF'><td colspan='2'>" + errorTab.split(",")[i] + "</td><td colspan='3'>" + HY_DBTP_JDao.getTabid(errorTab.split(",")[i],dbTool) + "</td></tr>");
             }
         }
         strContent_table.append("<tr bgcolor='#E8EFFF' height='30'>");

@@ -76,7 +76,7 @@ public class ExportView extends JFrame {
         tbMainSelect.remove(DataView);//数据查看的页面，在没有设置参数的时候不显示
         tbMainSelect.remove(dataIndexPanel);//数据索引页面，设置数据库初始参数后，一直显示
         jButton5.setVisible(false);//隐藏“重新读取”的按钮
-        exportType.setSelectedIndex(2);
+//        exportType.setSelectedIndex(2);
         ButtonGroup bgroup = new ButtonGroup();
         bgroup.add(jRadioButtonAll);
         bgroup.add(jRadioButtonY);
@@ -1320,16 +1320,16 @@ public class ExportView extends JFrame {
         String dbname = DataName.getText();
 
         if (driveClassIndex == 0) {
-            JOptionPane.showMessageDialog(null, "请选择数据库类型！", "提示", 0);
+            JOptionPane.showMessageDialog(null, "请选择数据库类型！", "错误", 0);
         } else {
             if (serverPort.trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "数据库端口号不能为空！", "提示", 0);
+                JOptionPane.showMessageDialog(null, "数据库端口号不能为空！", "错误", 0);
             } else {
                 if ("".trim().equals(ipAddress)) {
-                    JOptionPane.showMessageDialog(null, "服务器ip地址不能为空！", "提示", 0);
+                    JOptionPane.showMessageDialog(null, "服务器ip地址不能为空！", "错误", 0);
                 } else {
                     if ("".trim().equals(dbname)) {
-                        JOptionPane.showMessageDialog(null, "服务名不能为空！", "提示", 0);
+                        JOptionPane.showMessageDialog(null, "服务名不能为空！", "错误", 0);
                     } else {
                         expType = exportType.getSelectedIndex();
                         if (driveClassIndex == 1) {//sqlserver
@@ -1354,17 +1354,8 @@ public class ExportView extends JFrame {
                             jComboBox1.setEnabled(true);
                         }
                         try {
-//                            File saveFile = new File(txtDataDir.getText()+"\\excel");
                             boolean flg=false;
-//                            if(saveFile.exists()){
-//                               int k =  JOptionPane.showConfirmDialog(null, "导出数据文件目录:["+txtDataDir.getText()+"\\excel]已经存在,是否删除?\n"
-//                                       +" 点击确定删除文件，点击取消修改目录！", "提示", JOptionPane.OK_CANCEL_OPTION);
-//                               if(k==0){
                                    flg = FileAccess.deleteDirectory(txtDataDir.getText());
-//                               }
-//                            }else{
-//                                flg = true;
-//                            }
                             if (flg) {
                                 dbTool = new DBTool(DiverClass, JdbcUrl, txtUser.getText(),
                                         txtPass.getText(), txtDataDir.getText());
@@ -1390,7 +1381,6 @@ public class ExportView extends JFrame {
                                     for (String initstscsql : initStscTab) {
                                         if (initstscsql != null && !initstscsql.trim().equals("null")) {
                                             jt_Target.execute(initstscsql);
-//                                            System.out.println(initstscsql);
                                         }
                                     }
 
@@ -1455,15 +1445,10 @@ public class ExportView extends JFrame {
                                         }
                                     }
                                 }
-                                //同一个站名对应多个编码的时候有问题，所以注释掉
-//                                if (!selectedSnameModel.isEmpty()) {
-//                                    for (int k = 0; k < selectedSnameModel.size(); k++) {
-//                                        listParamModel_source.removeElement(selectedSnameModel.get(k));
-//                                    }
-//                                }
                                 listStsc.setModel(listParamModel_source);
                                 SelectedStsc.setModel(selectedSnameModel);
                             } else {
+
                                 if(dbTool!=null){
                                     dbTool.shutdown();
                                 }
@@ -1473,7 +1458,7 @@ public class ExportView extends JFrame {
 
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            JOptionPane.showMessageDialog(null, "数据库连接失败，请确认参数设置！", "提示", 0);
+                            JOptionPane.showMessageDialog(null, "数据库连接失败，请确认参数设置！", "错误", 0);
                             dbTool.shutdown();
                             tbMainSelect.remove(SelectTable);
                             tbMainSelect.add("参数设置", ParametSet);
@@ -1487,7 +1472,7 @@ public class ExportView extends JFrame {
     @SuppressWarnings("unchecked")
     private void btnTableNextStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTableNextStepActionPerformed
         if (selectedTablesModel.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "您没有选择任何数据表，请选择！", "提示", 0);
+            JOptionPane.showMessageDialog(null, "您没有选择任何数据表，请选择！", "错误", 0);
         } else {
             exportTabList.setModel(selectedTablesModel);
             tbMainSelect.remove(SelectTable);
@@ -1498,7 +1483,7 @@ public class ExportView extends JFrame {
 
     private void NextBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextBtnActionPerformed
          if (selectedSnameModel.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "您没有选择任何测站，请选择！", "提示", 0);
+            JOptionPane.showMessageDialog(null, "您没有选择任何测站，请选择！", "错误", 0);
         } else {
             tbMainSelect.remove(SelectStsc);
             tbMainSelect.add("数据导出", ExpData);
@@ -1516,20 +1501,7 @@ public class ExportView extends JFrame {
         btnExport.setEnabled(false);
         File dirFile = new File(txtDataDir.getText() + "\\excel\\");
         boolean bFile = dirFile.exists();
-        if (bFile == true) {
-            File[] files = dirFile.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                //删除子文件
-                if (files[i].isFile()) {
-                    File file = new File(files[i].getAbsolutePath());
-                    if (file.isFile() && file.exists()) {
-                        file.delete();
-                    }
-                }
-                dirFile.delete();
-            }
-            dirFile.mkdir();
-        } else {
+        if (bFile == false) {
             dirFile.mkdir();
         }
         ((DefaultListModel) logModel).removeAllElements();
@@ -1793,84 +1765,82 @@ public class ExportView extends JFrame {
      */
     private void listPreviewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listPreviewMouseClicked
         // TODO add your handling code here:
-        String colStr = "";
-        int type = jComboBox1.getSelectedIndex();
-        List<HY_DBFP_JBean> colList = null;
-        List<List<Map<String, String>>> resulstList = null;
-        try {
-            colList = HY_DBFP_JDao.colColumnBeanList(listPreview.getSelectedValue().toString(), "", "FLID");
-            colStr = HY_DBFP_JDao.colSqlFactory(listPreview.getSelectedValue().toString(), "FLID");
-            if (colStr == null || colStr.trim().equals(";")) {
-                JOptionPane.showMessageDialog(null, "没有取得表结构信息！", "提示", 0);
-            } else {
-                String colAndNameStri[] = colStr.split(";");
-                String tabid = HY_DBTP_JDao.getTabid(listPreview.getSelectedValue().toString());
-                String stscStr = "";
-                if (!selectedStscModel.isEmpty()) {
-
-                    for (int i = 0; i < selectedStscModel.size(); i++) {
-                        if (stscStr.trim().equals("")) {
-                            stscStr = "'" + selectedStscModel.get(i) + "'";
-                        } else {
-                            stscStr += "," + "'" + selectedStscModel.get(i) + "'";
-                        }
-                    }
-                }
-                stscStr = HY_DBFP_JDao.getStscd(stscStr);
-               resulstList =  HY_DBFP_JDao.findAllList(tabid, colAndNameStri[0], stscStr, type, dbTool, Version.getSelectedIndex());
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        if (colStr == null || colStr.trim().equals(";")) {
-            JOptionPane.showMessageDialog(null, "没有取得表结构信息！", "提示", 0);
-        } else {
-            String colcode[] = colStr.split(";")[0].split(",");
-            if (colList != null && colList.size() > 0) {
-                String title[] = new String[colList.size()];
-                String valueArr[][] = new String[resulstList.size()][colList.size()];
-                for (int i = 0; i < colList.size(); i++) {
-                    HY_DBFP_JBean colBean = (HY_DBFP_JBean) colList.get(i);
-                    title[i] = colBean.getFLDCNNM();
-                }
-                if (resulstList != null && resulstList.size() > 0) {
-                    for (int i = 0; i < resulstList.size(); i++) {
-                        List colvalueList = (List) resulstList.get(i);
-                        for (int k = 0; k < colvalueList.size(); k++) {
-                            Map valueMap = (Map) colvalueList.get(k);
-                            valueArr[i][k] = valueMap.get(colcode[k].toString()).toString();
-                        }
-                    }
-                }
-                //开始重构jtable
-                DefaultTableModel tabModel = new DefaultTableModel(
-                        valueArr, title);
-                preViewTable.setModel(tabModel);
-                preViewTable.setAutoResizeMode(preViewTable.AUTO_RESIZE_OFF);
-            }
-        }
-
+//        String colStr = "";
+//        int type = jComboBox1.getSelectedIndex();
+//        List<HY_DBFP_JBean> colList = null;
+//        List<List<Map<String, String>>> resulstList = null;
+//        try {
+//            colList = HY_DBFP_JDao.colColumnBeanList(listPreview.getSelectedValue().toString(), "", "FLID",dbTool,jComboBox1.getSelectedIndex());
+//            colStr = HY_DBFP_JDao.colSqlFactory(listPreview.getSelectedValue().toString(), "FLID",dbTool,jComboBox1.getSelectedIndex());
+//            if (colStr == null || colStr.trim().equals(";")) {
+//                JOptionPane.showMessageDialog(null, "没有取得表结构信息！", "提示", 0);
+//            } else {
+//                String colAndNameStri[] = colStr.split(";");
+//                String tabid = HY_DBTP_JDao.getTabid(listPreview.getSelectedValue().toString());
+//                String stscStr = "";
+//                if (!selectedStscModel.isEmpty()) {
+//
+//                    for (int i = 0; i < selectedStscModel.size(); i++) {
+//                        if (stscStr.trim().equals("")) {
+//                            stscStr = "'" + selectedStscModel.get(i) + "'";
+//                        } else {
+//                            stscStr += "," + "'" + selectedStscModel.get(i) + "'";
+//                        }
+//                    }
+//                }
+//                stscStr = HY_DBFP_JDao.getStscd(stscStr);
+//               resulstList =  HY_DBFP_JDao.findAllList(tabid, colAndNameStri[0], stscStr, type, dbTool, Version.getSelectedIndex());
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//        if (colStr == null || colStr.trim().equals(";")) {
+//            JOptionPane.showMessageDialog(null, "没有取得表结构信息！", "提示", 0);
+//        } else {
+//            String colcode[] = colStr.split(";")[0].split(",");
+//            if (colList != null && colList.size() > 0) {
+//                String title[] = new String[colList.size()];
+//                String valueArr[][] = new String[resulstList.size()][colList.size()];
+//                for (int i = 0; i < colList.size(); i++) {
+//                    HY_DBFP_JBean colBean = (HY_DBFP_JBean) colList.get(i);
+//                    title[i] = colBean.getFLDCNNM();
+//                }
+//                if (resulstList != null && resulstList.size() > 0) {
+//                    for (int i = 0; i < resulstList.size(); i++) {
+//                        List colvalueList = (List) resulstList.get(i);
+//                        for (int k = 0; k < colvalueList.size(); k++) {
+//                            Map valueMap = (Map) colvalueList.get(k);
+//                            valueArr[i][k] = valueMap.get(colcode[k].toString()).toString();
+//                        }
+//                    }
+//                }
+//                //开始重构jtable
+//                DefaultTableModel tabModel = new DefaultTableModel(
+//                        valueArr, title);
+//                preViewTable.setModel(tabModel);
+//                preViewTable.setAutoResizeMode(preViewTable.AUTO_RESIZE_OFF);
+//            }
+//        }
 
     }//GEN-LAST:event_listPreviewMouseClicked
-
+    /**
+     * 数据导出后的数据查看
+     * @param evt
+     */
     private void exportTabListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exportTabListMouseClicked
         // TODO add your handling code here:
         int type = jComboBox1.getSelectedIndex();
 
         String colStr = "";
-        List<HY_DBFP_JBean> colList = null;
         List<List<Map<String, String>>> resulstList = null;
+        String tabid = HY_DBTP_JDao.getTabid(exportTabList.getSelectedValue().toString(), dbTool);
         try {
-            colList = HY_DBFP_JDao.colColumnBeanList(exportTabList.getSelectedValue().toString(), "", "FLID", dbTool);
-            colStr = HY_DBFP_JDao.colSqlFactory(exportTabList.getSelectedValue().toString(), "FLID", dbTool);
+            colStr = dbTool.getFileds(tabid, dbTool, type);
             if (colStr == null || colStr.trim().equals(";")) {
-                JOptionPane.showMessageDialog(null, "没有取得表结构信息！", "提示", 0);
+                JOptionPane.showMessageDialog(null, "没有可供查看数据！", "提示", 1);
             } else {
-                String colAndNameStri[] = colStr.split(";");
-                String tabid = HY_DBTP_JDao.getTabid(exportTabList.getSelectedValue().toString(), dbTool);
                 String stscStr = "";
                 if (!selectedSnameModel.isEmpty()) {
-
                     for (int i = 0; i < selectedSnameModel.size(); i++) {
                         //返回内容为编码＋名称，处理后得到编码
                         String stcdandname = selectedSnameModel.get(i).toString();
@@ -1883,22 +1853,22 @@ public class ExportView extends JFrame {
                         }
                     }
                 }
-                resulstList = HY_DBFP_JDao.findAllList(tabid, colAndNameStri[0], stscStr, type, dbTool, Version.getSelectedIndex());
+                resulstList = HY_DBFP_JDao.findAllList(tabid, colStr, stscStr, type, dbTool, Version.getSelectedIndex());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        if (colStr == null || colStr.trim().equals(";")) {
-            JOptionPane.showMessageDialog(null, "没有取得表结构信息！", "提示", 0);
-        } else {
-            String colcode[] = colStr.split(";")[0].split(",");
-            if (colList != null && colList.size() > 0) {
-                String title[] = new String[colList.size()];
-                String valueArr[][] = new String[resulstList.size()][colList.size()];
-                for (int i = 0; i < colList.size(); i++) {
-                    HY_DBFP_JBean colBean = (HY_DBFP_JBean) colList.get(i);
-                    title[i] = colBean.getFLDCNNM();
+        if (resulstList != null && resulstList.size()>0) {
+            String colcode[] = colStr.split(",");
+            if (colStr != null && colStr.length() > 0) {
+                String title[] = new String[colcode.length];
+                int K=0;
+                for(String col:colcode){
+                    String name = dbTool.getFiledsCNNM(tabid, col);
+                    title[K]=name;
+                    K++;
                 }
+                String valueArr[][] = new String[resulstList.size()][colcode.length];
                 if (resulstList != null && resulstList.size() > 0) {
 
                     for (int i = 0; i < resulstList.size(); i++) {
@@ -2166,16 +2136,16 @@ public class ExportView extends JFrame {
         String dbname = DataName.getText();
 
         if (driveClassIndex == 0) {
-            JOptionPane.showMessageDialog(null, "请选择数据库类型！", "提示", 0);
+            JOptionPane.showMessageDialog(null, "请选择数据库类型！", "错误", 0);
         } else {
             if (serverPort.trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "数据库端口号不能为空！", "提示", 0);
+                JOptionPane.showMessageDialog(null, "数据库端口号不能为空！", "错误", 0);
             } else {
                 if ("".trim().equals(ipAddress)) {
-                    JOptionPane.showMessageDialog(null, "服务器ip地址不能为空！", "提示", 0);
+                    JOptionPane.showMessageDialog(null, "服务器ip地址不能为空！", "错误", 0);
                 } else {
                     if ("".trim().equals(dbname)) {
-                        JOptionPane.showMessageDialog(null, "服务名不能为空！", "提示", 0);
+                        JOptionPane.showMessageDialog(null, "服务名不能为空！", "错误", 0);
                     } else {
                         expType = exportType.getSelectedIndex();
                         if (driveClassIndex == 1) {//sqlserver
@@ -2189,6 +2159,10 @@ public class ExportView extends JFrame {
                         if (driveClassIndex == 3) {//sysbase
                             DiverClass = "oracle.jdbc.driver.OracleDriver";
                             JdbcUrl = "jdbc:oracle:thin:@" + txtIP.getText() + ":" + serverPort + ":" + DataName.getText();
+                        }
+                        if (driveClassIndex == 4) {//odbc数据源
+                            DiverClass = "sun.jdbc.odbc.JdbcOdbcDriver";
+                            JdbcUrl = "jdbc:odbc:"+DataName.getText();
                         }
                     }
                 }

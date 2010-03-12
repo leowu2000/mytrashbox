@@ -87,7 +87,7 @@ public class ConnectionPool {
 //            Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
 //            String dburl = "jdbc:odbc:driver={Microsoft Access Driver (*.mdb)};DBQ=f:\\hpjdb.mdb";
              String Driver="jdbc:odbc:driver={Microsoft Visual FoxPro Driver};SourceType=DBF;SourceDB=D:\\Microsoft Visual Studio\\Vfp98";
-            Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+            Class.forName("sun.jdbc.odbc.JdbcOdbcDriver").newInstance();
             String dburl = "jdbc:odbc:hydb";
             String user="";
             String password="";
