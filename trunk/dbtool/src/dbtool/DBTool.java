@@ -330,6 +330,7 @@ public class DBTool {
         // ¿½±´Êý¾Ý
         int i = 0;
         for (String table : tables) {
+            for(int timer=0;timer<3000;timer++){boolean temflg = true;}
             i++;
             Long sdate = System.currentTimeMillis();
 
@@ -532,7 +533,6 @@ public class DBTool {
                 });
                 fw.close();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             expSuccessModel.removeElement(getTabCnnm(jt2, table));
