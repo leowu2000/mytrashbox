@@ -48,10 +48,21 @@ Ext.onReady(function(){
         win = new Ext.Window({
         	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
+	        {text:'提交',handler: function(){if(validate()){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}}},
 	        {text:'关闭',handler: function(){win.hide();}}
 	        ]
         });
+    }
+    
+    function validate(){
+    	var empcode = document.getElementById('empcode').value;
+    	
+    	if(empcode=='0'){
+    		alert('请选择负责人!');
+    		return false;
+    	}else {
+    		return true;
+    	}
     }
     
     function onAddClick(btn){
@@ -62,6 +73,7 @@ Ext.onReady(function(){
        	Ext.get('pjcode_d').set({'disabled':''});
        	Ext.get('stagecode').set({'disabled':''});
        	AJAX_PJ(document.getElementById('pjcode').value);
+       	comboBoxTree.setValue({id:'0',text:'请选择...'});
         win.show(btn.dom);
     }
     

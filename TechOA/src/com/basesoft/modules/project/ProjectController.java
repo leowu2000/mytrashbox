@@ -105,7 +105,7 @@ public class ProjectController extends CommonController {
 			
 			//空值转null值，防止报错
 			if("".equals(planedworkload)){
-				planedworkload = null;
+				planedworkload = "0";
 			}
 			if("".equals(startdate)){
 				startdate = null;
@@ -149,7 +149,22 @@ public class ProjectController extends CommonController {
 			String  enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
 			String  note = ServletRequestUtils.getStringParameter(request, "note", "");
 			
-			projectDAO.update("update PROJECT set NAME='" + pjname + "',STATUS='" + status + "',MANAGER='" + manager + "',planedworkload=" + planedworkload + ",startdate='" + startdate + "',enddate='" + enddate + "',note='" + note + "' where ID='" + id + "'");
+			//空值转null值，防止报错
+			if("".equals(planedworkload)){
+				planedworkload = "0";
+			}
+			if("".equals(startdate)){
+				startdate = null;
+			}else {
+				startdate  = "'" + startdate + "'";
+			}
+			if("".equals(enddate)){
+				enddate = null;
+			}else {
+				enddate  = "'" + enddate + "'";
+			}
+			
+			projectDAO.update("update PROJECT set NAME='" + pjname + "',STATUS='" + status + "',MANAGER='" + manager + "',planedworkload=" + planedworkload + ",startdate=" + startdate + ",enddate=" + enddate + ",note='" + note + "' where ID='" + id + "'");
 			
 			response.sendRedirect("pj.do?action=list&page=" + page);
 			return null;

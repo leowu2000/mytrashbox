@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-module
   type="WEB"
-  name="TechOA"
+  name="test_oa"
   id="myeclipse.1263872173292"
   context-root="/"
   j2ee-spec="5.0"
-  archive="TechOA.war">
+  archive="test_oa.war">
   <attributes>
     <attribute name="webrootdir" value="WebRoot" />
   </attributes>

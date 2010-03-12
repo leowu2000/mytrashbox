@@ -25,12 +25,48 @@ String havePhoto = request.getAttribute("havePhoto").toString();
 	<link href="css/bs_button.css" type="text/css" rel="stylesheet">
 	<link href="css/bs_custom.css" type="text/css" rel="stylesheet">
 	<%@ include file="../../common/meta.jsp" %>
+	<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
 var win;
 var win1;
 var action;
 var url='/em.do';
 Ext.onReady(function(){
+	var comboBoxTree = new Ext.ux.ComboBoxTree({
+			renderTo : 'departspan',
+			width : 203,
+			hiddenName : 'depart',
+			hiddenId : 'depart',
+			tree : {
+				id:'tree1',
+				xtype:'treepanel',
+				rootVisible:false,
+				loader: new Ext.tree.TreeLoader({dataUrl:'/depart.do?action=departTree'}),
+		   	 	root : new Ext.tree.AsyncTreeNode({})
+			},
+			    	
+			//all:所有结点都可选中
+			//exceptRoot：除根结点，其它结点都可选(默认)
+			//folder:只有目录（非叶子和非根结点）可选
+			//leaf：只有叶子结点可选
+			selectNodeModel:'all',
+			listeners:{
+	            beforeselect: function(comboxtree,newNode,oldNode){//选择树结点设值之前的事件   
+	                   //... 
+	                   return;  
+	            },   
+	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
+	            		return;
+	            },   
+	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
+	                  //...   
+	                  //alert("显示值="+comboBoxTree.getRawValue()+"  真实值="+comboBoxTree.getValue());
+	                  return; 
+	            }   
+      		}
+			
+		});
+
 	var tb1 = new Ext.Toolbar({renderTo:'toolbar1'});
 	tb1.add({text: '修改基本信息',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 	tb1.add({text: '添加/修改照片',cls: 'x-btn-text-icon add',handler: onPhotoClick});
@@ -80,7 +116,7 @@ Ext.onReady(function(){
 			    Ext.get('id').set({'value':data.item.id});
 				Ext.get('loginid').set({'value':data.item.loginid});
 				Ext.get('rolecode').set({'value':data.item.rolecode});
-				Ext.get('depart').set({'value':data.item.departcode});
+				comboBoxTree.setValue({id:data.item.departcode,text:data.item.departname});
 				Ext.get('emname').set({'value':data.item.name});
 				Ext.get('mainjob').set({'value':data.item.mainjob});
 				Ext.get('level').set({'value':data.item.level});
@@ -204,9 +240,12 @@ Ext.onReady(function(){
 				  <tr>
 				    <td>角色</td>
 				    <td><select name="rolecode" style="width:200">
-				    	<option value="003">普通用户</option>
-				    	<option value="002">领导层</option>
-				    	<option value="001">管理员</option>
+				    	<option value="002">部领导</option>
+				    	<option value="005">组长</option>
+				    	<option value="003">普通员工</option>
+				    	<option value="004">计划员</option>
+				    	<option value="006">固定资产管理员</option>
+				    	<option value="007">人事管理员</option>
 				    </select></td>
 				  </tr>	
 				   <tr>
@@ -215,16 +254,7 @@ Ext.onReady(function(){
 				  </tr>	
 				  <tr id="departtr" name="departtr">
 				    <td>部门</td>
-				    <td><select name="depart" style="width:200">
-<%
-					for(int i=0;i<listChildDepart.size();i++){
-						Map mapDepart = (Map)listChildDepart.get(i);
-%>				
-							<option value="<%=mapDepart.get("CODE") %>"><%=mapDepart.get("NAME") %></option>
-<%
-					}
-%>					
-					</select></td>
+				    <td><span name="departspan" id="departspan"></td>
 				  </tr>	
 				  <tr>
 				    <td>主岗</td>

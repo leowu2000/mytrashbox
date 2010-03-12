@@ -34,6 +34,7 @@ AssetsDAO assetsDAO = (AssetsDAO)ctx.getBean("assetsDAO");
 	<link href="css/bs_custom.css" type="text/css" rel="stylesheet">
 	<%@ include file="../../common/meta.jsp" %>
 	<script src="../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+	<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
 var win;
@@ -43,6 +44,42 @@ var action;
 var url='/assets.do';
 var vali = "";
 Ext.onReady(function(){
+	var comboBoxTree = new Ext.ux.ComboBoxTree({
+			renderTo : 'selemp',
+			width : 203,
+			hiddenName : 'empcode',
+			hiddenId : 'empcode',
+			tree : {
+				id:'tree1',
+				xtype:'treepanel',
+				rootVisible:false,
+				loader: new Ext.tree.TreeLoader({dataUrl:'/depart.do?action=departempTree'}),
+		   	 	root : new Ext.tree.AsyncTreeNode({})
+			},
+			    	
+			//all:所有结点都可选中
+			//exceptRoot：除根结点，其它结点都可选(默认)
+			//folder:只有目录（非叶子和非根结点）可选
+			//leaf：只有叶子结点可选
+			selectNodeModel:'leaf',
+			listeners:{
+	            beforeselect: function(comboxtree,newNode,oldNode){//选择树结点设值之前的事件   
+	                   //... 
+	                   return;  
+	            },   
+	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
+	                  //...   
+	                   return; 
+	            },   
+	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
+	                  //...   
+	                  //alert("显示值="+comboBoxTree.getRawValue()+"  真实值="+comboBoxTree.getValue());
+	                  return; 
+	            }   
+      		}
+			
+	});
+
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	tb.add({text: '增加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '删除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
@@ -66,7 +103,7 @@ Ext.onReady(function(){
         win1 = new Ext.Window({
         	el:'dlg1',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm1').action=action; Ext.getDom('dataForm1').submit();}},
+	        {text:'提交',handler: function(){if(validate()){Ext.getDom('dataForm1').action=action; Ext.getDom('dataForm1').submit();}}},
 	        {text:'关闭',handler: function(){win1.hide();}}
 	        ]
         });
@@ -80,6 +117,17 @@ Ext.onReady(function(){
 	        {text:'关闭',handler: function(){win2.hide();}}
 	        ]
         });
+    }
+    
+    function validate(){
+    	var empcode = document.getElementById('empcode').value;
+    	
+    	if(empcode=='0'){
+    		alert('请选择领用人!');
+    		return false;
+    	}else {
+    		return true;
+    	}
     }
     
     function onAddClick(btn){
@@ -114,6 +162,7 @@ Ext.onReady(function(){
     	action = url+'?action=lend&id='+selValue+'&page=<%=pagenum %>';
     	win1.setTitle('领用');
        	Ext.getDom('dataForm1').reset();
+       	comboBoxTree.setValue({id:'0',text:'请选择...'});
         win1.show(btn.dom);
     }
     
@@ -159,25 +208,9 @@ Ext.onReady(function(){
 
 //-->
 </script>
-<script type="text/javascript">
-	function changeDepart(){
-		var depart = document.getElementById('departcode').value;
-		
-		if(window.XMLHttpRequest){ //Mozilla 
-      		var xmlHttpReq=new XMLHttpRequest();
-    	}else if(window.ActiveXObject){
- 	  		var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
-    	}
-    	xmlHttpReq.open("GET", "em.do?action=departAjax&depart="+depart, false);
-    	xmlHttpReq.send();
-    	if(xmlHttpReq.responseText!=''){
-        	document.getElementById('empspan').innerHTML = xmlHttpReq.responseText;
-    	}
-	}
-</script>
   </head>
   
-  <body onload="changeDepart();">
+  <body >
   	<div id="toolbar"></div>
 	<form id="listForm" name="listForm" action="" method="post">
 <%=pageList.getPageInfo().getHtml("assets.do?action=list_info&status="+status+"&depart="+depart+"&emp="+emp) %>
@@ -324,21 +357,8 @@ Ext.onReady(function(){
 	        <input type="hidden" name="page" value="<%=pagenum %>">
                 <table>
 				  <tr>
-				    <td>领用单位</td>
-					<td><select name="departcode" style="width:200" onchange="changeDepart();">
-<%
-					for(int i=0;i<listDepart.size();i++){
-						Map mapDepart = (Map)listDepart.get(i);
-%>				    
-						<option value="<%=mapDepart.get("CODE") %>"><%=mapDepart.get("NAME") %></option>	
-<%
-					}
-%>					
-					</select></td>
-				  </tr>
-				  <tr>
 				    <td>领用人</td>
-				    <td><span id="empspan" name="empspan"></span></td>
+				    <td><span id="selemp" name="selemp"></span></td>
 				  </tr>
 				</table>
 	        </form>

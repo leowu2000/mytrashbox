@@ -83,16 +83,28 @@ Ext.onReady(function(){
         win = new Ext.Window({
         	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
+	        {text:'提交',handler: function(){if(validate()){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}}},
 	        {text:'关闭',handler: function(){win.hide();}}
 	        ]
         });
+    }
+    
+    function validate(){
+    	var manager = document.getElementById('manager').value;
+    	
+    	if(manager=='0'){
+    		alert('请选择负责人!');
+    		return false;
+    	}else {
+    		return true;
+    	}
     }
     
     function onAddClick(btn){
     	action = url+'?action=add&pjcode=<%=pjcode %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
+       	comboBoxTree.setValue({id:'0',text:'请选择...'});
         win.show(btn.dom);
     }
     
@@ -169,9 +181,9 @@ for(int i=0;i<listPj_d.size();i++){
                 <td>&nbsp;<%=mapPj_d.get("CODE") %></td>
                 <td>&nbsp;<%=mapPj_d.get("NAME") %></td>
                 <td>&nbsp;<%=mapPj_d.get("MANAGERNAME") %></td>
-                <td>&nbsp;<%=mapPj_d.get("PLANEDWORKLOAD") %></td>
-                <td>&nbsp;<%=mapPj_d.get("STARTDATE") %></td>
-                <td>&nbsp;<%=mapPj_d.get("ENDDATE") %></td>
+                <td>&nbsp;<%=mapPj_d.get("PLANEDWORKLOAD")==null?0:mapPj_d.get("PLANEDWORKLOAD") %></td>
+                <td>&nbsp;<%=mapPj_d.get("STARTDATE")==null?"":mapPj_d.get("STARTDATE") %></td>
+                <td>&nbsp;<%=mapPj_d.get("ENDDATE")==null?"":mapPj_d.get("ENDDATE") %></td>
                 <td>&nbsp;<%=mapPj_d.get("NOTE") %></td>
             </tr>
 <%} %>            

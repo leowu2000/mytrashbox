@@ -48,7 +48,14 @@ public class CommonDAO {
 	 * @return
 	 */
 	public Map findByCode(String tablename, String code){
-		return jdbcTemplate.queryForMap("select * from " + tablename + " where CODE='" + code + "'");
+		Map hashMap = new HashMap();
+		
+		List list = jdbcTemplate.queryForList("select * from " + tablename + " where CODE='" + code + "'");
+		
+		if(list.size()>0){
+			hashMap = (Map)list.get(0);
+		}
+		return hashMap;
 	}
 	
 	/**

@@ -97,6 +97,7 @@ Ext.onReady(function(){
     	action = url+'?action=add';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
+       	comboBoxTree.setValue({id:'0',text:'请选择...'});
         win.show(btn.dom);
     }
     
@@ -178,7 +179,7 @@ for(int i=0;i<listProject.size();i++){
 	}
 	
 	//获得项目经理名称
-	Map mapManager = projectDAO.findByCode("EMPLOYEE", mapProject.get("MANAGER").toString());
+	String managername = projectDAO.findNameByCode("EMPLOYEE", mapProject.get("MANAGER").toString());
 	//获得参与人员名称
 	String members = projectDAO.findNamesByCodes("EMPLOYEE",mapProject.get("MEMBER").toString());
 %>
@@ -186,13 +187,13 @@ for(int i=0;i<listProject.size();i++){
                 <td><input type="checkbox" name="check" value="<%=mapProject.get("ID") %>" class="ainput"></td>
                 <td>&nbsp;<a href="/pj_d.do?action=list&pjcode=<%=mapProject.get("CODE") %>"><%=mapProject.get("NAME") %></a></td>
                 <td>&nbsp;<%=status %></td>
-                <td>&nbsp;<%=mapManager.get("NAME") %></td>
+                <td>&nbsp;<%=managername %></td>
                 <!-- <td>&nbsp;<%=members %></td> -->
-                <td>&nbsp;<%=mapProject.get("PLANEDWORKLOAD") %></td>
+                <td>&nbsp;<%=mapProject.get("PLANEDWORKLOAD")==null?0:mapProject.get("PLANEDWORKLOAD") %></td>
                 <!-- <td>&nbsp;<%=mapProject.get("NOWWORKLOAD") %></td> -->
-                <td>&nbsp;<%=mapProject.get("STARTDATE") %></td>
-                <td>&nbsp;<%=mapProject.get("ENDDATE") %></td>
-                <td>&nbsp;<%=mapProject.get("NOTE") %></td>
+                <td>&nbsp;<%=mapProject.get("STARTDATE")==null?"":mapProject.get("STARTDATE") %></td>
+                <td>&nbsp;<%=mapProject.get("ENDDATE")==null?"":mapProject.get("ENDDATE") %></td>
+                <td>&nbsp;<%=mapProject.get("NOTE")%></td>
             </tr>
 <%} %>            
 </table>

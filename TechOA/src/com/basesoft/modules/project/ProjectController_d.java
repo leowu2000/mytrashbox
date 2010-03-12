@@ -49,7 +49,7 @@ public class ProjectController_d extends CommonController {
 			
 			//空值转null值，防止报错
 			if("".equals(planedworkload)){
-				planedworkload = null;
+				planedworkload = "0";
 			}
 			if("".equals(startdate)){
 				startdate = null;
@@ -64,9 +64,8 @@ public class ProjectController_d extends CommonController {
 			
 			//生成id和code
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
-			int code = projectDAO.findTotalCount("PROJECT_D") + 1;
 			
-			projectDAO.insert("insert into PROJECT_D values('" + id + "','" + pjcode + "','" + code + "','" + name + "','" + manager + "'," + startdate + "," + enddate + "," + planedworkload + ",'" + note + "')");
+			projectDAO.insert("insert into PROJECT_D values('" + id + "','" + pjcode + "','" + name + "','" + name + "','" + manager + "'," + startdate + "," + enddate + "," + planedworkload + ",'" + note + "')");
 			
 			response.sendRedirect("pj_d.do?action=list&pjcode=" + pjcode);
 			return null;
@@ -89,12 +88,23 @@ public class ProjectController_d extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			String  name = ServletRequestUtils.getStringParameter(request, "name", "");
 			String  manager = ServletRequestUtils.getStringParameter(request, "manager", "");
-			String  planedworkload = ServletRequestUtils.getStringParameter(request, "planedworkload", "");
+			int  planedworkload = ServletRequestUtils.getIntParameter(request, "planedworkload", 0);
 			String  startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
 			String  enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
 			String  note = ServletRequestUtils.getStringParameter(request, "note", "");
 			
-			projectDAO.update("update PROJECT_D set NAME='" + name + "', MANAGER='" + manager + "', PLANEDWORKLOAD=" + planedworkload + ", STARTDATE='" + startdate + "', ENDDATE='" + enddate + "' where ID='" + id + "'");
+			if("".equals(startdate)){
+				startdate = null;
+			}else {
+				startdate  = "'" + startdate + "'";
+			}
+			if("".equals(enddate)){
+				enddate = null;
+			}else {
+				enddate  = "'" + enddate + "'";
+			}
+			
+			projectDAO.update("update PROJECT_D set NAME='" + name + "', MANAGER='" + manager + "', PLANEDWORKLOAD=" + planedworkload + ", STARTDATE=" + startdate + ", ENDDATE=" + enddate + " where ID='" + id + "'");
 			
 			response.sendRedirect("pj_d.do?action=list&pjcode=" + pjcode);
 			return null;
