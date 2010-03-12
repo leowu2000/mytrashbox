@@ -270,6 +270,9 @@ public class EmployeeDAO extends CommonDAO{
 		em.setDegreecode(mapEm.get("DEGREECODE").toString());
 		em.setProcode(mapEm.get("PROCODE").toString());
 		
+		String departname = findNameByCode("DEPARTMENT", mapEm.get("DEPARTCODE").toString());
+		em.setDepartname(departname);
+		
 		return em;
 	}
 	

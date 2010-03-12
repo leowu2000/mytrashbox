@@ -212,16 +212,16 @@ public class ProjectDAO extends CommonDAO{
 		Map mapPj = jdbcTemplate.queryForMap("select * from PROJECT where ID='" + id + "'");
 		
 		pj.setId(id);
-		pj.setCode(mapPj.get("CODE").toString());
-		pj.setName(mapPj.get("NAME").toString());
-		pj.setStatus(mapPj.get("STATUS").toString());
-		pj.setManager(mapPj.get("MANAGER").toString());
-		pj.setMember(mapPj.get("MEMBER").toString());
-		pj.setPlanedworkload(Integer.parseInt(mapPj.get("PLANEDWORKLOAD").toString()));
-		pj.setNowworkload(Integer.parseInt(mapPj.get("NOWWORKLOAD").toString()));
-		pj.setStartdate(mapPj.get("STARTDATE").toString());
-		pj.setEnddate(mapPj.get("ENDDATE").toString());
-		pj.setNote(mapPj.get("NOTE").toString());
+		pj.setCode(mapPj.get("CODE")==null?"":mapPj.get("CODE").toString());
+		pj.setName(mapPj.get("NAME")==null?"":mapPj.get("NAME").toString());
+		pj.setStatus(mapPj.get("STATUS")==null?"":mapPj.get("STATUS").toString());
+		pj.setManager(mapPj.get("MANAGER")==null?"":mapPj.get("MANAGER").toString());
+		pj.setMember(mapPj.get("MEMBER")==null?"":mapPj.get("MEMBER").toString());
+		pj.setPlanedworkload(mapPj.get("PLANEDWORKLOAD")==null?0:Integer.parseInt(mapPj.get("PLANEDWORKLOAD").toString()));
+		pj.setNowworkload(mapPj.get("NOWWORKLOAD")==null?0:Integer.parseInt(mapPj.get("NOWWORKLOAD").toString()));
+		pj.setStartdate(mapPj.get("STARTDATE")==null?"":mapPj.get("STARTDATE").toString());
+		pj.setEnddate(mapPj.get("ENDDATE")==null?"":mapPj.get("ENDDATE").toString());
+		pj.setNote(mapPj.get("NOTE")==null?"":mapPj.get("NOTE").toString());
 		
 		String managername = findNameByCode("EMPLOYEE", mapPj.get("MANAGER").toString());
 		pj.setManagername(managername);
@@ -244,9 +244,9 @@ public class ProjectDAO extends CommonDAO{
 		pj_d.setName(mapPj.get("NAME").toString());
 		pj_d.setPjcode(mapPj.get("PJCODE").toString());
 		pj_d.setManager(mapPj.get("MANAGER").toString());
-		pj_d.setPlanedworkload(Integer.parseInt(mapPj.get("PLANEDWORKLOAD").toString()));
-		pj_d.setStartdate(mapPj.get("STARTDATE").toString());
-		pj_d.setEnddate(mapPj.get("ENDDATE").toString());
+		pj_d.setPlanedworkload(mapPj.get("PLANEDWORKLOAD")==null?0:Integer.parseInt(mapPj.get("PLANEDWORKLOAD").toString()));
+		pj_d.setStartdate(mapPj.get("STARTDATE")==null?"":mapPj.get("STARTDATE").toString());
+		pj_d.setEnddate(mapPj.get("ENDDATE")==null?"":mapPj.get("ENDDATE").toString());
 		pj_d.setNote(mapPj.get("NOTE").toString());
 		
 		String managername = findNameByCode("EMPLOYEE", mapPj.get("MANAGER").toString());

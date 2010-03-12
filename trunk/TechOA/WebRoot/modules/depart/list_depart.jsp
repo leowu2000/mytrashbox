@@ -109,7 +109,7 @@ Ext.onReady(function(){
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
 				Ext.get('departname').set({'value':data.item.name});
-				Ext.get('departparent').set({'value':data.item.parent});
+				comboBoxTree.setValue({id:data.item.parent,text:data.item.parentname});
 		    	action = url+'?action=update';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);

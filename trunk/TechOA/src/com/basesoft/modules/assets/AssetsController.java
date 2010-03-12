@@ -2,6 +2,7 @@ package com.basesoft.modules.assets;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -119,7 +120,9 @@ public class AssetsController extends CommonController {
 			String departcode = ServletRequestUtils.getStringParameter(request, "departcode", "");
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
 			
-			String updateSql = "update ASSETS set STATUS='2', DEPARTCODE='" + departcode + "', EMPCODE='" + empcode + "', LENDDATE='" + StringUtil.DateToString(new Date(), "yyyy-MM-dd") + "' where ID='" + id + "'";
+			Map mapEmp = assetsDAO.findByCode("EMPLOYEE", empcode);
+			
+			String updateSql = "update ASSETS set STATUS='2', DEPARTCODE='" + mapEmp.get("DEPARTCODE") + "', EMPCODE='" + empcode + "', LENDDATE='" + StringUtil.DateToString(new Date(), "yyyy-MM-dd") + "' where ID='" + id + "'";
 			assetsDAO.update(updateSql);
 			
 			response.sendRedirect("assets.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);

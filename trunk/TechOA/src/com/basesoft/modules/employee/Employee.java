@@ -22,6 +22,7 @@ public class Employee {
 	public String majorcode;
 	public String degreecode;
 	public String procode;
+	public String departname;
 
 	public String getId() {
 		return id;
@@ -181,6 +182,14 @@ public class Employee {
 
 	public void setProcode(String procode) {
 		this.procode = procode;
+	}
+
+	public String getDepartname() {
+		return departname;
+	}
+
+	public void setDepartname(String departname) {
+		this.departname = departname;
 	}
 
 }

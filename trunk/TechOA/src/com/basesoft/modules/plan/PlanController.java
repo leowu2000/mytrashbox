@@ -90,12 +90,24 @@ public class PlanController extends CommonController {
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
 			String startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
 			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
-			String planedworkload = ServletRequestUtils.getStringParameter(request, "planedworkload", "");
+			int planedworkload = ServletRequestUtils.getIntParameter(request, "planedworkload", 0);
 			String note = ServletRequestUtils.getStringParameter(request, "note", "");
 			
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcode + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', '" + startdate + "', '" + enddate + "', '" + planedworkload + "', '" + note + "')");
+			//将空的日期值设为null
+			if("".equals(startdate)){
+				startdate = null;
+			}else {
+				startdate  = "'" + startdate + "'";
+			}
+			if("".equals(enddate)){
+				enddate = null;
+			}else {
+				enddate  = "'" + enddate + "'";
+			}
+			
+			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcode + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', " + startdate + ", " + enddate + ", '" + planedworkload + "', '" + note + "')");
 			
 			String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
 			String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
