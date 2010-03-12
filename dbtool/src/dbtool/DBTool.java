@@ -73,7 +73,7 @@ public class DBTool {
             searChsql = "select * from " + table.toUpperCase();
         }
         if(expType==1||expType==2)
-            ((DefaultListModel) (logList.getModel())).addElement("正在分析表" + table + "  【" + getTabCnnm(jt2, table) + "】的数据 ......");
+            ((DefaultListModel) (logList.getModel())).addElement("正在分析表：【" + getTabCnnm(jt2, table) + "】_" + table + "的数据 ......");
         outputError(table,"copyTable=searChsql:",searChsql);
         try {
             if (expType != 0) {
@@ -85,7 +85,7 @@ public class DBTool {
             }
             else{
                 if(expType==0)
-                    ((DefaultListModel) (logList.getModel())).addElement("正在分析表" + table + "  【" + getTabCnnm(jt2, table) + "】的数据 ......");
+                    ((DefaultListModel) (logList.getModel())).addElement("正在分析表：【" + getTabCnnm(jt2, table) + "】_" + table + "的数据 ......");
                 final String fields = result[0];
                 final String params = result[1];
                 jt1.query(searChsql, new RowMapper() {
@@ -112,7 +112,7 @@ public class DBTool {
                     }
                 });
 
-                ((DefaultListModel) (logList.getModel())).addElement("            ↓正在导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】 的数据，请等待...");
+                ((DefaultListModel) (logList.getModel())).addElement("         ↓正在导出【" + getTabCnnm(jt2, table) + "】的数据，请等待...");
                 if (expType == 2) {
                     createExcelTable(table, stsc, saveDir, logList, expType);
                 }
@@ -126,7 +126,7 @@ public class DBTool {
             } else {
                 errorTab += "," + getTabCnnm(jt2, table);
             }
-            ((DefaultListModel) (logList.getModel())).addElement("            ※系统检测到表结构错误，无法执行【" + getTabCnnm(jt2, table) + "】的入库操作，请修改导出方式为【只导出文本文件】※");
+            ((DefaultListModel) (logList.getModel())).addElement("         ※系统检测到表结构错误，无法执行【" + getTabCnnm(jt2, table) + "】的入库操作，请修改导出方式为【只导出文本文件】※");
             outputError(table, "=copyTable=",e.getMessage());
             return false;
         }
@@ -335,7 +335,7 @@ public class DBTool {
 
             boolean flg = false;
             if (expType == 0) {
-                ((DefaultListModel) (logList.getModel())).addElement("正在分析表" + table + "  【" + getTabCnnm(jt2, table) + "】的数据 ......");
+                ((DefaultListModel) (logList.getModel())).addElement("正在分析表：【" + getTabCnnm(jt2, table) + "】_" + table + "的数据 ......");
                 flg = createExcelTable(table, stscStr, saveDir, logList, expType);
             } else {
                 flg = copyTable(table, stscStr, saveDir, logList, expType, version);
@@ -412,15 +412,16 @@ public class DBTool {
                                 }
                             }
                         }
-                        ((DefaultListModel) (logList.getModel())).addElement("            √成功生成表【" + getTabCnnm(jt2, table) + "】的数据索引");
+                        ((DefaultListModel) (logList.getModel())).addElement("         √成功生成【" + getTabCnnm(jt2, table) + "】的数据索引");
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                        ((DefaultListModel) (logList.getModel())).addElement("         ※无法生成表数据索引，请确认日期字段【"+indexFiled+"】是否存在,若不存在请修改【c:\\tables.xls】※");
                     }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
                 outputError(table, "===insertDataIndexTable_new=",ex.getMessage());
-                ((DefaultListModel) (logList.getModel())).addElement("            ※无法生成表【" + getTabCnnm(jt2, table) + "】的数据索引，请确认日期字段【"+indexFiled+"】是否存在※");
+                ((DefaultListModel) (logList.getModel())).addElement("         ※无法生成【" + getTabCnnm(jt2, table) + "】的数据索引，请确认日期字段【"+indexFiled+"】是否存在※");
             }
         }
     }
@@ -449,9 +450,9 @@ public class DBTool {
         selectedSnameModel.removeElement("数据一览表");
         int realCount = getCountToExcel(jt1, table, stsc, isHaveStcdCol(table));
         if (realCount == 0) {
-            ((DefaultListModel) (logList.getModel())).addElement("            ◇数据表：" + table + "  【" + getTabCnnm(jt2, table) + "】可导出数据为空！");
+            ((DefaultListModel) (logList.getModel())).addElement("         ◇数据表 【" + getTabCnnm(jt2, table) + "】 的可导出数据为空◇");
         } else {
-            ((DefaultListModel) (logList.getModel())).addElement("            √成功结束导出表：" + table + "  【" + getTabCnnm(jt2, table) + "】   共有数据条数：" + getCount(jt1, table) + "，导出条数：" + realCount);
+            ((DefaultListModel) (logList.getModel())).addElement("         √成功结束导出 【" + getTabCnnm(jt2, table) + "】 的数据，共有数据条数：" + getCount(jt1, table) + "，导出条数：" + realCount);
         }
     }
 
@@ -474,7 +475,7 @@ public class DBTool {
             final String path = saveDir;
             if(totalRecords>0){
                 final FileWriter fw = new FileWriter(path + "\\excel\\" + tablename +".txt");
-                ((DefaultListModel) (logList.getModel())).addElement("            →正在写入文件：【" + saveDir + "\\excel\\" + tablename + ".txt】,请等待...");
+                ((DefaultListModel) (logList.getModel())).addElement("         →正在写入文件【" + saveDir + "\\excel\\" + tablename + ".txt】,请等待...");
                 jt1.query(searChsql,  new RowMapper() {
 
                     int k=0;
@@ -541,9 +542,9 @@ public class DBTool {
                 errorTab += "," + getTabCnnm(jt2, table);
             }
             if(expType==0)
-                ((DefaultListModel) (logList.getModel())).addElement("            ※无法执行导出， 请确认数据表：" + table + "  【" + getTabCnnm(jt2, table) + "】是否存在※");
+                ((DefaultListModel) (logList.getModel())).addElement("         ※无法执行导出， 请确认数据表【" + getTabCnnm(jt2, table) + "】_" + table + " 是否存在※");
             else
-                ((DefaultListModel) (logList.getModel())).addElement("            ※无法执行导出， 请确认数据表：" + table + "  【" + getTabCnnm(jt2, table) + "】是否存在，或者字段类型是否正确※");
+                ((DefaultListModel) (logList.getModel())).addElement("         ※无法执行导出， 请确认数据表【" + getTabCnnm(jt2, table) + "】_" + table + "是否存在，或者字段类型是否正确※");
             outputError(table, "===createExcelTable=",e.getMessage());
             return false;
         }
