@@ -39,6 +39,10 @@ h1 {
     background-image:url(/images/icons/email_edit.png);
 }
 
+.import .x-btn-text {
+    background-image:url(/images/icons/import.png);
+}
+
 .move .x-btn-text {
 	background-image:url(/images/icons/basket_remove.png);
 }
