@@ -122,6 +122,7 @@ public class MenuDAO extends CommonDAO {
 			menu.setOrdercode(map.get("ORDERCODE")==null?500:Integer.parseInt(map.get("ORDERCODE").toString()));
 			menu.setStatus(map.get("STATUS")==null?"":map.get("STATUS").toString());
 			menu.setParent(map.get("PARENT")==null?"":map.get("PARENT").toString());
+			menu.setIcon(map.get("ICON")==null?"":map.get("ICON").toString());
 		}
 		
 		return menu;
@@ -151,7 +152,7 @@ public class MenuDAO extends CommonDAO {
 			  .append(mapParent.get("MENUCODE"))
 			  .append("',leaf:false,icon:'images/icons/")
 			  .append(mapParent.get("ICON"))
-			  .append(".png',children:[");
+			  .append("',children:[");
 			
 			//取子菜单
 			String sqlChild = "select * from MENU where PARENT='" + mapParent.get("MENUCODE") + "' and MENUCODE in (select MENUCODE from USER_MENU where EMPCODE='" + code + "') and STATUS='1' ORDER BY ORDERCODE";
@@ -167,7 +168,7 @@ public class MenuDAO extends CommonDAO {
 				  .append(mapChild.get("MENUCODE"))
 				  .append("',leaf:true,hrefTarget:'main',icon:'images/icons/")
 				  .append(mapChild.get("ICON"))
-				  .append(".png',href:'")
+				  .append("',href:'")
 				  .append(mapChild.get("MENUURL"))
 				  .append("'}");
 				if(j<listChild.size()-1){

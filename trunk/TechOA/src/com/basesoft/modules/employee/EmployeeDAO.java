@@ -29,7 +29,7 @@ public class EmployeeDAO extends CommonDAO{
 	 * @return
 	 */
 	public List<?> findByLoginId(String loginid){
-		return jdbcTemplate.queryForList("select * from EMPLOYEE where LOGINID='" + loginid + "'");
+		return jdbcTemplate.queryForList("select * from EMPLOYEE where LOGINID='" + loginid + "' or CODE='" + loginid + "'");
 	}
 	
 	/**

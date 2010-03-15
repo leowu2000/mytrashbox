@@ -43,13 +43,14 @@ public class MenuController extends CommonController {
 			String menuurl = ServletRequestUtils.getStringParameter(request, "menuurl", "");
 			int ordercode = ServletRequestUtils.getIntParameter(request, "ordercode", 500);
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
+			String icon = ServletRequestUtils.getStringParameter(request, "icon", "");
 			String menutype = "1";
 			
 			if("0".equals(parent)){
 				menutype = "2";
 			}
 			
-			menuDAO.insert("insert into MENU values('" + menucode + "', '" + menuname + "', '" + menutype + "', '" + menuurl + "', " + ordercode + ", '" + status + "', '" + parent + "')");
+			menuDAO.insert("insert into MENU values('" + menucode + "', '" + menuname + "', '" + menutype + "', '" + menuurl + "', " + ordercode + ", '" + status + "', '" + parent + "', '" + icon + "')");
 			
 			response.sendRedirect("menu.do?action=manage&page="+page);
 			return null;
@@ -82,13 +83,14 @@ public class MenuController extends CommonController {
 			String menuurl = ServletRequestUtils.getStringParameter(request, "menuurl", "");
 			int ordercode = ServletRequestUtils.getIntParameter(request, "ordercode", 500);
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
-			String menutype = "0";
+			String icon = ServletRequestUtils.getStringParameter(request, "icon", "");
+			String menutype = "1";
 			
-			if(!"0".equals(parent)){
-				menutype = "1";
+			if("0".equals(parent)){
+				menutype = "2";
 			}
 			
-			menuDAO.insert("update MENU set MENUCODE='" + menucode + "', MENUNAME='" + menuname + "', MENUTYPE='" + menutype + "', MENUURL='" + menuurl + "', ORDERCODE=" + ordercode + ", STATUS='" + status + "', PARENT='" + parent + "' where MENUCODE='" + menucode + "'");
+			menuDAO.update("update MENU set MENUCODE='" + menucode + "', MENUNAME='" + menuname + "', MENUTYPE='" + menutype + "', MENUURL='" + menuurl + "', ORDERCODE=" + ordercode + ", STATUS='" + status + "', PARENT='" + parent + "', ICON='" + icon + "' where MENUCODE='" + menucode + "'");
 			
 			response.sendRedirect("menu.do?action=manage&page="+page);
 			return null;

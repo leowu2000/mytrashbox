@@ -9,6 +9,7 @@ public class Menu {
 	public int ordercode;
 	public String status;
 	public String parent;
+	public String icon;
 	
 	public String getMenucode() {
 		return menucode;
@@ -65,4 +66,13 @@ public class Menu {
 	public void setParent(String parent) {
 		this.parent = parent;
 	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+	
 }
