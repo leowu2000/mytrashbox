@@ -416,13 +416,13 @@ public class DBTool {
                         ((DefaultListModel) (logList.getModel())).addElement("         √成功生成【" + getTabCnnm(jt2, table) + "】的数据索引");
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ((DefaultListModel) (logList.getModel())).addElement("         ※无法生成表数据索引，请确认日期字段【"+indexFiled+"】是否存在,若不存在请修改【c:\\tables.xls】※");
+//                        ((DefaultListModel) (logList.getModel())).addElement("         ※无法生成表数据索引，请确认日期字段【"+indexFiled+"】是否存在,若不存在请修改【c:\\tables.xls】※");
                     }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
                 outputError(table, "===insertDataIndexTable_new=",ex.getMessage());
-                ((DefaultListModel) (logList.getModel())).addElement("         ※无法生成【" + getTabCnnm(jt2, table) + "】的数据索引，请确认日期字段【"+indexFiled+"】是否存在※");
+//                ((DefaultListModel) (logList.getModel())).addElement("         ※无法生成【" + getTabCnnm(jt2, table) + "】的数据索引，请确认日期字段【"+indexFiled+"】是否存在※");
             }
         }
     }
