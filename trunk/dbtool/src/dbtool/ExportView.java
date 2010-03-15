@@ -1423,8 +1423,8 @@ public class ExportView extends JFrame {
                                     public List<HY_STSC_ABean> mapRow(final ResultSet rs, int rowNum) throws SQLException {
                                         List<HY_STSC_ABean> resultList = null;
 //                                        System.out.println(rs.getString("stnm").trim());
-                                        String stnm = rs.getString("stnm");
-                                        String stcd = rs.getString("stcd");
+                                        String stnm = rs.getString("STNM");
+                                        String stcd = rs.getString("STCD");
                                         stnm=stnm==null?"":stnm;
                                         stscNameModel_source.addElement(stnm.trim());
                                         listParamModel_source.addElement("[" + stcd.trim() + "]" + stnm.trim());
@@ -1438,7 +1438,7 @@ public class ExportView extends JFrame {
                                 selectedSnameModel.removeAllElements();
                                 selectedStscModel.removeAllElements();
                                 for (int k = 0; k < liststscModel_source.size(); k++) {
-                                    int count = jt_target.queryForInt("select count(*) from TABLE_STCD where stcd='" + liststscModel_source.getElementAt(k).toString() + "'");
+                                    int count = jt_target.queryForInt("select count(*) from TABLE_STCD where STCD='" + liststscModel_source.getElementAt(k).toString() + "'");
                                     if (count > 0) {
                                         if ("".trim().equals(stscNameModel_source.getElementAt(k).toString())) {
                                             selectedSnameModel.addElement("[" + liststscModel_source.getElementAt(k).toString().trim() + "]~" + dbTool.getStscName(jt_Target, liststscModel_source.getElementAt(k).toString()));
@@ -1641,9 +1641,9 @@ public class ExportView extends JFrame {
 
             if (Version.getSelectedIndex() == 1) //符合4.0的标准
             {
-                queryStcdSQL = "select *  from HY_STSC_A where stnm like '%" + selectedValue.trim() + "%'";
+                queryStcdSQL = "select *  from HY_STSC_A where STNM like '%" + selectedValue.trim() + "%'";
             } else {
-                queryStcdSQL = "select *  from STHD where stnm like '%" + selectedValue.trim() + "%'";
+                queryStcdSQL = "select *  from STHD where STNM like '%" + selectedValue.trim() + "%'";
             }
             listParamModel_source.removeAllElements();
             liststscModel_source.removeAllElements();
@@ -1651,9 +1651,9 @@ public class ExportView extends JFrame {
 
                 public List<HY_STSC_ABean> mapRow(final ResultSet rs, int rowNum) throws SQLException {
                     List<HY_STSC_ABean> resultList = null;
-                    stscNameModel_source.addElement(rs.getString("stnm").trim());
-                    listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + rs.getString("stnm").trim());
-                    liststscModel_source.addElement(rs.getString("stcd").trim());
+                    stscNameModel_source.addElement(rs.getString("STNM").trim());
+                    listParamModel_source.addElement("[" + rs.getString("STCD").trim() + "]" + rs.getString("STNM").trim());
+                    liststscModel_source.addElement(rs.getString("STCD").trim());
                     return resultList;
                 }
             });
