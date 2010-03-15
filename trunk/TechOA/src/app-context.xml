@@ -46,6 +46,7 @@
 	</bean>
 
 	<!-- 需要由spring注入的bean定义 -->
+    <bean id="dbUpgrade" class="com.basesoft.util.DBUpgrade"/>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"/>
 	<bean id="employeeDAO" class="com.basesoft.modules.employee.EmployeeDAO"></bean>
