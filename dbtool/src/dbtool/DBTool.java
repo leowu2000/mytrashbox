@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class DBTool {
     String saveDirs="";
     DefaultListModel expSuccessModel = new DefaultListModel();
     String errorTab = "";
-
+    Map dataIndexMap = new HashMap();
     public DBTool(String configFile) {
         Properties p = new Properties();
         try {
@@ -361,7 +362,7 @@ public class DBTool {
             outputLog(table, saveDir, sdate, indexsdate, false);
         }
         //保存导出报告
-        ExcelService.createReportHtml(saveDir, expSuccessModel, errorTab, dbTool, selectedStscModel, selectedSnameModel, listTablesModel, expType, stscStr);
+        ExcelService.createReportHtml(saveDir, expSuccessModel, errorTab, dbTool, selectedStscModel, selectedSnameModel, listTablesModel, expType, stscStr,dataIndexMap);
         ((DefaultListModel) (logList.getModel())).addElement("==导出工作成功结束！==");
     }
 
@@ -413,10 +414,12 @@ public class DBTool {
                                 }
                             }
                         }
-                        ((DefaultListModel) (logList.getModel())).addElement("         √成功生成【" + getTabCnnm(jt2, table) + "】的数据索引");
+//                        ((DefaultListModel) (logList.getModel())).addElement("         √成功生成【" + getTabCnnm(jt2, table) + "】的数据索引");
+                        dataIndexMap.put(table, "成功");
                     } catch (Exception ex) {
                         ex.printStackTrace();
 //                        ((DefaultListModel) (logList.getModel())).addElement("         ※无法生成表数据索引，请确认日期字段【"+indexFiled+"】是否存在,若不存在请修改【c:\\tables.xls】※");
+                         dataIndexMap.put(table, "失败");
                     }
                 }
             } catch (Exception ex) {
