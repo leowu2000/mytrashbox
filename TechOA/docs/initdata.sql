@@ -39,16 +39,16 @@ INSERT INTO DICT VALUES('500007','交付使用','5');
 INSERT INTO DICT VALUES('500008','其他','5');
 INSERT INTO DICT VALUES('500009','例行试验','5');
 
-INSERT INTO EMPLOYEE VALUES('0','000000','1','000000','001','系统管理员','0','管理','管理','无','','','','','','','','','','','管理员');
-INSERT INTO EMPLOYEE VALUES('1','000001','1','000001','002','张三','1','审批','监督','副处','','','','','','','','100001','200004','300003','领导');
-INSERT INTO EMPLOYEE VALUES('2','000002','1','000002','003','赵六','1','助理','编辑','科员','','','','','','','','100006','200003','300001','技术骨干');
-INSERT INTO EMPLOYEE VALUES('3','000003','1','000003','004','李四','1','审批','监督','正科','','','','','','','','100001','200004','300003','领导');
-INSERT INTO EMPLOYEE VALUES('4','000004','1','000004','005','王五','1','干活','干活','科员','','','','','','','','100002','200004','300002','技术人员');
-INSERT INTO EMPLOYEE VALUES('5','000005','1','000005','006','孙七','1','文员','文员','科员','','','','','','','','100005','200004','300002','行政人员');
-INSERT INTO EMPLOYEE VALUES('6','000006','1','000006','007','周八','1','干活','干活','科员','','','','','','','','100004','200003','300001','技术人员');
-INSERT INTO EMPLOYEE VALUES('7','000007','1','000007','003','吴九','1','干活','干活','科员','','','','','','','','100003','200002','300001','技术骨干');
-INSERT INTO EMPLOYEE VALUES('8','000008','1','000008','003','郑十','1','干活','干活','科员','','','','','','','','100002','200003','300001','技术人员');
-INSERT INTO EMPLOYEE VALUES('9','000009','1','000009','003','刘一','1','干活','干活','科员','','','','','','','','100001','200004','300002','行政人员');
+INSERT INTO EMPLOYEE VALUES('0','admin','1','000000','001','系统管理员','0','管理','管理','无','','','','','','','','','','','管理员');
+INSERT INTO EMPLOYEE VALUES('1','leader','1','000001','002','张三','1','审批','监督','副处','','','','','','','','100001','200004','300003','领导');
+INSERT INTO EMPLOYEE VALUES('2','employee','1','000002','003','赵六','1','助理','编辑','科员','','','','','','','','100006','200003','300001','技术骨干');
+INSERT INTO EMPLOYEE VALUES('3','planner','1','000003','004','李四','1','审批','监督','正科','','','','','','','','100001','200004','300003','领导');
+INSERT INTO EMPLOYEE VALUES('4','team-manager','1','000004','005','王五','1','干活','干活','科员','','','','','','','','100002','200004','300002','技术人员');
+INSERT INTO EMPLOYEE VALUES('5','assets-admin','1','000005','006','孙七','1','文员','文员','科员','','','','','','','','100005','200004','300002','行政人员');
+INSERT INTO EMPLOYEE VALUES('6','employee-admin','1','000006','007','周八','1','干活','干活','科员','','','','','','','','100004','200003','300001','技术人员');
+INSERT INTO EMPLOYEE VALUES('7','employee2','1','000007','003','吴九','1','干活','干活','科员','','','','','','','','100003','200002','300001','技术骨干');
+INSERT INTO EMPLOYEE VALUES('8','employee3','1','000008','003','郑十','1','干活','干活','科员','','','','','','','','100002','200003','300001','技术人员');
+INSERT INTO EMPLOYEE VALUES('9','employee4','1','000009','003','刘一','1','干活','干活','科员','','','','','','','','100001','200004','300002','行政人员');
 
 
 INSERT INTO DEPARTMENT VALUES('1','1','三部','0','',1);
@@ -66,7 +66,7 @@ INSERT INTO PROJECT VALUES('6','6','工作令六','1','000003','000003,000004',340,9
 INSERT INTO PROJECT VALUES('7','7','工作令七','1','000001','000002,000005,000006,000007,000009',310,90,'2010-01-01','2010-03-01','工作令七');
 INSERT INTO PROJECT VALUES('8','8','工作令八','1','000003','000003,000004',350,90,'2010-01-01','2010-03-01','工作令八');
 
-INSERT INTO PROJECT_d VALUES('0','0','0','','',null,null,null,null)
+INSERT INTO PROJECT_D VALUES('0','0','0','','',null,null,null,null)
 INSERT INTO PROJECT_D VALUES('1','1','F01','F01','000004','2010-03-01','2010-03-10',50,'工作令一，分系统F01');
 INSERT INTO PROJECT_D VALUES('2','1','F02','F02','000004','2010-02-01','2010-03-01',60,'工作令一，分系统F02');
 INSERT INTO PROJECT_D VALUES('3','1','F03','F03','000004','2010-02-01','2010-03-10',70,'工作令一，分系统F03');
@@ -169,33 +169,36 @@ INSERT INTO WORKCHECK VALUES('000009','2010-1-30','400002',4);
 INSERT INTO WORKCHECK VALUES('000009','2010-1-31','400004',3);
 INSERT INTO WORKCHECK VALUES('000009','2010-2-1','400007',5);
 
-INSERT INTO MENU VALUES('001','系统维护','2','',1,'1','0','1');
-INSERT INTO MENU VALUES('011','工作令管理','1','pj.do?action=list',2,'1','001','1');
-INSERT INTO MENU VALUES('012','部门管理','1','depart.do?action=list',3,'1','001','1');
-INSERT INTO MENU VALUES('013','用户管理','1','em.do?action=frame_infolist',4,'1','001','1');
-INSERT INTO MENU VALUES('014','菜单管理','1','menu.do?action=manage',5,'1','001','1');
-INSERT INTO MENU VALUES('002','工作报告','2','',6,'1','0','2');
-INSERT INTO MENU VALUES('021','个人工作报告','1','workreport.do?action=list',7,'1','002','2');
-INSERT INTO MENU VALUES('022','审核工作报告','1','workreport.do?action=auditlist',8,'1','002','2');
-INSERT INTO MENU VALUES('003','工时统计汇总','2','',9,'1','0','3');
-INSERT INTO MENU VALUES('031','工时统计汇总','1','modules/pj/frame_gstjhz.jsp',10,'1','003','3');
-INSERT INTO MENU VALUES('032','科研工时统计','1','pj.do?action=frame_kygstj',11,'1','003','3');
-INSERT INTO MENU VALUES('033','承担任务情况','1','pj.do?action=frame_cdrwqk',12,'1','003','3');
-INSERT INTO MENU VALUES('004','人事管理','2','',13,'1','0','4');
-INSERT INTO MENU VALUES('041','人事管理','1','em.do?action=frame_manage',14,'1','004','4');
-INSERT INTO MENU VALUES('005','固定资产','2','',15,'1','0','5');
-INSERT INTO MENU VALUES('051','固定资产查询','1','assets.do?action=frame_info&manage=0',16,'1','005','5');
-INSERT INTO MENU VALUES('052','固定资产管理','1','assets.do?action=frame_info&manage=1',17,'1','005','5');
-INSERT INTO MENU VALUES('053','年检提醒','1','assets.do?action=remind',18,'1','005','5');
-INSERT INTO MENU VALUES('006','费用管理','2','',19,'1','0','6');
-INSERT INTO MENU VALUES('061','课题费用','1','cost.do?action=list',20,'1','006','6');
-INSERT INTO MENU VALUES('007','考勤管理','2','',21,'1','0','7');
-INSERT INTO MENU VALUES('071','员工考勤记录','1','em.do?action=frame_workcheck',22,'1','007','7');
-INSERT INTO MENU VALUES('008','绩效管理','2','',23,'1','0','8');
-INSERT INTO MENU VALUES('081','计划管理','1','plan.do?action=list_frame',24,'1','008','8');
-INSERT INTO MENU VALUES('082','绩效提醒','1','plan.do?action=remind_frame',25,'1','008','8');
-INSERT INTO MENU VALUES('009','收藏管理','2','',26,'1','0','9');
-INSERT INTO MENU VALUES('091','收藏菜单','1','menu.do?action=manage_favor',27,'1','009','9');
+INSERT INTO MENU VALUES('001','系统维护','2','',1,'1','0','1.png');
+INSERT INTO MENU VALUES('011','工作令管理','1','pj.do?action=list',2,'1','001','1.png');
+INSERT INTO MENU VALUES('012','部门管理','1','depart.do?action=list',3,'1','001','1.png');
+INSERT INTO MENU VALUES('013','用户管理','1','em.do?action=frame_infolist',4,'1','001','1.png');
+INSERT INTO MENU VALUES('014','菜单管理','1','menu.do?action=manage',5,'1','001','1.png');
+INSERT INTO MENU VALUES('002','工作报告','2','',8,'1','0','2.png');
+INSERT INTO MENU VALUES('021','个人工作报告','1','workreport.do?action=list',9,'1','002','2.png');
+INSERT INTO MENU VALUES('022','审核工作报告','1','workreport.do?action=auditlist',10,'1','002','2.png');
+INSERT INTO MENU VALUES('003','工时统计汇总','2','',11,'1','0','3.png');
+INSERT INTO MENU VALUES('031','工时统计汇总','1','modules/pj/frame_gstjhz.jsp',12,'1','003','3.png');
+INSERT INTO MENU VALUES('032','科研工时统计','1','pj.do?action=frame_kygstj',13,'1','003','3.png');
+INSERT INTO MENU VALUES('033','承担任务情况','1','pj.do?action=frame_cdrwqk',14,'1','003','3.png');
+INSERT INTO MENU VALUES('004','人事管理','2','',15,'1','0','4.png');
+INSERT INTO MENU VALUES('041','人事管理','1','em.do?action=frame_manage',16,'1','004','4.png');
+INSERT INTO MENU VALUES('005','固定资产','2','',17,'1','0','5.png');
+INSERT INTO MENU VALUES('051','固定资产查询','1','assets.do?action=frame_info&manage=0',18,'1','005','5.png');
+INSERT INTO MENU VALUES('052','固定资产管理','1','assets.do?action=frame_info&manage=1',19,'1','005','5.png');
+INSERT INTO MENU VALUES('053','年检提醒','1','assets.do?action=remind',20,'1','005','5.png');
+INSERT INTO MENU VALUES('006','费用管理','2','',21,'1','0','6.png');
+INSERT INTO MENU VALUES('061','课题费用','1','cost.do?action=list',22,'1','006','6.png');
+INSERT INTO MENU VALUES('007','考勤管理','2','',23,'1','0','7.png');
+INSERT INTO MENU VALUES('071','员工考勤记录','1','em.do?action=frame_workcheck',24,'1','007','7.png');
+INSERT INTO MENU VALUES('008','计划管理','2','',25,'1','0','8.png');
+INSERT INTO MENU VALUES('081','计划管理','1','plan.do?action=list_frame',26,'1','008','8.png');
+INSERT INTO MENU VALUES('082','计划提醒','1','plan.do?action=remind_frame',27,'1','008','8.png');
+INSERT INTO MENU VALUES('083','考核结果','1','plan.do?action=result_frame',28,'1','008','8.png');
+INSERT INTO MENU VALUES('009','收藏管理','2','',29,'1','0','9.png');
+INSERT INTO MENU VALUES('091','收藏菜单','1','menu.do?action=manage_favor',30,'1','009','9.png');
+INSERT INTO MENU VALUES('100','综合查询','2','',6,'1','0','10.png');
+INSERT INTO MENU VALUES('101','人员信息综合查询','1','em.do?action=search_multi',7,'1','100','10.png');
 
 /** 超级管理员 
 INSERT INTO EMPLOYEE VALUES('SSSSSS','SSSSSS','1','SSSSSS','000','超级管理员','0','管理','管理','无','','','','','','','','','','','超级管理员');
@@ -221,8 +224,11 @@ INSERT INTO USER_MENU VALUES('000','071','1');
 INSERT INTO USER_MENU VALUES('000','008','1');
 INSERT INTO USER_MENU VALUES('000','081','1');
 INSERT INTO USER_MENU VALUES('000','082','1');
+INSERT INTO USER_MENU VALUES('000','083','1');
 INSERT INTO USER_MENU VALUES('000','009','1');
 INSERT INTO USER_MENU VALUES('000','091','1');
+INSERT INTO USER_MENU VALUES('000','100','1');
+INSERT INTO USER_MENU VALUES('000','101','1');
 
 INSERT INTO USER_MENU VALUES('SSSSSS','001','2');
 INSERT INTO USER_MENU VALUES('SSSSSS','011','2');
@@ -249,22 +255,6 @@ INSERT INTO USER_MENU VALUES('001','011','1');
 INSERT INTO USER_MENU VALUES('001','012','1');
 INSERT INTO USER_MENU VALUES('001','013','1');
 INSERT INTO USER_MENU VALUES('001','014','1');
-INSERT INTO USER_MENU VALUES('001','003','1');
-INSERT INTO USER_MENU VALUES('001','031','1');
-INSERT INTO USER_MENU VALUES('001','032','1');
-INSERT INTO USER_MENU VALUES('001','033','1');
-INSERT INTO USER_MENU VALUES('001','004','1');
-INSERT INTO USER_MENU VALUES('001','041','1');
-INSERT INTO USER_MENU VALUES('001','005','1');
-INSERT INTO USER_MENU VALUES('001','051','1');
-INSERT INTO USER_MENU VALUES('001','052','1');
-INSERT INTO USER_MENU VALUES('001','006','1');
-INSERT INTO USER_MENU VALUES('001','061','1');
-INSERT INTO USER_MENU VALUES('001','007','1');
-INSERT INTO USER_MENU VALUES('001','071','1');
-INSERT INTO USER_MENU VALUES('001','008','1');
-INSERT INTO USER_MENU VALUES('001','081','1');
-INSERT INTO USER_MENU VALUES('001','082','1');
 INSERT INTO USER_MENU VALUES('001','009','1');
 INSERT INTO USER_MENU VALUES('001','091','1');
 
@@ -275,6 +265,8 @@ INSERT INTO USER_MENU VALUES('002','032','1');
 INSERT INTO USER_MENU VALUES('002','033','1');
 INSERT INTO USER_MENU VALUES('002','009','1');
 INSERT INTO USER_MENU VALUES('002','091','1');
+INSERT INTO USER_MENU VALUES('002','100','1');
+INSERT INTO USER_MENU VALUES('002','101','1');
 
 /** 普通人员 **/
 INSERT INTO USER_MENU VALUES('003','002','1');
@@ -284,6 +276,7 @@ INSERT INTO USER_MENU VALUES('003','021','1');
 INSERT INTO USER_MENU VALUES('004','008','1');
 INSERT INTO USER_MENU VALUES('004','081','1');
 INSERT INTO USER_MENU VALUES('004','082','1');
+INSERT INTO USER_MENU VALUES('004','083','1');
 INSERT INTO USER_MENU VALUES('004','009','1');
 INSERT INTO USER_MENU VALUES('004','091','1');
 
@@ -298,6 +291,8 @@ INSERT INTO USER_MENU VALUES('005','081','1');
 INSERT INTO USER_MENU VALUES('005','082','1');
 INSERT INTO USER_MENU VALUES('005','009','1');
 INSERT INTO USER_MENU VALUES('005','091','1');
+INSERT INTO USER_MENU VALUES('005','100','1');
+INSERT INTO USER_MENU VALUES('005','101','1');
 
 /** 固定资产管理员 **/
 INSERT INTO USER_MENU VALUES('006','005','1');

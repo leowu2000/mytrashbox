@@ -12,7 +12,7 @@ create table ASSETS  (
    NOWCOST              NUMERIC(15,2),
    LIFE                 INTEGER,
    STATUS               VARCHAR(10),
-   DEPARTCODE           VARCHAR(20),
+   DEPARTCPDE           VARCHAR(20),
    EMPCODE              VARCHAR(20),
    LENDDATE             DATE,
    CHECKDATE            DATE,
@@ -53,7 +53,7 @@ comment on column ASSETS.LIFE is
 comment on column ASSETS.STATUS is
 '设备状态(1:库中;2:借出;3:损坏)';
 
-comment on column ASSETS.DEPARTCODE is
+comment on column ASSETS.DEPARTCPDE is
 '借出部门';
 
 comment on column ASSETS.EMPCODE is
@@ -271,7 +271,7 @@ create table MENU  (
    ORDERCODE            INTEGER,
    STATUS               VARCHAR(1),
    PARENT               VARCHAR(20),
-   ICON                 INTEGER,
+   ICON                 VARCHAR(20),
    constraint PK_MENU primary key (MENUCODE)
 );
 
@@ -300,8 +300,7 @@ comment on column MENU.PARENT is
 '父功能编码';
 
 comment on column MENU.ICON is
-'图标号';
-
+'图标名称';
 
 /*==============================================================*/
 /* Table: PJ_COST                                               */
