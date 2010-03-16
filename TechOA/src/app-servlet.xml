@@ -18,6 +18,7 @@
 				/cost.do=CostController
 				/menu.do=MenuController
 				/plan.do=PlanController
+				/goods.do=GoodsController
 			</value>
 		</property>
 	</bean>
@@ -48,5 +49,6 @@
 	<bean name="CostController" class="com.basesoft.modules.cost.CostController"></bean>
 	<bean name="MenuController" class="com.basesoft.modules.menu.MenuController"></bean>
 	<bean name="PlanController" class="com.basesoft.modules.plan.PlanController"></bean>
+	<bean name="GoodsController" class="com.basesoft.modules.goods.GoodsController"></bean>
 </beans>
 

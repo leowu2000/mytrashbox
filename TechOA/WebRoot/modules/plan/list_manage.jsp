@@ -91,15 +91,19 @@ Ext.onReady(function(){
 			    Ext.get('id').set({'value':data.item.id});
 			    Ext.get('pjcode').set({'value':data.item.pjcode});
 			    Ext.get('pjcode').set({'disabled':'disabled'});
+			    AJAX_PJ(document.getElementById('pjcode').value);
 				Ext.get('pjcode_d').set({'value':data.item.pjcode__d});
 				Ext.get('pjcode_d').set({'disabled':'disabled'});
 				Ext.get('stagecode').set({'value':data.item.stagecode});
 				Ext.get('stagecode').set({'disabled':'disabled'});
-				comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
-				Ext.get('startdate').set({'value':data.item.startdate});
-				Ext.get('enddate').set({'value':data.item.enddate});
-				Ext.get('planedworkload').set({'value':data.item.planedworkload});
+				Ext.get('ordercode').set({'value':data.item.ordercode});
 				Ext.get('note').set({'value':data.item.note});
+				Ext.get('symbol').set({'value':data.item.symbol});
+				Ext.get('enddate').set({'value':data.item.enddate});
+				comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
+				Ext.get('assess').set({'value':data.item.assess});
+				Ext.get('remark').set({'value':data.item.remark});
+				
 		    	action = url+'?action=update&page=<%=pagenum %>&f_pjcode=<%=f_pjcode %>&f_stagecode=<%=f_stagecode %>&f_empname=<%=f_empname %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
@@ -184,14 +188,19 @@ function AJAX_PJ(pjcode){
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>选　择</td>
-                <td>工作令号</td>              
-                <td>子系统</td>
-                <td>阶段</td>
-                <td>负责人</td>
-                <td>工作内容</td>
-                <td>计划起始时间</td>
-                <td>计划完成时间</td>
-                <td>计划投入工时</td>
+                <td>产品令号</td>              
+                <td>序号</td>
+                <td>计划内容</td>
+                <td>标志</td>
+                <td>完成日期</td>
+                <td>责任单位</td>
+                <td>责任人</td>
+                <td>考核</td>
+                <td>备注</td>
+                <td>所领导</td>
+                <td>计划员</td>
+                <td>室领导</td>
+                <td>部领导</td>
             </tr>
 <%
 List listPlan = pageList.getList();
@@ -201,13 +210,18 @@ for(int i=0;i<listPlan.size();i++){
             <tr align="center">
                 <td><input type="checkbox" name="check" value="<%=mapPlan.get("ID") %>" class="ainput"></td>
                 <td>&nbsp;<%=mapPlan.get("PJNAME")==null?"":mapPlan.get("PJNAME") %></td>
-                <td>&nbsp;<%=mapPlan.get("PJNAME_D")==null?"":mapPlan.get("PJNAME_D") %></td>
-                <td>&nbsp;<%=mapPlan.get("STAGENAME")==null?"":mapPlan.get("STAGENAME") %></td>
-                <td>&nbsp;<%=mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME") %></td>
+                <td>&nbsp;<%=mapPlan.get("ORDERCODE")==null?"":mapPlan.get("ORDERCODE") %></td>
                 <td>&nbsp;<%=mapPlan.get("NOTE")==null?"":mapPlan.get("NOTE") %></td>
-                <td>&nbsp;<%=mapPlan.get("STARTDATE")==null?"":mapPlan.get("STARTDATE") %></td>
+                <td>&nbsp;<%=mapPlan.get("SYMBOL")==null?"":mapPlan.get("SYMBOL") %></td>
                 <td>&nbsp;<%=mapPlan.get("ENDDATE")==null?"":mapPlan.get("ENDDATE") %></td>
-                <td>&nbsp;<%=mapPlan.get("PLANEDWORKLOAD")==null?"":mapPlan.get("PLANEDWORKLOAD") %></td>
+                <td>&nbsp;<%=mapPlan.get("DEPARTNAME")==null?"":mapPlan.get("DEPARTNAME") %></td>
+                <td>&nbsp;<%=mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME") %></td>
+                <td>&nbsp;<%=mapPlan.get("ASSESS")==null?"":mapPlan.get("ASSESS") %></td>
+                <td>&nbsp;<%=mapPlan.get("REMARK")==null?"":mapPlan.get("REMARK") %></td>
+                <td>&nbsp;<%=mapPlan.get("LEADER_STATION")==null?"":mapPlan.get("LEADER_STATION") %></td>
+                <td>&nbsp;<%=mapPlan.get("PLANNERNAME")==null?"":mapPlan.get("PLANNERNAME") %></td>
+                <td>&nbsp;<%=mapPlan.get("LEADER_ROOM")==null?"":mapPlan.get("LEADER_ROOM") %></td>
+                <td>&nbsp;<%=mapPlan.get("LEADER_SECTION")==null?"":mapPlan.get("LEADER_SECTION") %></td>
             </tr>
 <%} %>            
 </table>
@@ -252,25 +266,33 @@ for(int i=0;i<listPlan.size();i++){
 				    </select></td>
 				  </tr>	
 				  <tr>
-				    <td>工作内容</td>
-				    <td><input type="text" name="note" style="width:200"></td>
+				    <td>序号</td>
+				    <td><input type="text" name="ordercode" style="width:200;"></td>
+				  </tr>				  
+				  <tr>
+				    <td>计划内容</td>
+				    <td><textarea name="note" rows="4" style="width:200"></textarea></td>
 				  </tr>
 				  <tr>
-				    <td>负责人</td>
-				    <td><span id="selemp" name="selemp"></span></td>
-				  </tr>	
+				    <td>标志</td>
+				    <td><input type="text" name="symbol" style="width:200"></td>
+				  </tr>
 				  <tr>
-				    <td>起始时间</td>
-				    <td><input type="text" name="startdate" style="width:200" onclick="WdatePicker()"></td>
-				  </tr>	
-				  <tr>
-				    <td>完成时间</td>
+				    <td>完成日期</td>
 				    <td><input type="text" name="enddate" style="width:200" onclick="WdatePicker()"></td>
 				  </tr>	
 				  <tr>
-				    <td>投入工时</td>
-				    <td><input type="text" name="planedworkload" style="width:200"></td>
+				    <td>责任人</td>
+				    <td><span id="selemp" name="selemp"></span></td>
 				  </tr>	
+				  <tr>
+				    <td>考核</td>
+				    <td><input type="text" name="assess" style="width:200"></td>
+				  </tr>
+				  <tr>
+				    <td>备注</td>
+				    <td><input type="text" name="remark" style="width:200"></td>
+				  </tr>
 				</table>
 	        </form>
     </div>

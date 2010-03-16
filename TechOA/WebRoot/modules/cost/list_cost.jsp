@@ -42,7 +42,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add';
+    	action = url+'?action=add&page=<%=pagenum %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);

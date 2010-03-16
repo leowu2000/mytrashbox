@@ -24,6 +24,6 @@ select a.*,b.name as PJNAME,c.name as STAGENAME,d.name as EMPNAME
 /*¼Æ»®*/
 
 create or replace view VIEW_PLAN as 
-select a.*,b.NAME as PJNAME,c.NAME as PJNAME_D,d.NAME as STAGENAME,E.NAME as EMPNAME 
-	from PLAN a, PROJECT b, PROJECT_D c, DICT d, EMPLOYEE e 
-	where b.CODE=a.PJCODE and c.CODE=a.PJCODE_D and d.CODE=a.STAGECODE and d.TYPE='5' and e.CODE=a.EMPCODE
+select a.*,b.NAME as PJNAME,c.NAME as PJNAME_D,d.NAME as STAGENAME
+	from PLAN a, PROJECT b, PROJECT_D c, DICT d
+	where b.CODE=a.PJCODE and c.CODE=a.PJCODE_D and d.CODE=a.STAGECODE and d.TYPE='5'
