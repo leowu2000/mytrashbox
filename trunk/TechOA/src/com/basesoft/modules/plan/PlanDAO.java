@@ -30,13 +30,13 @@ public class PlanDAO extends CommonDAO {
 				if("".equals(empname)){//全部人员
 					sql = "select * from VIEW_PLAN";
 				}else {//人员名称模糊检索
-					sql = "select * from VIEW_PLAN where EMPCODE in (select CODE from EMPLOYEE where NAME like '%" + empname + "%')";
+					sql = "select * from VIEW_PLAN where EMPNAME like '%" + empname + "%'";
 				}
 			}else {//选择了阶段
 				if("".equals(empname)){//全部人员
 					sql = "select * from VIEW_PLAN where STAGECODE='" + stagecode + "'";
 				}else {
-					sql = "select * from VIEW_PLAN where STAGECODE='" + stagecode + "' and EMPCODE in (select CODE from EMPLOYEE where NAME like '%" + empname + "%')";
+					sql = "select * from VIEW_PLAN where STAGECODE='" + stagecode + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}
 		}else {
@@ -44,16 +44,18 @@ public class PlanDAO extends CommonDAO {
 				if("".equals(empname)){//全部人员
 					sql = "select * from VIEW_PLAN where PJCODE='" + pjcode + "'";
 				}else {//人员名称模糊检索
-					sql = "select * from VIEW_PLAN where PJCODE='" + pjcode + "' and EMPCODE in (select CODE from EMPLOYEE where NAME like '%" + empname + "%')";
+					sql = "select * from VIEW_PLAN where PJCODE='" + pjcode + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}else {//选择了阶段
 				if("".equals(empname)){//全部人员
 					sql = "select * from VIEW_PLAN where PJCODE='" + pjcode + "' and STAGECODE='" + stagecode + "'";
 				}else {
-					sql = "select * from VIEW_PLAN where PJCODE='" + pjcode + "' and STAGECODE='" + stagecode + "' and EMPCODE in (select CODE from EMPLOYEE where NAME like '%" + empname + "%')";
+					sql = "select * from VIEW_PLAN where PJCODE='" + pjcode + "' and STAGECODE='" + stagecode + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}
 		}
+		
+		sql = sql + " order by PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -96,11 +98,14 @@ public class PlanDAO extends CommonDAO {
 	public Plan findById(String id){
 		Plan plan = new Plan();
 		
-		String sql = "select * from PLAN where ID='" + id + "'";
+		String sql = "select * from VIEW_PLAN where ID='" + id + "'";
 		Map map = jdbcTemplate.queryForMap(sql);
 		
 		plan.setId(id);
 		plan.setEmpcode(map.get("EMPCODE")==null?"":map.get("EMPCODE").toString());
+		plan.setEmpname(map.get("EMPNAME")==null?"":map.get("EMPNAME").toString());
+		plan.setDepartcode(map.get("DEPARTCODE")==null?"":map.get("DEPARTCODE").toString());
+		plan.setDepartname(map.get("DEPARTNAME")==null?"":map.get("DEPARTNAME").toString());
 		plan.setPjcode(map.get("PJCODE")==null?"":map.get("PJCODE").toString());
 		plan.setPjcode_d(map.get("PJCODE_D")==null?"":map.get("PJCODE_D").toString());
 		plan.setStagecode(map.get("STAGECODE")==null?"":map.get("STAGECODE").toString());
@@ -108,7 +113,15 @@ public class PlanDAO extends CommonDAO {
 		plan.setEnddate(map.get("ENDDATE")==null?"":map.get("ENDDATE").toString());
 		plan.setPlanedworkload(map.get("PLANEDWORKLOAD")==null?0:Integer.parseInt(map.get("PLANEDWORKLOAD").toString()));
 		plan.setNote(map.get("NOTE")==null?"":map.get("NOTE").toString());
-		plan.setEmpname(this.findNameByCode("EMPLOYEE", plan.getEmpcode()));
+		plan.setSymbol(map.get("SYMBOL")==null?"":map.get("SYMBOL").toString());
+		plan.setAssess(map.get("ASSESS")==null?"":map.get("ASSESS").toString());
+		plan.setRemark(map.get("REMARK")==null?"":map.get("REMARK").toString());
+		plan.setLeader_station(map.get("LEADER_STATION")==null?"":map.get("LEADER_STATION").toString());
+		plan.setLeader_section(map.get("LEADER_SECTION")==null?"":map.get("LEADER_SECTION").toString());
+		plan.setLeader_room(map.get("LEADER_ROOM")==null?"":map.get("LEADER_ROOM").toString());
+		plan.setPlannercode(map.get("PLANNERCODE")==null?"":map.get("PLANNERCODE").toString());
+		plan.setPlannername(map.get("PLANNERNAME")==null?"":map.get("PLANNERNAME").toString());
+		plan.setOrdercode(map.get("ORDERCODE")==null?0:Integer.parseInt(map.get("ORDERCODE").toString()));
 		
 		return plan;
 	}

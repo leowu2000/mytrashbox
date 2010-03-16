@@ -87,27 +87,28 @@ public class PlanController extends CommonController {
 			String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
 			String pjcode_d = ServletRequestUtils.getStringParameter(request, "pjcode_d", "");
 			String stagecode = ServletRequestUtils.getStringParameter(request, "stagecode", "");
-			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
-			String startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
-			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
-			int planedworkload = ServletRequestUtils.getIntParameter(request, "planedworkload", 0);
+			int ordercode = ServletRequestUtils.getIntParameter(request, "ordercode", 1);
 			String note = ServletRequestUtils.getStringParameter(request, "note", "");
+			String symbol = ServletRequestUtils.getStringParameter(request, "symbol", "");
+			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
+			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
+			String assess = ServletRequestUtils.getStringParameter(request, "assess", "");
+			String remark = ServletRequestUtils.getStringParameter(request, "remark", "");
 			
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			
+			Map mapEmp = planDAO.findByCode("EMPLOYEE", empcode);
+			String departname = planDAO.findNameByCode("DEPARTMENT", mapEmp.get("DEPARTCODE").toString());
+			String plannercode = request.getSession().getAttribute("EMCODE").toString();
+			String plannername = request.getSession().getAttribute("EMNAME").toString();
 			//将空的日期值设为null
-			if("".equals(startdate)){
-				startdate = null;
-			}else {
-				startdate  = "'" + startdate + "'";
-			}
 			if("".equals(enddate)){
 				enddate = null;
 			}else {
 				enddate  = "'" + enddate + "'";
 			}
 			
-			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcode + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', " + startdate + ", " + enddate + ", '" + planedworkload + "', '" + note + "')");
+			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcode + "', '" + mapEmp.get("NAME") + "', '" + mapEmp.get("DEPARTCODE") + "', '" + departname + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', null, " + enddate + ", 0, '" + note + "', '" + symbol + "', '" + assess + "', '" + remark + "', '所领导', '部领导', '室领导', '" + plannercode + "', '" + plannername + "', " + ordercode + ")");
 			
 			String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
 			String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");

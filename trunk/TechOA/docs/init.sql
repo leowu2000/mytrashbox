@@ -261,6 +261,259 @@ comment on column EMPLOYEE.DESCRIBE is
 '描述';
 
 /*==============================================================*/
+/* Table: EMP_CARD                                              */
+/*==============================================================*/
+create table EMP_CARD  (
+   EMPCODE              VARCHAR(20),
+   EMPNAME              VARCHAR(50),
+   SEX                  VARCHAR(1),
+   CARDNO               VARCHAR(20),
+   PHONE1               VARCHAR(20),
+   PHONE2               VARCHAR(20),
+   ADDRESS              VARCHAR(500),
+   DEPARTCODE           VARCHAR(20),
+   DEPARTNAME           VARCHAR(50)
+);
+
+comment on table EMP_CARD is
+'员工一卡通表';
+
+comment on column EMP_CARD.EMPCODE is
+'员工编号 ';
+
+comment on column EMP_CARD.EMPNAME is
+'员工姓名';
+
+comment on column EMP_CARD.SEX is
+'员工性别(1:男性;2:女性)';
+
+comment on column EMP_CARD.CARDNO is
+'卡号';
+
+comment on column EMP_CARD.PHONE1 is
+'电话1';
+
+comment on column EMP_CARD.PHONE2 is
+'电话2';
+
+comment on column EMP_CARD.ADDRESS is
+'地址';
+
+comment on column EMP_CARD.DEPARTCODE is
+'部门编码';
+
+comment on column EMP_CARD.DEPARTNAME is
+'部门名称';
+
+/*==============================================================*/
+/* Table: EMP_FINANCIAL                                         */
+/*==============================================================*/
+create table EMP_FINANCIAL  (
+   EMPCODE              VARCHAR(20),
+   EMPNAME              VARCHAR(50),
+   DEPARTCODE           VARCHAR(20),
+   DEPARTNAME           VARCHAR(50),
+   JBF                  NUMERIC(10, 2),
+   PSF                  NUMERIC(10, 2),
+   GC                   NUMERIC(10, 2),
+   CJ                   NUMERIC(10, 2),
+   WCBT                 NUMERIC(10, 2),
+   CGLBT                NUMERIC(10, 2),
+   LB                   NUMERIC(10, 2),
+   GJBT                 NUMERIC(10, 2),
+   FPBT                 NUMERIC(10, 2),
+   XMMC                 VARCHAR(50),
+   BZ                   VARCHAR(500)
+);
+
+comment on table EMP_FINANCIAL is
+'员工财务表';
+
+comment on column EMP_FINANCIAL.EMPCODE is
+'人员编号';
+
+comment on column EMP_FINANCIAL.EMPNAME is
+'姓名';
+
+comment on column EMP_FINANCIAL.DEPARTCODE is
+'部门编码';
+
+comment on column EMP_FINANCIAL.DEPARTNAME is
+'部门名称';
+
+comment on column EMP_FINANCIAL.JBF is
+'加班费';
+
+comment on column EMP_FINANCIAL.PSF is
+'评审费';
+
+comment on column EMP_FINANCIAL.GC is
+'稿酬';
+
+comment on column EMP_FINANCIAL.CJ is
+'酬金';
+
+comment on column EMP_FINANCIAL.WCBT is
+'外场补贴';
+
+comment on column EMP_FINANCIAL.CGLBT is
+'车公里补贴';
+
+comment on column EMP_FINANCIAL.LB is
+'劳保';
+
+comment on column EMP_FINANCIAL.GJBT is
+'过江补贴';
+
+comment on column EMP_FINANCIAL.FPBT is
+'返聘补贴';
+
+comment on column EMP_FINANCIAL.XMMC is
+'项目 名称';
+
+comment on column EMP_FINANCIAL.BZ is
+'备注';
+
+/*==============================================================*/
+/* Table: EMP_POS                                               */
+/*==============================================================*/
+create table EMP_POS  (
+   EMPCODE              VARCHAR(20),
+   EMPNAME              VARCHAR(50),
+   DEPARTCODE           VARCHAR(20),
+   DEPARTNAME           VARCHAR(50),
+   CARDNO               VARCHAR(20),
+   POSMACHINE           VARCHAR(50),
+   SWIPETIME            DATE,
+   COST                 NUMERIC(10,2),
+   POSCODE              INTEGER
+);
+
+comment on table EMP_POS is
+'班车刷卡表';
+
+comment on column EMP_POS.EMPCODE is
+'人员编号';
+
+comment on column EMP_POS.EMPNAME is
+'人员姓名';
+
+comment on column EMP_POS.DEPARTCODE is
+'部门编号';
+
+comment on column EMP_POS.DEPARTNAME is
+'部门名称';
+
+comment on column EMP_POS.CARDNO is
+'卡号';
+
+comment on column EMP_POS.POSMACHINE is
+'车载POS机';
+
+comment on column EMP_POS.SWIPETIME is
+'刷卡时间';
+
+comment on column EMP_POS.COST is
+'刷卡金额';
+
+comment on column EMP_POS.POSCODE is
+'POS流水号';
+
+/*==============================================================*/
+/* Table: GOODS                                                 */
+/*==============================================================*/
+create table GOODS  (
+   ID                   VARCHAR(32)                     not null,
+   KJND                 INTEGER,
+   KJH                  VARCHAR(20),
+   CKDH                 VARCHAR(20),
+   JE                   NUMERIC(10,2),
+   LLBMMC               VARCHAR(50),
+   LLBMBM               VARCHAR(20),
+   JSBMMC               VARCHAR(50),
+   JSBMBM               VARCHAR(20),
+   LLRMC                VARCHAR(50),
+   LLRBM                VARCHAR(20),
+   ZJH                  VARCHAR(20),
+   CHMC                 VARCHAR(200),
+   GG                   VARCHAR(100),
+   PJCODE               VARCHAR(20),
+   TH                   VARCHAR(50),
+   ZJLDW                VARCHAR(50),
+   SL                   INTEGER,
+   DJ                   NUMERIC(15,6),
+   XMYT                 VARCHAR(200),
+   CHBM                 VARCHAR(20),
+   constraint PK_GOODS primary key (ID)
+);
+
+comment on table GOODS is
+'物资表';
+
+comment on column GOODS.ID is
+'ID';
+
+comment on column GOODS.KJND is
+'会计年度';
+
+comment on column GOODS.KJH is
+'会计号';
+
+comment on column GOODS.CKDH is
+'出库单号';
+
+comment on column GOODS.JE is
+'金额';
+
+comment on column GOODS.LLBMMC is
+'领料部门名称';
+
+comment on column GOODS.LLBMBM is
+'领料部门编码';
+
+comment on column GOODS.JSBMMC is
+'结算部门名称';
+
+comment on column GOODS.JSBMBM is
+'结算部门编码';
+
+comment on column GOODS.LLRMC is
+'领料人姓名';
+
+comment on column GOODS.LLRBM is
+'领料人编码';
+
+comment on column GOODS.ZJH is
+'整件号';
+
+comment on column GOODS.CHMC is
+'存货名称';
+
+comment on column GOODS.GG is
+'规格';
+
+comment on column GOODS.PJCODE is
+'项目编码';
+
+comment on column GOODS.TH is
+'图号';
+
+comment on column GOODS.ZJLDW is
+'主计量单位';
+
+comment on column GOODS.SL is
+'数量';
+
+comment on column GOODS.DJ is
+'单价';
+
+comment on column GOODS.XMYT is
+'项目用途';
+
+comment on column GOODS.CHBM is
+'存货编码';
+
+/*==============================================================*/
 /* Table: MENU                                                  */
 /*==============================================================*/
 create table MENU  (
@@ -303,81 +556,14 @@ comment on column MENU.ICON is
 '图标名称';
 
 /*==============================================================*/
-/* Table: PJ_COST                                               */
-/*==============================================================*/
-create table PJ_COST  (
-   ID                   VARCHAR(32)                     not null,
-   RQ                   DATE,
-   DJBH                 VARCHAR(20),
-   GZLH                 VARCHAR(20),
-   FXT                  VARCHAR(20),
-   ZJH                  VARCHAR(20),
-   BM                   VARCHAR(20),
-   XHGG                 VARCHAR(20),
-   DW                   VARCHAR(20),
-   SL                   INTEGER,
-   JE                   NUMERIC(10,2),
-   XM                   VARCHAR(20),
-   LLDW                 VARCHAR(20),
-   JSDW                 VARCHAR(20),
-   YT                   VARCHAR(50),
-   constraint PK_PJ_COST primary key (ID)
-);
-
-comment on table PJ_COST is
-'课题费用表';
-
-comment on column PJ_COST.ID is
-'ID';
-
-comment on column PJ_COST.RQ is
-'日期';
-
-comment on column PJ_COST.DJBH is
-'单据编号';
-
-comment on column PJ_COST.GZLH is
-'工作令号';
-
-comment on column PJ_COST.FXT is
-'分系统';
-
-comment on column PJ_COST.ZJH is
-'整件号';
-
-comment on column PJ_COST.BM is
-'编码';
-
-comment on column PJ_COST.XHGG is
-'型号规格';
-
-comment on column PJ_COST.DW is
-'单位';
-
-comment on column PJ_COST.SL is
-'数量';
-
-comment on column PJ_COST.JE is
-'金额';
-
-comment on column PJ_COST.XM is
-'姓名';
-
-comment on column PJ_COST.LLDW is
-'领料单位';
-
-comment on column PJ_COST.JSDW is
-'结算单位';
-
-comment on column PJ_COST.YT is
-'用途';
-
-/*==============================================================*/
 /* Table: PLAN                                                  */
 /*==============================================================*/
 create table PLAN  (
    ID                   VARCHAR(32)                     not null,
    EMPCODE              VARCHAR(20),
+   EMPNAME              VARCHAR(50),
+   DEPARTCODE           VARCHAR(20),
+   DEPARTNAME           VARCHAR(50),
    PJCODE               VARCHAR(20),
    PJCODE_D             VARCHAR(20),
    STAGECODE            VARCHAR(20),
@@ -385,6 +571,15 @@ create table PLAN  (
    ENDDATE              DATE,
    PLANEDWORKLOAD       INTEGER,
    NOTE                 VARCHAR(500),
+   SYMBOL               VARCHAR(50),
+   ASSESS               VARCHAR(50),
+   REMARK               VARCHAR(200),
+   LEADER_STATION       VARCHAR(50),
+   LEADER_SECTION       VARCHAR(50),
+   LEADER_ROOM          VARCHAR(50),
+   PLANNERCODE          VARCHAR(20),
+   PLANNERNAME          VARCHAR(50),
+   ORDERCODE            INTEGER,
    constraint PK_PLAN primary key (ID)
 );
 
@@ -395,7 +590,16 @@ comment on column PLAN.ID is
 'ID';
 
 comment on column PLAN.EMPCODE is
-'人员编码';
+'责任人编码';
+
+comment on column PLAN.EMPNAME is
+'责任人姓名';
+
+comment on column PLAN.DEPARTCODE is
+'责任单位编码';
+
+comment on column PLAN.DEPARTNAME is
+'责任单位名称';
 
 comment on column PLAN.PJCODE is
 '工作令号';
@@ -416,7 +620,34 @@ comment on column PLAN.PLANEDWORKLOAD is
 '计划工时';
 
 comment on column PLAN.NOTE is
-'计划描述';
+'计划内容';
+
+comment on column PLAN.SYMBOL is
+'标志';
+
+comment on column PLAN.ASSESS is
+'考核';
+
+comment on column PLAN.REMARK is
+'备注';
+
+comment on column PLAN.LEADER_STATION is
+'所领导';
+
+comment on column PLAN.LEADER_SECTION is
+'部领导';
+
+comment on column PLAN.LEADER_ROOM is
+'室领导';
+
+comment on column PLAN.PLANNERCODE is
+'计划员编码';
+
+comment on column PLAN.PLANNERNAME is
+'计划员姓名';
+
+comment on column PLAN.ORDERCODE is
+'序号';
 
 /*==============================================================*/
 /* Table: PROJECT                                               */
