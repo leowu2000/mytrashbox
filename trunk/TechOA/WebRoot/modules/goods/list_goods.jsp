@@ -279,6 +279,10 @@ Ext.onReady(function(){
 				    <td><input type="text" name="kjh" style="width:200" ></td>
 				  </tr>	
 				  <tr>
+				    <td>出库单号</td>
+				    <td><input type="text" name="ckdh" style="width:200" ></td>
+				  </tr>	
+				  <tr>
 				    <td>领料部门</td>
 				    <td><span id="llbmspan" name="llbmspan"></span></td>
 				  </tr>
@@ -318,6 +322,10 @@ Ext.onReady(function(){
 				  <tr>
 				    <td>图号</td>
 				    <td><input type="text" name="th" style="width:200"></td>
+				  </tr>	
+				  <tr>
+				    <td>主计量单位</td>
+				    <td><input type="text" name="zjldw" style="width:200"></td>
 				  </tr>	
 				  <tr>
 				    <td>数量</td>
