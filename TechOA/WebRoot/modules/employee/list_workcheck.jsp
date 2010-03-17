@@ -148,7 +148,7 @@ Ext.onReady(function(){
         <table>
 		  <tr>
 		  	<td>考勤日期</td>
-		  	<td><input type="text" name="checkdate" onclick="WdatePicker({readOnly:true,minDate:'<%=minDate %>', maxDate:'<%=maxDate %>'})" style="width:200" ></td>
+		  	<td><input type="text" name="checkdate" value="<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd") %>" onclick="WdatePicker({readOnly:true,minDate:'<%=minDate %>', maxDate:'<%=maxDate %>'})" style="width:200" ></td>
 		  </tr>
 		  <tr>
 		  	<td>考勤状态</td>

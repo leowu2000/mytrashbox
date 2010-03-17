@@ -17,9 +17,9 @@ select DISTINCT
 /*工作报告记录*/
 
 create or replace view VIEW_WORKREPORT as
-select a.*,b.name as PJNAME,c.name as STAGENAME,d.name as EMPNAME 
-	from WORKREPORT a, PROJECT b, DICT c, EMPLOYEE d
-	where b.CODE=a.PJCODE and c.CODE=a.STAGECODE and d.CODE=a.EMPCODE;
+select a.*,b.name as PJNAME,c.name as STAGENAME,d.name as EMPNAME,e.NAME as PJNAME_D 
+	from WORKREPORT a, PROJECT b, DICT c, EMPLOYEE d, PROJECT_D e
+	where b.CODE=a.PJCODE and c.CODE=a.STAGECODE and d.CODE=a.EMPCODE and e.CODE=a.PJCODE_D;
 	
 /*计划*/
 

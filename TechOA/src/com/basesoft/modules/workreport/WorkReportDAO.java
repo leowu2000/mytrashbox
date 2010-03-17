@@ -16,8 +16,8 @@ public class WorkReportDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String emid, int page){
-		String sql = "select * from VIEW_WORKREPORT where EMPCODE='" + emid + "' order by STARTDATE desc";
+	public PageList findAll(String emcode, int page){
+		String sql = "select * from VIEW_WORKREPORT where EMPCODE='" + emcode + "' order by STARTDATE desc";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
@@ -81,6 +81,7 @@ public class WorkReportDAO extends CommonDAO {
 		workReport.setStartdate(map.get("startdate")==null?"":map.get("startdate").toString());
 		workReport.setEnddate(map.get("enddate")==null?"":map.get("enddate").toString());
 		workReport.setPjcode(map.get("pjcode")==null?"":map.get("pjcode").toString());
+		workReport.setPjcode_d(map.get("pjcode_d")==null?"":map.get("pjcode_d").toString());
 		workReport.setStagecode(map.get("stagecode")==null?"":map.get("stagecode").toString());
 		workReport.setBz(map.get("bz")==null?"":map.get("bz").toString());
 		workReport.setAmount(map.get("amount")==null?0:Integer.parseInt(map.get("amount").toString()));

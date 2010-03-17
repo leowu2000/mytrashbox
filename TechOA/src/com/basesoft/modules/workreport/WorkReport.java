@@ -9,6 +9,7 @@ public class WorkReport {
 	public String startdate;
 	public String enddate;
 	public String pjcode;
+	public String pjcode_d;
 	public String stagecode;
 	public int amount;
 	public String bz;
@@ -101,5 +102,13 @@ public class WorkReport {
 	
 	public void setDepartcode(String departcode) {
 		this.departcode = departcode;
+	}
+
+	public String getPjcode_d() {
+		return pjcode_d;
+	}
+
+	public void setPjcode_d(String pjcode_d) {
+		this.pjcode_d = pjcode_d;
 	}
 }
