@@ -12,7 +12,7 @@ create table ASSETS  (
    NOWCOST              NUMERIC(15,2),
    LIFE                 INTEGER,
    STATUS               VARCHAR(10),
-   DEPARTCPDE           VARCHAR(20),
+   DEPARTCODE           VARCHAR(20),
    EMPCODE              VARCHAR(20),
    LENDDATE             DATE,
    CHECKDATE            DATE,
@@ -53,7 +53,7 @@ comment on column ASSETS.LIFE is
 comment on column ASSETS.STATUS is
 '设备状态(1:库中;2:借出;3:损坏)';
 
-comment on column ASSETS.DEPARTCPDE is
+comment on column ASSETS.DEPARTCODE is
 '借出部门';
 
 comment on column ASSETS.EMPCODE is
