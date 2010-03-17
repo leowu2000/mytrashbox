@@ -26,6 +26,11 @@
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+    <servlet>
+        <servlet-name>InitServlet</servlet-name>
+        <servlet-class>com.basesoft.util.InitServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
   <!-- spring配置 -->
   <servlet>
     <servlet-name>app</servlet-name>
