@@ -241,11 +241,12 @@ Ext.onReady(function(){
     	Map mapAssets = (Map)listAssets.get(i);
     	
     	String statusname = "";
-    	if("1".equals(mapAssets.get("STATUS").toString())){
+    	String statuscode = mapAssets.get("STATUS")==null?"":mapAssets.get("STATUS").toString();
+    	if("1".equals(statuscode)){
     		statusname = "库中";
-    	}else if("2".equals(mapAssets.get("STATUS").toString())){
+    	}else if("2".equals(statuscode)){
     		statusname = "借出";
-    	}else if("3".equals(mapAssets.get("STATUS").toString())){
+    	}else if("3".equals(statuscode)){
     		statusname = "损坏";
     	}
     	

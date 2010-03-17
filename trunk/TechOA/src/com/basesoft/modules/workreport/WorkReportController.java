@@ -25,13 +25,14 @@ public class WorkReportController extends CommonController {
 		
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
+		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		
 		if("list".equals(action)){//列表
 			mv = new ModelAndView("modules/workreport/list_workreport");
 			
 			//工作报告列表
-			PageList listReport = workReportDAO.findAll(emid, page);
+			PageList listReport = workReportDAO.findAll(emcode, page);
 			
 			//项目列表和投入阶段列表
 			List listProject = workReportDAO.getProject();
@@ -59,14 +60,25 @@ public class WorkReportController extends CommonController {
 			//接收页面参数
 			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 			String reportname = ServletRequestUtils.getStringParameter(request, "reportname", "");
-			String project = ServletRequestUtils.getStringParameter(request, "project", "");
+			String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
+			String pjcode_d = ServletRequestUtils.getStringParameter(request, "pjcode_d", "");
 			String stage = ServletRequestUtils.getStringParameter(request, "stage", "");
 			String amount = ServletRequestUtils.getStringParameter(request, "amount", "");
 			String bz = ServletRequestUtils.getStringParameter(request, "bz", "");
 			//生成uuid
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			String insertSql = "insert into WORKREPORT values('" + uuid + "','" + reportname + "','" + emid + "','" + datepick + "','" + datepick + "','" + project + "','" + stage + "'," + amount + ",'" + bz + "',0,'" + mapEm.get("DEPARTCODE") + "')";
+			if("".equals(datepick)){
+				datepick = null;
+			}else {
+				datepick = "'" + datepick + "'";
+			}
+			
+			if("".equals(amount)){
+				amount = "0";
+			}
+			
+			String insertSql = "insert into WORKREPORT values('" + uuid + "','" + reportname + "','" + emcode + "'," + datepick + "," + datepick + ",'" + pjcode + "','" + pjcode_d + "','" + stage + "'," + amount + ",'" + bz + "',0,'" + mapEm.get("DEPARTCODE") + "')";
 			
 			workReportDAO.insert(insertSql);
 			
@@ -88,13 +100,24 @@ public class WorkReportController extends CommonController {
 			//接收页面参数
 			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 			String reportname = ServletRequestUtils.getStringParameter(request, "reportname", "");
-			String project = ServletRequestUtils.getStringParameter(request, "project", "");
+			String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
+			String pjcode_d = ServletRequestUtils.getStringParameter(request, "pjcode_d", "");
 			String stage = ServletRequestUtils.getStringParameter(request, "stage", "");
 			String amount = ServletRequestUtils.getStringParameter(request, "amount", "");
 			String bz = ServletRequestUtils.getStringParameter(request, "bz", "");
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
-			String updateSql = "update WORKREPORT set STARTDATE='" + datepick + "',NAME='" + reportname + "',PJCODE='" + project + "',STAGECODE='" + stage + "',AMOUNT=" + amount + ",bz='" + bz + "' where ID='" + id + "'";
+			if("".equals(datepick)){
+				datepick = null;
+			}else {
+				datepick = "'" + datepick + "'";
+			}
+			
+			if("".equals(amount)){
+				amount = "0";
+			}
+			
+			String updateSql = "update WORKREPORT set STARTDATE=" + datepick + ",ENDDATE=" + datepick + ",NAME='" + reportname + "',PJCODE='" + pjcode + "',PJCODE_D='" + pjcode_d + "',STAGECODE='" + stage + "',AMOUNT=" + amount + ",bz='" + bz + "' where ID='" + id + "'";
 		
 			workReportDAO.update(updateSql);
 			

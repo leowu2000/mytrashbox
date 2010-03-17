@@ -84,15 +84,44 @@ public class AssetsController extends CommonController {
 			String model = ServletRequestUtils.getStringParameter(request, "model", "");
 			String buydate = ServletRequestUtils.getStringParameter(request, "buydate", "2000-01-01");
 			String producdate = ServletRequestUtils.getStringParameter(request, "producdate", "2000-01-01");
-			String buycost = ServletRequestUtils.getStringParameter(request, "buycost", "0");
-			String nowcost = ServletRequestUtils.getStringParameter(request, "nowcost", "0");
-			String life = ServletRequestUtils.getStringParameter(request, "life", "10");
-			String checkdate = ServletRequestUtils.getStringParameter(request, "checkdate", "1");
-			String checkyear = ServletRequestUtils.getStringParameter(request, "checkyear", "1");
+			String buycost = ServletRequestUtils.getStringParameter(request, "buycost", "");
+			String nowcost = ServletRequestUtils.getStringParameter(request, "nowcost", "");
+			String life = ServletRequestUtils.getStringParameter(request, "life", "");
+			String checkdate = ServletRequestUtils.getStringParameter(request, "checkdate", "");
+			String checkyear = ServletRequestUtils.getStringParameter(request, "checkyear", "");
 			
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			String insertSql = "insert into ASSETS values('" + id + "', '" + code + "', '" + name + "', '" + model + "', '" + buydate + "', '" + producdate + "', " + buycost + ", " + nowcost + ", " + life + ", '1', null, null, null,'" + checkdate + "', " + checkyear + ")";
+			if("".equals(buydate)){
+				buydate = null;
+			}else {
+				buydate = "'" + buydate + "'";
+			}
+			if("".equals(producdate)){
+				producdate = null;
+			}else {
+				producdate = "'" + producdate + "'";
+			}
+			if("".equals(checkdate)){
+				checkdate = "'" + StringUtil.DateToString(new Date(), "yyyy-MM-dd") + "'";
+			}else {
+				checkdate = "'" + checkdate + "'";
+			}
+			
+			if("".equals(buycost)){
+				buycost = "0";
+			}
+			if("".equals(nowcost)){
+				nowcost = "0";
+			}
+			if("".equals(life)){
+				life = "10";
+			}
+			if("".equals(checkyear)){
+				checkyear = "1";
+			}
+			
+			String insertSql = "insert into ASSETS values('" + id + "', '" + code + "', '" + name + "', '" + model + "', " + buydate + ", " + producdate + ", " + buycost + ", " + nowcost + ", " + life + ", '1', null, null, null," + checkdate + ", " + checkyear + ")";
 			assetsDAO.insert(insertSql);
 			
 			response.sendRedirect("assets.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);

@@ -54,6 +54,7 @@ Ext.onReady(function(){
     	action = url+'?action=add';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
+       	AJAX_PJ(document.getElementById('pjcode').value);
         win.show(btn.dom);
     }
     
@@ -71,7 +72,9 @@ Ext.onReady(function(){
 			    Ext.get('id').set({'value':data.item.id});
 				Ext.get('reportname').set({'value':data.item.name});
 				Ext.get('datepick').set({'value':data.item.startdate});
-				Ext.get('project').set({'value':data.item.pjcode});
+				Ext.get('pjcode').set({'value':data.item.pjcode});
+				AJAX_PJ(document.getElementById('pjcode').value);
+				Ext.get('pjcode_d').set({'value':data.item.pjcode__d});
 				Ext.get('stage').set({'value':data.item.stagecode});
 				Ext.get('amount').set({'value':data.item.amount});
 				Ext.get('bz').set({'value':data.item.bz});
@@ -114,6 +117,18 @@ Ext.onReady(function(){
     }
 });
 
+function AJAX_PJ(pjcode){
+	if(window.XMLHttpRequest){ //Mozilla 
+      var xmlHttpReq=new XMLHttpRequest();
+    }else if(window.ActiveXObject){
+ 	  var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    }
+    xmlHttpReq.open("GET", "/plan.do?action=AJAX_PJ&pjcode="+pjcode, false);
+    xmlHttpReq.send();
+    if(xmlHttpReq.responseText!=''){
+        document.getElementById('selpj_d').innerHTML = xmlHttpReq.responseText;
+    }
+}
 //-->
 </script>
 	</head>
@@ -128,7 +143,8 @@ Ext.onReady(function(){
                 <td>选　择</td>
                 <td>日  期</td>              
                 <td>名  称</td>
-                <td>工作令</td>
+                <td>工作令号</td>
+                <td>分系统</td>
                 <td>投入阶段</td>
                 <td>投入工时</td>
                 <td>备注</td>
@@ -156,9 +172,10 @@ for(int i=0;i<list.size();i++){
                 <input type="checkbox" name="check" value="<%=map.get("ID") %>" class="ainput">
                 <%} %>
                 </td>
-                <td><%=map.get("STARTDATE") %></td>
+                <td><%=map.get("STARTDATE")==null?"":map.get("STARTDATE") %></td>
                 <td><%=map.get("NAME") %></td>
                 <td><%=map.get("PJNAME") %></td>
+                <td><%=map.get("PJNAME_D") %></td>
                 <td><%=map.get("STAGENAME") %></td>   
                 <td><%=map.get("AMOUNT") %></td>
                 <td><%=map.get("BZ") %></td>
@@ -186,7 +203,7 @@ for(int i=0;i<list.size();i++){
 				  </tr>	
 				  <tr>
 				    <td>工作令</td>
-				    <td><select name="project" style="width:200">
+				    <td><select name="pjcode" onchange="AJAX_PJ(this.value);" style="width:200">
 <%
 					for(int i=0;i<listProject.size();i++){
 						Map mapProject = (Map)listProject.get(i);
@@ -196,6 +213,10 @@ for(int i=0;i<list.size();i++){
 					}
 %>
 				    </select></td>
+				  </tr>
+				  <tr>
+				    <td>子系统</td>
+				    <td id="selpj_d" name="selpj_d"><select name="pjcode_d" style="width:200;"><option value="0">请选择...</option></select></td>
 				  </tr>	
 				  <tr>
 				    <td>研究阶段</td>

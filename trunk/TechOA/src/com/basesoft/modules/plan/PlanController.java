@@ -131,12 +131,16 @@ public class PlanController extends CommonController {
 		}else if("update".equals(action)){//更新
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
-			String startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
 			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
-			String planedworkload = ServletRequestUtils.getStringParameter(request, "planedworkload", "");
 			String note = ServletRequestUtils.getStringParameter(request, "note", "");
 		
-			String updateSql = "update PLAN set EMPCODE='" + empcode + "', STARTDATE='" + startdate + "', ENDDATE='" + enddate + "', PLANEDWORKLOAD=" + planedworkload + ", NOTE='" + note + "' where ID='" + id + "'";
+			if("".equals(enddate)){
+				enddate = null;
+			}else {
+				enddate  = "'" + enddate + "'";
+			}
+			
+			String updateSql = "update PLAN set EMPCODE='" + empcode + "', ENDDATE=" + enddate + ", PLANEDWORKLOAD=0, NOTE='" + note + "' where ID='" + id + "'";
 			
 			planDAO.update(updateSql);
 			
