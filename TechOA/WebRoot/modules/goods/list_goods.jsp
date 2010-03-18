@@ -170,20 +170,21 @@ Ext.onReady(function(){
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
-				Ext.get('rq').set({'value':data.item.rq});
-				Ext.get('djbh').set({'value':data.item.djbh});
-				Ext.get('gzlh').set({'value':data.item.gzlh});
-				Ext.get('fxt').set({'value':data.item.fxt});
+				Ext.get('kjh').set({'value':data.item.kjh});
+				Ext.get('ckdh').set({'value':data.item.ckdh});
+				comboBoxTree1.setValue({id:data.item.llbmbm,text:data.item.llbmmc});
+				comboBoxTree2.setValue({id:data.item.jsbmbm,text:data.item.jsbmmc});
+				comboBoxTree3.setValue({id:data.item.llrbm,text:data.item.llrmc});
 				Ext.get('zjh').set({'value':data.item.zjh});
-				Ext.get('bm').set({'value':data.item.bm});
-				Ext.get('xhgg').set({'value':data.item.xhgg});
-				Ext.get('dw').set({'value':data.item.dw});
+				Ext.get('chmc').set({'value':data.item.chmc});
+				Ext.get('gg').set({'value':data.item.gg});
+				Ext.get('pjcode').set({'value':data.item.pjcode});
+				Ext.get('th').set({'value':data.item.th});
+				Ext.get('zjldw').set({'value':data.item.zjldw});
 				Ext.get('sl').set({'value':data.item.sl});
-				Ext.get('je').set({'value':data.item.je});
-				Ext.get('xm').set({'value':data.item.xm});
-				Ext.get('lldw').set({'value':data.item.lldw});
-				Ext.get('jsdw').set({'value':data.item.jsdw});
-				Ext.get('yt').set({'value':data.item.yt});
+				Ext.get('dj').set({'value':data.item.dj});
+				Ext.get('xmyt').set({'value':data.item.xmyt});
+				Ext.get('chbm').set({'value':data.item.chbm});
 				
 				
 		    	action = url+'?action=update&page=<%=pagenum %>';
@@ -272,7 +273,6 @@ Ext.onReady(function(){
     <div class="x-window-body" id="dlg-body">
 	        <form id="dataForm" name="dataForm" action="" method="post">
 	        	<input type="hidden" name="id" >
-	        	<input type="hidden" name="page" value="<%=pagenum %>">
                 <table>
                   <tr>
 				    <td>会计号</td>

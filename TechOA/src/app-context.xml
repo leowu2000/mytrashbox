@@ -58,4 +58,7 @@
 	<bean id="menuDAO" class="com.basesoft.modules.menu.MenuDAO"></bean>
 	<bean id="planDAO" class="com.basesoft.modules.plan.PlanDAO"></bean>
 	<bean id="goodsDAO" class="com.basesoft.modules.goods.GoodsDAO"></bean>
+	<bean id="cardDAO" class="com.basesoft.modules.employee.CardDAO"></bean>
+	<bean id="financeDAO" class="com.basesoft.modules.employee.FinanceDAO"></bean>
+	<bean id="posDAO" class="com.basesoft.modules.employee.PosDAO"></bean>
 </beans>

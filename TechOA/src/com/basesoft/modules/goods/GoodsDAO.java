@@ -1,6 +1,7 @@
 package com.basesoft.modules.goods;
 
 import java.util.List;
+import java.util.Map;
 
 import com.basesoft.core.PageInfo;
 import com.basesoft.core.PageList;
@@ -33,5 +34,41 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 		
 		return pageList;
 		
+	}
+	
+	/**
+	 * 根据id获取实例
+	 * @param id
+	 * @return
+	 */
+	public Goods findById(String id){
+		Goods goods = new Goods();
+		
+		String sql = "select * from GOODS where ID='" + id + "'";
+		Map map = jdbcTemplate.queryForMap(sql);
+		
+		goods.setId(map.get("ID").toString());
+		goods.setKjnd(map.get("KJND")==null?"":map.get("KJND").toString());
+		goods.setKjh(map.get("KJH")==null?"":map.get("KJH").toString());
+		goods.setCkdh(map.get("CKDH")==null?"":map.get("CKDH").toString());
+		goods.setJe(map.get("JE")==null?0:Float.parseFloat(map.get("JE").toString()));
+		goods.setLlbmmc(map.get("LLBMMC")==null?"":map.get("LLBMMC").toString());
+		goods.setLlbmbm(map.get("LLBMBM")==null?"":map.get("LLBMBM").toString());
+		goods.setJsbmmc(map.get("JSBMMC")==null?"":map.get("JSBMMC").toString());
+		goods.setJsbmbm(map.get("JSBMBM")==null?"":map.get("JSBMBM").toString());
+		goods.setLlrmc(map.get("LLRMC")==null?"":map.get("LLRMC").toString());
+		goods.setLlrbm(map.get("LLRBM")==null?"":map.get("LLRBM").toString());
+		goods.setZjh(map.get("ZJH")==null?"":map.get("ZJH").toString());
+		goods.setChmc(map.get("CHMC")==null?"":map.get("CHMC").toString());
+		goods.setGg(map.get("GG")==null?"":map.get("GG").toString());
+		goods.setPjcode(map.get("PJCODE")==null?"":map.get("PJCODE").toString());
+		goods.setTh(map.get("TH")==null?"":map.get("TH").toString());
+		goods.setZjldw(map.get("ZJLDW")==null?"":map.get("ZJLDW").toString());
+		goods.setSl(map.get("SL")==null?0:Integer.parseInt(map.get("SL").toString()));
+		goods.setDj(map.get("DJ")==null?0:Float.parseFloat(map.get("DJ").toString()));
+		goods.setXmyt(map.get("XMYT")==null?"":map.get("XMYT").toString());
+		goods.setChbm(map.get("CHBM")==null?"":map.get("CHBM").toString());
+		
+		return goods;
 	}
 }
