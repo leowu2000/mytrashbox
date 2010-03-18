@@ -6,7 +6,7 @@ public class Goods {
 	//会计年度
 	public String kjnd;
 	//会计号
-	public String klj;
+	public String kjh;
 	//出库单号
 	public String ckdh;
 	//金额
@@ -20,7 +20,7 @@ public class Goods {
 	//结算部门编码
 	public String jsbmbm;
 	//领料人姓名
-	public String llrxm;
+	public String llrmc;
 	//领料人编码
 	public String llrbm;
 	//整件号
@@ -60,12 +60,12 @@ public class Goods {
 		this.kjnd = kjnd;
 	}
 	
-	public String getKlj() {
-		return klj;
+	public String getKjh() {
+		return kjh;
 	}
 	
-	public void setKlj(String klj) {
-		this.klj = klj;
+	public void setKjh(String kjh) {
+		this.kjh = kjh;
 	}
 	
 	public String getCkdh() {
@@ -116,12 +116,12 @@ public class Goods {
 		this.jsbmbm = jsbmbm;
 	}
 	
-	public String getLlrxm() {
-		return llrxm;
+	public String getLlrmc() {
+		return llrmc;
 	}
 	
-	public void setLlrxm(String llrxm) {
-		this.llrxm = llrxm;
+	public void setLlrmc(String llrmc) {
+		this.llrmc = llrmc;
 	}
 	
 	public String getLlrbm() {

@@ -19,6 +19,9 @@
 				/menu.do=MenuController
 				/plan.do=PlanController
 				/goods.do=GoodsController
+				/card.do=CardController
+				/finance.do=FinanceController
+				/posDAO=PosController
 			</value>
 		</property>
 	</bean>
@@ -50,5 +53,8 @@
 	<bean name="MenuController" class="com.basesoft.modules.menu.MenuController"></bean>
 	<bean name="PlanController" class="com.basesoft.modules.plan.PlanController"></bean>
 	<bean name="GoodsController" class="com.basesoft.modules.goods.GoodsController"></bean>
+	<bean name="CardController" class="com.basesoft.modules.employee.CardController"></bean>
+	<bean name="FinanceController" class="com.basesoft.modules.employee.FinanceController"></bean>
+	<bean name="PosController" class="com.basesoft.modules.employee.PosController"></bean>
 </beans>
 
