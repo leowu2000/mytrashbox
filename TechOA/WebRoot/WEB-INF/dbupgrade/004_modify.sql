@@ -46,7 +46,7 @@ drop table EMP_FINANCIAL;
 /* Table: EMP_FINANCIAL                                         */
 /*==============================================================*/
 create table EMP_FINANCIAL  (
-   ID                   VARCHAR(32),
+   ID                   VARCHAR(32)                     not null,
    EMPCODE              VARCHAR(20),
    EMPNAME              VARCHAR(50),
    DEPARTCODE           VARCHAR(20),
@@ -62,7 +62,8 @@ create table EMP_FINANCIAL  (
    GJBT                 NUMERIC(10, 2),
    FPBT                 NUMERIC(10, 2),
    XMMC                 VARCHAR(50),
-   BZ                   VARCHAR(500)
+   BZ                   VARCHAR(500),
+   constraint PK_EMP_FINANCIAL primary key (ID)
 );
 
 comment on table EMP_FINANCIAL is
@@ -114,7 +115,138 @@ comment on column EMP_FINANCIAL.FPBT is
 '返聘补贴';
 
 comment on column EMP_FINANCIAL.XMMC is
-'项目 名称';
+'项目名称';
 
 comment on column EMP_FINANCIAL.BZ is
 '备注';
+
+drop table EMP_CARD;
+
+/*==============================================================*/
+/* Table: EMP_CARD                                              */
+/*==============================================================*/
+create table EMP_CARD  (
+   EMPCODE              VARCHAR(20),
+   EMPNAME              VARCHAR(50),
+   SEX                  VARCHAR(1),
+   CARDNO               VARCHAR(20)                     not null,
+   PHONE1               VARCHAR(20),
+   PHONE2               VARCHAR(20),
+   ADDRESS              VARCHAR(500),
+   DEPARTCODE           VARCHAR(20),
+   DEPARTNAME           VARCHAR(50),
+   constraint PK_EMP_CARD primary key (CARDNO)
+);
+
+comment on table EMP_CARD is
+'员工一卡通表';
+
+comment on column EMP_CARD.EMPCODE is
+'员工编号 ';
+
+comment on column EMP_CARD.EMPNAME is
+'员工姓名';
+
+comment on column EMP_CARD.SEX is
+'员工性别(1:男性;2:女性)';
+
+comment on column EMP_CARD.CARDNO is
+'卡号';
+
+comment on column EMP_CARD.PHONE1 is
+'电话1';
+
+comment on column EMP_CARD.PHONE2 is
+'电话2';
+
+comment on column EMP_CARD.ADDRESS is
+'地址';
+
+comment on column EMP_CARD.DEPARTCODE is
+'部门编码';
+
+comment on column EMP_CARD.DEPARTNAME is
+'部门名称';
+
+drop table EMP_POS;
+
+/*==============================================================*/
+/* Table: EMP_POS                                               */
+/*==============================================================*/
+create table EMP_POS  (
+   ID                   VARCHAR(32),
+   EMPCODE              VARCHAR(20),
+   EMPNAME              VARCHAR(50),
+   DEPARTCODE           VARCHAR(20),
+   DEPARTNAME           VARCHAR(50),
+   CARDNO               VARCHAR(20),
+   POSMACHINE           VARCHAR(50),
+   SWIPETIME            TIMESTAMP,
+   COST                 NUMERIC(10,2),
+   POSCODE              INTEGER
+);
+
+comment on table EMP_POS is
+'班车刷卡表';
+
+comment on column EMP_POS.ID is
+'ID';
+
+comment on column EMP_POS.EMPCODE is
+'人员编号';
+
+comment on column EMP_POS.EMPNAME is
+'人员姓名';
+
+comment on column EMP_POS.DEPARTCODE is
+'部门编号';
+
+comment on column EMP_POS.DEPARTNAME is
+'部门名称';
+
+comment on column EMP_POS.CARDNO is
+'卡号';
+
+comment on column EMP_POS.POSMACHINE is
+'车载POS机';
+
+comment on column EMP_POS.SWIPETIME is
+'刷卡时间';
+
+comment on column EMP_POS.COST is
+'刷卡金额';
+
+comment on column EMP_POS.POSCODE is
+'POS流水号';
+
+
+INSERT INTO EMP_CARD VALUES('000001','张三','1','0558000001','','','','1','三部');
+INSERT INTO EMP_CARD VALUES('000002','赵六','1','0558000002','','','','1','三部');
+INSERT INTO EMP_CARD VALUES('000003','李四','1','0558000003','','','','1','三部');
+INSERT INTO EMP_CARD VALUES('000004','王五','1','0558000004','','','','1','三部');
+INSERT INTO EMP_CARD VALUES('000005','孙七','1','0558000005','','','','1','三部');
+INSERT INTO EMP_CARD VALUES('000006','周八','1','0558000006','','','','1','三部');
+INSERT INTO EMP_CARD VALUES('000007','吴九','1','0558000007','','','','1','三部');
+
+INSERT INTO EMP_FINANCIAL VALUES('1','000001','张三','1','三部','2010-03-15',100,20,2000,3000,500,500,50,0,0,'工作令一','');
+INSERT INTO EMP_FINANCIAL VALUES('2','000002','赵六','1','三部','2010-03-15',120,30,1000,3000,400,500,50,0,0,'工作令二','');
+INSERT INTO EMP_FINANCIAL VALUES('3','000003','李四','1','三部','2010-03-15',140,40,3000,3000,500,500,50,0,0,'工作令三','');
+INSERT INTO EMP_FINANCIAL VALUES('4','000004','王五','1','三部','2010-03-15',160,60,2000,3000,200,500,50,0,0,'工作令四','');
+INSERT INTO EMP_FINANCIAL VALUES('5','000005','孙七','1','三部','2010-03-15',180,50,4000,3000,300,500,50,0,0,'工作令五','');
+INSERT INTO EMP_FINANCIAL VALUES('6','000006','周八','1','三部','2010-03-15',200,70,200,3000,100,500,50,0,0,'工作令六','');
+INSERT INTO EMP_FINANCIAL VALUES('7','000007','吴九','1','三部','2010-03-15',220,80,20,3000,50,500,50,0,0,'工作令七','');
+
+INSERT INTO EMP_POS VALUES('1','000001','张三','1','三部','0558000001','所POS1','2010-03-05 11:48:50',0.00,1);
+INSERT INTO EMP_POS VALUES('2','000002','赵六','1','三部','0558000002','所POS1','2010-03-05 11:49:50',0.00,2);
+INSERT INTO EMP_POS VALUES('3','000003','李四','1','三部','0558000003','所POS1','2010-03-05 11:50:50',0.00,3);
+INSERT INTO EMP_POS VALUES('4','000004','王五','1','三部','0558000004','所POS1','2010-03-05 11:51:50',0.00,4);
+INSERT INTO EMP_POS VALUES('5','000005','孙七','1','三部','0558000005','所POS1','2010-03-05 11:52:50',0.00,5);
+INSERT INTO EMP_POS VALUES('6','000006','周八','1','三部','0558000006','所POS1','2010-03-05 11:53:50',0.00,6);
+INSERT INTO EMP_POS VALUES('7','000007','吴九','1','三部','0558000007','所POS1','2010-03-05 11:54:50',0.00,7);
+
+DELETE FROM GOODS;
+INSERT INTO GOODS VALUES('1',2009,'01','CC090119299',704.65,'三部','1','三部','1','赵六','000002','MR091122845','集成电路 AM29','AM29','3','00001','块儿',16,'44.040625','拼装','0560340027');
+INSERT INTO GOODS VALUES('2',2009,'01','CC090119311',240.30,'三部','1','三部','1','吴九','000007','MR091092637','电容器 CA45E','CA45E','4','00001','个',50,'4.806','拼装','06714135710120');
+
+DELETE FROM PLAN;
+INSERT INTO PLAN VALUES('1','000002','赵六','1','三部','1','F01','500003','2010-03-10','2010-03-30',50,'科研生产','标志','考核','备注','所领导','部领导','室领导','000003','李四',1);

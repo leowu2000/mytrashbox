@@ -22,8 +22,6 @@ public class FinanceController extends CommonController {
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
-		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
-		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
@@ -87,7 +85,6 @@ public class FinanceController extends CommonController {
 			response.setContentType("text/html; charset=UTF-8");
 			response.getWriter().write(xstream.toXML(f));
 			response.getWriter().close();
-			return null;
 		}else if("update".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			

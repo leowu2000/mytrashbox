@@ -21,7 +21,7 @@
 				/goods.do=GoodsController
 				/card.do=CardController
 				/finance.do=FinanceController
-				/posDAO=PosController
+				/pos.do=PosController
 			</value>
 		</property>
 	</bean>
