@@ -105,16 +105,6 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                      <Component id="txtUser" pref="642" max="32767" attributes="2"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                      <Component id="DataName" pref="642" max="32767" attributes="2"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                                       <Component id="txtIP" pref="642" max="32767" attributes="2"/>
@@ -135,6 +125,17 @@
                                       <Component id="jRadioButton1" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                                       <Component id="jRadioButton2" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="DataName" alignment="0" pref="642" max="32767" attributes="2"/>
+                                          <Component id="txtUser" alignment="0" pref="642" max="32767" attributes="2"/>
+                                      </Group>
                                   </Group>
                               </Group>
                           </Group>
@@ -453,7 +454,9 @@
                       <EmptySpace min="-2" pref="157" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="602" max="32767" attributes="0"/>
+                      <EmptySpace pref="503" max="32767" attributes="0"/>
+                      <Component id="btnPreview2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnTablePerStep" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnTableNextStep" min="-2" max="-2" attributes="0"/>
@@ -475,6 +478,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnTablePerStep" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnTableNextStep" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnPreview2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -609,6 +613,15 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTablePerStepActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnPreview2">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="btnPreview2.text"/>
+                <Property name="name" type="java.lang.String" value="btnPreview2" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPreview2ActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -894,6 +907,8 @@
                               <Component id="jScrollPane9" pref="652" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
+                              <Component id="btnPreview1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="btnPreview" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -910,7 +925,10 @@
                           <Component id="jScrollPane8" alignment="0" pref="279" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnPreview" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnPreview" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnPreview1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -982,6 +1000,15 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPreviewActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnPreview1">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="btnPreview1.text"/>
+                <Property name="name" type="java.lang.String" value="btnPreview1" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPreview1ActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
