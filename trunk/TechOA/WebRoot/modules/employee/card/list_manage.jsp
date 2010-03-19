@@ -3,18 +3,17 @@
 <%@ page import="com.basesoft.core.*" %>
 <%
 	PageList pageList = (PageList)request.getAttribute("pageList");
-	List listFinance = pageList.getList();
+	List listCard = pageList.getList();
 	int pagenum = pageList.getPageInfo().getCurPage();
 	
 	String seldepart = request.getAttribute("seldepart").toString();
 	String emname = request.getAttribute("emname").toString();
-	String datepick = request.getAttribute("datepick").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>财务管理</title>
+    <title>一卡通管理</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -22,13 +21,13 @@
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<%@ include file="../../../common/meta.jsp" %>
-<script src="../../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script src="../../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
 var win;
+var win2;
 var action;
-var url='/finance.do';
+var url='/card.do';
 Ext.onReady(function(){
 	var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'empsel',
@@ -54,7 +53,8 @@ Ext.onReady(function(){
 	                   return;  
 	            },   
 	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
-	            		return;
+	            	   //... 
+	                   return;
 	            },   
 	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
 	                  //...   
@@ -74,16 +74,27 @@ Ext.onReady(function(){
         win = new Ext.Window({
         	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
+	        {text:'提交',handler: function(){if(havaCardno()){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}}},
 	        {text:'关闭',handler: function(){win.hide();}}
 	        ]
         });
     }
     
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
+	        ]
+        });
+    }
+    
     function onAddClick(btn){
-    	action = url+'?action=add&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';
+    	action = url+'?action=add&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
+       	Ext.get('cardno').set({'disabled':''});
         win.show(btn.dom);
     }
     
@@ -98,24 +109,18 @@ Ext.onReady(function(){
 			method: 'GET',
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
-			    Ext.get('id').set({'value':data.item.id});
+			    Ext.get('id').set({'value':data.item.cardno});
 			    comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
-				Ext.get('rq').set({'value':data.item.rq});
-				Ext.get('jbf').set({'value':data.item.jbf});
-				Ext.get('psf').set({'value':data.item.psf});
-				Ext.get('gc').set({'value':data.item.gc});
-				Ext.get('cj').set({'value':data.item.cj});
-				Ext.get('wcbt').set({'value':data.item.wcbt});
-				Ext.get('cglbt').set({'value':data.item.cglbt});
-				Ext.get('lb').set({'value':data.item.lb});
-				Ext.get('gjbt').set({'value':data.item.gjbt});
-				Ext.get('fpbt').set({'value':data.item.fpbt});
-				Ext.get('xmmc').set({'value':data.item.xmmc});
-				Ext.get('bz').set({'value':data.item.bz});
+				Ext.get('sex').set({'value':data.item.sex});
+				Ext.get('cardno').set({'value':data.item.cardno});
+				Ext.get('cardno').set({'disabled':'disabled'});
+				Ext.get('phone1').set({'value':data.item.phone1});
+				Ext.get('phone2').set({'value':data.item.phone2});
+				Ext.get('address').set({'value':data.item.address});
 				
-		    	action = url+'?action=update&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';
-	    		win.setTitle('修改');
-		        win.show(btn.dom);
+		    	action = url+'?action=update&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>';
+	    		win2.setTitle('修改');
+		        win2.show(btn.dom);
 		  	}
 		});
     }   
@@ -129,12 +134,35 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';       
+	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
     }
 });
+
+function havaCardno(){
+	var cardno = document.getElementById('cardno').value;
+	if(cardno==''){//没有填写
+		alert('请填写卡号！');
+		return false;
+	}else {
+		if(window.XMLHttpRequest){ //Mozilla 
+      		var xmlHttpReq=new XMLHttpRequest();
+    	}else if(window.ActiveXObject){
+ 	  		var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    	}
+    	xmlHttpReq.open("GET", "/card.do?action=haveCardno&cardno="+cardno, false);
+    	xmlHttpReq.send();
+    	if(xmlHttpReq.responseText=='true'){
+        	alert('已有重复卡号！');
+        	return false;
+    	}else {
+    	    return true;
+    	}
+	}
+}
+
 
 //-->
 </script>
@@ -143,45 +171,40 @@ Ext.onReady(function(){
   <body>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("finance.do?action=list_manage&page="+pagenum+"&seldepart="+seldepart+"&empname="+emname+"&datepick="+datepick) %>
+<%=pageList.getPageInfo().getHtml("card.do?action=list_manage&page="+pagenum+"&seldepart="+seldepart+"&empname="+emname) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
     		<td>选择</td>
     		<td>人员编号</td>
     		<td>姓名</td>
-    		<td>部门</td>
-    		<td>加班费</td>
-    		<td>评审费</td>
-    		<td>稿酬</td>
-    		<td>酬金</td>
-    		<td>外场补贴</td>
-    		<td>车公里补贴</td>
-    		<td>劳保</td>
-    		<td>过江补贴</td>
-    		<td>返聘补贴</td>
-    		<td>项目名称</td>
-    		<td>备注</td>
+    		<td>性别</td>
+    		<td>卡号</td>
+    		<td>电话1</td>
+    		<td>电话2</td>
+    		<td>地址</td>
+    		<td>部门名称</td>
 <%
-	for(int i=0;i<listFinance.size();i++){
-		Map mapFinance = (Map)listFinance.get(i);
+	for(int i=0;i<listCard.size();i++){
+		Map mapCard = (Map)listCard.get(i);
+		String sexname = "";
+		String sexcode = mapCard.get("SEX")==null?"0":mapCard.get("SEX").toString();
+		if("1".equals(sexcode)){
+			sexname = "男";
+		}else if("2".equals(sexcode)){
+			sexname = "女";
+		}
 %>
 		<tr>
-			<td><input type="checkbox" name="check" value="<%=mapFinance.get("ID") %>" class="ainput"></td>
-			<td><%=mapFinance.get("EMPCODE") %></td>
-			<td><%=mapFinance.get("EMPNAME") %></td>
-			<td><%=mapFinance.get("DEPARTNAME") %></td>
-			<td><%=mapFinance.get("JBF")==null?"0":mapFinance.get("JBF") %></td>
-			<td><%=mapFinance.get("PSF")==null?"0":mapFinance.get("PSF") %></td>
-			<td><%=mapFinance.get("GC")==null?"0":mapFinance.get("GC") %></td>
-			<td><%=mapFinance.get("CJ")==null?"0":mapFinance.get("CJ") %></td>
-			<td><%=mapFinance.get("WCBT")==null?"0":mapFinance.get("WCBT") %></td>
-			<td><%=mapFinance.get("CGLBT")==null?"0":mapFinance.get("CGLBT") %></td>
-			<td><%=mapFinance.get("LB")==null?"0":mapFinance.get("LB") %></td>
-			<td><%=mapFinance.get("GJBT")==null?"0":mapFinance.get("GJBT") %></td>
-			<td><%=mapFinance.get("FPBT")==null?"0":mapFinance.get("FPBT") %></td>
-			<td><%=mapFinance.get("XMMC")==null?"":mapFinance.get("XMMC") %></td>
-			<td><%=mapFinance.get("BZ")==null?"":mapFinance.get("BZ") %></td>
+			<td><input type="checkbox" name="check" value="<%=mapCard.get("CARDNO") %>" class="ainput"></td>
+			<td><%=mapCard.get("EMPCODE")==null?"":mapCard.get("EMPCODE") %></td>
+			<td><%=mapCard.get("EMPNAME")==null?"":mapCard.get("EMPNAME") %></td>
+			<td><%=sexname %></td>
+			<td><%=mapCard.get("CARDNO")==null?"":mapCard.get("CARDNO") %></td>
+			<td><%=mapCard.get("PHONE1")==null?"":mapCard.get("PHONE1") %></td>
+			<td><%=mapCard.get("PHONE2")==null?"":mapCard.get("PHONE2") %></td>
+			<td><%=mapCard.get("ADDRESS")==null?"":mapCard.get("ADDRESS") %></td>
+			<td><%=mapCard.get("DEPARTNAME")==null?"":mapCard.get("DEPARTNAME") %></td>
 		</tr>
 <%
 	} 
@@ -199,52 +222,27 @@ Ext.onReady(function(){
 				    <td><span name="empsel" id="empsel"></span></td>
 				  </tr>	
 				  <tr>
-				    <td>日期</td>
-				    <td><input type="text" name="rq" style="width:200" onclick="WdatePicker()" value="<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd") %>"></td>
+				    <td>性别</td>
+				    <td><select name="sex">
+				    	<option value="1">男</option>
+				    	<option value="2">女</option>
+				    </select></td>
 				  </tr>
 				  <tr>
-				    <td>加班费</td>
-				    <td><input type="text" name="jbf" style="width:200"></td>
+				    <td>卡号</td>
+				    <td><input type="text" name="cardno" style="width:200"></td>
 				  </tr>	
 				  <tr>
-				    <td>评审费</td>
-				    <td><input type="text" name="psf" style="width:200"></td>
+				    <td>电话1</td>
+				    <td><input type="text" name="phone1" style="width:200"></td>
 				  </tr>	
 				  <tr>
-				    <td>稿酬</td>
-				    <td><input type="text" name="gc" style="width:200"></td>
+				    <td>电话2</td>
+				    <td><input type="text" name="phone2" style="width:200"></td>
 				  </tr>
 				  <tr>
-				    <td>酬金</td>
-				    <td><input type="text" name="cj" style="width:200"></td>
-				  </tr>
-				  <tr>
-				    <td>外场补贴</td>
-				    <td><input type="text" name="wcbt" style="width:200"></td>
-				  </tr>	
-				  <tr>
-				    <td>车公里补贴</td>
-				    <td><input type="text" name="cglbt" style="width:200"></td>
-				  </tr>	
-				  <tr>
-				    <td>劳保</td>
-				    <td><input type="text" name="lb" style="width:200"></td>
-				  </tr>	
-				  <tr>
-				    <td>过江补贴</td>
-				    <td><input type="text" name="gjbt" style="width:200"></td>
-				  </tr>	
-				  <tr>
-				    <td>返聘补贴</td>
-				    <td><input type="text" name="fpbt" style="width:200"></td>
-				  </tr>
-				  <tr>
-				    <td>项目名称</td>
-				    <td><input type="text" name="xmmc" style="width:200"></td>
-				  </tr>
-				  <tr>
-				    <td>备注</td>
-				    <td><input type="text" name="bz" style="width:200"></td>
+				    <td>地址</td>
+				    <td><input type="text" name="address" style="width:200"></td>
 				  </tr>
 				</table>
 	        </form>

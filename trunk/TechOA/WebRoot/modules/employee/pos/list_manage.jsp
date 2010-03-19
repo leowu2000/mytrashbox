@@ -3,7 +3,7 @@
 <%@ page import="com.basesoft.core.*" %>
 <%
 	PageList pageList = (PageList)request.getAttribute("pageList");
-	List listFinance = pageList.getList();
+	List listPos = pageList.getList();
 	int pagenum = pageList.getPageInfo().getCurPage();
 	
 	String seldepart = request.getAttribute("seldepart").toString();
@@ -14,7 +14,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>财务管理</title>
+    <title>刷卡信息list</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -28,7 +28,7 @@
 <!--
 var win;
 var action;
-var url='/finance.do';
+var url='/pos.do';
 Ext.onReady(function(){
 	var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'empsel',
@@ -100,18 +100,10 @@ Ext.onReady(function(){
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
 			    comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
-				Ext.get('rq').set({'value':data.item.rq});
-				Ext.get('jbf').set({'value':data.item.jbf});
-				Ext.get('psf').set({'value':data.item.psf});
-				Ext.get('gc').set({'value':data.item.gc});
-				Ext.get('cj').set({'value':data.item.cj});
-				Ext.get('wcbt').set({'value':data.item.wcbt});
-				Ext.get('cglbt').set({'value':data.item.cglbt});
-				Ext.get('lb').set({'value':data.item.lb});
-				Ext.get('gjbt').set({'value':data.item.gjbt});
-				Ext.get('fpbt').set({'value':data.item.fpbt});
-				Ext.get('xmmc').set({'value':data.item.xmmc});
-				Ext.get('bz').set({'value':data.item.bz});
+				Ext.get('swipetime').set({'value':data.item.swipetime});
+				Ext.get('posmachine').set({'value':data.item.posmachine});
+				Ext.get('cost').set({'value':data.item.cost});
+				Ext.get('poscode').set({'value':data.item.poscode});
 				
 		    	action = url+'?action=update&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';
 	    		win.setTitle('修改');
@@ -148,40 +140,28 @@ Ext.onReady(function(){
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
     		<td>选择</td>
+    		<td>刷卡时间</td>
     		<td>人员编号</td>
     		<td>姓名</td>
     		<td>部门</td>
-    		<td>加班费</td>
-    		<td>评审费</td>
-    		<td>稿酬</td>
-    		<td>酬金</td>
-    		<td>外场补贴</td>
-    		<td>车公里补贴</td>
-    		<td>劳保</td>
-    		<td>过江补贴</td>
-    		<td>返聘补贴</td>
-    		<td>项目名称</td>
-    		<td>备注</td>
+    		<td>车载POS机</td>
+    		<td>金额</td>
+    		<td>POS流水号</td>
+    		<td>卡号</td>
 <%
-	for(int i=0;i<listFinance.size();i++){
-		Map mapFinance = (Map)listFinance.get(i);
+	for(int i=0;i<listPos.size();i++){
+		Map mapPos = (Map)listPos.get(i);
 %>
 		<tr>
-			<td><input type="checkbox" name="check" value="<%=mapFinance.get("ID") %>" class="ainput"></td>
-			<td><%=mapFinance.get("EMPCODE") %></td>
-			<td><%=mapFinance.get("EMPNAME") %></td>
-			<td><%=mapFinance.get("DEPARTNAME") %></td>
-			<td><%=mapFinance.get("JBF")==null?"0":mapFinance.get("JBF") %></td>
-			<td><%=mapFinance.get("PSF")==null?"0":mapFinance.get("PSF") %></td>
-			<td><%=mapFinance.get("GC")==null?"0":mapFinance.get("GC") %></td>
-			<td><%=mapFinance.get("CJ")==null?"0":mapFinance.get("CJ") %></td>
-			<td><%=mapFinance.get("WCBT")==null?"0":mapFinance.get("WCBT") %></td>
-			<td><%=mapFinance.get("CGLBT")==null?"0":mapFinance.get("CGLBT") %></td>
-			<td><%=mapFinance.get("LB")==null?"0":mapFinance.get("LB") %></td>
-			<td><%=mapFinance.get("GJBT")==null?"0":mapFinance.get("GJBT") %></td>
-			<td><%=mapFinance.get("FPBT")==null?"0":mapFinance.get("FPBT") %></td>
-			<td><%=mapFinance.get("XMMC")==null?"":mapFinance.get("XMMC") %></td>
-			<td><%=mapFinance.get("BZ")==null?"":mapFinance.get("BZ") %></td>
+			<td><input type="checkbox" name="check" value="<%=mapPos.get("ID") %>" class="ainput"></td>
+			<td><%=mapPos.get("SWIPETIME")==null?"":mapPos.get("SWIPETIME") %></td>
+			<td><%=mapPos.get("EMPCODE")==null?"":mapPos.get("EMPCODE") %></td>
+			<td><%=mapPos.get("EMPNAME")==null?"":mapPos.get("EMPNAME") %></td>
+			<td><%=mapPos.get("DEPARTNAME")==null?"":mapPos.get("DEPARTNAME") %></td>
+			<td><%=mapPos.get("POSMACHINE")==null?"":mapPos.get("POSMACHINE") %></td>
+			<td><%=mapPos.get("COST")==null?"0":mapPos.get("COST") %></td>
+			<td><%=mapPos.get("POSCODE")==null?"":mapPos.get("POSCODE") %></td>
+			<td><%=mapPos.get("CARDNO")==null?"":mapPos.get("CARDNO") %></td>
 		</tr>
 <%
 	} 
@@ -199,52 +179,20 @@ Ext.onReady(function(){
 				    <td><span name="empsel" id="empsel"></span></td>
 				  </tr>	
 				  <tr>
-				    <td>日期</td>
-				    <td><input type="text" name="rq" style="width:200" onclick="WdatePicker()" value="<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd") %>"></td>
+				    <td>刷卡时间</td>
+				    <td><input type="text" name="swipetime" style="width:200" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"></td>
 				  </tr>
 				  <tr>
-				    <td>加班费</td>
-				    <td><input type="text" name="jbf" style="width:200"></td>
+				    <td>车载POS机</td>
+				    <td><input type="text" name="posmachine" style="width:200"></td>
 				  </tr>	
 				  <tr>
-				    <td>评审费</td>
-				    <td><input type="text" name="psf" style="width:200"></td>
+				    <td>金额</td>
+				    <td><input type="text" name="cost" style="width:200"></td>
 				  </tr>	
 				  <tr>
-				    <td>稿酬</td>
-				    <td><input type="text" name="gc" style="width:200"></td>
-				  </tr>
-				  <tr>
-				    <td>酬金</td>
-				    <td><input type="text" name="cj" style="width:200"></td>
-				  </tr>
-				  <tr>
-				    <td>外场补贴</td>
-				    <td><input type="text" name="wcbt" style="width:200"></td>
-				  </tr>	
-				  <tr>
-				    <td>车公里补贴</td>
-				    <td><input type="text" name="cglbt" style="width:200"></td>
-				  </tr>	
-				  <tr>
-				    <td>劳保</td>
-				    <td><input type="text" name="lb" style="width:200"></td>
-				  </tr>	
-				  <tr>
-				    <td>过江补贴</td>
-				    <td><input type="text" name="gjbt" style="width:200"></td>
-				  </tr>	
-				  <tr>
-				    <td>返聘补贴</td>
-				    <td><input type="text" name="fpbt" style="width:200"></td>
-				  </tr>
-				  <tr>
-				    <td>项目名称</td>
-				    <td><input type="text" name="xmmc" style="width:200"></td>
-				  </tr>
-				  <tr>
-				    <td>备注</td>
-				    <td><input type="text" name="bz" style="width:200"></td>
+				    <td>POS流水号</td>
+				    <td><input type="text" name="poscode" style="width:200"></td>
 				  </tr>
 				</table>
 	        </form>
