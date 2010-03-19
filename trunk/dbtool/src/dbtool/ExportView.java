@@ -20,8 +20,6 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -88,7 +86,7 @@ public class ExportView extends JFrame {
         bgroup2.add(jRadioButton2);
         jRadioButton1.setSelected(true);
         jRadioButton2.setEnabled(false);
-
+        btnPreview2.setVisible(false);
         DefaultListModel yearModel = new DefaultListModel();
         int currentYear = (Calendar.getInstance()).get(Calendar.YEAR);
         for (int i = currentYear; i > currentYear - 100; i--) {
@@ -190,6 +188,7 @@ public class ExportView extends JFrame {
         AddBtnAllTables = new javax.swing.JButton();
         CancelBtnAllTables = new javax.swing.JButton();
         btnTablePerStep = new javax.swing.JButton();
+        btnPreview2 = new javax.swing.JButton();
         SelectStsc = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -213,6 +212,7 @@ public class ExportView extends JFrame {
         jScrollPane9 = new javax.swing.JScrollPane();
         preViewTable = new javax.swing.JTable();
         btnPreview = new javax.swing.JButton();
+        btnPreview1 = new javax.swing.JButton();
         ExpData = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         logList = new javax.swing.JList();
@@ -415,14 +415,6 @@ public class ExportView extends JFrame {
                         .addContainerGap()
                         .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(28, 28, 28)
-                                .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addGap(28, 28, 28)
-                                .addComponent(DataName, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(28, 28, 28)
                                 .addComponent(txtIP, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE))
@@ -441,7 +433,15 @@ public class ExportView extends JFrame {
                                 .addGap(27, 27, 27)
                                 .addComponent(jRadioButton1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
+                                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel11))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(DataName, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+                                    .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -593,6 +593,14 @@ public class ExportView extends JFrame {
             }
         });
 
+        btnPreview2.setText(resourceMap.getString("btnPreview2.text")); // NOI18N
+        btnPreview2.setName("btnPreview2"); // NOI18N
+        btnPreview2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreview2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout SelectTableLayout = new javax.swing.GroupLayout(SelectTable);
         SelectTable.setLayout(SelectTableLayout);
         SelectTableLayout.setHorizontalGroup(
@@ -615,7 +623,9 @@ public class ExportView extends JFrame {
                     .addComponent(jLabel7))
                 .addGap(157, 157, 157))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SelectTableLayout.createSequentialGroup()
-                .addContainerGap(602, Short.MAX_VALUE)
+                .addContainerGap(503, Short.MAX_VALUE)
+                .addComponent(btnPreview2)
+                .addGap(18, 18, 18)
                 .addComponent(btnTablePerStep)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnTableNextStep)
@@ -633,7 +643,8 @@ public class ExportView extends JFrame {
                 .addGap(13, 13, 13)
                 .addGroup(SelectTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTablePerStep)
-                    .addComponent(btnTableNextStep))
+                    .addComponent(btnTableNextStep)
+                    .addComponent(btnPreview2))
                 .addContainerGap())
             .addGroup(SelectTableLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
@@ -861,6 +872,14 @@ public class ExportView extends JFrame {
             }
         });
 
+        btnPreview1.setText(resourceMap.getString("btnPreview1.text")); // NOI18N
+        btnPreview1.setName("btnPreview1"); // NOI18N
+        btnPreview1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreview1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout ExpViewLayout = new javax.swing.GroupLayout(ExpView);
         ExpView.setLayout(ExpViewLayout);
         ExpViewLayout.setHorizontalGroup(
@@ -873,6 +892,8 @@ public class ExportView extends JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ExpViewLayout.createSequentialGroup()
+                        .addComponent(btnPreview1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnPreview)
                         .addContainerGap())))
         );
@@ -884,7 +905,9 @@ public class ExportView extends JFrame {
                     .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
                     .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnPreview)
+                .addGroup(ExpViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnPreview)
+                    .addComponent(btnPreview1))
                 .addContainerGap())
         );
 
@@ -1285,17 +1308,17 @@ public class ExportView extends JFrame {
         if (driveClassIndex == 1) {//sqlserver
             txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
             txtPort.setText("1433");
-            jLabel11.setText(" 服务名：");
+            jLabel11.setText(" 数据库名称：");
         }
         if (driveClassIndex == 2) {//sysbase
             txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
             txtPort.setText("5000");
-            jLabel11.setText(" 服务名：");
+            jLabel11.setText(" 数据库名称：");
         }
         if (driveClassIndex == 3) {//oracle
             txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
             txtPort.setText("1521");
-            jLabel11.setText(" 服务名：");
+            jLabel11.setText(" 数据库名称：");
         }
         if(driveClassIndex == 4){//foxpro
             txtPort.setText("0000");
@@ -1303,7 +1326,7 @@ public class ExportView extends JFrame {
             exportType.setEnabled(false);
             txtPort.setEnabled(false);
             txtIP.setEnabled(false);
-            jLabel11.setText(" 数据源：");
+            jLabel11.setText(" 数据源名称：");
         }
 }//GEN-LAST:event_cbDriverActionPerformed
 
@@ -1342,7 +1365,7 @@ public class ExportView extends JFrame {
                             DiverClass = "com.sybase.jdbc3.jdbc.SybDriver";
                             JdbcUrl = "jdbc:sybase:Tds:" + txtIP.getText() + ":" + serverPort + "/" + DataName.getText();
                         }
-                        if (driveClassIndex == 3) {//sysbase
+                        if (driveClassIndex == 3) {//sysbase             
                             DiverClass = "oracle.jdbc.driver.OracleDriver";
                             JdbcUrl = "jdbc:oracle:thin:@" + txtIP.getText() + ":" + serverPort + ":" + DataName.getText();
                         }
@@ -2182,6 +2205,15 @@ public class ExportView extends JFrame {
         }
     }//GEN-LAST:event_TestConnActionPerformed
 
+    private void btnPreview1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreview1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPreview1ActionPerformed
+
+    private void btnPreview2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreview2ActionPerformed
+        // TODO add your handling code here:
+        ExcelService.createTemplateXls(dbTool,txtDataDir.getText());
+    }//GEN-LAST:event_btnPreview2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2230,6 +2262,8 @@ public class ExportView extends JFrame {
     private javax.swing.JButton btnExport;
     private javax.swing.JButton btnExportPerStep;
     private javax.swing.JButton btnPreview;
+    private javax.swing.JButton btnPreview1;
+    private javax.swing.JButton btnPreview2;
     private javax.swing.JButton btnTableNextStep;
     private javax.swing.JButton btnTablePerStep;
     private javax.swing.ButtonGroup buttonGroup1;
