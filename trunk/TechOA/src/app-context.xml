@@ -61,4 +61,5 @@
 	<bean id="cardDAO" class="com.basesoft.modules.employee.CardDAO"></bean>
 	<bean id="financeDAO" class="com.basesoft.modules.employee.FinanceDAO"></bean>
 	<bean id="posDAO" class="com.basesoft.modules.employee.PosDAO"></bean>
+	<bean id="searchDAO" class="com.basesoft.modules.employee.SearchDAO"></bean>
 </beans>

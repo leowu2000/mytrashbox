@@ -3,18 +3,16 @@
 <%@ page import="com.basesoft.core.*" %>
 <%@ page import="com.basesoft.util.*" %>
 <%
+String method = (String)request.getAttribute("method");
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listAssess = (List)pageList.getList();
 int pagenum = pageList.getPageInfo().getCurPage();
-String f_pjcode = request.getAttribute("f_pjcode").toString();
-String f_stagecode = request.getAttribute("f_stagecode").toString();
-String f_empname = request.getAttribute("f_empname").toString();
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<title>考核统计</title>
+		<title>个人考核统计</title>
 		<style type="text/css">
 		<!--
 		input{
@@ -29,13 +27,31 @@ String f_empname = request.getAttribute("f_empname").toString();
 		-->
 		</style>		
 <%@ include file="../../common/meta.jsp" %>
+<script type="text/javascript">
+var win;
+var win1;
+var action;
+var url='/em.do';
+Ext.onReady(function(){
+	var method = '<%=method %>';
+	
+	if(method=='search'){
+		var tb = new Ext.Toolbar({renderTo:'toolbar'});
+		tb.add({text: '返回',cls: 'x-btn-text-icon back',handler: onBackClick});
+	}
+	
+	function onBackClick(btn){
+    	history.back(-1);
+    }
+});
+</script>
 	</head>
 	<body>
 	<div id="toolbar"></div>
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("plan.do?action=list_remind&pjcode=" + f_pjcode + "&stagecode=" + f_stagecode + "&empname=" + f_empname) %>
+<%=pageList.getPageInfo().getHtml("plan.do?action=list_result") %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>产品令号</td>              
@@ -54,10 +70,6 @@ String f_empname = request.getAttribute("f_empname").toString();
 <%
 for(int i=0;i<listAssess.size();i++){
 	Map mapAssess = (Map)listAssess.get(i);
-	int amount = mapAssess.get("AMOUNT")==null?0:Integer.parseInt(mapAssess.get("AMOUNT").toString());
-	int planedworkload = mapAssess.get("PLANEDWORKLOAD")==null?0:Integer.parseInt(mapAssess.get("PLANEDWORKLOAD").toString());
-	//完成率
-	float persent = planedworkload==0?0:amount*100/planedworkload;
 	//计划完成情况
 	String state = "";
 	Date now = new Date();
@@ -65,18 +77,16 @@ for(int i=0;i<listAssess.size();i++){
 	Date enddate = mapAssess.get("ENDDATE")==null?new Date():StringUtil.StringToDate(mapAssess.get("ENDDATE").toString(),"yyyy-MM-dd");
 	
 	int plandays = StringUtil.getBetweenDays(startdate, enddate);
-	int passdays = StringUtil.getBetweenDays(now, startdate);
+	int passdays = StringUtil.getBetweenDays(startdate, now);
 	
-	float daypersent = plandays==0?0:passdays*100/plandays;
+	float daypersent = plandays==0?0:passdays*100/plandays>100?100:passdays*100/plandays;
 	
-	if(persent<daypersent-5){
-		state = "<font color='red'>进度滞后</font>";
-	}else if(persent>=daypersent-5&&persent<=daypersent+5){
-		state = "<font color='green'>正常完成</font>"; 
-	}else if(persent>daypersent+5&&persent<100){
-		state = "<font color='blue'>超额完成</font>"; 
-	}else if(persent>=100){
-		state = "<font color='gray'>已完成</font>";
+	if(daypersent<=20){
+		state = "<font color='green'>启动</font>";
+	}else if(daypersent>20&&daypersent<=80){
+		state = "<font color='blue'>运行</font>"; 
+	}else if(daypersent>=80){
+		state = "<font color='red'>结尾</font>";
 	}
 %>
             <tr align="center">
@@ -90,7 +100,7 @@ for(int i=0;i<listAssess.size();i++){
                 <td>&nbsp;<%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
                 <td>&nbsp;<%=mapAssess.get("PLANNERNAME")==null?"":mapAssess.get("PLANNERNAME") %></td>
                 <td>&nbsp;<%=mapAssess.get("LEADER_ROOM")==null?"":mapAssess.get("LEADER_ROOM") %></td>
-                <td>&nbsp;<%=persent %></td>
+                <td>&nbsp;<%=daypersent %></td>
                 <td>&nbsp;<%=mapAssess.get("REMARK")==null?"":mapAssess.get("REMARK") %></td>
             </tr>
 <%} %>            

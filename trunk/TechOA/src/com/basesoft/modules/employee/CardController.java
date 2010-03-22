@@ -97,8 +97,9 @@ public class CardController extends CommonController {
 			response.sendRedirect("card.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + emname);
 		}else if("haveCardno".equals(action)){
 			String cardno = ServletRequestUtils.getStringParameter(request, "cardno", "");
+			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
 			
-			String haveCardno = cardDAO.haveCard(cardno);
+			String haveCardno = cardDAO.haveCard(cardno, empcode);
 			
 			response.setHeader("Pragma", "No-cache");
 			response.setHeader("Cache-Control", "no-cache");

@@ -40,17 +40,15 @@ public class EmployeeDAO extends CommonDAO{
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String emid, String departcode, String emname, int page){
+	public PageList findAll(String departcode, String emname, int page){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		List listChildDepart = getChildDepart(emid);
-		
 		if("0".equals(departcode)){//全部部门
-			List listDepart = getChildDepart(emid);
+			List listDepart = getDepartment();
 			String departs = "";
 			for(int i=0;i<listDepart.size();i++){
 				Map map = (Map)listDepart.get(i);

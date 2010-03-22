@@ -28,7 +28,7 @@ public class PlanDAO extends CommonDAO {
 		if("0".equals(pjcode)){//全部工作令
 			if("0".equals(stagecode)){//全部阶段
 				if("".equals(empname)){//全部人员
-					sql = "select * from VIEW_PLAN";
+					sql = "select * from VIEW_PLAN where 1=1";
 				}else {//人员名称模糊检索
 					sql = "select * from VIEW_PLAN where EMPNAME like '%" + empname + "%'";
 				}
@@ -54,6 +54,93 @@ public class PlanDAO extends CommonDAO {
 				}
 			}
 		}
+		
+		sql = sql + " order by PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
+	
+	/**
+	 * 获取计划提醒列表
+	 * @param pjcode 工作令号
+	 * @param stagecode 阶段
+	 * @param empname 责任人名称
+	 * @param page 页码
+	 * @return
+	 */
+	public PageList findAllRemind(String pjcode, String stagecode, String empname, int page){
+		PageList pageList = new PageList();
+		String sql = "select a.*,b.* from VIEW_PLAN a, (select sum(AMOUNT) as AMOUNT from WORKREPORT c,PLAN d where c.PJCODE=d.PJCODE and c.PJCODE_D=d.PJCODE_D and c.STAGECODE=d.STAGECODE and c.STARTDATE>=d.STARTDATE and c.STARTDATE<=d.ENDDATE) b ";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		if("0".equals(pjcode)){//全部工作令
+			if("0".equals(stagecode)){//全部阶段
+				if("".equals(empname)){//全部人员
+					
+				}else {//人员名称模糊检索
+					sql = sql + " where EMPNAME like '%" + empname + "%'";
+				}
+			}else {//选择了阶段
+				if("".equals(empname)){//全部人员
+					sql = sql + " where STAGECODE='" + stagecode + "'";
+				}else {
+					sql = sql + " where STAGECODE='" + stagecode + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}
+		}else {
+			if("0".equals(stagecode)){//全部阶段
+				if("".equals(empname)){//全部人员
+					sql = sql + " where PJCODE='" + pjcode + "'";
+				}else {//人员名称模糊检索
+					sql = sql + " where PJCODE='" + pjcode + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}else {//选择了阶段
+				if("".equals(empname)){//全部人员
+					sql = sql + " where PJCODE='" + pjcode + "' and STAGECODE='" + stagecode + "'";
+				}else {
+					sql = sql + " where PJCODE='" + pjcode + "' and STAGECODE='" + stagecode + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}
+		}
+		
+		sql = sql + " order by PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
+	
+	/**
+	 * 获取个人计划信息
+	 * @param empcode
+	 * @return
+	 */
+	public PageList findAllResult(String empcode, int page){
+		PageList pageList = new PageList();
+		String sql = "select * from VIEW_PLAN a where EMPCODE='" + empcode + "'";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
 		
 		sql = sql + " order by PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
 		
