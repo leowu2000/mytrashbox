@@ -41,7 +41,7 @@
 	  var stagecode = document.getElementById('selstage').value;
 	  var empname = document.getElementById('empname').value;
 	  
-	  document.getElementById('list_remind').src = "/plan.do?action=remind_list&pjcode=" + pjcode + "&stagecode=" + stagecode + "&empname=" + empname;
+	  document.getElementById('list_remind').src = "/plan.do?action=remind_list&f_pjcode=" + pjcode + "&f_stagecode=" + stagecode + "&f_empname=" + empname;
 	}
 	</script>
   </head>

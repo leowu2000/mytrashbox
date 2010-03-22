@@ -135,7 +135,7 @@ Ext.onReady(function(){
   <body>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("finance.do?action=list_manage&page="+pagenum+"&seldepart="+seldepart+"&empname="+emname+"&datepick="+datepick) %>
+<%=pageList.getPageInfo().getHtml("pos.do?action=list_manage&page="+pagenum+"&seldepart="+seldepart+"&empname="+emname+"&datepick="+datepick) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

@@ -6,6 +6,8 @@ PageList listReport = (PageList)request.getAttribute("listReport");
 List listProject = (List)request.getAttribute("listProject");
 List listStage = (List)request.getAttribute("listStage");
 
+String method = request.getAttribute("method").toString();
+
 String emrole = session.getAttribute("EMROLE").toString();
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -33,12 +35,19 @@ String emrole = session.getAttribute("EMROLE").toString();
 var win;
 var action;
 var url='/workreport.do';
+var method = '<%=method %>';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
-	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
-	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
-	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
-	tb.add({text: '上  报',cls: 'x-btn-text-icon jieyue',handler: onSubmitClick});
+	
+	if(method=='search'){
+		tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
+	}else {
+		tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
+		tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
+		tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+		tb.add({text: '上  报',cls: 'x-btn-text-icon jieyue',handler: onSubmitClick});
+	}
+	
 
     if(!win){
         win = new Ext.Window({
@@ -115,6 +124,10 @@ Ext.onReady(function(){
     		}
     	});
     }
+    
+    function onBackClick(btn){
+    	history.back(-1);
+    }
 });
 
 function AJAX_PJ(pjcode){
@@ -140,7 +153,13 @@ function AJAX_PJ(pjcode){
 <%=listReport.getPageInfo().getHtml("workreport.do?action=list") %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
+<%
+	if(!"search".equals(method)){
+%>            
                 <td>选　择</td>
+<%
+	}
+%>                
                 <td>日  期</td>              
                 <td>名  称</td>
                 <td>工作令号</td>
@@ -167,11 +186,17 @@ for(int i=0;i<list.size();i++){
 	}
 %>
             <tr>
-                <td>
+<%
+	if(!"search".equals(method)){
+%>               
+			  	<td>
                 <%if("未上报".equals(flag)||"已退回".equals(flag)){%>
-                <input type="checkbox" name="check" value="<%=map.get("ID") %>" class="ainput">
+                	<input type="checkbox" name="check" value="<%=map.get("ID") %>" class="ainput">
                 <%} %>
                 </td>
+<%
+	}
+%>                
                 <td><%=map.get("STARTDATE")==null?"":map.get("STARTDATE") %></td>
                 <td><%=map.get("NAME") %></td>
                 <td><%=map.get("PJNAME") %></td>

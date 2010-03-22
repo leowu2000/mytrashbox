@@ -28,6 +28,7 @@ var win;
 var win2;
 var action;
 var url='/card.do';
+var c = '';
 Ext.onReady(function(){
 	var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'empsel',
@@ -74,23 +75,22 @@ Ext.onReady(function(){
         win = new Ext.Window({
         	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'提交',handler: function(){if(havaCardno()){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}}},
+	        {text:'提交',handler: function(){
+	        		if(c=='add'){
+		        		if(havaCardno()){
+		        			Ext.getDom('dataForm').action=action; 
+	    	    			Ext.getDom('dataForm').submit();
+	        			}
+	        		}
+	        	}
+	        },
 	        {text:'关闭',handler: function(){win.hide();}}
 	        ]
         });
     }
     
-    if(!win2){
-        win2 = new Ext.Window({
-        	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
-	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
-	        {text:'关闭',handler: function(){win2.hide();}}
-	        ]
-        });
-    }
-    
     function onAddClick(btn){
+    	c = 'add';
     	action = url+'?action=add&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
@@ -108,6 +108,7 @@ Ext.onReady(function(){
 			url: url+'?action=query&id='+selValue,
 			method: 'GET',
 			success: function(transport) {
+				c = 'update';
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.cardno});
 			    comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
@@ -119,8 +120,8 @@ Ext.onReady(function(){
 				Ext.get('address').set({'value':data.item.address});
 				
 		    	action = url+'?action=update&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>';
-	    		win2.setTitle('修改');
-		        win2.show(btn.dom);
+	    		win.setTitle('修改');
+		        win.show(btn.dom);
 		  	}
 		});
     }   
@@ -143,6 +144,7 @@ Ext.onReady(function(){
 
 function havaCardno(){
 	var cardno = document.getElementById('cardno').value;
+	var empcode = document.getElementById('empcode').value;
 	if(cardno==''){//没有填写
 		alert('请填写卡号！');
 		return false;
@@ -152,13 +154,16 @@ function havaCardno(){
     	}else if(window.ActiveXObject){
  	  		var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
     	}
-    	xmlHttpReq.open("GET", "/card.do?action=haveCardno&cardno="+cardno, false);
+    	xmlHttpReq.open("GET", "/card.do?action=haveCardno&cardno="+cardno+"&empcode="+empcode, false);
     	xmlHttpReq.send();
     	if(xmlHttpReq.responseText=='true'){
         	alert('已有重复卡号！');
         	return false;
+    	}else if(xmlHttpReq.responseText=='true1'){
+    	    alert('已存在此员工的一卡通信息！');
+    	    return false;
     	}else {
-    	    return true;
+    		return true;
     	}
 	}
 }

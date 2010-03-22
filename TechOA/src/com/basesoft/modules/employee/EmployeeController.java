@@ -42,7 +42,7 @@ public class EmployeeController extends CommonController {
 
 			mv.addObject("listChildDepart", listChildDepart);
 			//获取部门下员工列表
-			PageList pageList = emDAO.findAll(emid, seldepart, "", page);
+			PageList pageList = emDAO.findAll(seldepart, "", page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
@@ -90,13 +90,15 @@ public class EmployeeController extends CommonController {
 			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 			String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
 			
-			PageList pageList = emDAO.findAll(emid, seldepart, emname, page);
+			PageList pageList = emDAO.findAll(seldepart, emname, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
 		}else if("manage".equals(action)){//人事管理详细信息
 			mv = new ModelAndView("modules/employee/detail_manage");
+			
+			String method = ServletRequestUtils.getStringParameter(request, "method", "");
 			
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
 			
@@ -144,6 +146,7 @@ public class EmployeeController extends CommonController {
 			mv.addObject("mapEm", mapEm);
 			mv.addObject("listAttach", listAttach);
 			mv.addObject("havePhoto", havaPhoto);
+			mv.addObject("method", method);
 		}else if("query".equals(action)){//查找返回修改
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			Employee employee = emDAO.findById(id);

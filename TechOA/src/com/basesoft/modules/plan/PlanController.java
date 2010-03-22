@@ -1,5 +1,6 @@
 package com.basesoft.modules.plan;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -12,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
-import com.basesoft.modules.menu.Menu;
+import com.basesoft.util.StringUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
@@ -29,6 +30,9 @@ public class PlanController extends CommonController {
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
+		String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
+		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
 		
 		if("list_frame".equals(action)){//计划管理frame
 			mv = new ModelAndView("modules/plan/frame_manage");
@@ -42,20 +46,16 @@ public class PlanController extends CommonController {
 		}else if("list".equals(action)){//计划管理
 			mv = new ModelAndView("modules/plan/list_manage");
 			
-			String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
-			String stagecode = ServletRequestUtils.getStringParameter(request, "stagecode", "");
-			String empname = ServletRequestUtils.getStringParameter(request, "empname", "");
-			
-			PageList pageList = planDAO.findAll(pjcode, stagecode, empname, page);
+			PageList pageList = planDAO.findAll(f_pjcode, f_stagecode, f_empname, page);
 			List listPj = planDAO.getProject();
 			List listStage = planDAO.getDICTByType("5");
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("listPj", listPj);
 			mv.addObject("listStage", listStage);
-			mv.addObject("f_pjcode", pjcode);
-			mv.addObject("f_stagecode", stagecode);
-			mv.addObject("f_empname", empname);
+			mv.addObject("f_pjcode", f_pjcode);
+			mv.addObject("f_stagecode", f_stagecode);
+			mv.addObject("f_empname", f_empname);
 			return mv;
 		}else if("AJAX_PJ".equals(action)){//工作令号选择ajax
 			StringBuffer sb = new StringBuffer();
@@ -108,13 +108,12 @@ public class PlanController extends CommonController {
 				enddate  = "'" + enddate + "'";
 			}
 			
-			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcode + "', '" + mapEmp.get("NAME") + "', '" + mapEmp.get("DEPARTCODE") + "', '" + departname + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', null, " + enddate + ", 0, '" + note + "', '" + symbol + "', '" + assess + "', '" + remark + "', '所领导', '部领导', '室领导', '" + plannercode + "', '" + plannername + "', " + ordercode + ")");
+			int betweendays = StringUtil.getBetweenDays(new Date(), StringUtil.StringToDate(enddate, "yyyy-MM-dd"));
+			int planedworkload = betweendays * 8;
 			
-			String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
-			String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
-			String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
+			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcode + "', '" + mapEmp.get("NAME") + "', '" + mapEmp.get("DEPARTCODE") + "', '" + departname + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', '" + new Date() + "', " + enddate + ", " + planedworkload + ", '" + note + "', '" + symbol + "', '" + assess + "', '" + remark + "', '所领导', '部领导', '室领导', '" + plannercode + "', '" + plannername + "', " + ordercode + ")");
 			
-			response.sendRedirect("plan.do?action=list&pjcode=" + f_pjcode + "&stagecode=" + f_stagecode + "&empname=" + f_empname + "&page=" + page);
+			response.sendRedirect("plan.do?action=list&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + f_empname + "&page=" + page);
 		}else if("query".equals(action)){//查找
 			String planid = ServletRequestUtils.getStringParameter(request, "planid", "");
 			Plan plan = planDAO.findById(planid);
@@ -144,11 +143,7 @@ public class PlanController extends CommonController {
 			
 			planDAO.update(updateSql);
 			
-			String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
-			String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
-			String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
-			
-			response.sendRedirect("plan.do?action=list&pjcode=" + f_pjcode + "&stagecode=" + f_stagecode + "&empname=" + f_empname + "&page=" + page);
+			response.sendRedirect("plan.do?action=list&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + f_empname + "&page=" + page);
 		}else if("delete".equals(action)){//删除
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
@@ -156,11 +151,7 @@ public class PlanController extends CommonController {
 				planDAO.delete(deleteSql);
 			}
 			
-			String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
-			String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
-			String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
-			
-			response.sendRedirect("plan.do?action=list&pjcode=" + f_pjcode + "&stagecode=" + f_stagecode + "&empname=" + f_empname + "&page=" + page);
+			response.sendRedirect("plan.do?action=list&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + f_empname + "&page=" + page);
 		}else if("remind_frame".equals(action)){//计划提醒frame
 			mv = new ModelAndView("modules/plan/frame_remind");
 			
@@ -174,13 +165,23 @@ public class PlanController extends CommonController {
 		}else if("remind_list".equals(action)){//计划提醒列表
 			mv = new ModelAndView("modules/plan/list_remind");
 			
-			String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
-			String stagecode = ServletRequestUtils.getStringParameter(request, "stagecode", "");
-			String empname = ServletRequestUtils.getStringParameter(request, "empname", "");
+			PageList pageList = planDAO.findAllRemind(f_pjcode, f_stagecode, f_empname, page);
 			
-			
-			
+			mv.addObject("pageList", pageList);
+			mv.addObject("f_pjcode", f_pjcode);
+			mv.addObject("f_stagecode", f_stagecode);
+			mv.addObject("f_empname", f_empname);
 			return mv;
+		}else if("result_list".equals(action)){//综合查询个人计划项
+			mv = new ModelAndView("modules/plan/list_result");
+			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
+			String method = ServletRequestUtils.getStringParameter(request, "method", "");
+			
+			PageList pageList = planDAO.findAllResult(empcode, page);
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("method", method);
+			return mv;	
 		}
 		
 		return null;

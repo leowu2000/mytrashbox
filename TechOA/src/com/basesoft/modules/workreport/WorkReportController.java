@@ -31,6 +31,12 @@ public class WorkReportController extends CommonController {
 		if("list".equals(action)){//列表
 			mv = new ModelAndView("modules/workreport/list_workreport");
 			
+			
+			String method = ServletRequestUtils.getStringParameter(request, "method", "");
+			
+			if("search".equals(method)){
+				emcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
+			}
 			//工作报告列表
 			PageList listReport = workReportDAO.findAll(emcode, page);
 			
@@ -41,6 +47,7 @@ public class WorkReportController extends CommonController {
 			mv.addObject("listReport", listReport);
 			mv.addObject("listProject", listProject);
 			mv.addObject("listStage", listStage);
+			mv.addObject("method", method);
 		}else if("auditlist".equals(action)){//审核列表
 			mv = new ModelAndView("modules/workreport/list_auditreport");
 			

@@ -217,7 +217,7 @@ Ext.onReady(function(){
   <body>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("cost.do?action=subjectcost") %>
+<%=pageList.getPageInfo().getHtml("goods.do?action=list") %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

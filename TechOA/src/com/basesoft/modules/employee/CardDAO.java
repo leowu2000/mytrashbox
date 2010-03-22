@@ -77,15 +77,19 @@ public class CardDAO extends EmployeeDAO {
 	/**
 	 * 判断是否存在一卡通号
 	 * @param cardno 一卡通号
+	 * @param empcode 人员编码
 	 * @return
 	 */
-	public String haveCard(String cardno){
+	public String haveCard(String cardno, String empcode){
 		String haveCardno= "false";
 		
 		List list = jdbcTemplate.queryForList("select * from EMP_CARD where CARDNO='" + cardno + "'");
+		List list1 = jdbcTemplate.queryForList("select * from EMP_CARD where EMPCODE='" + empcode + "'");
 		
 		if(list.size()>0){
 			haveCardno = "true";
+		}else if(list1.size()>0){
+			haveCardno = "true1";
 		}
 		
 		return haveCardno;

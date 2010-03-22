@@ -9,6 +9,7 @@ List listMajor = (List)request.getAttribute("listMajor");
 List listDegree = (List)request.getAttribute("listDegree");
 List listPro = (List)request.getAttribute("listPro");
 String havePhoto = request.getAttribute("havePhoto").toString();
+String method = request.getAttribute("method").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -68,9 +69,12 @@ Ext.onReady(function(){
 		});
 
 	var tb1 = new Ext.Toolbar({renderTo:'toolbar1'});
+	var method = '<%=method %>';
+	if(method!='search'){
 	tb1.add({text: '修改基本信息',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 	tb1.add({text: '添加/修改照片',cls: 'x-btn-text-icon add',handler: onPhotoClick});
 	tb1.add({text: '添加附件',cls: 'x-btn-text-icon add',handler: onAttachClick});
+	}
 	tb1.add({text: '返回',cls: 'x-btn-text-icon back',handler: onBackClick});
 
     if(!win){
