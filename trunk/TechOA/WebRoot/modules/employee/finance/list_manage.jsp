@@ -9,6 +9,8 @@
 	String seldepart = request.getAttribute("seldepart").toString();
 	String emname = request.getAttribute("emname").toString();
 	String datepick = request.getAttribute("datepick").toString();
+	
+	String method = request.getAttribute("method").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -29,6 +31,7 @@
 var win;
 var action;
 var url='/finance.do';
+var method = '<%=method %>';
 Ext.onReady(function(){
 	var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'empsel',
@@ -66,9 +69,14 @@ Ext.onReady(function(){
 		});
 
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
-	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
-	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
-	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	
+	if(method=='search'){
+		tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
+	}else {
+		tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
+		tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
+		tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	}
 
     if(!win){
         win = new Ext.Window({
@@ -134,6 +142,10 @@ Ext.onReady(function(){
     	    }
     	});
     }
+    
+    function onBackClick(btn){
+    	history.back(-1);
+    }
 });
 
 //-->
@@ -143,11 +155,21 @@ Ext.onReady(function(){
   <body>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
+<%
+if(!"search".equals(method)){
+%>
 <%=pageList.getPageInfo().getHtml("finance.do?action=list_manage&page="+pagenum+"&seldepart="+seldepart+"&empname="+emname+"&datepick="+datepick) %>
+<%} %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
+    <%
+    	if(!"search".equals(method)){
+    %>
     		<td>选择</td>
+    <%
+    	}
+    %>
     		<td>人员编号</td>
     		<td>姓名</td>
     		<td>部门</td>
@@ -167,7 +189,13 @@ Ext.onReady(function(){
 		Map mapFinance = (Map)listFinance.get(i);
 %>
 		<tr>
+	<%
+    	if(!"search".equals(method)){
+    %>	
 			<td><input type="checkbox" name="check" value="<%=mapFinance.get("ID") %>" class="ainput"></td>
+	<%
+    	}
+	%>
 			<td><%=mapFinance.get("EMPCODE") %></td>
 			<td><%=mapFinance.get("EMPNAME") %></td>
 			<td><%=mapFinance.get("DEPARTNAME") %></td>

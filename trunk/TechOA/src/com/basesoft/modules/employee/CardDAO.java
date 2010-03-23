@@ -26,13 +26,13 @@ public class CardDAO extends EmployeeDAO {
 			if("".equals(emname)){//所有人员
 				sql = "select * from EMP_CARD";
 			}else {//按名字模糊检索
-				sql = "select * from EMP_CARD where EMPNAME like '%" + emname + "'%";
+				sql = "select * from EMP_CARD where EMPNAME like '%" + emname + "%'";
 			}
 		}else {//选择的部门
 			if("".equals(emname)){//所有人员
 				sql = "select * from EMP_CARD where DEPARTCODE='" + seldepart + "'";
 			}else {//按名字模糊检索
-				sql = "select * from EMP_CARD where DEPARTCODE='" + seldepart + "' and EMPNAME like '%" + emname + "'%";
+				sql = "select * from EMP_CARD where DEPARTCODE='" + seldepart + "' and EMPNAME like '%" + emname + "%'";
 			}
 		}
 		

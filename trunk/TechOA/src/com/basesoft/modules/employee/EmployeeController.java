@@ -31,6 +31,7 @@ public class EmployeeController extends CommonController {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
+		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		if("frame_infolist".equals(action)){//人员frame
 			mv = new ModelAndView("modules/employee/frame_info");
@@ -239,8 +240,19 @@ public class EmployeeController extends CommonController {
 			return null;
 		}else if("frame_workcheck".equals(action)){//考勤frame
 			mv = new ModelAndView("modules/employee/frame_workcheck");
+			String method = ServletRequestUtils.getStringParameter(request, "method", "");
+			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
+			
+			mv.addObject("method", method);
+			mv.addObject("empcode", empcode);
 		}else if("workcheck".equals(action)){//考勤结果
 			mv = new ModelAndView("modules/employee/list_workcheck");
+			
+			String method = ServletRequestUtils.getStringParameter(request, "method", "");
+			if("search".equals(method)){
+				emcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
+				mv.addObject("method", method);
+			}
 			
 			//默认显示本周期本部门内部的考勤记录
 			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
@@ -258,7 +270,7 @@ public class EmployeeController extends CommonController {
 			
 			List<Date> listDate = StringUtil.getDateList(start,end);
 			
-			List listWorkCheck = emDAO.findWorkCheck(start, end, depart, emid);
+			List listWorkCheck = emDAO.findWorkCheck(start, end, depart, emcode, method);
 			
 			//考勤项列表
 			List listCheck = emDAO.getDICTByType("4");
@@ -269,6 +281,7 @@ public class EmployeeController extends CommonController {
 			mv.addObject("listWorkCheck", listWorkCheck);
 			mv.addObject("listDate", listDate);
 			mv.addObject("listCheck", listCheck);
+			mv.addObject("method", method);
 		}else if("addWorkcheck".equals(action)){//增加考勤记录
 			String checkdate = ServletRequestUtils.getStringParameter(request, "checkdate", "");
 			String checkcode = ServletRequestUtils.getStringParameter(request, "checkcode", "");
@@ -289,7 +302,7 @@ public class EmployeeController extends CommonController {
 		}else if("departAjax".equals(action)){
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			
-			List listEm = emDAO.findEmployeeByDepart(depart, "00000");
+			List listEm = emDAO.findEmployeeByDepart(depart);
 
 			StringBuffer sb = new StringBuffer();
 			

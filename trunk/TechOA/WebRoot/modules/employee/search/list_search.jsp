@@ -59,15 +59,15 @@ EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
 			<td>&nbsp;<%=mapEm.get("CODE")==null?"":mapEm.get("CODE") %></td>
 			<td>&nbsp;<%=mapEm.get("NAME")==null?"":mapEm.get("NAME") %></td>
 			<td>&nbsp;<%=departname %></td>
-			<td>&nbsp;<a href="workreport.do?action=list&empcode=<%=mapEm.get("CODE") %>&method=search">工作报告</a></td>
-			<td>&nbsp;<a href="plan.do?action=result_list&empcode=<%=mapEm.get("CODE") %>&method=search">计划考核</a></td>
-			<td>&nbsp;<%="" %></td>
-			<td>&nbsp;<a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>&method=search">人事信息</a></td>
-			<td>财务信息</td>
-    		<td>一卡通信息</td>
-    		<td>班车刷卡信息</td>
-    		<td>物资资产领用信息</td>
-    		<td>固定资产领用信息</td>
+			<td>&nbsp;<a href="workreport.do?action=list&empcode=<%=mapEm.get("CODE") %>&method=search"><image src="../../../images/icons/tag_blue.png" border="0"></td>
+			<td>&nbsp;<a href="plan.do?action=result_list&empcode=<%=mapEm.get("CODE") %>&method=search"><image src="../../../images/icons/tag_green.png" border="0"></a></td>
+			<td>&nbsp;<a href="em.do?action=frame_workcheck&empcode=<%=mapEm.get("CODE") %>&method=search"><image src="../../../images/icons/tag_orange.png" border="0"></a></td>
+			<td>&nbsp;<a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>&method=search"><image src="../../../images/icons/tag_purple.png" border="0"></a></td>
+			<td>&nbsp;<a href="finance.do?action=frame_manage&seldepart=<%=mapEm.get("DEPARTCODE") %>&emname=<%=mapEm.get("NAME") %>&method=search"><image src="../../../images/icons/tag_pink.png" border="0"></a></td>
+    		<td>&nbsp;<a href="card.do?action=list_manage&seldepart=<%=mapEm.get("DEPARTCODE") %>&emname=<%=mapEm.get("NAME") %>&method=search"><image src="../../../images/icons/tag_yellow.png" border="0"></a></td>
+    		<td>&nbsp;<a href="pos.do?action=list_manage&seldepart=<%=mapEm.get("DEPARTCODE") %>&emname=<%=mapEm.get("NAME") %>&method=search"><image src="../../../images/icons/tag_red.png" border="0"></a></td>
+    		<td>&nbsp;<a href="goods.do?action=sellend&empcode=<%=mapEm.get("CODE") %>"><image src="../../../images/icons/tag_blue.png" border="0"></a></td>
+    		<td>&nbsp;<a href="assets.do?action=sellend&empcode=<%=mapEm.get("CODE") %>"><image src="../../../images/icons/tag_orange.png" border="0"></a></td>
 		</tr>
 <%  } %>
     </table>

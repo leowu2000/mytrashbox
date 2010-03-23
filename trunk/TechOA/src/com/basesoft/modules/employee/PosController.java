@@ -33,12 +33,15 @@ public class PosController extends CommonController {
 		}else if("list_manage".equals(action)){//刷卡记录list
 			mv = new ModelAndView("modules/employee/pos/list_manage");
 			
+			String method = ServletRequestUtils.getStringParameter(request, "method", "");
+			
 			PageList pageList = posDAO.findAll(seldepart, emname, datepick, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
 			mv.addObject("datepick", datepick);
+			mv.addObject("method", method);
 			return mv;
 		}else if("add".equals(action)){
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");

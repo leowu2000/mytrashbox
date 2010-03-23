@@ -32,6 +32,7 @@ EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
 <script type="text/javascript">
 var win;
 var win1;
+var win2;
 var action;
 var url='/em.do';
 Ext.onReady(function(){
@@ -74,6 +75,7 @@ Ext.onReady(function(){
 	tb1.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb1.add({text: '修改密码',cls: 'x-btn-text-icon update',handler: onChangepassClick});
 	tb1.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb1.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
     if(!win){
         win = new Ext.Window({
@@ -91,6 +93,16 @@ Ext.onReady(function(){
 	        buttons: [
 	        {text:'提交',handler: function(){Ext.getDom('dataForm1').action=action; Ext.getDom('dataForm1').submit();}},
 	        {text:'关闭',handler: function(){win1.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
 	        ]
         });
     }
@@ -139,6 +151,13 @@ Ext.onReady(function(){
             	Ext.getDom('listForm').submit();
     		}
     	});
+    }
+    
+    function onImportClick(btn){
+		action = 'excel.do?action=import&table=EMPLOYEE&seldepart=<%=seldepart %>&page=<%=pagenum %>';
+    	win2.setTitle('导入excel');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
     }
     
 });
@@ -226,6 +245,21 @@ Ext.onReady(function(){
 				</table>
 			</form>
 	</div>
-</div>  	
+</div>
+
+<div id="dlg2" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
+	        	<input type="hidden" name="page" value="<%=pagenum %>">
+                <table>
+				  <tr>
+				    <td>选择文件</td>
+				    <td><input type="file" name="file" style="width:200"></td>
+				  </tr>	
+				</table>
+			</form>
+	</div>
+</div>  	  	
   </body>
 </html>

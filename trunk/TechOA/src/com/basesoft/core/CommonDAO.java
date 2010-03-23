@@ -75,6 +75,22 @@ public class CommonDAO {
 	}
 	
 	/**
+	 * 根据名称得到对应的code
+	 * @param tablename 数据库表名
+	 * @param name 名称
+	 * @return
+	 */
+	public String findCodeByName(String tablename, String name){
+		try{
+			Map map = jdbcTemplate.queryForMap("select CODE from " + tablename + " where NAME='" + name + "'");
+			String s = map.get("CODE").toString();
+			return s;
+		}catch(Exception e){
+			return "";
+		}
+	}
+	
+	/**
 	 * 根据code码得到对应的名称
 	 * @param tablename 数据库表名
 	 * @param code 编码

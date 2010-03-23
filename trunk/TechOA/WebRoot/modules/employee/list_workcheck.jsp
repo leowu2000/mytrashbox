@@ -12,6 +12,8 @@
 	String maxDate = StringUtil.DateToString((Date)listDate.get(listDate.size()-1),"yyyy-MM-dd");
 	
 	String emprole = session.getAttribute("EMROLE").toString();
+	
+	String method = request.getAttribute("method").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -31,13 +33,21 @@
 var win;
 var action;
 var url='/em.do';
+var method = '<%=method %>';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 <%  
-	if(!"003".equals(emprole)){	
+	if(!"003".equals(emprole)){
+		if("search".equals(method)){
 %>
+	tb.add({text: '返回',cls: 'x-btn-text-icon back',handler: onBackClick});
+<%
+		}else {
+%>
+
 	tb.add({text: '填写考勤记录',cls: 'x-btn-text-icon add',handler: onAddClick});
 <%
+		}
 	}
 %>
 	
@@ -63,6 +73,10 @@ Ext.onReady(function(){
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
     }
+    
+    function onBackClick(btn){
+    	history.back(-1);
+    }
 
 });
 	</script>
@@ -71,12 +85,22 @@ Ext.onReady(function(){
   <body>
     <div id="toolbar"></div>
     <center><b><span style="font-size: 27;">员工考勤记录</span></b></center>
-    <span>&nbsp;&nbsp;&nbsp;&nbsp;单位名称：<%="".equals(departname)?"全部":departname %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <%
+    	if(!"search".equals(method)){
+    		
+    %>
+    	单位名称：<%="".equals(departname)?"全部":departname %>
+    <%
+    	}
+    %>
+    </span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <span>&nbsp;&nbsp;&nbsp;&nbsp;考勤年月：<%=datepick %></span>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center"  bgcolor="#E0F1F8" class="b_tr">
 <%  
-	if(!"003".equals(emprole)){	
+	if(!"003".equals(emprole)&&!"search".equals(method)){	
 %>
     		<td rowspan="2">选择</td>
 <%
@@ -119,7 +143,7 @@ Ext.onReady(function(){
 %>    	
 		<tr align="center">
 <%  
-	if(!"003".equals(emprole)){	
+	if(!"003".equals(emprole)&&!"search".equals(method)){	
 %>		
 			<td><input type="checkbox" name="check" value="<%=mapWorkCheck.get("EMPCODE") %>" class="ainput"></td>
 <%

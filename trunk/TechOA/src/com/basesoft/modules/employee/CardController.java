@@ -31,11 +31,14 @@ public class CardController extends CommonController {
 		}else if("list_manage".equals(action)){//一卡通管理list
 			mv = new ModelAndView("modules/employee/card/list_manage");
 			
+			String method = ServletRequestUtils.getStringParameter(request, "method", "");
+			
 			PageList pageList = cardDAO.findAll(seldepart, emname, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
+			mv.addObject("method", method);
 			return mv;
 		}else if("add".equals(action)){
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");

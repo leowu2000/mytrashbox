@@ -29,9 +29,17 @@ public class FinanceController extends CommonController {
 		
 		if("frame_manage".equals(action)){//财务管理frame
 			mv = new ModelAndView("modules/employee/finance/frame_manage");
+			
+			String method = ServletRequestUtils.getStringParameter(request, "method", "");
+			
+			mv.addObject("seldepart", seldepart);
+			mv.addObject("emname", emname);
+			mv.addObject("method", method);
 			return mv;
 		}else if("list_manage".equals(action)){//财务管理list
 			mv = new ModelAndView("modules/employee/finance/list_manage");
+			
+			String method = ServletRequestUtils.getStringParameter(request, "method", "");
 			
 			PageList pageList = financeDAO.findAll(seldepart, emname, datepick, page);
 			
@@ -39,6 +47,7 @@ public class FinanceController extends CommonController {
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
 			mv.addObject("datepick", datepick);
+			mv.addObject("method", method);
 			
 			return mv;
 		}else if("add".equals(action)){

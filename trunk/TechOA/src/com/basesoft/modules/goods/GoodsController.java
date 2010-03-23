@@ -2,6 +2,7 @@ package com.basesoft.modules.goods;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -117,6 +118,16 @@ public class GoodsController extends CommonController {
 			goodsDAO.update(updateSql);
 			
 			response.sendRedirect("goods.do?action=list&page=" + page);
+		}else if("sellend".equals(action)){//个人领用固定资产查询
+			mv = new ModelAndView("modules/goods/list_sellend");
+			
+			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
+			
+			PageList pageList = goodsDAO.findSelLend(empcode, page);
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("empcode", empcode);
+			return mv;
 		}
 		
 		return null;
