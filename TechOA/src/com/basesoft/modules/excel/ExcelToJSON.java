@@ -17,7 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.basesoft.modules.excel.Config;
+import com.basesoft.modules.excel.config.Config;
 import com.basesoft.util.StringUtil;
 
 /**

@@ -90,10 +90,10 @@ public class EmployeeDAO extends CommonDAO{
 	 * @param emid 员工id
 	 * @return
 	 */
-	public List<?> findEmployeeByDepart(String depart, String emid){
+	public List<?> findEmployeeByDepart(String depart){
 		if("0".equals(depart)){
 			//获取下级部门列表
-			List listDepart = getChildDepart(emid);
+			List listDepart = getDepartment();
 			String departs = "";
 			for(int i=0;i<listDepart.size();i++){
 				Map map = (Map)listDepart.get(i);
@@ -114,17 +114,17 @@ public class EmployeeDAO extends CommonDAO{
 	 * @param start 起始日期
 	 * @param end 截止日期
 	 * @param depart 单位code
-	 * @param emid 员工id
+	 * @param empcode 员工code
 	 * @return
 	 */
-	public List<?> findWorkCheck(String start, String end, String depart, String emid){
+	public List<?> findWorkCheck(String start, String end, String depart, String empcode, String method){
 		List<Date> listDate = StringUtil.getDateList(start, end);
 		List returnList = new ArrayList();
 		
 		//获取雇员信息
-		Map mapEm = findByEmId(emid);
+		Map mapEm = findByCode("EMPLOYEE", empcode);
 		
-		if("003".equals(mapEm.get("ROLECODE").toString())){//普通员工只能看到自己的考勤
+		if("003".equals(mapEm.get("ROLECODE").toString())||"search".equals(method)){//普通员工只能看到自己的考勤
 			Map returnMap = new HashMap();
 			returnMap.put("NAME", mapEm.get("NAME"));
 			returnMap.put("EMPCODE", mapEm.get("CODE"));
@@ -148,7 +148,7 @@ public class EmployeeDAO extends CommonDAO{
 			
 			returnList.add(returnMap);
 		}else {//领导和管理员看整个部门的
-			List listEmployee = findEmployeeByDepart(depart, emid);
+			List listEmployee = findEmployeeByDepart(depart);
 			for(int i=0;i<listEmployee.size();i++){//循环部门中的雇员
 				Map returnMap = new HashMap();
 				Map mapEmployee = (Map)listEmployee.get(i);

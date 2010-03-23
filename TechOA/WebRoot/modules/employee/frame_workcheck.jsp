@@ -1,6 +1,9 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.basesoft.util.*" %>
-
+<%
+	String method = request.getAttribute("method").toString();
+	String empcode = request.getAttribute("empcode").toString();
+%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -16,6 +19,7 @@
 	<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	Ext.onReady(function(){
+		var method = '<%=method %>';
 		var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'departspan',
 			width : 120,
@@ -53,10 +57,13 @@
 		});
 	
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
-  		tb.add('选择部门：');
-  		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add(document.getElementById('departspan'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
+		if(method==''){
+			document.getElementById('departspan').style.display = '';
+			tb.add('选择部门：');
+  			tb.add('&nbsp;&nbsp;&nbsp;');
+  			tb.add(document.getElementById('departspan'));
+  			tb.add('&nbsp;&nbsp;&nbsp;');
+		}
   		tb.add('选择年月：');
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('datepick'));
@@ -68,7 +75,7 @@
 	  	  document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
 	  	  datepick = document.getElementById('datepick').value;
 	  	}
-	    document.getElementById('list_workcheck').src = "/em.do?action=workcheck&depart=" + comboBoxTree.getValue() + "&datepick=" + datepick;
+	    document.getElementById('list_workcheck').src = "/em.do?action=workcheck&depart=" + comboBoxTree.getValue() + "&datepick=" + datepick + "&empcode=<%=empcode %>&method=<%=method %>";
 	});
 	
 	function commit(){
@@ -78,7 +85,7 @@
 	  	document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
 	  	datepick = document.getElementById('datepick').value;
 	  }
-	  document.getElementById('list_workcheck').src = "/em.do?action=workcheck&datepick="+datepick+"&depart="+depart;
+	  document.getElementById('list_workcheck').src = "/em.do?action=workcheck&datepick="+datepick+"&depart="+depart+"&empcode=<%=empcode %>&method=<%=method %>";
 	}
 	
 	function IFrameResize(){
@@ -89,7 +96,7 @@
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
   	<div id="toolbar"></div>
-	<span id="departspan" name="departspan"></span>
+	<span id="departspan" name="departspan" style="display:none;"></span>
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" onchange="commit();" style="width:50;">
     <iframe name="list_workcheck" width="100%" frameborder="0" height="500"></iframe>
   </body>

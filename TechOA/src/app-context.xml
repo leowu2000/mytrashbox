@@ -62,4 +62,5 @@
 	<bean id="financeDAO" class="com.basesoft.modules.employee.FinanceDAO"></bean>
 	<bean id="posDAO" class="com.basesoft.modules.employee.PosDAO"></bean>
 	<bean id="searchDAO" class="com.basesoft.modules.employee.SearchDAO"></bean>
+	<bean id="excelDAO" class="com.basesoft.modules.excel.ExcelDAO"></bean>
 </beans>

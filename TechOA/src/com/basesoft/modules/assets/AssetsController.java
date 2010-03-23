@@ -193,6 +193,21 @@ public class AssetsController extends CommonController {
 			
 			response.sendRedirect("assets.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
+		}else if("sellend".equals(action)){//个人领用固定资产查询
+			mv = new ModelAndView("modules/assets/list_sellend");
+			
+			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
+			Map mapEmp = assetsDAO.findByCode("EMPLOYEE", empcode);
+			String empname = mapEmp.get("NAME")==null?"":mapEmp.get("NAME").toString();
+			String departcode = mapEmp.get("DEPARTCODE")==null?"":mapEmp.get("DEPARTCODE").toString();
+			String departname = assetsDAO.findNameByCode("DEPARTMENT", departcode);
+			
+			PageList pageList = assetsDAO.findSelLend(empcode, page);
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("empcode", empcode);
+			mv.addObject("empname", empname);
+			mv.addObject("departname", departname);
 		}
 		
 		return mv;

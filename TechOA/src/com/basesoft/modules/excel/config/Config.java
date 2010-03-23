@@ -1,4 +1,4 @@
-package com.basesoft.modules.excel;
+package com.basesoft.modules.excel.config;
 
 import java.io.BufferedReader;
 import java.io.File;

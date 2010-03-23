@@ -93,4 +93,30 @@ public class AssetsDAO extends CommonDAO {
 		
 		return pageList;
 	}
+	
+	/**
+	 * 找出个人借出的所有固定资产的信息
+	 * @param empcode 人员编码
+	 * @param page 页码
+	 * @return
+	 */
+	public PageList findSelLend(String empcode, int page){
+		PageList pageList = new PageList();
+		String sql = "select * from ASSETS where EMPCODE='" + empcode + "' order by LENDDATE desc";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
 }

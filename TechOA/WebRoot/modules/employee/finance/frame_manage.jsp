@@ -1,7 +1,12 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page import="java.net.*" %>
 <%
 	Calendar ca = Calendar.getInstance();
 	String thisYearAndMonth = ca.get(ca.YEAR) + "-" + (ca.get(ca.MONTH)+1);
+	
+	String seldepart = request.getAttribute("seldepart").toString();
+	String emname = request.getAttribute("emname").toString();
+	String method = request.getAttribute("method").toString();
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -17,6 +22,8 @@
 	<%@ include file="../../../common/meta.jsp" %>
 	<script src="../../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 	<script type="text/javascript">
+	var method = '<%=method %>';
+	
 	Ext.onReady(function(){
 		var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'departspan',
@@ -56,23 +63,38 @@
 		});
 		
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
-  		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('选择部门');
-  		tb.add(document.getElementById('departspan'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('选择年月：');
-  		tb.add(document.getElementById('datepick'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('按名字模糊查询');
-  		tb.add(document.getElementById('emname'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add(document.getElementById('search'));
-  		
+		if(method=='search'){
+			tb.add('&nbsp;&nbsp;&nbsp;');
+  			tb.add('选择年月：');
+  			tb.add(document.getElementById('datepick'));
+		}else {
+			document.getElementById('departspan').style.display = '';
+			document.getElementById('emname').style.display = '';
+			document.getElementById('search').style.display = '';
+		
+			tb.add('&nbsp;&nbsp;&nbsp;');
+  			tb.add('选择部门');
+  			tb.add(document.getElementById('departspan'));
+  			tb.add('&nbsp;&nbsp;&nbsp;');
+  			tb.add('选择年月：');
+  			tb.add(document.getElementById('datepick'));
+  			tb.add('&nbsp;&nbsp;&nbsp;');
+  			tb.add('按名字模糊查询');
+  			tb.add(document.getElementById('emname'));
+  			tb.add('&nbsp;&nbsp;&nbsp;');
+  			tb.add(document.getElementById('search'));
+		}
+
   		comboBoxTree.setValue({id:'0',text:'请选择...'});
   		
   		var emname = document.getElementById('emname').value;
   		var datepick = document.getElementById('datepick').value;
-	    document.getElementById('list_manage').src = "/finance.do?action=list_manage&seldepart=" + comboBoxTree.getValue() + "&emname=" + emname + "&datepick=" + datepick;
+  		
+  		if(method=='search'){
+  			document.getElementById('list_manage').src = "/finance.do?action=list_manage&method=search&seldepart=<%=seldepart %>&emname=<%=URLEncoder.encode(emname,"UTF-8") %>&method=search&datepick=" + datepick;
+  		}else {
+  			document.getElementById('list_manage').src = "/finance.do?action=list_manage&seldepart=" + comboBoxTree.getValue() + "&emname=" + emname + "&datepick=" + datepick;	
+  		}
 	});
 	
 	function IFrameResize(){
@@ -84,17 +106,21 @@
 	  var emname = document.getElementById('emname').value;
 	  var datepick = document.getElementById('datepick').value;
 	  
-	  document.getElementById('list_manage').src = "/finance.do?action=list_manage&seldepart=" + seldepart + "&emname=" + emname + "&datepick=" + datepick;
+	  if(method=='search'){
+	  	document.getElementById('list_manage').src = "/finance.do?action=list_manage&method=search&seldepart=<%=seldepart %>&emname=<%=URLEncoder.encode(emname,"UTF-8") %>&datepick=" + datepick;
+	  }else {
+	  	document.getElementById('list_manage').src = "/finance.do?action=list_manage&seldepart=" + seldepart + "&emname=" + emname + "&datepick=" + datepick;
+	  }
 	}
 	</script>
   </head>
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
   	<div id="toolbar"></div>
-	<span id="departspan" name="departspan"></span>
+	<span id="departspan" name="departspan" style="display:none;"></span>
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" onchange="commit();" value="<%=thisYearAndMonth %>" style="width: 50">
-	<input type="text" name="emname" style="width:60;">
-	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
+	<input type="text" name="emname" style="width:60;"  style="display:none;">
+	<input type="button" class="btn" value="查询" name="search" onclick="commit();" style="display:none;">
     <iframe name="list_manage" width="100%" frameborder="0" height="500"></iframe>
   </body>
 </html>

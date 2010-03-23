@@ -23,6 +23,7 @@
 				/finance.do=FinanceController
 				/pos.do=PosController
 				/search.do=SearchController
+				/excel.do=ExcelController
 			</value>
 		</property>
 	</bean>
@@ -58,5 +59,6 @@
 	<bean name="FinanceController" class="com.basesoft.modules.employee.FinanceController"></bean>
 	<bean name="PosController" class="com.basesoft.modules.employee.PosController"></bean>
 	<bean name="SearchController" class="com.basesoft.modules.employee.SearchController"></bean>
+	<bean name="ExcelController" class="com.basesoft.modules.excel.ExcelController"></bean>
 </beans>
 

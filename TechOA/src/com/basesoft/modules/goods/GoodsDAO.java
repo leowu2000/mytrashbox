@@ -71,4 +71,31 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 		
 		return goods;
 	}
+	
+	/**
+	 * 获取个人领用物资资产列表
+	 * @param empcode 人员编码
+	 * @param page 页码
+	 * @return
+	 */
+	public PageList findSelLend(String empcode, int page){
+		PageList pageList = new PageList();
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		String sql = "select * from GOODS where LLRBM='" + empcode + "' order by KJND,KJH,PJCODE";
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
 }

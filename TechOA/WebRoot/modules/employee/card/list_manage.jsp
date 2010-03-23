@@ -8,6 +8,7 @@
 	
 	String seldepart = request.getAttribute("seldepart").toString();
 	String emname = request.getAttribute("emname").toString();
+	String method = request.getAttribute("method").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -29,6 +30,7 @@ var win2;
 var action;
 var url='/card.do';
 var c = '';
+var method = '<%=method %>';
 Ext.onReady(function(){
 	var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'empsel',
@@ -67,9 +69,14 @@ Ext.onReady(function(){
 		});
 
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
-	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
-	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
-	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	
+	if(method=='search'){
+		tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
+	}else {
+		tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
+		tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
+		tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	}
 
     if(!win){
         win = new Ext.Window({
@@ -140,6 +147,10 @@ Ext.onReady(function(){
     	    }
     	});
     }
+    
+    function onBackClick(btn){
+    	history.back(-1);
+    }
 });
 
 function havaCardno(){
@@ -180,7 +191,13 @@ function havaCardno(){
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
+    	<%
+    		if(!"search".equals(method)){
+    	%>
     		<td>选择</td>
+    	<%
+    		}
+    	%>
     		<td>人员编号</td>
     		<td>姓名</td>
     		<td>性别</td>
@@ -201,7 +218,13 @@ function havaCardno(){
 		}
 %>
 		<tr>
+		<%
+    		if(!"search".equals(method)){
+    	%>
 			<td><input type="checkbox" name="check" value="<%=mapCard.get("CARDNO") %>" class="ainput"></td>
+		<%
+    		}
+		%>
 			<td><%=mapCard.get("EMPCODE")==null?"":mapCard.get("EMPCODE") %></td>
 			<td><%=mapCard.get("EMPNAME")==null?"":mapCard.get("EMPNAME") %></td>
 			<td><%=sexname %></td>
