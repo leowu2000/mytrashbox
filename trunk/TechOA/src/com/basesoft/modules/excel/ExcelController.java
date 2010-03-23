@@ -36,7 +36,9 @@ public class ExcelController extends CommonController {
 				JSONObject config_Conversion = Config.getJSONObjectByName("config\\" + table + "_Conversion");
 				JSONObject data = ExcelToJSON.parse(file, config_Conversion);
 				
-				System.out.print(data);
+				int r = excelDAO.insertEmployee(data);
+				
+				System.out.println(r);
 			}
 			
 			
