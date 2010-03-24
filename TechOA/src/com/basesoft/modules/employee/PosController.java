@@ -1,5 +1,6 @@
 package com.basesoft.modules.employee;
 
+import java.net.URLEncoder;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ public class PosController extends CommonController {
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
 		String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
+		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		
 		if("frame_manage".equals(action)){//刷卡记录frame
 			mv = new ModelAndView("modules/employee/pos/frame_manage");
@@ -42,6 +44,7 @@ public class PosController extends CommonController {
 			mv.addObject("emname", emname);
 			mv.addObject("datepick", datepick);
 			mv.addObject("method", method);
+			mv.addObject("errorMessage", errorMessage);
 			return mv;
 		}else if("add".equals(action)){
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
@@ -68,7 +71,7 @@ public class PosController extends CommonController {
 			String insertSql = "insert into EMP_POS values('" + id + "', '" + empcode + "', '" + empname + "', '" + departcode + "', '" + departname + "', '" + cardno + "', '" + posmachine + "', " + swipetime + ", " + cost + ", " + poscode + ")";
 			posDAO.insert(insertSql);
 			
-			response.sendRedirect("pos.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + emname + "&datepick=" + datepick);
+			response.sendRedirect("pos.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick);
 		}else if("query".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			Pos pos = posDAO.findByPId(id); 
@@ -104,7 +107,7 @@ public class PosController extends CommonController {
 			String updateSql = "update EMP_POS set EMPCODE='" + empcode + "', EMPNAME='" + empname + "', DEPARTCODE='" + departcode + "', DEPARTNAME='" + departname + "', CARDNO='" + cardno + "', POSMACHINE='" + posmachine + "', SWIPETIME" + swipetime + ", COST=" + cost + ", POSCODE=" + poscode + " where ID='" + id + "')";
 			posDAO.update(updateSql);
 			
-			response.sendRedirect("pos.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + emname + "&datepick=" + datepick);
+			response.sendRedirect("pos.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick);
 		}else if("delete".equals(action)){
 			String[] check=request.getParameterValues("check");
 			//循环按id删除
@@ -113,7 +116,7 @@ public class PosController extends CommonController {
 				posDAO.delete(deleteSql);
 			}
 			
-			response.sendRedirect("pos.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + emname + "&datepick=" + datepick);
+			response.sendRedirect("pos.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick);
 		}
 		
 		return null;

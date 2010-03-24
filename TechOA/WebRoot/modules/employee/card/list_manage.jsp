@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page import="java.net.*"%>
 <%@ page import="com.basesoft.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%
@@ -8,7 +9,10 @@
 	
 	String seldepart = request.getAttribute("seldepart").toString();
 	String emname = request.getAttribute("emname").toString();
+	emname = URLEncoder.encode(emname,"UTF-8");
 	String method = request.getAttribute("method").toString();
+	
+	String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -25,6 +29,11 @@
 <script src="../../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
+var errorMessage = '<%=errorMessage %>';
+if(errorMessage!=''){
+	alert(errorMessage);
+}
+
 var win;
 var win2;
 var action;
@@ -76,6 +85,7 @@ Ext.onReady(function(){
 		tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 		tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 		tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+		tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 	}
 
     if(!win){
@@ -92,6 +102,16 @@ Ext.onReady(function(){
 	        	}
 	        },
 	        {text:'关闭',handler: function(){win.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
 	        ]
         });
     }
@@ -150,6 +170,13 @@ Ext.onReady(function(){
     
     function onBackClick(btn){
     	history.back(-1);
+    }
+    
+    function onImportClick(btn){
+		action = 'excel.do?action=import&redirect=card.do?action=list_manage&table=EMP_CARD&seldepart=<%=seldepart %>&page=<%=pagenum %>&emname=<%=emname %>';
+    	win2.setTitle('导入excel');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
     }
 });
 
@@ -276,5 +303,20 @@ function havaCardno(){
 	        </form>
     </div>
 </div>
+
+<div id="dlg2" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
+	        	<input type="hidden" name="page" value="<%=pagenum %>">
+                <table>
+				  <tr>
+				    <td>选择文件</td>
+				    <td><input type="file" name="file" style="width:200"></td>
+				  </tr>	
+				</table>
+			</form>
+	</div>
+</div>  
   </body>
 </html>

@@ -1,5 +1,6 @@
 package com.basesoft.modules.plan;
 
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +114,7 @@ public class PlanController extends CommonController {
 			
 			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcode + "', '" + mapEmp.get("NAME") + "', '" + mapEmp.get("DEPARTCODE") + "', '" + departname + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', '" + new Date() + "', " + enddate + ", " + planedworkload + ", '" + note + "', '" + symbol + "', '" + assess + "', '" + remark + "', '所领导', '部领导', '室领导', '" + plannercode + "', '" + plannername + "', " + ordercode + ")");
 			
-			response.sendRedirect("plan.do?action=list&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + f_empname + "&page=" + page);
+			response.sendRedirect("plan.do?action=list&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
 		}else if("query".equals(action)){//查找
 			String planid = ServletRequestUtils.getStringParameter(request, "planid", "");
 			Plan plan = planDAO.findById(planid);
@@ -143,7 +144,7 @@ public class PlanController extends CommonController {
 			
 			planDAO.update(updateSql);
 			
-			response.sendRedirect("plan.do?action=list&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + f_empname + "&page=" + page);
+			response.sendRedirect("plan.do?action=list&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
 		}else if("delete".equals(action)){//删除
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
@@ -151,7 +152,7 @@ public class PlanController extends CommonController {
 				planDAO.delete(deleteSql);
 			}
 			
-			response.sendRedirect("plan.do?action=list&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + f_empname + "&page=" + page);
+			response.sendRedirect("plan.do?action=list&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
 		}else if("remind_frame".equals(action)){//计划提醒frame
 			mv = new ModelAndView("modules/plan/frame_remind");
 			

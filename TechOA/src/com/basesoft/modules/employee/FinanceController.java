@@ -1,5 +1,6 @@
 package com.basesoft.modules.employee;
 
+import java.net.URLEncoder;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ public class FinanceController extends CommonController {
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
 		String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
+		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		
 		if("frame_manage".equals(action)){//财务管理frame
 			mv = new ModelAndView("modules/employee/finance/frame_manage");
@@ -48,6 +50,7 @@ public class FinanceController extends CommonController {
 			mv.addObject("emname", emname);
 			mv.addObject("datepick", datepick);
 			mv.addObject("method", method);
+			mv.addObject("errorMessage", errorMessage);
 			
 			return mv;
 		}else if("add".equals(action)){
@@ -82,7 +85,7 @@ public class FinanceController extends CommonController {
 			String insertSql = "insert into EMP_FINANCIAL values('" + id + "', '" + empcode + "', '" + empname + "', '" + departcode + "', '" + departname + "', " + rq + ", " + jbf + ", " + psf + ", " + gc + ", " + cj + ", " + wcbt + ", " + cglbt + ", " + lb + ", " + gjbt + ", " + fpbt + ", '" + xmmc + "', '" + bz + "')";
 			financeDAO.insert(insertSql);
 			
-			response.sendRedirect("finance.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + emname + "&datepick=" + datepick);
+			response.sendRedirect("finance.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick);
 		}else if("query".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			Finance f = financeDAO.findByFId(id); 
@@ -126,7 +129,7 @@ public class FinanceController extends CommonController {
 			String updateSql = "update EMP_FINANCIAL set EMPCODE='" + empcode + "', EMPNAME='" + empname + "', DEPARTCODE='" + departcode + "', DEPARTNAME='" + departname + "', RQ=" + rq + ", JBF=" + jbf + ", PSF=" + psf + ", GC=" + gc + ", CJ=" + cj + ", WCBT=" + wcbt + ", CGLBT=" + cglbt + ", LB=" + lb + ", GJBT=" + gjbt + ", FPBT=" + fpbt + ", XMMC='" + xmmc + "', BZ='" + bz + "' where ID='" + id + "'";
 			financeDAO.update(updateSql);
 			
-			response.sendRedirect("finance.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + emname + "&datepick=" + datepick);
+			response.sendRedirect("finance.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick);
 		}else if("delete".equals(action)){
 			String[] check=request.getParameterValues("check");
 			//循环按id删除
@@ -135,7 +138,7 @@ public class FinanceController extends CommonController {
 				financeDAO.delete(deleteSql);
 			}
 			
-			response.sendRedirect("finance.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + emname + "&datepick=" + datepick);
+			response.sendRedirect("finance.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick);
 		}
 		
 		return null;

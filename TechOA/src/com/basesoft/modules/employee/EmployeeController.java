@@ -33,6 +33,7 @@ public class EmployeeController extends CommonController {
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		if("frame_infolist".equals(action)){//人员frame
 			mv = new ModelAndView("modules/employee/frame_info");
 		}else if("infolist".equals(action)){//人员基本信息
@@ -47,6 +48,7 @@ public class EmployeeController extends CommonController {
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
+			mv.addObject("errorMessage", errorMessage);
 		}else if("add".equals(action)){//新用户添加操作
 			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 			//接收页面参数

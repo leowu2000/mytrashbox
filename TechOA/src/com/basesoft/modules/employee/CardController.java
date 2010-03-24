@@ -1,5 +1,6 @@
 package com.basesoft.modules.employee;
 
+import java.net.URLEncoder;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ public class CardController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
+		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		
 		if("frame_manage".equals(action)){//一卡通管理frame
 			mv = new ModelAndView("modules/employee/card/frame_manage");
@@ -39,6 +41,7 @@ public class CardController extends CommonController {
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
 			mv.addObject("method", method);
+			mv.addObject("errorMessage", errorMessage);
 			return mv;
 		}else if("add".equals(action)){
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
@@ -57,7 +60,7 @@ public class CardController extends CommonController {
 			String insertSql = "insert into EMP_CARD values('" + empcode + "', '" + empname + "', '" + sex + "', '" + cardno + "', '" + phone1 + "', '" + phone2 + "', '" + address + "', '" + departcode + "', '" + departname + "')";
 			cardDAO.insert(insertSql);
 			
-			response.sendRedirect("card.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + emname);
+			response.sendRedirect("card.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8"));
 		}else if("query".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			Card card = cardDAO.findByCId(id); 
@@ -88,7 +91,7 @@ public class CardController extends CommonController {
 			String updateSql = "update EMP_CARD set EMPCODE='" + empcode + "', EMPNAME='" + empname + "', SEX='" + sex + "', PHONE1='" + phone1 + "', PHONE2='" + phone2 + "', ADDRESS='" + address + "', DEPARTCODE='" + departcode + "', DEPARTNAME='" + departname + "' where CARDNO='" + id + "'";
 			cardDAO.update(updateSql);
 			
-			response.sendRedirect("card.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + emname);
+			response.sendRedirect("card.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8"));
 		}else if("delete".equals(action)){
 			String[] check=request.getParameterValues("check");
 			//循环按id删除
@@ -97,7 +100,7 @@ public class CardController extends CommonController {
 				cardDAO.delete(deleteSql);
 			}
 			
-			response.sendRedirect("card.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + emname);
+			response.sendRedirect("card.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8"));
 		}else if("haveCardno".equals(action)){
 			String cardno = ServletRequestUtils.getStringParameter(request, "cardno", "");
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
