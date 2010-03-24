@@ -29,6 +29,7 @@ public class GoodsController extends CommonController {
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		
 		if("list".equals(action)){
 			mv = new ModelAndView("modules/goods/list_goods");
@@ -38,6 +39,7 @@ public class GoodsController extends CommonController {
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("listPj", listPj);
+			mv.addObject("errorMessage", errorMessage);
 			return mv;
 		}else if("add".equals(action)){
 			String kjh = ServletRequestUtils.getStringParameter(request, "kjh", "");

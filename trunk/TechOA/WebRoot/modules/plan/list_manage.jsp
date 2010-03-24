@@ -1,5 +1,6 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
+<%@ page import="java.net.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%
 PageList pageList = (PageList)request.getAttribute("pageList");
@@ -10,6 +11,9 @@ int pagenum = pageList.getPageInfo().getCurPage();
 String f_pjcode = request.getAttribute("f_pjcode").toString();
 String f_stagecode = request.getAttribute("f_stagecode").toString();
 String f_empname = request.getAttribute("f_empname").toString();
+f_empname = URLEncoder.encode(f_empname,"UTF-8");
+
+String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -34,7 +38,13 @@ String f_empname = request.getAttribute("f_empname").toString();
 <script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
+var errorMessage = '<%=errorMessage %>';
+if(errorMessage!=''){
+	alert(errorMessage);
+}
+
 var win;
+var win2;
 var action;
 var url='/plan.do';
 var vali = "";
@@ -43,6 +53,7 @@ Ext.onReady(function(){
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
     if(!win){
         win = new Ext.Window({
@@ -50,6 +61,16 @@ Ext.onReady(function(){
 	        buttons: [
 	        {text:'提交',handler: function(){if(validate()){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}}},
 	        {text:'关闭',handler: function(){win.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
 	        ]
         });
     }
@@ -161,6 +182,13 @@ Ext.onReady(function(){
       		}
 			
 	});
+	
+	function onImportClick(btn){
+		action = 'excel.do?action=import&redirect=plan.do?action=list_manage&table=PLAN&f_pjcode=<%=f_pjcode %>&f_stagecode=<%=f_stagecode %>&page=<%=pagenum %>&f_empname=<%=f_empname %>';
+    	win2.setTitle('导入excel');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
+    }
 });
 
 function AJAX_PJ(pjcode){
@@ -297,5 +325,20 @@ for(int i=0;i<listPlan.size();i++){
 	        </form>
     </div>
 </div>
+
+<div id="dlg2" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
+	        	<input type="hidden" name="page" value="<%=pagenum %>">
+                <table>
+				  <tr>
+				    <td>选择文件</td>
+				    <td><input type="file" name="file" style="width:200"></td>
+				  </tr>	
+				</table>
+			</form>
+	</div>
+</div>  
 	</body>
 </html>

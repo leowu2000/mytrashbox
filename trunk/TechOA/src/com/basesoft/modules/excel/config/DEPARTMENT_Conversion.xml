@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<head>
+		<table>DEPARTMENT</table>
+		<code>DEPARTMENT</code>
+		<name>部门表</name>
+		<row>2</row>
+		<col>1</col>
+		<type>1</type>
+		<count></count>
+		<split></split>
+	</head>
+	<body>
+		<relation>
+			<id>1</id>
+			<name>部门编号</name>
+			<column>CODE</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>2</id>
+			<name>部门名称</name>
+			<column>NAME</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>3</id>
+			<name>上级部门名称</name>
+			<column>PARENTNAME</column>
+			<format></format>
+		</relation>
+	</body>
+</config>

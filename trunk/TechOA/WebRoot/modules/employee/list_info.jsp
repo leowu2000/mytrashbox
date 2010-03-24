@@ -12,6 +12,8 @@ int pagenum = pageList.getPageInfo().getCurPage();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
+
+String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -30,6 +32,10 @@ EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
 	<%@ include file="../../common/meta.jsp" %>
 	<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
+var errorMessage = '<%=errorMessage %>';
+if(errorMessage!=''){
+	alert(errorMessage);
+}
 var win;
 var win1;
 var win2;
@@ -154,7 +160,7 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=import&table=EMPLOYEE&seldepart=<%=seldepart %>&page=<%=pagenum %>';
+		action = 'excel.do?action=import&redirect=em.do?action=infolist&table=EMPLOYEE&seldepart=<%=seldepart %>&page=<%=pagenum %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);

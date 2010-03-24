@@ -59,9 +59,9 @@ public class EmployeeDAO extends CommonDAO{
 				}
 			}
 			if("".equals(emname)){//没有名字过滤
-				sql = "select * from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE in (" + departs + ")) order by DEPARTCODE desc,LEVEL";
+				sql = "select * from EMPLOYEE order by DEPARTCODE desc,LEVEL";
 			}else {
-				sql = "select * from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE in (" + departs + ")) and NAME like '%" + emname + "%' order by DEPARTCODE desc,LEVEL ";
+				sql = "select * from EMPLOYEE where NAME like '%" + emname + "%' order by DEPARTCODE desc,LEVEL ";
 			}
 		}else {
 			if("".equals(emname)){
@@ -248,27 +248,27 @@ public class EmployeeDAO extends CommonDAO{
 		Map mapEm = findByEmId(id);
 		
 		em.setId(id);
-		em.setLoginid(mapEm.get("LOGINID").toString());
-		em.setPassword(mapEm.get("PASSWORD").toString());
-		em.setCode(mapEm.get("CODE").toString());
-		em.setRolecode(mapEm.get("ROLECODE").toString());
-		em.setName(mapEm.get("NAME").toString());
-		em.setDepartcode(mapEm.get("DEPARTCODE").toString());
-		em.setMainjob(mapEm.get("MAINJOB").toString());
-		em.setSecjob(mapEm.get("SECJOB").toString());
-		em.setLevel(mapEm.get("LEVEL").toString());
-		em.setEmail(mapEm.get("EMAIL").toString());
-		em.setBlog(mapEm.get("BLOG").toString());
-		em.setSelfweb(mapEm.get("SELFWEB").toString());
-		em.setStcphone(mapEm.get("STCPHONE").toString());
-		em.setMobphone(mapEm.get("MOBPHONE").toString());
-		em.setAddress(mapEm.get("ADDRESS").toString());
-		em.setPost(mapEm.get("POST").toString());
-		em.setMajorcode(mapEm.get("MAJORCODE").toString());
-		em.setDegreecode(mapEm.get("DEGREECODE").toString());
-		em.setProcode(mapEm.get("PROCODE").toString());
+		em.setLoginid(mapEm.get("LOGINID")==null?"":mapEm.get("LOGINID").toString());
+		em.setPassword(mapEm.get("PASSWORD")==null?"":mapEm.get("PASSWORD").toString());
+		em.setCode(mapEm.get("CODE")==null?"":mapEm.get("CODE").toString());
+		em.setRolecode(mapEm.get("ROLECODE")==null?"":mapEm.get("ROLECODE").toString());
+		em.setName(mapEm.get("NAME")==null?"":mapEm.get("NAME").toString());
+		em.setDepartcode(mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString());
+		em.setMainjob(mapEm.get("MAINJOB")==null?"":mapEm.get("MAINJOB").toString());
+		em.setSecjob(mapEm.get("SECJOB")==null?"":mapEm.get("SECJOB").toString());
+		em.setLevel(mapEm.get("LEVEL")==null?"":mapEm.get("LEVEL").toString());
+		em.setEmail(mapEm.get("EMAIL")==null?"":mapEm.get("EMAIL").toString());
+		em.setBlog(mapEm.get("BLOG")==null?"":mapEm.get("BLOG").toString());
+		em.setSelfweb(mapEm.get("SELFWEB")==null?"":mapEm.get("SELFWEB").toString());
+		em.setStcphone(mapEm.get("STCPHONE")==null?"":mapEm.get("STCPHONE").toString());
+		em.setMobphone(mapEm.get("MOBPHONE")==null?"":mapEm.get("MOBPHONE").toString());
+		em.setAddress(mapEm.get("ADDRESS")==null?"":mapEm.get("ADDRESS").toString());
+		em.setPost(mapEm.get("POST")==null?"":mapEm.get("POST").toString());
+		em.setMajorcode(mapEm.get("MAJORCODE")==null?"":mapEm.get("MAJORCODE").toString());
+		em.setDegreecode(mapEm.get("DEGREECODE")==null?"":mapEm.get("DEGREECODE").toString());
+		em.setProcode(mapEm.get("PROCODE")==null?"":mapEm.get("PROCODE").toString());
 		
-		String departname = findNameByCode("DEPARTMENT", mapEm.get("DEPARTCODE").toString());
+		String departname = findNameByCode("DEPARTMENT", mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString());
 		em.setDepartname(departname);
 		
 		return em;

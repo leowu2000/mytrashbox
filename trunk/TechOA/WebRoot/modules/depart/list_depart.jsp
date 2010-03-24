@@ -34,6 +34,7 @@ DepartmentDAO departDAO = (DepartmentDAO)ctx.getBean("departmentDAO");
 <script type="text/javascript">
 <!--
 var win;
+var win2;
 var action;
 var url='/depart.do';
 var vali = "";
@@ -77,6 +78,7 @@ Ext.onReady(function(){
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
     if(!win){
         win = new Ext.Window({
@@ -84,6 +86,16 @@ Ext.onReady(function(){
 	        buttons: [
 	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
 	        {text:'关闭',handler: function(){win.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
 	        ]
         });
     }
@@ -156,6 +168,13 @@ Ext.onReady(function(){
 		  	}
 		});
     }
+    
+    function onImportClick(btn){
+		action = 'excel.do?action=import&redirect=depart.do?action=list&table=DEPARTMENT';
+    	win2.setTitle('导入excel');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
+    }
 });
 
 //-->
@@ -180,13 +199,13 @@ for(int i=0;i<listDepart.size();i++){
 	
 	if(!"0".equals(mapDepart.get("PARENT").toString())){
 		Map mapParent = departDAO.findByCode("DEPARTMENT",mapDepart.get("PARENT").toString());
-		parentname = mapParent.get("NAME").toString();
+		parentname = mapParent.get("NAME")==null?"":mapParent.get("NAME").toString();
 	}
 %>
             <tr align="center">
                 <td><input type="checkbox" name="check" value="<%=mapDepart.get("ID") %>" class="ainput"></td>
                 <td>&nbsp;<%=mapDepart.get("NAME") %></td>
-                <td>&nbsp;<%=mapDepart.get("LEVEL").toString() %>级部门</td>
+                <td>&nbsp;<%=mapDepart.get("LEVEL") %>级部门</td>
                 <td>&nbsp;<%=parentname %></td>
             </tr>
 <%} %>            
@@ -213,5 +232,19 @@ for(int i=0;i<listDepart.size();i++){
 	        </form>
     </div>
 </div>
+
+<div id="dlg2" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
+                <table>
+				  <tr>
+				    <td>选择文件</td>
+				    <td><input type="file" name="file" style="width:200"></td>
+				  </tr>	
+				</table>
+			</form>
+	</div>
+</div>  	
 	</body>
 </html>
