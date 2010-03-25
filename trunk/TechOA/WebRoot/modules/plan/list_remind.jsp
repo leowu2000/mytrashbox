@@ -65,16 +65,16 @@ for(int i=0;i<listAssess.size();i++){
 	Date enddate = mapAssess.get("ENDDATE")==null?new Date():StringUtil.StringToDate(mapAssess.get("ENDDATE").toString(),"yyyy-MM-dd");
 	
 	int plandays = StringUtil.getBetweenDays(startdate, enddate);
-	int passdays = StringUtil.getBetweenDays(now, startdate);
+	int passdays = StringUtil.getBetweenDays(startdate, now);
 	
 	float daypersent = plandays==0?0:passdays*100/plandays;
 	
-	if(persent<daypersent-5){
-		state = "<font color='red'>进度滞后</font>";
-	}else if(persent>=daypersent-5&&persent<=daypersent+5){
-		state = "<font color='green'>正常完成</font>"; 
-	}else if(persent>daypersent+5&&persent<100){
-		state = "<font color='blue'>超额完成</font>"; 
+	if(daypersent<=10){
+		state = "<font color='blue'>开始启动</font>";
+	}else if(daypersent>10&&daypersent<=80){
+		state = "<font color='green'>正常运行</font>"; 
+	}else if(daypersent>80&&daypersent<100){
+		state = "<font color='red'>结尾阶段</font>"; 
 	}else if(persent>=100){
 		state = "<font color='gray'>已完成</font>";
 	}
@@ -90,7 +90,7 @@ for(int i=0;i<listAssess.size();i++){
                 <td>&nbsp;<%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
                 <td>&nbsp;<%=mapAssess.get("PLANNERNAME")==null?"":mapAssess.get("PLANNERNAME") %></td>
                 <td>&nbsp;<%=mapAssess.get("LEADER_ROOM")==null?"":mapAssess.get("LEADER_ROOM") %></td>
-                <td>&nbsp;<%=persent %></td>
+                <td>&nbsp;<%=daypersent %></td>
                 <td>&nbsp;<%=mapAssess.get("REMARK")==null?"":mapAssess.get("REMARK") %></td>
             </tr>
 <%} %>            

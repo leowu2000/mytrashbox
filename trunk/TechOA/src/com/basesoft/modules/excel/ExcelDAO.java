@@ -1,5 +1,6 @@
 package com.basesoft.modules.excel;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -10,26 +11,28 @@ import com.basesoft.core.CommonDAO;
 
 public class ExcelDAO extends CommonDAO {
 
-	public int insertData(JSONObject data, String table, String date) throws Exception{
-		int r = 0;
+	public String insertData(JSONObject data, String table, String date) throws Exception{
+		String errorMessage = "";
 		
 		if("DEPARTMENT".equals(table)){//导入部门
-			r = insertDepart(data);
+			errorMessage = insertDepart(data);
 		}else if("EMPLOYEE".equals(table)){//导入人员
-			r = insertEmployee(data);
+			errorMessage = insertEmployee(data);
 		}else if("EMP_FINANCIAL".equals(table)){//导入人员财务信息
-			r = insertFinance(data, date);
+			errorMessage = insertFinance(data, date);
 		}else if("EMP_CARD".equals(table)){//导入人员一卡通信息
-			r = insertCard(data);
+			errorMessage = insertCard(data);
 		}else if("EMP_POS".equals(table)){//导入班车打卡信息
-			r = insertPos(data);
+			errorMessage = insertPos(data);
 		}else if("GOODS".equals(table)){//物资资产
-			r = insertGoods(data);
+			errorMessage = insertGoods(data);
 		}else if("PLAN".equals(table)){//计划
-			r = insertPlan(data);
+			errorMessage = insertPlan(data);
+		}else if("ASSETS".equals(table)){//固定资产
+			errorMessage = insertAssets(data);
 		}
 		
-		return r;
+		return errorMessage;
 	}
 	
 	/**
@@ -37,8 +40,8 @@ public class ExcelDAO extends CommonDAO {
 	 * @param data 员工信息
 	 * @return
 	 */
-	public int insertEmployee(JSONObject data) throws Exception{
-		int r = 0;
+	public String insertEmployee(JSONObject data) throws Exception{
+		String errorMessage = "";
 		
 		//循环数据行
 		JSONArray rows = data.optJSONArray("row");
@@ -62,14 +65,22 @@ public class ExcelDAO extends CommonDAO {
 			
 			try{
 				insert(insertSql);
-				r = r + 1;
 			}catch(Exception e){
 				System.out.println(e);
+				if("".equals(errorMessage)){
+					errorMessage = "第" + i + "行数据有错误，请检查！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+				}
 				continue;
 			}
 		}
 		
-		return r;
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
 	}
 	
 	/**
@@ -78,8 +89,8 @@ public class ExcelDAO extends CommonDAO {
 	 * @param date 日期
 	 * @return
 	 */
-	public int insertFinance(JSONObject data, String date) throws Exception{
-		int r = 0;
+	public String insertFinance(JSONObject data, String date) throws Exception{
+		String errorMessage = "";
 		
 		//循环数据行
 		JSONArray rows = data.optJSONArray("row");
@@ -110,14 +121,22 @@ public class ExcelDAO extends CommonDAO {
 			
 			try{
 				insert(insertSql);
-				r = r + 1;
 			}catch(Exception e){
 				System.out.println(e);
+				if("".equals(errorMessage)){
+					errorMessage = "第" + i + "行数据有错误，请检查！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+				}
 				continue;
 			}
 		}
 		
-		return r;
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
 	}
 	
 	/**
@@ -125,8 +144,8 @@ public class ExcelDAO extends CommonDAO {
 	 * @param data 
 	 * @return
 	 */
-	public int insertCard(JSONObject data) throws Exception{
-		int r = 0;
+	public String insertCard(JSONObject data) throws Exception{
+		String errorMessage = "";
 		
 		//循环数据行
 		JSONArray rows = data.optJSONArray("row");
@@ -157,14 +176,22 @@ public class ExcelDAO extends CommonDAO {
 			
 			try{
 				insert(insertSql);
-				r = r + 1;
 			}catch(Exception e){
 				System.out.println(e);
+				if("".equals(errorMessage)){
+					errorMessage = "第" + i + "行数据有错误，请检查！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+				}
 				continue;
 			}
 		}
 		
-		return r;
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
 	}
 	
 	/**
@@ -172,8 +199,8 @@ public class ExcelDAO extends CommonDAO {
 	 * @param data 
 	 * @return
 	 */
-	public int insertPos(JSONObject data) throws Exception{
-		int r = 0;
+	public String insertPos(JSONObject data) throws Exception{
+		String errorMessage = "";
 		
 		//循环数据行
 		JSONArray rows = data.optJSONArray("row");
@@ -198,14 +225,22 @@ public class ExcelDAO extends CommonDAO {
 			
 			try{
 				insert(insertSql);
-				r = r + 1;
 			}catch(Exception e){
 				System.out.println(e);
+				if("".equals(errorMessage)){
+					errorMessage = "第" + i + "行数据有错误，请检查！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+				}
 				continue;
 			}
 		}
 		
-		return r;
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
 	}
 	
 	/**
@@ -214,8 +249,8 @@ public class ExcelDAO extends CommonDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public int insertDepart(JSONObject data) throws Exception{
-		int r = 0;
+	public String insertDepart(JSONObject data) throws Exception{
+		String errorMessage = "";
 		
 		//循环数据行
 		JSONArray rows = data.optJSONArray("row");
@@ -244,14 +279,22 @@ public class ExcelDAO extends CommonDAO {
 			
 			try{
 				insert(insertSql);
-				r = r + 1;
 			}catch(Exception e){
 				System.out.println(e);
+				if("".equals(errorMessage)){
+					errorMessage = "第" + i + "行数据有错误，请检查！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+				}
 				continue;
 			}
 		}
 		
-		return r;
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
 	}
 	
 	/**
@@ -259,8 +302,8 @@ public class ExcelDAO extends CommonDAO {
 	 * @param data 
 	 * @return
 	 */
-	public int insertPlan(JSONObject data) throws Exception{
-		int r = 0;
+	public String insertGoods(JSONObject data) throws Exception{
+		String errorMessage = "";
 		
 		//循环数据行
 		JSONArray rows = data.optJSONArray("row");
@@ -295,23 +338,31 @@ public class ExcelDAO extends CommonDAO {
 			
 			try{
 				insert(insertSql);
-				r = r + 1;
 			}catch(Exception e){
 				System.out.println(e);
+				if("".equals(errorMessage)){
+					errorMessage = "第" + i + "行数据有错误，请检查！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+				}
 				continue;
 			}
 		}
 		
-		return r;
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
 	}
 	
 	/**
-	 * 物资资产入库
+	 * 计划入库
 	 * @param data 
 	 * @return
 	 */
-	public int insertGoods(JSONObject data) throws Exception{
-		int r = 0;
+	public String insertPlan(JSONObject data) throws Exception{
+		String errorMessage = "";
 		
 		//循环数据行
 		JSONArray rows = data.optJSONArray("row");
@@ -337,23 +388,111 @@ public class ExcelDAO extends CommonDAO {
 			//根据责任人姓名找出责任人编码
 			String empcode = findCodeByName("EMPLOYEE", empname);
 			//根据计划员姓名找出计划员编码
-			String plannercode = findCodeByName("EMPLOYEE", empcode);
+			String plannercode = findCodeByName("EMPLOYEE", plannername);
 			//生成32位uuid
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			
-			
-			//String insertSql = "insert into GOODS values('" + uuid + "'," + kjnd + ",'" + kjh + "','" + ckdh + "'," + je + ",'" + llbmmc + "','" + llbmbm + "','" + jsbmmc + "','" + jsbmbm + "','" + llrmc + "','" + llrbm + "','" + zjh + "','" + chmc + "','" + gg + "','" + pjcode + "','" + th + "','" + zjldw + "'," + sl + "," + dj + ",'" + xmyt + "','" + chbm + "')";
+			String insertSql = "insert into PLAN values('" + uuid + "','" + empcode + "','" + empname + "','" + departcode + "','" + departname + "','" + pjcode + "','0','','" + new Date() + "','" + enddate + "',0,'" + note + "','" + symbol + "','" + assess + "','" + remark + "','" + leader_station + "','" + leader_section + "','" + leader_room + "','" + plannercode + "','" + plannername + "'," + ordercode + ")";
 			
 			try{
-				//insert(insertSql);
-				r = r + 1;
+				insert(insertSql);
 			}catch(Exception e){
 				System.out.println(e);
+				if("".equals(errorMessage)){
+					errorMessage = "第" + i + "行数据有错误，请检查！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+				}
 				continue;
 			}
 		}
 		
-		return r;
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 固定资产入库
+	 * @param data 
+	 * @return
+	 */
+	public String insertAssets(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			String code = row.optString("CODE");
+			String name = row.optString("NAME");
+			String model = row.optString("MODEL");
+			String buydate = row.optString("BUYDATE");
+			if("".equals(buydate)){
+				buydate = null;
+			}else {
+				buydate = "'" + buydate + "'";
+			}
+			String producedate = row.optString("PRODUCEDATE");
+			if("".equals(producedate)){
+				producedate = null;
+			}else {
+				producedate = "'" + producedate + "'";
+			}
+			int life = row.optInt("LIFE");
+			double buycost = row.optDouble("BUYCOST");
+			String status = row.optString("STATUS");
+			if("库中".equals(status)){
+				status = "1";
+			}else if("借出".equals(status)){
+				status = "2";
+			}else if("损坏".equals(status)){
+				status = "3";
+			}
+			String empname = row.optString("EMPNAME");
+			String lenddate = row.optString("LENDDATE");
+			if("".equals(lenddate)){
+				lenddate = null;
+			}else {
+				lenddate = "'" + lenddate + "'";
+			}
+			String checkdate = row.optString("CHECKDATE");
+			if("".equals(checkdate)){
+				checkdate = null;
+			}else {
+				checkdate = "'" + checkdate + "'";
+			}
+			int checkyear = row.optInt("CHECKYEAR");
+			
+			//根据领用人姓名找出责任人信息
+			String empcode = findCodeByName("EMPLOYEE", empname);
+			Map mapEmp = findByCode("EMPLOYEE", empcode);
+			String departcode = mapEmp.get("DEPARTCODE")==null?"":mapEmp.get("DEPARTCODE").toString();
+			//生成32位uuid
+			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			
+			String insertSql = "insert into ASSETS values('" + uuid + "','" + code + "','" + name + "','" + model + "'," + buydate + "," + producedate + "," + buycost + ",0," + life + ",'" + status + "','" + departcode + "','" + empcode + "'," + lenddate + "," + checkdate + "," + checkyear + ")";
+			
+			try{
+				insert(insertSql);
+			}catch(Exception e){
+				System.out.println(e);
+				if("".equals(errorMessage)){
+					errorMessage = "第" + i + "行数据有错误，请检查！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+				}
+				continue;
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
 	}
 }

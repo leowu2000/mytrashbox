@@ -33,6 +33,9 @@ public class ExcelController extends CommonController {
 		String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
 		String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
+		String status = ServletRequestUtils.getStringParameter(request, "status", "");
+		String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
+		String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
 		String errorMessage = "";
 		
 		if("import".equals(action)){//excel导入
@@ -46,21 +49,11 @@ public class ExcelController extends CommonController {
 				JSONObject config_Conversion = Config.getJSONObjectByName(table + "_Conversion");
 				JSONObject data = ExcelToJSON.parse(file, config_Conversion);
 				
-				int r = excelDAO.insertData(data, table, date);
-				
-				if(r<data.optJSONArray("row").length()&&r>0){
-					errorMessage = "出现错误，导入了" + r + "条数据，请检查数据！";
-				}else if(r==data.optJSONArray("row").length()){
-					errorMessage = "成功导入" + r + "条数据！";
-				}else if(r==0){
-					errorMessage = "导入失败，请检查数据！";
-				}
-				
-				System.out.println(data.optJSONArray("row").length());
+				errorMessage = excelDAO.insertData(data, table, date);
 			}
 			
 			
-			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8"));
+			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp);
 		}
 		
 		return null;

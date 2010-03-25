@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<head>
+		<table>WORKCHECK</table>
+		<code>WORKCHECK</code>
+		<name>考勤表</name>
+		<row>2</row>
+		<col>1</col>
+		<type>2</type>
+		<count>31</count>
+		<split>1</split>
+	</head>
+	<body>
+		<relation>
+			<id>1</id>
+			<name>姓名</name>
+			<column>EMPNAME</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id></id>
+			<name>考勤日期</name>
+			<column>CHECKDAY</column>
+			<format>25/26/27/28/29/30/31/1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18/19/20/21/22/23/24</format>
+		</relation>
+		<relation>
+			<id>2</id>
+			<name>考勤</name>
+			<column>CHECKRESULT</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>3</id>
+			<name>缺勤时间</name>
+			<column>EMPTYHOURS</column>
+			<format></format>
+		</relation>
+	</body>
+</config>

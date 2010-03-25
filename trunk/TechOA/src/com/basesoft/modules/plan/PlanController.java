@@ -34,6 +34,7 @@ public class PlanController extends CommonController {
 		String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
 		String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
+		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		
 		if("list_frame".equals(action)){//计划管理frame
 			mv = new ModelAndView("modules/plan/frame_manage");
@@ -57,6 +58,7 @@ public class PlanController extends CommonController {
 			mv.addObject("f_pjcode", f_pjcode);
 			mv.addObject("f_stagecode", f_stagecode);
 			mv.addObject("f_empname", f_empname);
+			mv.addObject("errorMessage", errorMessage);
 			return mv;
 		}else if("AJAX_PJ".equals(action)){//工作令号选择ajax
 			StringBuffer sb = new StringBuffer();
