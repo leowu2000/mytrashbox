@@ -67,7 +67,7 @@ public class DBTool {
         this.config(p);
     }
 
-    public boolean copyTable(final String table, String stsc, String saveDir, JList logList, int expType, int version,int dbType) {
+    public boolean copyTable(final String table, String stsc, String saveDir, JList logList, int expType, int version,boolean isTurnChar) {
 
         String searChsql = "";
         if (isHaveStcdCol(table)) {
@@ -117,7 +117,7 @@ public class DBTool {
 
                 ((DefaultListModel) (logList.getModel())).addElement("         ↓正在导出【" + getTabCnnm(jt2, table) + "】的数据，请等待...");
                 if (expType == 2) {
-                    createExcelTable(table, stsc, saveDir, logList, expType,dbType);
+                    createExcelTable(table, stsc, saveDir, logList, expType,isTurnChar);
                 }
             }
 
@@ -305,7 +305,7 @@ public class DBTool {
             DefaultListModel selectedYearsModel,
             DefaultListModel selectedSnameModel,
             DBTool dbTool, String saveDir, int expType,
-            int version,int dbType) {
+            int version,boolean isTurnChar) {
 
         expSuccessModel = expModel;
         String[] tables = new String[expModel.size()];
@@ -346,9 +346,9 @@ public class DBTool {
             boolean flg = false;
             if (expType == 0) {
                 ((DefaultListModel) (logList.getModel())).addElement("正在分析表：【" + getTabCnnm(jt2, table) + "】_" + table + "的数据 ......");
-                flg = createExcelTable(table, stscStr, saveDir, logList, expType,dbType);
+                flg = createExcelTable(table, stscStr, saveDir, logList, expType,isTurnChar);
             } else {
-                flg = copyTable(table, stscStr, saveDir, logList, expType, version,dbType);
+                flg = copyTable(table, stscStr, saveDir, logList, expType, version,isTurnChar);
             }
             if (flg) {
                 outputInfoExcel(table, logList, selectedSnameModel, stscStr);
@@ -507,12 +507,9 @@ public class DBTool {
         }
     }
 
-    public boolean createExcelTable(final String table, String stsc, String saveDir, final JList logList, int expType,int dbType) {
+    public boolean createExcelTable(final String table, String stsc, String saveDir, final JList logList, int expType,final boolean isTurnChar) {
         String searChsql = "";
         String countChsql = "";
-        boolean charFlag = false;
-        if (dbType==2)
-            charFlag = true;
         if (isHaveStcdCol(table)) {
             searChsql = "select * from " + table.toUpperCase() + makeStcdSqlCol(stsc ).toUpperCase();
             countChsql = "select count(*) from " + table.toUpperCase() + makeStcdSqlCol(stsc ).toUpperCase();
@@ -529,7 +526,6 @@ public class DBTool {
             final String path = saveDir;
             if(totalRecords>0){
                 final FileWriter fw = new FileWriter(path + "\\excel\\" + tablename +".txt");
-                final boolean changeFlg = charFlag;
                 ((DefaultListModel) (logList.getModel())).addElement("         →正在写入文件【" + saveDir + "\\excel\\" + tablename + ".txt】,请等待...");
                 jt1.query(searChsql,  new RowMapper() {
 
@@ -554,13 +550,13 @@ public class DBTool {
                                  Object obj = rs.getObject(i);
                                  obj=obj==null?"null":obj;
                                 if (fields.toString().trim().equals("")) {
-                                    if(changeFlg)
+                                    if(isTurnChar)
                                         fields = new StringBuffer(new String(obj.toString().getBytes("ISO-8859-1"),"GBK"));
                                     else
                                         fields = new StringBuffer(obj.toString());
 
                                 } else {
-                                     if(changeFlg)
+                                     if(isTurnChar)
                                          fields = new StringBuffer(fields + "\t" + new StringBuffer(new String(obj.toString().getBytes("ISO-8859-1"),"GBK")));
                                      else
                                          fields = new StringBuffer(fields + "\t" + obj.toString());
@@ -576,12 +572,12 @@ public class DBTool {
                                  Object obj = rs.getObject(i);
                                  obj=obj==null?"null":obj;
                                 if (fields.toString().trim().equals("")) {
-                                    if(changeFlg)
+                                    if(isTurnChar)
                                         fields = new StringBuffer(new String(obj.toString().getBytes("ISO-8859-1"),"GBK"));
                                     else
                                         fields = new StringBuffer(obj.toString());
                                 } else {
-                                     if(changeFlg)
+                                     if(isTurnChar)
                                         fields = new StringBuffer(fields + "\t" +new String(obj.toString().getBytes("ISO-8859-1"),"GBK"));
                                     else
                                         fields = new StringBuffer(fields + "\t" + obj.toString());

@@ -77,6 +77,7 @@ public class ExportView extends JFrame {
         tbMainSelect.remove(dataIndexPanel);//数据索引页面，设置数据库初始参数后，一直显示
         jButton5.setVisible(false);//隐藏“重新读取”的按钮
 //        exportType.setSelectedIndex(2);
+        charBox.setEnabled(false);
         ButtonGroup bgroup = new ButtonGroup();
         bgroup.add(jRadioButtonAll);
         bgroup.add(jRadioButtonY);
@@ -175,6 +176,7 @@ public class ExportView extends JFrame {
         jLabel17 = new javax.swing.JLabel();
         Version = new javax.swing.JComboBox();
         TestConn = new javax.swing.JButton();
+        charBox = new javax.swing.JCheckBox();
         SelectTable = new javax.swing.JPanel();
         SelectTableLPanel = new javax.swing.JScrollPane();
         ListTables = new javax.swing.JList();
@@ -397,6 +399,9 @@ public class ExportView extends JFrame {
             }
         });
 
+        charBox.setText(resourceMap.getString("charBox.text")); // NOI18N
+        charBox.setName("charBox"); // NOI18N
+
         javax.swing.GroupLayout ParametSetLayout = new javax.swing.GroupLayout(ParametSet);
         ParametSet.setLayout(ParametSetLayout);
         ParametSetLayout.setHorizontalGroup(
@@ -417,48 +422,50 @@ public class ExportView extends JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(28, 28, 28)
-                                .addComponent(txtIP, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE))
-                            .addGroup(ParametSetLayout.createSequentialGroup()
+                                .addComponent(txtIP, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cbDriver, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addGap(32, 32, 32)
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                                 .addComponent(jLabel17)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Version, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(Version, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
                                 .addComponent(jRadioButton1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jRadioButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
                                 .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
                                     .addComponent(jLabel11))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(DataName, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
-                                    .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)))))
+                                    .addComponent(DataName, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
+                                    .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
                             .addGroup(ParametSetLayout.createSequentialGroup()
                                 .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
-                                    .addGroup(ParametSetLayout.createSequentialGroup()
-                                        .addComponent(txtDataDir, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ParametSetLayout.createSequentialGroup()
+                                        .addComponent(txtDataDir, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
                                         .addGap(18, 18, 18)
                                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(exportType, 0, 212, Short.MAX_VALUE)))))))
+                                        .addComponent(exportType, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(33, 33, 33)
+                                        .addComponent(charBox)))))))
                 .addGap(67, 67, 67))
         );
         ParametSetLayout.setVerticalGroup(
@@ -469,12 +476,12 @@ public class ExportView extends JFrame {
                     .addComponent(jLabel1)
                     .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(cbDriver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jRadioButton1)
                         .addComponent(jRadioButton2)
-                        .addComponent(jLabel10)
-                        .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jRadioButton1)
+                        .addComponent(Version, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel17)
-                        .addComponent(Version, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10)))
                 .addGap(19, 19, 19)
                 .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtIP)
@@ -495,6 +502,7 @@ public class ExportView extends JFrame {
                 .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtDataDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(charBox)
                     .addComponent(jLabel14)
                     .addComponent(exportType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -1308,20 +1316,28 @@ public class ExportView extends JFrame {
         if (driveClassIndex == 1) {//sqlserver
             txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
             txtPort.setText("1433");
+            charBox.setSelected(false);
+            charBox.setEnabled(false);
             jLabel11.setText(" 数据库名称：");
         }
         if (driveClassIndex == 2) {//sysbase
             txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
+            charBox.setEnabled(true);
+            charBox.setSelected(true);
             txtPort.setText("5000");
             jLabel11.setText(" 数据库名称：");
         }
         if (driveClassIndex == 3) {//oracle
             txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
+            charBox.setSelected(false);
+            charBox.setEnabled(false);
             txtPort.setText("1521");
             jLabel11.setText(" 数据库名称：");
         }
         if(driveClassIndex == 4){//foxpro
             txtPort.setText("0000");
+            charBox.setSelected(false);
+            charBox.setEnabled(false);
             exportType.setSelectedIndex(0);
             exportType.setEnabled(false);
             txtPort.setEnabled(false);
@@ -1362,8 +1378,13 @@ public class ExportView extends JFrame {
                             JdbcUrl = "jdbc:jtds:sqlserver://" + txtIP.getText() + ":" + serverPort + "/" + DataName.getText();
                         }
                         if (driveClassIndex == 2) {//sysbase
-                            DiverClass = "com.sybase.jdbc3.jdbc.SybDriver";
-                            JdbcUrl = "jdbc:sybase:Tds:" + txtIP.getText() + ":" + serverPort + "/" + DataName.getText()+"?charset=cp850";
+                            if(charBox.isSelected()){
+                                DiverClass = "com.sybase.jdbc3.jdbc.SybDriver";
+                                JdbcUrl = "jdbc:sybase:Tds:" + txtIP.getText() + ":" + serverPort + "/" + DataName.getText()+"?charset=cp850";
+                            }else{
+                                 DiverClass = "com.sybase.jdbc3.jdbc.SybDriver";
+                                 JdbcUrl = "jdbc:sybase:Tds:" + txtIP.getText() + ":" + serverPort + "/" + DataName.getText();
+                            }
                         }
                         if (driveClassIndex == 3) {//sysbase             
                             DiverClass = "oracle.jdbc.driver.OracleDriver";
@@ -1449,9 +1470,9 @@ public class ExportView extends JFrame {
                                         try{
                                         String stnm = rs.getString("STNM");
                                         String stcd = rs.getString("STCD");
-                                        stnm=stnm==null?"":stnm;
-                                        if(cbDriver.getSelectedIndex()==2)
+                                        if(charBox.isSelected())
                                             stnm = new String(stnm.getBytes("ISO-8859-1"),"GBK");
+                                        stnm=stnm==null?"":stnm;
                                         stscNameModel_source.addElement(stnm.trim());
                                         listParamModel_source.addElement("[" + stcd.trim() + "]" + stnm.trim());
                                         liststscModel_source.addElement(stcd.trim());
@@ -1541,7 +1562,7 @@ public class ExportView extends JFrame {
             public void run() {
                 DefaultListModel allTablesmodel = (DefaultListModel) ListTables.getModel();
                 dbTool.process(logList, allTablesmodel, selectedTablesModel, selectedStscModel, selectedYearsModel,
-                        selectedSnameModel, dbTool, txtDataDir.getText(), expType, Version.getSelectedIndex(),cbDriver.getSelectedIndex());
+                        selectedSnameModel, dbTool, txtDataDir.getText(), expType, Version.getSelectedIndex(),charBox.isSelected());
                 MessageLabel.setText("系统消息：导出成功结束,导出数据和报告已成功保存至[");
                 MessageLabel1.setText("<html><a href='file:///" + txtDataDir.getText() + "'>" + txtDataDir.getText() + "\\excel</a></html>");
                 MessageLabel2.setText("]请查看！");
@@ -1680,7 +1701,7 @@ public class ExportView extends JFrame {
                     List<HY_STSC_ABean> resultList = null;
                     try{
                     String stnm = rs.getString("STNM").trim();
-                    if(cbDriver.getSelectedIndex()==2)
+                    if(charBox.isSelected())
                         stnm = new String(stnm.getBytes("ISO-8859-1"),"GBK");
                     stscNameModel_source.addElement(stnm);
                     listParamModel_source.addElement("[" + rs.getString("STCD").trim() + "]" + stnm);
@@ -2153,7 +2174,7 @@ public class ExportView extends JFrame {
                 while (rs.next()) {
                     try{
                     String stnm = rs.getString("stnm").trim();
-                    if(cbDriver.getSelectedIndex()==2)
+                    if(charBox.isSelected())
                         stnm = new String(stnm.getBytes("ISO-8859-1"),"GBK");
                     stscNameModel_source.addElement(stnm);
                     listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + stnm);
@@ -2282,6 +2303,7 @@ public class ExportView extends JFrame {
     private javax.swing.JButton btnTablePerStep;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cbDriver;
+    private javax.swing.JCheckBox charBox;
     private javax.swing.JTabbedPane dataIndexPanel;
     private javax.swing.JTable dataIndexTable;
     private javax.swing.JButton exitBtn;
