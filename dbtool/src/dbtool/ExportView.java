@@ -123,20 +123,20 @@ public class ExportView extends JFrame {
                 ex.printStackTrace();
             }
         }
-        File indexfile = new File("c://tables.xls");
-        if (!indexfile.exists()) {
-            try {
-                InputStream is = ExportView.class.getResourceAsStream("/tables.xls");
-                FileOutputStream fs = new FileOutputStream("c:/tables.xls");
-                byte[] buffer = new byte[1444];
-                while ((byteread = is.read(buffer)) != -1) {
-                    fs.write(buffer, 0, byteread);
-                }
-                is.close();
-            } catch (Exception ex) {
-                ex.printStackTrace();
+//        File indexfile = new File("c://tables.xls");
+//        if (!indexfile.exists()) {
+        try {
+            InputStream is = ExportView.class.getResourceAsStream("/tables.xls");
+            FileOutputStream fs = new FileOutputStream("c:/tables.xls");
+            byte[] buffer = new byte[1444];
+            while ((byteread = is.read(buffer)) != -1) {
+                fs.write(buffer, 0, byteread);
             }
+            is.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+//        }
     }
 
     /** This method is called from within the constructor to
