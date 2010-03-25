@@ -63,6 +63,8 @@
   			tb.add('&nbsp;&nbsp;&nbsp;');
   			tb.add(document.getElementById('departspan'));
   			tb.add('&nbsp;&nbsp;&nbsp;');
+		}else {
+			document.getElementById('departspan').style.display = 'none';
 		}
   		tb.add('选择年月：');
   		tb.add('&nbsp;&nbsp;&nbsp;');
@@ -96,7 +98,7 @@
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
   	<div id="toolbar"></div>
-	<span id="departspan" name="departspan" style="display:none;"></span>
+	<span id="departspan" name="departspan" ></span>
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" onchange="commit();" style="width:50;">
     <iframe name="list_workcheck" width="100%" frameborder="0" height="500"></iframe>
   </body>

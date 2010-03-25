@@ -17,6 +17,7 @@ List listDepart = (List)request.getAttribute("listDepart");
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 AssetsDAO assetsDAO = (AssetsDAO)ctx.getBean("assetsDAO");
+String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -37,9 +38,15 @@ AssetsDAO assetsDAO = (AssetsDAO)ctx.getBean("assetsDAO");
 	<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
+var errorMessage = '<%=errorMessage %>';
+if(errorMessage!=''){
+	alert(errorMessage);
+}
+
 var win;
 var win1;
 var win2;
+var win3;
 var action;
 var url='/assets.do';
 var vali = "";
@@ -88,6 +95,7 @@ Ext.onReady(function(){
 	tb.add({text: '归还',cls: 'x-btn-text-icon guihuan',handler: onReturnClick});
 	tb.add({text: '报修',cls: 'x-btn-text-icon xiugai',handler: onDamageClick});
 	tb.add({text: '年检',cls: 'x-btn-text-icon xiugai',handler: onCheckClick});
+	tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
     if(!win){
         win = new Ext.Window({
@@ -115,6 +123,16 @@ Ext.onReady(function(){
 	        buttons: [
 	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
 	        {text:'关闭',handler: function(){win2.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win3){
+        win3 = new Ext.Window({
+        	el:'dlg3',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm3').action=action; Ext.getDom('dataForm3').submit();}},
+	        {text:'关闭',handler: function(){win3.hide();}}
 	        ]
         });
     }
@@ -203,6 +221,13 @@ Ext.onReady(function(){
     	win2.setTitle('年检');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
+    }
+    
+    function onImportClick(btn){
+		action = 'excel.do?action=import&redirect=assets.do?action=list_manage&table=ASSETS';
+    	win3.setTitle('导入excel');
+       	Ext.getDom('dataForm3').reset();
+        win3.show(btn.dom);
     }
 });
 
@@ -383,5 +408,23 @@ Ext.onReady(function(){
 	        </form>
     </div>
 </div>
+
+<div id="dlg3" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm3" name="dataForm2" action="" method="post" enctype="multipart/form-data">
+	        	<input type="hidden" name="page" value="<%=pagenum %>">
+	        	<input type="hidden" name="status" value="<%=status %>">
+	        	<input type="hidden" name="depart" value="<%=depart %>">
+	        	<input type="hidden" name="emp" value="<%=emp %>">
+                <table>
+				  <tr>
+				    <td>选择文件</td>
+				    <td><input type="file" name="file" style="width:200"></td>
+				  </tr>	
+				</table>
+			</form>
+	</div>
+</div>  
   </body>
 </html>

@@ -27,6 +27,7 @@ public class AssetsController extends CommonController {
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		
 		if("frame_info".equals(action)){//固定资产查询frame
 			mv = new ModelAndView("modules/assets/frame_info");
@@ -74,6 +75,7 @@ public class AssetsController extends CommonController {
 			mv.addObject("depart", depart);
 			mv.addObject("emp", emp);
 			mv.addObject("listDepart", listDepart);
+			mv.addObject("errorMessage", errorMessage);
 		}else if("add".equals(action)){
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");

@@ -39,7 +39,7 @@
 			<id>5</id>
 			<name>完成日期</name>
 			<column>ENDDATE</column>
-			<format></format>
+			<format>yyyy-MM-dd</format>
 		</relation>
 		<relation>
 			<id>6</id>

@@ -184,7 +184,7 @@ Ext.onReady(function(){
 	});
 	
 	function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=plan.do?action=list_manage&table=PLAN&f_pjcode=<%=f_pjcode %>&f_stagecode=<%=f_stagecode %>&page=<%=pagenum %>&f_empname=<%=f_empname %>';
+		action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN&f_pjcode=<%=f_pjcode %>&f_stagecode=<%=f_stagecode %>&page=<%=pagenum %>&f_empname=<%=f_empname %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
