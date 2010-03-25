@@ -30,6 +30,8 @@ public class ExcelDAO extends CommonDAO {
 			errorMessage = insertPlan(data);
 		}else if("ASSETS".equals(table)){//固定资产
 			errorMessage = insertAssets(data);
+		}else if("WORKCHECK".equals(table)){//考勤
+			errorMessage = insertWorkcheck(data);
 		}
 		
 		return errorMessage;
@@ -475,6 +477,65 @@ public class ExcelDAO extends CommonDAO {
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			
 			String insertSql = "insert into ASSETS values('" + uuid + "','" + code + "','" + name + "','" + model + "'," + buydate + "," + producedate + "," + buycost + ",0," + life + ",'" + status + "','" + departcode + "','" + empcode + "'," + lenddate + "," + checkdate + "," + checkyear + ")";
+			
+			try{
+				insert(insertSql);
+			}catch(Exception e){
+				System.out.println(e);
+				if("".equals(errorMessage)){
+					errorMessage = "第" + i + "行数据有错误，请检查！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+				}
+				continue;
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 考勤入库
+	 * @param data 
+	 * @return
+	 */
+	public String insertWorkcheck(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			int kjnd = row.optInt("KJND");
+			String kjh = row.optString("KJH");
+			String ckdh = row.optString("CKDH");
+			double je = row.optDouble("JE");
+			String llbmmc = row.optString("LLBMMC");
+			String llbmbm = row.optString("LLBMBM");
+			String jsbmbm = row.optString("JSBMBM");
+			String jsbmmc = row.optString("JSBMMC");
+			String llrbm = row.optString("LLRBM");
+			String llrmc = row.optString("LLRMC");
+			String zjh = row.optString("ZJH");
+			String chmc = row.optString("CHMC");
+			String gg = row.optString("GG");
+			String pjcode = row.optString("PJCODE");
+			String th = row.optString("TH");
+			String zjldw = row.optString("ZJLDW");
+			int sl = row.optInt("SL");
+			double dj = row.optDouble("DJ");
+			String xmyt = row.optString("XMYT");
+			String chbm = row.optString("CHBM");
+			
+			//生成32位uuid
+			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			
+			String insertSql = "insert into GOODS values('" + uuid + "'," + kjnd + ",'" + kjh + "','" + ckdh + "'," + je + ",'" + llbmmc + "','" + llbmbm + "','" + jsbmmc + "','" + jsbmbm + "','" + llrmc + "','" + llrbm + "','" + zjh + "','" + chmc + "','" + gg + "','" + pjcode + "','" + th + "','" + zjldw + "'," + sl + "," + dj + ",'" + xmyt + "','" + chbm + "')";
 			
 			try{
 				insert(insertSql);

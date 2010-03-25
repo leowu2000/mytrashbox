@@ -26,6 +26,8 @@ public class DepartmentController extends CommonController {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
+		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
+		errorMessage = new String(errorMessage.getBytes("ISO8859-1"),"UTF-8");
 		
 		if("list".equals(action)){//列表页面
 			mv = new ModelAndView("modules/depart/list_depart");
@@ -33,6 +35,7 @@ public class DepartmentController extends CommonController {
 			List listDepart = departDAO.getChildDepart(emid);
 			
 			mv.addObject("listDepart", listDepart);
+			mv.addObject("errorMessage", errorMessage);
 		}else if("add".equals(action)){//新增
 			String name = ServletRequestUtils.getStringParameter(request, "departname", "");
 			String parent = ServletRequestUtils.getStringParameter(request, "departparent", "");

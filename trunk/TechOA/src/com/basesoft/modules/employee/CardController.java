@@ -25,7 +25,9 @@ public class CardController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
+		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
+		errorMessage = new String(errorMessage.getBytes("ISO8859-1"),"UTF-8");
 		
 		if("frame_manage".equals(action)){//一卡通管理frame
 			mv = new ModelAndView("modules/employee/card/frame_manage");

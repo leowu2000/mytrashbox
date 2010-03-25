@@ -9,6 +9,8 @@ String emrole = session.getAttribute("EMROLE").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 DepartmentDAO departDAO = (DepartmentDAO)ctx.getBean("departmentDAO");
+
+String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -33,6 +35,11 @@ DepartmentDAO departDAO = (DepartmentDAO)ctx.getBean("departmentDAO");
 <script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
+var errorMessage = '<%=errorMessage %>';
+if(errorMessage!=''){
+	alert(errorMessage);
+}
+
 var win;
 var win2;
 var action;

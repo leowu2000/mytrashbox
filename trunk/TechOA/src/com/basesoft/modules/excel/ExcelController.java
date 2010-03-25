@@ -27,12 +27,14 @@ public class ExcelController extends CommonController {
 		String table = ServletRequestUtils.getStringParameter(request, "table", "");
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
+		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 		String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 		String redirect = ServletRequestUtils.getStringParameter(request, "redirect", "");
 		String date = ServletRequestUtils.getStringParameter(request, "date", "");
 		String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
 		String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
+		f_empname = new String(f_empname.getBytes("ISO8859-1"),"UTF-8");
 		String status = ServletRequestUtils.getStringParameter(request, "status", "");
 		String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 		String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
