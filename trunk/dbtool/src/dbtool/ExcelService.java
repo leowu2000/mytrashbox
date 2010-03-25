@@ -8,12 +8,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import org.springframework.jdbc.core.RowMapper;
@@ -649,7 +652,7 @@ public class ExcelService {
             DefaultListModel selectedSnameModel,
             DefaultListModel listTabModel,int type,
             String stscstr,Map dataIndexMap,
-            Map dataDescMap,Map resultStscMap) {
+            Map dataDescMap,Map resultStscMap,boolean isTurnChar) {
         JdbcTemplate jt1 = dbTool.getJt1();
         JdbcTemplate jt2 = dbTool.getJt2();
         String[] tables = null;
@@ -694,6 +697,13 @@ public class ExcelService {
                 stnm = dbTool.getStscName(jt2, stcd.replaceAll("'",""));
                 if("".trim().equals(stnm))
                     stnm=stcd.replaceAll("'","");
+            if(isTurnChar){
+                try {
+                    stnm = new String(stnm.getBytes("ISO-8859-1"), "GBK");
+                } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(ExcelService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             strContent_table.append("<td class='title'colspan='2'><a href='#' onclick='return false;' title='"+stcd.replaceAll("'","")+"'>"+stnm+"</a></td>");
         }
         strContent_table.append("<td rowspan='2' class='title' nowrap>ºÏ¼Æ(Õ¾Äê)</td>");
