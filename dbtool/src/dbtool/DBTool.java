@@ -67,7 +67,7 @@ public class DBTool {
         this.config(p);
     }
 
-    public boolean copyTable(final String table, String stsc, String saveDir, JList logList, int expType, int version) {
+    public boolean copyTable(final String table, String stsc, String saveDir, JList logList, int expType, int version,int dbType) {
 
         String searChsql = "";
         if (isHaveStcdCol(table)) {
@@ -77,14 +77,14 @@ public class DBTool {
         }
         if(expType==1||expType==2)
             ((DefaultListModel) (logList.getModel())).addElement("正在分析表：【" + getTabCnnm(jt2, table) + "】_" + table + "的数据 ......");
-        outputError(table,"copyTable=searChsql:",searChsql);
+        outputError("\r\n"+table,"copyTable=searChsql:",searChsql);
         try {
             if (expType != 0) {
                 clearTable(true, table.toUpperCase());
             }
             String result[] = makeFiledsAndParamets(table);
             if(result==null){
-                outputError(table, "=copyTable=",getTabCnnm(jt2, table)+"数据表数据为空系统跳过");
+                outputError("\r\n"+table, "=copyTable=",getTabCnnm(jt2, table)+"数据表数据为空系统跳过");
             }
             else{
                 if(expType==0)
@@ -117,7 +117,7 @@ public class DBTool {
 
                 ((DefaultListModel) (logList.getModel())).addElement("         ↓正在导出【" + getTabCnnm(jt2, table) + "】的数据，请等待...");
                 if (expType == 2) {
-                    createExcelTable(table, stsc, saveDir, logList, expType);
+                    createExcelTable(table, stsc, saveDir, logList, expType,dbType);
                 }
             }
 
@@ -130,7 +130,7 @@ public class DBTool {
                 errorTab += "," + getTabCnnm(jt2, table);
             }
             ((DefaultListModel) (logList.getModel())).addElement("         ※系统检测到表结构错误，无法执行【" + getTabCnnm(jt2, table) + "】的入库操作，请修改导出方式为【只导出文本文件】※");
-            outputError(table, "=copyTable=",e.getMessage());
+            outputError("\r\n"+table, "=copyTable=",e.getMessage());
             return false;
         }
         return true;
@@ -144,7 +144,7 @@ public class DBTool {
                 || "ADDV".trim().equalsIgnoreCase(table)) {
             flag = false;
         } else {
-            List rows = jt2.queryForList("select * from HY_DBFP_J WHERE TBID='" + table + "' and upper(FLID)='STCD'");
+            List rows = jt2.queryForList("select * from HY_DBFP_J WHERE upper(TBID)='" + table.toUpperCase() + "' and upper(FLID)='STCD'");
             if (rows.size() > 0) {
                 flag = true;
             }
@@ -169,7 +169,7 @@ public class DBTool {
             return "";
         } else {
             try {
-                colmap = jt2.queryForMap("select FILDID from INDEX_DESC where TBENNM='" + table + "'");
+                colmap = jt2.queryForMap("SELECT FILDID FROM INDEX_DESC WHERE upper(TBENNM)='" + table.toUpperCase() + "'");
                 
             } catch (EmptyResultDataAccessException e) {
                 return "";
@@ -269,22 +269,23 @@ public class DBTool {
         } catch (Exception e) {
             return "";
         }
-        return map.get("stnm").toString();
+        return map.get("STNM").toString();
     }
+
     public String getStscName2(JdbcTemplate jdbcTemplate, String stcd, int version) {
         Map map = null;
         String searchSQL = "";
         if (version == 0) {
-            searchSQL = "select stnm from STHD where STCD='" + stcd + "'";
+            searchSQL = "select STNM from STHD where STCD='" + stcd + "'";
         } else {
-            searchSQL = "select stnm from HY_STSC_A where STCD='" + stcd + "'";
+            searchSQL = "select STNM from HY_STSC_A where STCD='" + stcd + "'";
         }
         try {
             map = jdbcTemplate.queryForMap(searchSQL);
         } catch (Exception e) {
             return "";
         }
-        return map.get("stnm").toString();
+        return map.get("STNM").toString();
     }
 
     public void clearTable(boolean isTarget, String table) {
@@ -304,7 +305,7 @@ public class DBTool {
             DefaultListModel selectedYearsModel,
             DefaultListModel selectedSnameModel,
             DBTool dbTool, String saveDir, int expType,
-            int version) {
+            int version,int dbType) {
 
         expSuccessModel = expModel;
         String[] tables = new String[expModel.size()];
@@ -345,18 +346,17 @@ public class DBTool {
             boolean flg = false;
             if (expType == 0) {
                 ((DefaultListModel) (logList.getModel())).addElement("正在分析表：【" + getTabCnnm(jt2, table) + "】_" + table + "的数据 ......");
-                flg = createExcelTable(table, stscStr, saveDir, logList, expType);
+                flg = createExcelTable(table, stscStr, saveDir, logList, expType,dbType);
             } else {
-                flg = copyTable(table, stscStr, saveDir, logList, expType, version);
+                flg = copyTable(table, stscStr, saveDir, logList, expType, version,dbType);
             }
             if (flg) {
                 outputInfoExcel(table, logList, selectedSnameModel, stscStr);
             }
             //生成数据索引
-            Long indexsdate = System.currentTimeMillis();
-
+//            Long indexsdate = System.currentTimeMillis();
             insertDataIndexTable(table, stscStr, stnameStr, logList, version, expType, saveDir);
-            outputLog(table, saveDir, sdate, indexsdate, true);
+//            outputLog(table, saveDir, sdate, indexsdate, true);
             if (i == tables.length) {
                 ((DefaultListModel) (logList.getModel())).addElement("正在生成导出报告 ......");
             }
@@ -366,7 +366,7 @@ public class DBTool {
                 Logger.getLogger(DBTool.class.getName()).log(Level.SEVERE, null, ex);
                 outputError("", "===process=Thread=",ex.getMessage());
             }
-            outputLog(table, saveDir, sdate, indexsdate, false);
+//            outputLog(table, saveDir, sdate, indexsdate, false);
         }
         //保存导出报告
 //        ExcelService.createReportHtml(saveDir, expSuccessModel, errorTab, dbTool, selectedStscModel, selectedSnameModel, listTablesModel, expType, stscStr,dataIndexMap,dataDescMap,resultStscMap);
@@ -376,19 +376,21 @@ public class DBTool {
 
      public void insertDataIndexTable(String table, String stcdStr,
             String stnameStr, JList logList, int version, int expType, String saveDir) {
+        outputError("\r\n"+table,"===准备生成索引==","");
         String indexFiled = getIndexFiled(table);
+        outputError("\r\n"+table,"===准备在字段-"+indexFiled+"-上生成索引","");
         if (!indexFiled.trim().equals("")) {//首先保证这张表可以生成数据索引
             try {
                 int row = jt1.queryForInt("select count(*) from " + table.toUpperCase());
                 if (row > 0) {
                     Map colmap = null;
                     try {
-                        colmap = jt2.queryForMap("select FILDTPL from INDEX_DESC where TBENNM='" + table + "'");
+                        colmap = jt2.queryForMap("select FILDTPL from INDEX_DESC where upper(TBENNM)='" + table.toUpperCase() + "'");
                     } catch (EmptyResultDataAccessException e) {
                         colmap = null;
                     }
                     try {
-                        String fltp = colmap.get("FILDTPL").toString().trim();
+                        String fltp = colmap.get("FILDTPL").toString().trim().toUpperCase();
                         String searchSQL = "";
                         String resultDesc = "";
                         String stscSQL = makeStcdSqlCol(stcdStr);
@@ -452,36 +454,27 @@ public class DBTool {
                                 }
                             }
                         }
-                        //=======================================
-//                        List rows2 = jt1.queryForList(stscSQL);
-//
-//                        ToOrder order2 = new ToOrder();
-//                        List beforList2 = new ArrayList();
-//                        Iterator it2 = rows2.iterator();
-//                        while (it2.hasNext()) {
-//                            Map map = (Map) it2.next();
-//                            beforList2.add(order2.getTem(map.get("STCD").toString(), map.get("YEARS").toString(), map.get("TOTAL").toString()));
-//                        }
-//                        List afterList2 = ToOrder.toOrder(beforList2);
-//                        resultStscMap.put(table, afterList2);
-//                        ((DefaultListModel) (logList.getModel())).addElement("         √成功生成【" + getTabCnnm(jt2, table) + "】的数据索引");
                         Map resuMap = jt1.queryForMap(resultDesc);
                         if(resuMap!=null)
                             dataDescMap.put(table,resuMap.get("RESU"));
                         dataIndexMap.put(table, "成功");
                     } catch (Exception ex) {
                         ex.printStackTrace();
-//                        ((DefaultListModel) (logList.getModel())).addElement("         ※无法生成表数据索引，请确认日期字段【"+indexFiled+"】是否存在,若不存在请修改【c:\\tables.xls】※");
+                        outputError("\r\n"+table, "===insertDataIndexTable_new=",ex.getMessage());
                          dataIndexMap.put(table, "失败");
                          dataDescMap.put(table,"");
                     }
+                }else{
+                    dataIndexMap.put(table, "");
                 }
             } catch (Exception ex) {
+                dataIndexMap.put(table, "错误");
                 ex.printStackTrace();
-                outputError(table, "===insertDataIndexTable_new=",ex.getMessage());
+                outputError("\r\n"+table, "===insertDataIndexTable_new=",ex.getMessage());
 //                ((DefaultListModel) (logList.getModel())).addElement("         ※无法生成【" + getTabCnnm(jt2, table) + "】的数据索引，请确认日期字段【"+indexFiled+"】是否存在※");
             }
         }
+        
     }
 
     public Connection getCnSource() {
@@ -514,9 +507,12 @@ public class DBTool {
         }
     }
 
-    public boolean createExcelTable(final String table, String stsc, String saveDir, final JList logList, int expType) {
+    public boolean createExcelTable(final String table, String stsc, String saveDir, final JList logList, int expType,int dbType) {
         String searChsql = "";
         String countChsql = "";
+        boolean charFlag = false;
+        if (dbType==2)
+            charFlag = true;
         if (isHaveStcdCol(table)) {
             searChsql = "select * from " + table.toUpperCase() + makeStcdSqlCol(stsc ).toUpperCase();
             countChsql = "select count(*) from " + table.toUpperCase() + makeStcdSqlCol(stsc ).toUpperCase();
@@ -524,8 +520,8 @@ public class DBTool {
             searChsql = "select * from " + table.toUpperCase();
             countChsql = "select count(*) from " + table.toUpperCase();
         }
-        outputError(table,"createExcelTable=searChsql:",searChsql);
-        outputError(table,"createExcelTable=countChsql:",countChsql);
+        outputError("\r\n"+table,"createExcelTable=searChsql:",searChsql);
+        outputError("\r\n"+table,"createExcelTable=countChsql:",countChsql);
         try {
             final String tablename = getTabCnnm(jt2, table);
             //总记录数
@@ -533,6 +529,7 @@ public class DBTool {
             final String path = saveDir;
             if(totalRecords>0){
                 final FileWriter fw = new FileWriter(path + "\\excel\\" + tablename +".txt");
+                final boolean changeFlg = charFlag;
                 ((DefaultListModel) (logList.getModel())).addElement("         →正在写入文件【" + saveDir + "\\excel\\" + tablename + ".txt】,请等待...");
                 jt1.query(searChsql,  new RowMapper() {
 
@@ -557,9 +554,16 @@ public class DBTool {
                                  Object obj = rs.getObject(i);
                                  obj=obj==null?"null":obj;
                                 if (fields.toString().trim().equals("")) {
-                                    fields = new StringBuffer(obj.toString());
+                                    if(changeFlg)
+                                        fields = new StringBuffer(new String(obj.toString().getBytes("ISO-8859-1"),"GBK"));
+                                    else
+                                        fields = new StringBuffer(obj.toString());
+
                                 } else {
-                                    fields = new StringBuffer(fields + "\t" + obj.toString());
+                                     if(changeFlg)
+                                         fields = new StringBuffer(fields + "\t" + new StringBuffer(new String(obj.toString().getBytes("ISO-8859-1"),"GBK")));
+                                     else
+                                         fields = new StringBuffer(fields + "\t" + obj.toString());
                                 }
                             }
                             fw.write(fields.toString() + "\r\n");
@@ -567,21 +571,28 @@ public class DBTool {
 
                             }catch(Exception ex){ex.printStackTrace();}
                         }else{
+                            try {
                             for (int i = 1; i <= cols; i++) {
                                  Object obj = rs.getObject(i);
                                  obj=obj==null?"null":obj;
                                 if (fields.toString().trim().equals("")) {
-                                    fields = new StringBuffer(obj.toString());
+                                    if(changeFlg)
+                                        fields = new StringBuffer(new String(obj.toString().getBytes("ISO-8859-1"),"GBK"));
+                                    else
+                                        fields = new StringBuffer(obj.toString());
                                 } else {
-                                    fields = new StringBuffer(fields + "\t" + obj.toString());
+                                     if(changeFlg)
+                                        fields = new StringBuffer(fields + "\t" +new String(obj.toString().getBytes("ISO-8859-1"),"GBK"));
+                                    else
+                                        fields = new StringBuffer(fields + "\t" + obj.toString());
                                 }
                             }
-                            try {
-                                    fw.write(fields.toString() + "\r\n");
-                                    fields=new StringBuffer("");
-                                } catch (IOException ex) {
-                                     ex.printStackTrace();
-                                }
+                            
+                            fw.write(fields.toString() + "\r\n");
+                            fields=new StringBuffer("");
+                        } catch (IOException ex) {
+                             ex.printStackTrace();
+                        }
                         }
                         k++;
                          return null;
@@ -602,7 +613,7 @@ public class DBTool {
                 ((DefaultListModel) (logList.getModel())).addElement("         ※无法执行导出， 请确认数据表【" + getTabCnnm(jt2, table) + "】_" + table + " 是否存在※");
             else
                 ((DefaultListModel) (logList.getModel())).addElement("         ※无法执行导出， 请确认数据表【" + getTabCnnm(jt2, table) + "】_" + table + "是否存在，或者字段类型是否正确※");
-            outputError(table, "===createExcelTable=",e.getMessage());
+            outputError("\r\n"+table, "===createExcelTable=",e.getMessage());
             return false;
         }
         return true;
@@ -709,8 +720,8 @@ public class DBTool {
                     final int cols = meta.getColumnCount();
                     for (int i = 0; i < cols; i++) {
                         String colname = meta.getColumnName(i + 1);
-                        if(colname.toUpperCase().equals("YR"))
-                            colname = compareYearColumn(tablename);
+//                        if(colname.toUpperCase().equals("YR"))
+//                            colname = compareYearColumn(tablename);
                         fields += colname + ",";
                         params += "?,";
                     }

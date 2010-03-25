@@ -452,7 +452,9 @@ public class ExcelService {
             HSSFCell cell_stnm = row_Val.getCell((short) 1);
             HSSFCell cell_parent = row_Val.getCell((short) 2);
             try {
+
                 stcdList[i - 1] = "INSERT INTO TABLE_STCD(STCD,STNM,PARENT)VALUES('" + getStringCellValue(cell_stcd) + "','" + getStringCellValue(cell_stnm) + "','" + getStringCellValue(cell_parent) + "')";
+//                System.out.println(stcdList[i - 1]);
             } catch (Exception e) {
                 continue;
             }
@@ -687,7 +689,12 @@ public class ExcelService {
         strContent_table.append("<td rowspan='2' class='title' nowrap>导出条数</td>");
         strContent_table.append("<td rowspan='2' class='title' nowrap> 索  引 </td>");
         for(String stcd:stsc){
-            strContent_table.append("<td class='title'colspan='2'><a href='#' onclick='return false;' title='"+stcd.replaceAll("'","")+"'>"+dbTool.getStscName(jt2, stcd.replaceAll("'",""))+"</a></td>");
+            String stnm = dbTool.getStscName(jt1, stcd.replaceAll("'",""));
+            if("".trim().equals(stnm))
+                stnm = dbTool.getStscName(jt2, stcd.replaceAll("'",""));
+                if("".trim().equals(stnm))
+                    stnm=stcd.replaceAll("'","");
+            strContent_table.append("<td class='title'colspan='2'><a href='#' onclick='return false;' title='"+stcd.replaceAll("'","")+"'>"+stnm+"</a></td>");
         }
         strContent_table.append("<td rowspan='2' class='title' nowrap>合计(站年)</td>");
         strContent_table.append("</tr><tr bgcolor='#E8EFFF' height='20'>");
@@ -704,7 +711,10 @@ public class ExcelService {
                 strContent_table.append("<td>" + dbTool.getCountToExcel(jt1, table,stscstr,dbTool.isHaveStcdCol(table)) + "</td>");
                 Object result=dataIndexMap.get(table);
                 if (result==null) result="";
-                strContent_table.append("<td>" + result+ "</td>");
+                if("失败".trim().equals(result))//getIndexFiled(table)
+                    strContent_table.append("<td><a href='#' onclick='return false;' title='请确认表－"+table+"－中存在索引字段:"+dbTool.getIndexFiled(table)+"'>" + result+ "</td>");
+                else
+                    strContent_table.append("<td>" + result+ "</td>");
                 List resultList = (List)resultStscMap.get(table);
                 if(resultList!=null && resultList.size()>0){
                     for(int k = 0; k<stsc.length;k++){
