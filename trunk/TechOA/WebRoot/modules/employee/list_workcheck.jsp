@@ -14,6 +14,8 @@
 	String emprole = session.getAttribute("EMROLE").toString();
 	
 	String method = request.getAttribute("method").toString();
+	
+	String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -30,7 +32,13 @@
 	<%@ include file="../../common/meta.jsp" %>
 	<script src="../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 	<script type="text/javascript">
+var errorMessage = '<%=errorMessage %>';
+if(errorMessage!=''){
+	alert(errorMessage);
+}	
+
 var win;
+var win2;
 var action;
 var url='/em.do';
 var method = '<%=method %>';
@@ -46,6 +54,7 @@ Ext.onReady(function(){
 %>
 
 	tb.add({text: '填写考勤记录',cls: 'x-btn-text-icon add',handler: onAddClick});
+	//tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 <%
 		}
 	}
@@ -61,6 +70,16 @@ Ext.onReady(function(){
         });
     }
     
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
+	        ]
+        });
+    }
+    
     function onAddClick(btn){
     	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
 		if(selValue==undefined) {
@@ -72,6 +91,13 @@ Ext.onReady(function(){
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
+    }
+    
+    function onImportClick(btn){
+		action = 'excel.do?action=import&redirect=em.do?action=workcheck&table=WORKCHECK&depart=<%=depart %>&datepick=<%=datepick %>';
+    	win2.setTitle('导入excel');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
     }
     
     function onBackClick(btn){
@@ -195,5 +221,23 @@ Ext.onReady(function(){
       </form>
     </div>
 </div>
+
+<div id="dlg2" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
+                <table>
+                  <tr>
+				    <td>选择月份</td>
+				    <td><input type="text" name="date" style="width:200" onclick="WdatePicker({dateFmt:'yyyy-MM'})"></td>
+				  </tr>	
+				  <tr>
+				    <td>选择文件</td>
+				    <td><input type="file" name="file" style="width:200"></td>
+				  </tr>	
+				</table>
+			</form>
+	</div>
+</div>  
   </body>
 </html>
