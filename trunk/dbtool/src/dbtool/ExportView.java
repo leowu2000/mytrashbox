@@ -1363,7 +1363,7 @@ public class ExportView extends JFrame {
                         }
                         if (driveClassIndex == 2) {//sysbase
                             DiverClass = "com.sybase.jdbc3.jdbc.SybDriver";
-                            JdbcUrl = "jdbc:sybase:Tds:" + txtIP.getText() + ":" + serverPort + "/" + DataName.getText();
+                            JdbcUrl = "jdbc:sybase:Tds:" + txtIP.getText() + ":" + serverPort + "/" + DataName.getText()+"?charset=cp850";
                         }
                         if (driveClassIndex == 3) {//sysbase             
                             DiverClass = "oracle.jdbc.driver.OracleDriver";
@@ -1443,15 +1443,19 @@ public class ExportView extends JFrame {
                                 liststscModel_source.removeAllElements();
                                 jt_stsc.query(queryStcdSQL, new RowMapper() {
 
-                                    public List<HY_STSC_ABean> mapRow(final ResultSet rs, int rowNum) throws SQLException {
+                                    public List<HY_STSC_ABean> mapRow(final ResultSet rs, int rowNum) throws SQLException{
                                         List<HY_STSC_ABean> resultList = null;
 //                                        System.out.println(rs.getString("stnm").trim());
+                                        try{
                                         String stnm = rs.getString("STNM");
                                         String stcd = rs.getString("STCD");
                                         stnm=stnm==null?"":stnm;
+                                        if(cbDriver.getSelectedIndex()==2)
+                                            stnm = new String(stnm.getBytes("ISO-8859-1"),"GBK");
                                         stscNameModel_source.addElement(stnm.trim());
                                         listParamModel_source.addElement("[" + stcd.trim() + "]" + stnm.trim());
                                         liststscModel_source.addElement(stcd.trim());
+                                        }catch(Exception ex){ex.printStackTrace();}
                                         return resultList;
                                     }
                                 });
@@ -1537,7 +1541,7 @@ public class ExportView extends JFrame {
             public void run() {
                 DefaultListModel allTablesmodel = (DefaultListModel) ListTables.getModel();
                 dbTool.process(logList, allTablesmodel, selectedTablesModel, selectedStscModel, selectedYearsModel,
-                        selectedSnameModel, dbTool, txtDataDir.getText(), expType, Version.getSelectedIndex());
+                        selectedSnameModel, dbTool, txtDataDir.getText(), expType, Version.getSelectedIndex(),cbDriver.getSelectedIndex());
                 MessageLabel.setText("系统消息：导出成功结束,导出数据和报告已成功保存至[");
                 MessageLabel1.setText("<html><a href='file:///" + txtDataDir.getText() + "'>" + txtDataDir.getText() + "\\excel</a></html>");
                 MessageLabel2.setText("]请查看！");
@@ -1674,9 +1678,14 @@ public class ExportView extends JFrame {
 
                 public List<HY_STSC_ABean> mapRow(final ResultSet rs, int rowNum) throws SQLException {
                     List<HY_STSC_ABean> resultList = null;
-                    stscNameModel_source.addElement(rs.getString("STNM").trim());
-                    listParamModel_source.addElement("[" + rs.getString("STCD").trim() + "]" + rs.getString("STNM").trim());
+                    try{
+                    String stnm = rs.getString("STNM").trim();
+                    if(cbDriver.getSelectedIndex()==2)
+                        stnm = new String(stnm.getBytes("ISO-8859-1"),"GBK");
+                    stscNameModel_source.addElement(stnm);
+                    listParamModel_source.addElement("[" + rs.getString("STCD").trim() + "]" + stnm);
                     liststscModel_source.addElement(rs.getString("STCD").trim());
+                    }catch(Exception ex){ex.printStackTrace();}
                     return resultList;
                 }
             });
@@ -2142,9 +2151,14 @@ public class ExportView extends JFrame {
             public List<HY_STSC_ABean> mapRow(final ResultSet rs, int rowNum) throws SQLException {
                 List<HY_STSC_ABean> resultList = null;
                 while (rs.next()) {
-                    stscNameModel_source.addElement(rs.getString("stnm").trim());
-                    listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + rs.getString("stnm").trim());
+                    try{
+                    String stnm = rs.getString("stnm").trim();
+                    if(cbDriver.getSelectedIndex()==2)
+                        stnm = new String(stnm.getBytes("ISO-8859-1"),"GBK");
+                    stscNameModel_source.addElement(stnm);
+                    listParamModel_source.addElement("[" + rs.getString("stcd").trim() + "]" + stnm);
                     liststscModel_source.addElement(rs.getString("stcd").trim());
+                    }catch(Exception ex){ex.printStackTrace();}
                 }
                 return resultList;
             }
