@@ -31,7 +31,7 @@ public class ExcelDAO extends CommonDAO {
 		}else if("ASSETS".equals(table)){//固定资产
 			errorMessage = insertAssets(data);
 		}else if("WORKCHECK".equals(table)){//考勤
-			errorMessage = insertWorkcheck(data);
+			errorMessage = insertWorkcheck(data, date);
 		}
 		
 		return errorMessage;
@@ -503,39 +503,36 @@ public class ExcelDAO extends CommonDAO {
 	 * @param data 
 	 * @return
 	 */
-	public String insertWorkcheck(JSONObject data) throws Exception{
+	public String insertWorkcheck(JSONObject data, String date) throws Exception{
 		String errorMessage = "";
 		
 		//循环数据行
 		JSONArray rows = data.optJSONArray("row");
 		for(int i=0;i<rows.length();i++){
+			String checkdate = ""; 
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
-			int kjnd = row.optInt("KJND");
-			String kjh = row.optString("KJH");
-			String ckdh = row.optString("CKDH");
-			double je = row.optDouble("JE");
-			String llbmmc = row.optString("LLBMMC");
-			String llbmbm = row.optString("LLBMBM");
-			String jsbmbm = row.optString("JSBMBM");
-			String jsbmmc = row.optString("JSBMMC");
-			String llrbm = row.optString("LLRBM");
-			String llrmc = row.optString("LLRMC");
-			String zjh = row.optString("ZJH");
-			String chmc = row.optString("CHMC");
-			String gg = row.optString("GG");
-			String pjcode = row.optString("PJCODE");
-			String th = row.optString("TH");
-			String zjldw = row.optString("ZJLDW");
-			int sl = row.optInt("SL");
-			double dj = row.optDouble("DJ");
-			String xmyt = row.optString("XMYT");
-			String chbm = row.optString("CHBM");
+			String empname = row.optString("EMPNAME");
+			int checkday = row.optInt("CHECKDAY");
+			String checkresult = row.optString("CHECKRESULT");
+			int emptyhours = row.optInt("EMPTYHOURS");
 			
-			//生成32位uuid
-			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			if(checkday>=25){
+				if("01".equals(date.split("-")[1])){
+					checkdate = date.split("-")[0] + "-12-" + checkday;
+				}else {
+					checkdate = date.split("-")[0] + "-" + (Integer.parseInt(date.split("-")[1])-1) + "-" + checkday;
+				}
+			}else {
+				checkdate = date + "-" + checkday;
+			}
 			
-			String insertSql = "insert into GOODS values('" + uuid + "'," + kjnd + ",'" + kjh + "','" + ckdh + "'," + je + ",'" + llbmmc + "','" + llbmbm + "','" + jsbmmc + "','" + jsbmbm + "','" + llrmc + "','" + llrbm + "','" + zjh + "','" + chmc + "','" + gg + "','" + pjcode + "','" + th + "','" + zjldw + "'," + sl + "," + dj + ",'" + xmyt + "','" + chbm + "')";
+			//根据姓名找编码
+			String empcode = findCodeByName("EMPLOYEE", empname);
+			//根据result名称找到编码
+			String checkresultcode = findCodeByName("DICT", checkresult);
+			
+			String insertSql = "insert into WORKCHECK values('" + empcode + "','" + checkdate + "','" + checkresultcode + "'," + emptyhours + ")";
 			
 			try{
 				insert(insertSql);
