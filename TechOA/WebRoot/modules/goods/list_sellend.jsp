@@ -47,7 +47,6 @@ Ext.onReady(function(){
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
-    		<td>选择</td>
     		<td>会计年度</td>
     		<td>会计号</td>
     		<td>出库单号</td>
@@ -71,7 +70,6 @@ Ext.onReady(function(){
 		Map mapGoods = (Map)listGoods.get(i);
 %>
 		<tr>
-			<td><input type="checkbox" name="check" value="<%=mapGoods.get("ID") %>" class="ainput"></td>
 			<td><%=mapGoods.get("KJND") %></td>
 			<td><%=mapGoods.get("KJH") %></td>
 			<td><%=mapGoods.get("CKDH") %></td>

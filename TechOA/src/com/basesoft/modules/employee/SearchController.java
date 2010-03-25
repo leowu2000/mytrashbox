@@ -22,6 +22,7 @@ public class SearchController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
+		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 		
 		if("frame_search".equals(action)){//综合查询frame
 			mv = new ModelAndView("modules/employee/search/frame_search");

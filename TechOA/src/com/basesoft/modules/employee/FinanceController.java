@@ -26,8 +26,10 @@ public class FinanceController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
+		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 		String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
+		errorMessage = new String(errorMessage.getBytes("ISO8859-1"),"UTF-8");
 		
 		if("frame_manage".equals(action)){//财务管理frame
 			mv = new ModelAndView("modules/employee/finance/frame_manage");

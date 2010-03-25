@@ -34,6 +34,7 @@ public class EmployeeController extends CommonController {
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
+		errorMessage = new String(errorMessage.getBytes("ISO8859-1"),"UTF-8");
 		if("frame_infolist".equals(action)){//人员frame
 			mv = new ModelAndView("modules/employee/frame_info");
 		}else if("infolist".equals(action)){//人员基本信息
@@ -54,6 +55,7 @@ public class EmployeeController extends CommonController {
 			//接收页面参数
 			String loginid = ServletRequestUtils.getStringParameter(request, "loginid", "");
 			String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
+			emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 			String rolecode = ServletRequestUtils.getStringParameter(request, "rolecode", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 
@@ -92,6 +94,7 @@ public class EmployeeController extends CommonController {
 			
 			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 			String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
+			emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 			
 			PageList pageList = emDAO.findAll(seldepart, emname, page);
 			
@@ -284,6 +287,7 @@ public class EmployeeController extends CommonController {
 			mv.addObject("listDate", listDate);
 			mv.addObject("listCheck", listCheck);
 			mv.addObject("method", method);
+			mv.addObject("errorMessage", errorMessage);
 		}else if("addWorkcheck".equals(action)){//增加考勤记录
 			String checkdate = ServletRequestUtils.getStringParameter(request, "checkdate", "");
 			String checkcode = ServletRequestUtils.getStringParameter(request, "checkcode", "");

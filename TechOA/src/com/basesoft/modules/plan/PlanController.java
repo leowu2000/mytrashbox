@@ -34,6 +34,7 @@ public class PlanController extends CommonController {
 		String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
 		String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
+		f_empname = new String(f_empname.getBytes("ISO8859-1"),"UTF-8");
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		
 		if("list_frame".equals(action)){//计划管理frame
