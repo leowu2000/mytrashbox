@@ -354,13 +354,12 @@ public class DBTool {
         }
         //保存导出报告
         ExcelService.createReportHtml2(saveDir, expSuccessModel, errorTab, dbTool, selectedStscModel, selectedSnameModel,
-                listTablesModel, expType, stscStr,dataIndexMap,dataDescMap,resultStscMap,isTurnChar);
+                listTablesModel, expType, stscStr,dataIndexMap,dataDescMap,resultStscMap,isTurnChar,version);
         ((DefaultListModel) (logList.getModel())).addElement("==导出工作成功结束！==");
     }
 
      public void insertDataIndexTable(String table, String stcdStr,
             String stnameStr, JList logList, int version, int expType, String saveDir,boolean isTurnChar) {
-        outputError("\r\n"+table,"===准备生成索引==","");
         String indexFiled = getIndexFiled(table);
         outputError("\r\n"+table,"===准备在字段-"+indexFiled+"-上生成索引","");
         if (!indexFiled.trim().equals("")) {//首先保证这张表可以生成数据索引
@@ -385,9 +384,9 @@ public class DBTool {
                             resultDesc= "SELECT SUM(A.INDEXY) AS RESU FROM (SELECT STCD,COUNT("
                                     + "DISTINCT (DATEPART(yyyy,"+indexFiled.toUpperCase()+"))) "
                                     +"AS INDEXY FROM "+table.toUpperCase()+" "+makeStcdSqlCol(stcdStr)+" GROUP BY STCD) AS A";
-                            stscSQL = "SELECT DISTINCT STCD,DATEPART (yyyy," + indexFiled.toUpperCase() + ") as YEARS,COUNT(*) AS TOTAL FROM " + table.toUpperCase()
-                                    + " "+makeStcdSqlCol(stcdStr)+" GROUP BY STCD,DATEPART (yyyy," + indexFiled.toUpperCase() + ")"
-                                    + " ORDER BY STCD,YEARS ASC ";
+//                            stscSQL = "SELECT DISTINCT STCD,DATEPART (yyyy," + indexFiled.toUpperCase() + ") as YEARS,COUNT(*) AS TOTAL FROM " + table.toUpperCase()
+//                                    + " "+makeStcdSqlCol(stcdStr)+" GROUP BY STCD,DATEPART (yyyy," + indexFiled.toUpperCase() + ")"
+//                                    + " ORDER BY STCD,YEARS ASC ";
                             stscSQL =  "SELECT TAB.STCD,min(TAB.YEARS) as MINY,max(TAB.YEARS) AS MAXY,sum(TAB.TOTAL) AS ALLSUM FROM "
                                         +"(SELECT STCD,DATEPART (yyyy,"+indexFiled.toUpperCase()+") as YEARS,"
                                         +" COUNT(*) AS TOTAL FROM "+table.toUpperCase()+" "+makeStcdSqlCol(stcdStr)
@@ -571,7 +570,7 @@ public class DBTool {
                         }
                         }
                         k++;
-                         return null;
+                        return null;
                     }
                 });
                 fw.close();
@@ -611,7 +610,7 @@ public class DBTool {
                     if (k == 0) {
                         String stnm = getStscName(jt2, values[0]);
                         if("".trim().equals(stnm))
-                            stnm = getStscName(jt1, values[0]);
+                            stnm = getStscName2(jt1, values[0],version);
                         if(isTurnChar)
                             stnm = new String(stnm.getBytes("ISO-8859-1"),"GBK");
                         str += stnm + "\t" + values[k] + "\t";
