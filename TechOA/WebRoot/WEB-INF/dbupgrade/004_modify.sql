@@ -7,34 +7,38 @@ INSERT INTO MENU VALUES('011','工作令管理','1','pj.do?action=list',2,'1','0
 INSERT INTO MENU VALUES('012','部门管理','1','depart.do?action=list',3,'1','001','1.png');
 INSERT INTO MENU VALUES('013','用户管理','1','em.do?action=frame_infolist',4,'1','001','1.png');
 INSERT INTO MENU VALUES('014','菜单管理','1','menu.do?action=manage',5,'1','001','1.png');
-INSERT INTO MENU VALUES('002','工作报告','2','',8,'1','0','2.png');
-INSERT INTO MENU VALUES('021','个人工作报告','1','workreport.do?action=list',9,'1','002','2.png');
-INSERT INTO MENU VALUES('022','审核工作报告','1','workreport.do?action=auditlist',10,'1','002','2.png');
-INSERT INTO MENU VALUES('003','工时统计汇总','2','',11,'1','0','3.png');
-INSERT INTO MENU VALUES('031','工时统计汇总','1','modules/pj/frame_gstjhz.jsp',12,'1','003','3.png');
-INSERT INTO MENU VALUES('032','科研工时统计','1','pj.do?action=frame_kygstj',13,'1','003','3.png');
-INSERT INTO MENU VALUES('033','承担任务情况','1','pj.do?action=frame_cdrwqk',14,'1','003','3.png');
-INSERT INTO MENU VALUES('004','人事管理','2','',15,'1','0','4.png');
-INSERT INTO MENU VALUES('041','人事管理','1','em.do?action=frame_manage',16,'1','004','4.png');
-INSERT INTO MENU VALUES('042','财务管理','1','finance.do?action=frame_manage',17,'1','004','4.png');
-INSERT INTO MENU VALUES('043','一卡通管理','1','card.do?action=frame_manage',18,'1','004','4.png');
-INSERT INTO MENU VALUES('044','班车信息','1','pos.do?action=frame_manage',19,'1','004','4.png');
-INSERT INTO MENU VALUES('005','固定资产管理','2','',20,'1','0','5.png');
-INSERT INTO MENU VALUES('051','固定资产查询','1','assets.do?action=frame_info&manage=0',21,'1','005','5.png');
-INSERT INTO MENU VALUES('052','固定资产维护','1','assets.do?action=frame_info&manage=1',22,'1','005','5.png');
-INSERT INTO MENU VALUES('053','年检提醒','1','assets.do?action=remind',23,'1','005','5.png');
-INSERT INTO MENU VALUES('006','物资管理','2','',24,'1','0','6.png');
-INSERT INTO MENU VALUES('061','物资管理','1','goods.do?action=list',25,'1','006','6.png');
-INSERT INTO MENU VALUES('007','考勤管理','2','',26,'1','0','7.png');
-INSERT INTO MENU VALUES('071','员工考勤记录','1','em.do?action=frame_workcheck',27,'1','007','7.png');
-INSERT INTO MENU VALUES('008','计划管理','2','',28,'1','0','8.png');
-INSERT INTO MENU VALUES('081','计划管理','1','plan.do?action=list_frame',29,'1','008','8.png');
-INSERT INTO MENU VALUES('082','考核统计','1','plan.do?action=remind_frame',30,'1','008','8.png');
-INSERT INTO MENU VALUES('083','考核结果','1','plan.do?action=result_list',31,'1','008','8.png');
-INSERT INTO MENU VALUES('009','收藏管理','2','',32,'1','0','9.png');
-INSERT INTO MENU VALUES('091','收藏菜单','1','menu.do?action=manage_favor',33,'1','009','9.png');
 INSERT INTO MENU VALUES('100','综合查询','2','',6,'1','0','10.png');
 INSERT INTO MENU VALUES('101','人员信息综合查询','1','search.do?action=frame_search',7,'1','100','10.png');
+INSERT INTO MENU VALUES('102','个人信息综合查询','1','search.do?action=self_search',9,'1','100','10.png');
+INSERT INTO MENU VALUES('002','工作报告','2','',9,'1','0','2.png');
+INSERT INTO MENU VALUES('021','个人工作报告','1','workreport.do?action=list',10,'1','002','2.png');
+INSERT INTO MENU VALUES('022','审核工作报告','1','workreport.do?action=auditlist',11,'1','002','2.png');
+INSERT INTO MENU VALUES('003','统计汇总','2','',12,'1','0','3.png');
+INSERT INTO MENU VALUES('031','工时统计汇总','1','modules/pj/frame_gstjhz.jsp',13,'1','003','3.png');
+INSERT INTO MENU VALUES('032','科研工时统计','1','pj.do?action=frame_kygstj',14,'1','003','3.png');
+INSERT INTO MENU VALUES('033','承担任务情况','1','pj.do?action=frame_cdrwqk',15,'1','003','3.png');
+INSERT INTO MENU VALUES('004','人事管理','2','',17,'1','0','4.png');
+INSERT INTO MENU VALUES('041','人事管理','1','em.do?action=frame_manage',17,'1','004','4.png');
+INSERT INTO MENU VALUES('042','财务管理','1','finance.do?action=frame_manage',18,'1','004','4.png');
+INSERT INTO MENU VALUES('043','一卡通管理','1','card.do?action=frame_manage',19,'1','004','4.png');
+INSERT INTO MENU VALUES('044','班车信息','1','pos.do?action=frame_manage',20,'1','004','4.png');
+INSERT INTO MENU VALUES('045','培训管理','1','train.do?action=list_manage',21,'1','004','4.png');
+INSERT INTO MENU VALUES('046','培训统计','1','train.do?action=frame_pxtj',21,'1','004','4.png');
+INSERT INTO MENU VALUES('005','固定资产管理','2','',22,'1','0','5.png');
+INSERT INTO MENU VALUES('051','固定资产查询','1','assets.do?action=frame_info&manage=0',23,'1','005','5.png');
+INSERT INTO MENU VALUES('052','固定资产维护','1','assets.do?action=frame_info&manage=1',24,'1','005','5.png');
+INSERT INTO MENU VALUES('053','年检提醒','1','assets.do?action=remind',25,'1','005','5.png');
+INSERT INTO MENU VALUES('006','物资管理','2','',26,'1','0','6.png');
+INSERT INTO MENU VALUES('061','物资管理','1','goods.do?action=list',27,'1','006','6.png');
+INSERT INTO MENU VALUES('007','考勤管理','2','',28,'1','0','7.png');
+INSERT INTO MENU VALUES('071','员工考勤记录','1','em.do?action=frame_workcheck',29,'1','007','7.png');
+INSERT INTO MENU VALUES('008','计划管理','2','',30,'1','0','8.png');
+INSERT INTO MENU VALUES('081','计划管理','1','plan.do?action=list_frame',31,'1','008','8.png');
+INSERT INTO MENU VALUES('082','考核统计','1','plan.do?action=remind_frame',32,'1','008','8.png');
+INSERT INTO MENU VALUES('083','考核结果','1','plan.do?action=result_list',33,'1','008','8.png');
+INSERT INTO MENU VALUES('009','收藏管理','2','',34,'1','0','9.png');
+INSERT INTO MENU VALUES('091','收藏菜单','1','menu.do?action=manage_favor',35,'1','009','9.png');
+
 
 DELETE FROM USER_MENU;
 
@@ -61,6 +65,8 @@ INSERT INTO USER_MENU VALUES('002','101','1');
 /** 普通人员 **/
 INSERT INTO USER_MENU VALUES('003','002','1');
 INSERT INTO USER_MENU VALUES('003','021','1');
+INSERT INTO USER_MENU VALUES('003','100','1');
+INSERT INTO USER_MENU VALUES('003','102','1');
 
 /** 计划员 **/
 INSERT INTO USER_MENU VALUES('004','008','1');
@@ -97,8 +103,12 @@ INSERT INTO USER_MENU VALUES('007','041','1');
 INSERT INTO USER_MENU VALUES('007','042','1');
 INSERT INTO USER_MENU VALUES('007','043','1');
 INSERT INTO USER_MENU VALUES('007','044','1');
+INSERT INTO USER_MENU VALUES('007','045','1');
+INSERT INTO USER_MENU VALUES('007','046','1');
 INSERT INTO USER_MENU VALUES('007','009','1');
 INSERT INTO USER_MENU VALUES('007','091','1');
+INSERT INTO USER_MENU VALUES('007','100','1');
+INSERT INTO USER_MENU VALUES('007','101','1');
 
 INSERT INTO USER_MENU VALUES('000000','001','2');
 INSERT INTO USER_MENU VALUES('000000','011','2');
@@ -110,8 +120,8 @@ INSERT INTO USER_MENU VALUES('000001','003','2');
 INSERT INTO USER_MENU VALUES('000001','031','2');
 INSERT INTO USER_MENU VALUES('000001','032','2');
 INSERT INTO USER_MENU VALUES('000001','033','2');
-INSERT INTO USER_MENU VALUES('000001','100','1');
-INSERT INTO USER_MENU VALUES('000001','101','1');
+INSERT INTO USER_MENU VALUES('000001','100','2');
+INSERT INTO USER_MENU VALUES('000001','101','2');
 
 
 INSERT INTO USER_MENU VALUES('000003','008','2');
@@ -125,23 +135,35 @@ INSERT INTO USER_MENU VALUES('000004','071','2');
 
 INSERT INTO USER_MENU VALUES('000005','005','2');
 INSERT INTO USER_MENU VALUES('000005','052','2');
-INSERT INTO USER_MENU VALUES('000005','006','1');
-INSERT INTO USER_MENU VALUES('000005','061','1');
+INSERT INTO USER_MENU VALUES('000005','006','2');
+INSERT INTO USER_MENU VALUES('000005','061','2');
 
 INSERT INTO USER_MENU VALUES('000006','004','2');
 INSERT INTO USER_MENU VALUES('000006','041','2');
 INSERT INTO USER_MENU VALUES('000006','042','2');
 INSERT INTO USER_MENU VALUES('000006','043','2');
 INSERT INTO USER_MENU VALUES('000006','044','2');
+INSERT INTO USER_MENU VALUES('000006','045','2');
+INSERT INTO USER_MENU VALUES('000006','046','2');
+INSERT INTO USER_MENU VALUES('000006','100','2');
+INSERT INTO USER_MENU VALUES('000006','101','2');
 
 INSERT INTO USER_MENU VALUES('000002','002','2');
 INSERT INTO USER_MENU VALUES('000002','021','2');
+INSERT INTO USER_MENU VALUES('000002','100','2');
+INSERT INTO USER_MENU VALUES('000002','102','2');
 INSERT INTO USER_MENU VALUES('000007','002','2');
 INSERT INTO USER_MENU VALUES('000007','021','2');
+INSERT INTO USER_MENU VALUES('000007','100','2');
+INSERT INTO USER_MENU VALUES('000007','102','2');
 INSERT INTO USER_MENU VALUES('000008','002','2');
 INSERT INTO USER_MENU VALUES('000008','021','2');
+INSERT INTO USER_MENU VALUES('000008','100','2');
+INSERT INTO USER_MENU VALUES('000008','102','2');
 INSERT INTO USER_MENU VALUES('000009','002','2');
 INSERT INTO USER_MENU VALUES('000009','021','2');
+INSERT INTO USER_MENU VALUES('000009','100','2');
+INSERT INTO USER_MENU VALUES('000009','102','2');
 
 drop table EMP_FINANCIAL;
 
@@ -322,6 +344,82 @@ comment on column EMP_POS.COST is
 comment on column EMP_POS.POSCODE is
 'POS流水号';
 
+/*==============================================================*/
+/* Table: TRAIN                                                 */
+/*==============================================================*/
+create table TRAIN  (
+   ID                   VARCHAR(32)                     not null,
+   EMPCODE              VARCHAR(20),
+   EMPNAME              VARCHAR(50),
+   TRAINID              VARCHAR(32),
+   TRAINNAME            VARCHAR(100),
+   ASSESS               VARCHAR(20),
+   constraint PK_TRAIN primary key (ID)
+);
+
+comment on table TRAIN is
+'培训表';
+
+comment on column TRAIN.ID is
+'ID';
+
+comment on column TRAIN.EMPCODE is
+'员工编号';
+
+comment on column TRAIN.EMPNAME is
+'员工姓名';
+
+comment on column TRAIN.TRAINID is
+'培训ID';
+
+comment on column TRAIN.TRAINNAME is
+'培训名称';
+
+comment on column TRAIN.ASSESS is
+'培训考核';
+
+
+
+/*==============================================================*/
+/* Table: TRAIN_D                                               */
+/*==============================================================*/
+create table TRAIN_D  (
+   ID                   VARCHAR(32)                     not null,
+   NAME                 VARCHAR(100),
+   TARGET               VARCHAR(1000),
+   PLAN                 VARCHAR(2000),
+   RECORD               VARCHAR(2000),
+   RESULT               VARCHAR(2000),
+   COST                 NUMERIC(12,2),
+   constraint PK_TRAIN_D primary key (ID)
+);
+
+comment on table TRAIN_D is
+'培训详细表';
+
+comment on column TRAIN_D.ID is
+'ID';
+
+comment on column TRAIN_D.NAME is
+'培训名称';
+
+comment on column TRAIN_D.TARGET is
+'培训目标';
+
+comment on column TRAIN_D.PLAN is
+'培训计划';
+
+comment on column TRAIN_D.RECORD is
+'培训过程记录';
+
+comment on column TRAIN_D.RESULT is
+'培训结果记录';
+
+comment on column TRAIN_D.COST is
+'培训成本';
+
+create or replace view VIEW_TRAIN as
+select a.*,b.NAME,b.TARGET,b.PLAN,b.RECORD,b.RESULT,b.COST from TRAIN a,TRAIN_D b where b.ID=a.TRAINID;
 
 INSERT INTO EMP_CARD VALUES('000001','张三','1','0558000001','','','','1','三部');
 INSERT INTO EMP_CARD VALUES('000002','赵六','1','0558000002','','','','1','三部');

@@ -24,6 +24,7 @@
 				/pos.do=PosController
 				/search.do=SearchController
 				/excel.do=ExcelController
+				/train.do=TrainController
 			</value>
 		</property>
 	</bean>
@@ -60,5 +61,6 @@
 	<bean name="PosController" class="com.basesoft.modules.employee.PosController"></bean>
 	<bean name="SearchController" class="com.basesoft.modules.employee.SearchController"></bean>
 	<bean name="ExcelController" class="com.basesoft.modules.excel.ExcelController"></bean>
+	<bean name="TrainController" class="com.basesoft.modules.employee.TrainController"></bean>
 </beans>
 
