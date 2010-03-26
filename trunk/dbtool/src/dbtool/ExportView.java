@@ -1456,9 +1456,9 @@ public class ExportView extends JFrame {
                                 JdbcTemplate jt_stsc = dbTool.getJt1();//从源数据库中取得测站名称信息
                                 String queryStcdSQL = "";
                                 if (Version.getSelectedIndex() == 1) {//符合4.0的标准
-                                    queryStcdSQL = "select *  from HY_STSC_A";
+                                    queryStcdSQL = "select *  from HY_STSC_A order by STNM";
                                 } else {
-                                    queryStcdSQL = "select *  from STHD";
+                                    queryStcdSQL = "select *  from STHD ORDER BY STNM";
                                 }
                                 listParamModel_source.removeAllElements();
                                 liststscModel_source.removeAllElements();

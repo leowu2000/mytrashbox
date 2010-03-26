@@ -107,7 +107,7 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                      <Component id="txtIP" pref="654" max="32767" attributes="2"/>
+                                      <Component id="txtIP" pref="642" max="32767" attributes="2"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -117,7 +117,7 @@
                                       <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="txtPort" min="-2" pref="80" max="-2" attributes="1"/>
-                                      <EmptySpace pref="22" max="32767" attributes="0"/>
+                                      <EmptySpace pref="10" max="32767" attributes="0"/>
                                       <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="Version" min="-2" pref="65" max="-2" attributes="1"/>
@@ -133,8 +133,8 @@
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="DataName" alignment="0" pref="654" max="32767" attributes="2"/>
-                                          <Component id="txtUser" alignment="0" pref="654" max="32767" attributes="2"/>
+                                          <Component id="DataName" alignment="0" pref="642" max="32767" attributes="2"/>
+                                          <Component id="txtUser" alignment="0" pref="642" max="32767" attributes="2"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -142,7 +142,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel15" alignment="1" pref="730" max="32767" attributes="0"/>
+                                  <Component id="jLabel15" alignment="1" pref="718" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                           <Component id="jLabel5" alignment="0" pref="66" max="32767" attributes="1"/>
@@ -150,9 +150,9 @@
                                       </Group>
                                       <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="txtPass" pref="654" max="32767" attributes="2"/>
+                                          <Component id="txtPass" pref="642" max="32767" attributes="2"/>
                                           <Group type="102" alignment="1" attributes="0">
-                                              <Component id="txtDataDir" pref="294" max="32767" attributes="1"/>
+                                              <Component id="txtDataDir" pref="282" max="32767" attributes="1"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
                                               <Component id="jLabel14" min="-2" pref="61" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>

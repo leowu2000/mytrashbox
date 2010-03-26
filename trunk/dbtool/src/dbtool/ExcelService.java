@@ -9,9 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -652,7 +649,7 @@ public class ExcelService {
             DefaultListModel selectedSnameModel,
             DefaultListModel listTabModel,int type,
             String stscstr,Map dataIndexMap,
-            Map dataDescMap,Map resultStscMap,boolean isTurnChar) {
+            Map dataDescMap,Map resultStscMap,boolean isTurnChar,int version) {
         JdbcTemplate jt1 = dbTool.getJt1();
         JdbcTemplate jt2 = dbTool.getJt2();
         String[] tables = null;
@@ -692,9 +689,9 @@ public class ExcelService {
         strContent_table.append("<td rowspan='2' class='title' nowrap>导出条数</td>");
         strContent_table.append("<td rowspan='2' class='title' nowrap> 索  引 </td>");
         for(String stcd:stsc){
-            String stnm = dbTool.getStscName(jt1, stcd.replaceAll("'",""));
+            String stnm = dbTool.getStscName(jt2, stcd.replaceAll("'",""));
             if("".trim().equals(stnm))
-                stnm = dbTool.getStscName(jt2, stcd.replaceAll("'",""));
+                stnm = dbTool.getStscName2(jt1, stcd.replaceAll("'",""),version);
                 if("".trim().equals(stnm))
                     stnm=stcd.replaceAll("'","");
             if(isTurnChar){
@@ -704,7 +701,7 @@ public class ExcelService {
                     Logger.getLogger(ExcelService.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            strContent_table.append("<td class='title'colspan='2'><a href='#' onclick='return false;' title='"+stcd.replaceAll("'","")+"'>"+stnm+"</a></td>");
+            strContent_table.append("<td class='title'colspan='2'>"+stnm+"<br>["+stcd.replaceAll("'","")+"]</td>");
         }
         strContent_table.append("<td rowspan='2' class='title' nowrap>合计(站年)</td>");
         strContent_table.append("</tr><tr bgcolor='#E8EFFF' height='20'>");
