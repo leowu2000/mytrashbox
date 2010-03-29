@@ -44,7 +44,7 @@
 	            },   
 	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
 	            	  var type = document.getElementById('type').value;
-	                  document.getElementById('list_manage').src = "/train.do?action=list_manage&empcode=" + newNode.id + "&type=" + type;
+	                  document.getElementById('list_pxtj').src = "/train.do?action=list_pxtj&empcode=" + newNode.id + "&type=" + type;
 	            },   
 	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
 	                  //...   
@@ -74,11 +74,11 @@
   		var seltrain = document.getElementById('seltrain').value;
   		var selassess = document.getElementById('selassess').value;
   		var cost = document.getElementById('cost').value;
-	    document.getElementById('list_manage').src = "/train.do?action=list_manage&empcode=" + empcode + "&seltrain=" + seltrain + "&selassess=" + selassess + "&cost=" + cost;
+	    document.getElementById('list_pxtj').src = "/train.do?action=list_pxtj&type=" + type + "&empcode=" + empcode + "&seltrain=" + seltrain + "&selassess=" + selassess + "&cost=" + cost;
 	});
 	
 	function IFrameResize(){
-	  document.getElementById("list_manage").height = document.body.offsetHeight - document.getElementById("list_manage").offsetTop-10;
+	  document.getElementById("list_pxtj").height = document.body.offsetHeight - document.getElementById("list_pxtj").offsetTop-10;
 	}
 	
 	function commit(){
@@ -87,7 +87,7 @@
   		var seltrain = document.getElementById('seltrain').value;
   		var selassess = document.getElementById('selassess').value;
   		var cost = document.getElementById('cost').value;
-	    document.getElementById('list_manage').src = "/train.do?action=list_manage&empcode=" + empcode + "&seltrain=" + seltrain + "&selassess=" + selassess + "&cost=" + cost;
+	    document.getElementById('list_pxtj').src = "/train.do?action=list_pxtj&type=" + type + "&empcode=" + empcode + "&seltrain=" + seltrain + "&selassess=" + selassess + "&cost=" + cost;
 	}
 	
 	function changeType(type){
@@ -116,7 +116,7 @@
 			document.getElementById('cost').style.display = '';
 			document.getElementById('search').style.display = '';
 		}
-		
+		commit();
 	}
 	</script>
   </head>
@@ -130,7 +130,7 @@
   		<option value="4">成本</option>
   	</select>
 	<span id="empspan" name="empspan"></span>
-	<select id="seltrain" name="seltrain" style="display:none;">
+	<select id="seltrain" name="seltrain" style="display:none;" onchange="commit();">
 <%
 	for(int i=0;i<listTrain.size();i++){
 		Map mapTrain = (Map)listTrain.get(i);
@@ -140,7 +140,7 @@
 	}
 %>		
 	</select>
-	<select id="selassess" name="selassess" style="display:none;">
+	<select id="selassess" name="selassess" style="display:none;" onchange="commit();">
 <%
 	for(int i=0;i<listAssess.size();i++){
 		Map mapAssess = (Map)listAssess.get(i);
@@ -152,6 +152,6 @@
 	</select>
 	<input type="text" name="cost" style="width:60;display:none;">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();" style="display:none;">
-    <iframe name="list_manage" width="100%" frameborder="0" height="500"></iframe>
+    <iframe name="list_pxtj" width="100%" frameborder="0" height="500"></iframe>
   </body>
 </html>

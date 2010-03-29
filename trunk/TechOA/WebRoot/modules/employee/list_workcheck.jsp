@@ -45,18 +45,14 @@ var method = '<%=method %>';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 <%  
-	if(!"003".equals(emprole)){
-		if("search".equals(method)){
+	if("search".equals(method)){
 %>
 	tb.add({text: '返回',cls: 'x-btn-text-icon back',handler: onBackClick});
 <%
-		}else {
+	}else {
 %>
-
 	tb.add({text: '填写考勤记录',cls: 'x-btn-text-icon add',handler: onAddClick});
-	//tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 <%
-		}
 	}
 %>
 	

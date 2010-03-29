@@ -1,6 +1,6 @@
 package com.basesoft.modules.plan;
 
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -223,5 +223,31 @@ public class PlanDAO extends CommonDAO {
 		boolean b = false;
 		
 		return b;
+	}
+	
+	/**
+	 * 获取完成情况百分比列表
+	 * @return
+	 */
+	public List getListPersent(){
+		return jdbcTemplate.queryForList("select * from PLAN_PERSENT order by ORDERCODE");
+	}
+	
+	/**
+	 * 获取当前完成率所在的完成情况记录
+	 * @param persent
+	 * @return
+	 */
+	public Map getPersent(float persent){
+		Map map = new HashMap();
+		
+		String sql = "select * from PLAN_PERSENT where STARTPERSENT<=" + persent + " and ENDPERSENT>" + persent;
+			
+		List list = jdbcTemplate.queryForList(sql);
+		if(list.size()>0){
+			map = (Map)list.get(0);
+		}
+		
+		return map;
 	}
 }

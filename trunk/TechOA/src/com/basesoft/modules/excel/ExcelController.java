@@ -2,7 +2,7 @@ package com.basesoft.modules.excel;
 
 import java.io.InputStream;
 import java.net.URLEncoder;
-import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,6 +56,23 @@ public class ExcelController extends CommonController {
 			
 			
 			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp);
+		}else if("export".equals(action)){//excel导出
+			String model = ServletRequestUtils.getStringParameter(request, "model", "");
+			
+			//List list = excelDAO.
+			
+			//byte[] b = (byte[])map.get("ATTACH");
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expiresponse", 0L);
+			response.setContentType("application/*");
+			response.setHeader("Content-Disposition", "attachment;filename=" + new String("".getBytes("GBK"),"ISO8859-1"));
+
+			//response.getOutputStream().write(b);
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+			return null;
 		}
 		
 		return null;

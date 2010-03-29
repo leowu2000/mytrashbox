@@ -6,6 +6,7 @@
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listPj = (List)request.getAttribute("listPj");
 List listStage = (List)request.getAttribute("listStage");
+List listPersent = (List)request.getAttribute("listPersent");
 
 int pagenum = pageList.getPageInfo().getCurPage();
 String f_pjcode = request.getAttribute("f_pjcode").toString();
@@ -45,6 +46,7 @@ if(errorMessage!=''){
 
 var win;
 var win2;
+var win3;
 var action;
 var url='/plan.do';
 var vali = "";
@@ -53,6 +55,7 @@ Ext.onReady(function(){
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: '设置完成情况百分比',cls: 'x-btn-text-icon xiugai',handler: onSetClick});
 	tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
     if(!win){
@@ -71,6 +74,16 @@ Ext.onReady(function(){
 	        buttons: [
 	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
 	        {text:'关闭',handler: function(){win2.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win3){
+        win3 = new Ext.Window({
+        	el:'dlg3',width:450,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm3').action=action; Ext.getDom('dataForm3').submit();}},
+	        {text:'关闭',handler: function(){win3.hide();}}
 	        ]
         });
     }
@@ -189,6 +202,49 @@ Ext.onReady(function(){
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
     }
+    
+    function onSetClick(btn){
+		action = url + '?action=setpersent&f_pjcode=<%=f_pjcode %>&f_stagecode=<%=f_stagecode %>&page=<%=pagenum %>&f_empname=<%=f_empname %>';
+    	win3.setTitle('设置完成情况百分比');
+        win3.show(btn.dom);
+    }
+    
+    var colorMenu1 = new Ext.menu.ColorMenu({
+    	selectHandler:function(value){
+    		Ext.get('color1').set({'value':'#'+value.value});
+    	}
+    });   
+	Ext.get('color1').on("click",function(e){   
+    	e.stopEvent();   
+    	colorMenu1.showAt(e.getXY());   
+	}); 
+	var colorMenu2 = new Ext.menu.ColorMenu({
+    	selectHandler:function(value){
+    		Ext.get('color2').set({'value':'#'+value.value});
+    	}
+    });   
+	Ext.get('color2').on("click",function(e){   
+    	e.stopEvent();   
+    	colorMenu2.showAt(e.getXY());   
+	}); 
+	var colorMenu3 = new Ext.menu.ColorMenu({
+    	selectHandler:function(value){
+    		Ext.get('color3').set({'value':'#'+value.value});
+    	}
+    });   
+	Ext.get('color3').on("click",function(e){   
+    	e.stopEvent();   
+    	colorMenu3.showAt(e.getXY());   
+	}); 
+	var colorMenu4 = new Ext.menu.ColorMenu({
+    	selectHandler:function(value){
+    		Ext.get('color4').set({'value':'#'+value.value});
+    	}
+    });   
+	Ext.get('color4').on("click",function(e){   
+    	e.stopEvent();   
+    	colorMenu4.showAt(e.getXY());   
+	});   
 });
 
 function AJAX_PJ(pjcode){
@@ -340,5 +396,36 @@ for(int i=0;i<listPlan.size();i++){
 			</form>
 	</div>
 </div>  
+
+<div id="dlg3" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm3" name="dataForm3" action="" method="post">
+	        	<input type="hidden" name="page" value="<%=pagenum %>">
+                <table>
+<%
+	for(int i=1;i<listPersent.size()+1;i++){
+		Map mapPersent = (Map)listPersent.get(i-1);
+		String name = "name" + i;
+		String startname = "startpersent" + i;
+		String endname = "endpersent" + i;
+		String colorname = "color" + i;
+%>
+				  <tr>
+				    <td><input type="text" name="<%=name %>" style="width:70" value="<%=mapPersent.get("NAME") %>"></td>
+				    <td>起始完成率</td>
+				    <td><input type="text" name="<%=startname %>" style="width:45" value="<%=mapPersent.get("STARTPERSENT") %>"></td>
+				    <td>截止完成率</td>
+				    <td><input type="text" name="<%=endname %>" style="width:45" value="<%=mapPersent.get("ENDPERSENT") %>"></td>
+				    <td>颜色</td>
+				    <td><input type="text" name="<%=colorname %>" style="width:55" value="<%=mapPersent.get("COLOR") %>"></td>
+				  </tr>	
+<%
+	}
+%>				  
+				</table>
+			</form>
+	</div>
+</div> 
 	</body>
 </html>

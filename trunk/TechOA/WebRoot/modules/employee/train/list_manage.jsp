@@ -35,47 +35,12 @@ var win2;
 var action;
 var url='/train.do';
 Ext.onReady(function(){
-	var comboBoxTree = new Ext.ux.ComboBoxTree({
-			renderTo : 'empsel',
-			width : 202,
-			hiddenName : 'empcode',
-			hiddenId : 'empcode',
-			tree : {
-				id:'tree1',
-				xtype:'treepanel',
-				rootVisible:false,
-				loader: new Ext.tree.TreeLoader({dataUrl:'/depart.do?action=departempTree'}),
-		   	 	root : new Ext.tree.AsyncTreeNode({})
-			},
-			    	
-			//all:所有结点都可选中
-			//exceptRoot：除根结点，其它结点都可选(默认)
-			//folder:只有目录（非叶子和非根结点）可选
-			//leaf：只有叶子结点可选
-			selectNodeModel:'leaf',
-			listeners:{
-	            beforeselect: function(comboxtree,newNode,oldNode){//选择树结点设值之前的事件   
-	                   //... 
-	                   return;  
-	            },   
-	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
-	            		return;
-	            },   
-	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
-	                  //...   
-	                  //alert("显示值="+comboBoxTree.getRawValue()+"  真实值="+comboBoxTree.getValue());
-	                  return; 
-	            }   
-      		}
-			
-		});
-
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
-	tb.add({text: '管  理',cls: 'x-btn-text-icon xiugai',handler: onManageClick});
+	tb.add({text: '参与人员管理',cls: 'x-btn-text-icon xiugai',handler: onManageClick});
 	//tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
     if(!win){
@@ -117,11 +82,14 @@ Ext.onReady(function(){
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
-			    comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
-				Ext.get('swipetime').set({'value':data.item.swipetime});
-				Ext.get('posmachine').set({'value':data.item.posmachine});
-				Ext.get('cost').set({'value':data.item.cost});
-				Ext.get('poscode').set({'value':data.item.poscode});
+				Ext.get('name').set({'value':data.item.name});
+				Ext.get('cost_d').set({'value':data.item.cost});
+				Ext.get('startdate').set({'value':data.item.startdate});
+				Ext.get('enddate').set({'value':data.item.enddate});
+				Ext.get('target').set({'value':data.item.target});
+				Ext.get('plan').set({'value':data.item.plan});
+				Ext.get('record').set({'value':data.item.record});
+				Ext.get('result').set({'value':data.item.result});
 				
 		    	action = url+'?action=update&page=<%=pagenum %>';
 	    		win.setTitle('修改');
@@ -157,7 +125,13 @@ Ext.onReady(function(){
     }
     
     function onManageClick(btn){
-		alert(1);
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+    
+		window.location.href="train.do?action=manage&page1=<%=pagenum %>&trainid=" + selValue;
     }
 });
 
@@ -168,7 +142,7 @@ Ext.onReady(function(){
   <body>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("pos.do?action=list_manage&page=" + pagenum) %>
+<%=pageList.getPageInfo().getHtml("train.do?action=list_manage") %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
@@ -205,24 +179,36 @@ Ext.onReady(function(){
 	        	<input type="hidden" name="id" >
                 <table>
                   <tr>
-				    <td>人员</td>
-				    <td><span name="empsel" id="empsel"></span></td>
+				    <td>培训名称</td>
+				    <td><input type="text" name="name" style="width:200"></td>
 				  </tr>	
 				  <tr>
-				    <td>培训名称</td>
-				    <td><input type="text" name="swipetime" style="width:200" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"></td>
+				    <td>开始时间</td>
+				    <td><input type="text" name="startdate" style="width:200" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"></td>
 				  </tr>
 				  <tr>
-				    <td>车载POS机</td>
-				    <td><input type="text" name="posmachine" style="width:200"></td>
+				    <td>结束时间</td>
+				    <td><input type="text" name="enddate" style="width:200" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"></td>
+				  </tr>
+				  <tr>
+				    <td>培训费用</td>
+				    <td><input type="text" name="cost_d" style="width:200"></td>
+				  </tr>
+				  <tr>
+				    <td>培训目标</td>
+				    <td><textarea name="target" rows="3" style="width:200"></textarea></td>
 				  </tr>	
 				  <tr>
-				    <td>金额</td>
-				    <td><input type="text" name="cost" style="width:200"></td>
+				    <td>培训计划</td>
+				    <td><textarea name="plan" rows="3" style="width:200"></textarea></td>
 				  </tr>	
 				  <tr>
-				    <td>POS流水号</td>
-				    <td><input type="text" name="poscode" style="width:200"></td>
+				    <td>培训过程</td>
+				    <td><textarea name="record" rows="3" style="width:200"></textarea></td>
+				  </tr>
+				  <tr>
+				    <td>培训结果</td>
+				    <td><textarea name="result" rows="3" style="width:200"></textarea></td>
 				  </tr>
 				</table>
 	        </form>

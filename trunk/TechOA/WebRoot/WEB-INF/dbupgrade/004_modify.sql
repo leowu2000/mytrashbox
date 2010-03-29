@@ -378,8 +378,6 @@ comment on column TRAIN.TRAINNAME is
 comment on column TRAIN.ASSESS is
 '培训考核';
 
-
-
 /*==============================================================*/
 /* Table: TRAIN_D                                               */
 /*==============================================================*/
@@ -391,6 +389,8 @@ create table TRAIN_D  (
    RECORD               VARCHAR(2000),
    RESULT               VARCHAR(2000),
    COST                 NUMERIC(12,2),
+   STARTDATE            DATE,
+   ENDDATE              DATE,
    constraint PK_TRAIN_D primary key (ID)
 );
 
@@ -417,6 +417,13 @@ comment on column TRAIN_D.RESULT is
 
 comment on column TRAIN_D.COST is
 '培训成本';
+
+comment on column TRAIN_D.STARTDATE is
+'培训开始时间';
+
+comment on column TRAIN_D.ENDDATE is
+'培训结束时间';
+
 
 create or replace view VIEW_TRAIN as
 select a.*,b.NAME,b.TARGET,b.PLAN,b.RECORD,b.RESULT,b.COST from TRAIN a,TRAIN_D b where b.ID=a.TRAINID;
@@ -455,3 +462,42 @@ INSERT INTO PLAN VALUES('1','000002','赵六','1','三部','1','F01','500003','2
 INSERT INTO DICT VALUES('','',5);
 
 UPDATE ASSETS SET DEPARTCODE='1' WHERE ID='5';
+
+/*==============================================================*/
+/* Table: PLAN_PERSENT                                          */
+/*==============================================================*/
+create table PLAN_PERSENT  (
+   ID                   VARCHAR(32),
+   NAME                 VARCHAR(20),
+   STARTPERSENT         NUMERIC(5,2),
+   ENDPERSENT           NUMERIC(5,2),
+   COLOR                VARCHAR(10),
+   ORDERCODE            INTEGER
+);
+
+comment on table PLAN_PERSENT is
+'计划完成情况维护表';
+
+comment on column PLAN_PERSENT.ID is
+'ID';
+
+comment on column PLAN_PERSENT.NAME is
+'名称';
+
+comment on column PLAN_PERSENT.STARTPERSENT is
+'起始百分率';
+
+comment on column PLAN_PERSENT.ENDPERSENT is
+'截止百分率';
+
+comment on column PLAN_PERSENT.COLOR is
+'颜色';
+
+comment on column PLAN_PERSENT.ORDERCODE is
+'排序号';
+
+
+INSERT INTO PLAN_PERSENT VALUES('1','初始运行',0,20,'green',1);
+INSERT INTO PLAN_PERSENT VALUES('2','正常运行',20,60,'blue',2);
+INSERT INTO PLAN_PERSENT VALUES('3','后期运行',60,80,'orange',3);
+INSERT INTO PLAN_PERSENT VALUES('4','结尾阶段',80,100,'red',4);

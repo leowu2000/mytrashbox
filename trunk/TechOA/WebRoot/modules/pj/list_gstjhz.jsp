@@ -17,6 +17,25 @@
 	<link href="css/bs_base.css" type="text/css" rel="stylesheet">
 	<link href="css/bs_button.css" type="text/css" rel="stylesheet">
 	<link href="css/bs_custom.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript">
+	function CellAreaExcel()    
+ {   
+  var oXL = new ActiveXObject("Excel.Application");    
+  var oWB = oXL.Workbooks.Add();    
+  var oSheet = oWB.ActiveSheet;
+  var table = document.getElementById('the-table');    
+  var Lenr = table.rows.length;   
+  for (i=0;i<Lenr;i++)    
+  {    
+   var Lenc = table.rows(i).cells.length;    
+   for (j=0;j<Lenc;j++)    
+   {    
+    oSheet.Cells(i+1,j+1).value = table.rows(i).cells(j).innerText;    
+   }    
+  }    
+  oXL.Visible = true;    
+ }   
+	</script>
   </head>
   
   <body>
@@ -48,6 +67,6 @@
 <%} %>
 		</tr>
 <%} %>
-	</table>
+	</table><input type="button" onclick="CellAreaExcel();" value="excel导出">
   </body>
 </html>

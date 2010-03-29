@@ -52,6 +52,7 @@ public class PlanController extends CommonController {
 			PageList pageList = planDAO.findAll(f_pjcode, f_stagecode, f_empname, page);
 			List listPj = planDAO.getProject();
 			List listStage = planDAO.getDICTByType("5");
+			List listPersent = planDAO.getListPersent();
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("listPj", listPj);
@@ -60,6 +61,7 @@ public class PlanController extends CommonController {
 			mv.addObject("f_stagecode", f_stagecode);
 			mv.addObject("f_empname", f_empname);
 			mv.addObject("errorMessage", errorMessage);
+			mv.addObject("listPersent", listPersent);
 			return mv;
 		}else if("AJAX_PJ".equals(action)){//工作令号选择ajax
 			StringBuffer sb = new StringBuffer();
@@ -154,6 +156,35 @@ public class PlanController extends CommonController {
 				String deleteSql = "delete from PLAN where ID='" + check[i] + "'";
 				planDAO.delete(deleteSql);
 			}
+			
+			response.sendRedirect("plan.do?action=list&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
+		}else if("setpersent".equals(action)){//设置完成情况百分率
+			String name1 = ServletRequestUtils.getStringParameter(request, "name1", "");
+			String name2 = ServletRequestUtils.getStringParameter(request, "name2", "");
+			String name3 = ServletRequestUtils.getStringParameter(request, "name3", "");
+			String name4 = ServletRequestUtils.getStringParameter(request, "name4", "");
+			float startpersent1 = ServletRequestUtils.getFloatParameter(request, "startpersent1", 0);
+			float startpersent2 = ServletRequestUtils.getFloatParameter(request, "startpersent2", 0);
+			float startpersent3 = ServletRequestUtils.getFloatParameter(request, "startpersent3", 0);
+			float startpersent4 = ServletRequestUtils.getFloatParameter(request, "startpersent4", 0);
+			float endpersent1 = ServletRequestUtils.getFloatParameter(request, "endpersent1", 0);
+			float endpersent2 = ServletRequestUtils.getFloatParameter(request, "endpersent2", 0);
+			float endpersent3 = ServletRequestUtils.getFloatParameter(request, "endpersent3", 0);
+			float endpersent4 = ServletRequestUtils.getFloatParameter(request, "endpersent4", 0);
+			String color1 = ServletRequestUtils.getStringParameter(request, "color1", "");
+			String color2 = ServletRequestUtils.getStringParameter(request, "color2", "");
+			String color3 = ServletRequestUtils.getStringParameter(request, "color3", "");
+			String color4 = ServletRequestUtils.getStringParameter(request, "color4", "");
+			
+			String updateSql1 = "update PLAN_PERSENT set NAME='" + name1 + "', STARTPERSENT=" + startpersent1 + ", ENDPERSENT=" + endpersent1 + ", color='" + color1 + "' where ID='1'";
+			String updateSql2 = "update PLAN_PERSENT set NAME='" + name2 + "', STARTPERSENT=" + startpersent2 + ", ENDPERSENT=" + endpersent2 + ", color='" + color2 + "' where ID='2'";
+			String updateSql3 = "update PLAN_PERSENT set NAME='" + name3 + "', STARTPERSENT=" + startpersent3 + ", ENDPERSENT=" + endpersent3 + ", color='" + color3 + "' where ID='3'";
+			String updateSql4 = "update PLAN_PERSENT set NAME='" + name4 + "', STARTPERSENT=" + startpersent4 + ", ENDPERSENT=" + endpersent4 + ", color='" + color4 + "' where ID='4'";
+			
+			planDAO.update(updateSql1);
+			planDAO.update(updateSql2);
+			planDAO.update(updateSql3);
+			planDAO.update(updateSql4);
 			
 			response.sendRedirect("plan.do?action=list&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
 		}else if("remind_frame".equals(action)){//计划提醒frame

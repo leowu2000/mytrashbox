@@ -1,5 +1,7 @@
 package com.basesoft.modules.employee;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,6 +38,16 @@ public class SearchController extends CommonController {
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
+			return mv;
+		}else if("self_search".equals(action)){//个人信息综合查询
+			mv = new ModelAndView("modules/employee/search/self_search");
+			
+			Employee em = searchDAO.findById(emid);
+			
+			PageList pageList = searchDAO.findAll(em.getDepartcode(), em.getName(), 1);
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("em", em);
 			return mv;
 		}
 		

@@ -1,6 +1,8 @@
 package com.basesoft.modules.excel;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -8,9 +10,41 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.basesoft.core.CommonDAO;
+import com.basesoft.modules.project.ProjectDAO;
+import com.basesoft.util.StringUtil;
 
 public class ExcelDAO extends CommonDAO {
 
+	ProjectDAO pjDAO;
+	
+	/**
+	 * 获取导入数据list
+	 * @param model 导出的模版
+	 * @param datepick 日期
+	 * @return
+	 */
+	public Map getExportData(String model, String datepick){
+		Map map = new HashMap();
+		
+		if("GSTJHZ".equals(model)){//工时统计汇总
+			Date start = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+			Date end = StringUtil.getEndOfMonth(start);
+			
+			//List list
+			List listGstjhz = pjDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"));
+		}
+		
+		return map;
+	}
+	
+	/**
+	 * 导入excel数据入库
+	 * @param data 数据
+	 * @param table 表
+	 * @param date 日期
+	 * @return
+	 * @throws Exception
+	 */
 	public String insertData(JSONObject data, String table, String date) throws Exception{
 		String errorMessage = "";
 		
@@ -552,5 +586,9 @@ public class ExcelDAO extends CommonDAO {
 		}
 		
 		return errorMessage;
+	}
+	
+	public void setProjectDAO(ProjectDAO pjDAO){
+		this.pjDAO = pjDAO;
 	}
 }
