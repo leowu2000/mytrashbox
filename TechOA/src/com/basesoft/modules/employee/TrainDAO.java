@@ -1,6 +1,7 @@
 package com.basesoft.modules.employee;
 
 import java.util.List;
+import java.util.Map;
 
 import com.basesoft.core.PageInfo;
 import com.basesoft.core.PageList;
@@ -91,9 +92,78 @@ public class TrainDAO extends EmployeeDAO {
 			if(cost==0){//全部成本
 				sql = "select * from VIEW_TRAIN order by COST desc";
 			}else {//成本小于所填写的
-				sql = "select * from VIEW_TRAIN where COST<=" + cost + "' order by COST desc";
+				sql = "select * from VIEW_TRAIN where COST<=" + cost + " order by COST desc";
 			}
 		}
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
+	
+	/**
+	 * 根据id获取实例
+	 * @param id
+	 * @return
+	 */
+	public Train findByTId_D(String id){
+		Train train = new Train();
+		
+		String sql = "select * from TRAIN_D where ID='" + id + "'";
+		Map map = jdbcTemplate.queryForMap(sql);
+		
+		train.setId(id);
+		train.setName(map.get("NAME")==null?"":map.get("NAME").toString());
+		train.setCost(map.get("COST")==null?0:Float.parseFloat(map.get("COST").toString()));
+		train.setTarget(map.get("TARGET")==null?"":map.get("TARGET").toString());
+		train.setPlan(map.get("PLAN")==null?"":map.get("PLAN").toString());
+		train.setRecord(map.get("RECORD")==null?"":map.get("RECORD").toString());
+		train.setResult(map.get("RESULT")==null?"":map.get("RESULT").toString());
+		train.setStartdate(map.get("STARTDATE")==null?"":map.get("STARTDATE").toString());
+		train.setEnddate(map.get("ENDDATE")==null?"":map.get("ENDDATE").toString());
+		
+		return train;
+	}
+	
+	/**
+	 * 根据id获取实例
+	 * @param id
+	 * @return
+	 */
+	public Train findByTId(String id){
+		Train train = new Train();
+		
+		String sql = "select * from TRAIN where ID='" + id + "'";
+		Map map = jdbcTemplate.queryForMap(sql);
+		
+		train.setId(id);
+		train.setEmpcode(map.get("EMPCODE")==null?"":map.get("EMPCODE").toString());
+		train.setEmpname(map.get("EMPNAME")==null?"":map.get("EMPNAME").toString());
+		train.setAssess(map.get("ASSESS")==null?"":map.get("ASSESS").toString());
+		
+		return train;
+	}
+	
+	/**
+	 * 获取培训参与人员列表
+	 * @param trainid 培训id
+	 * @param page 页码
+	 * @return
+	 */
+	public PageList findAllTrainEmp(String trainid, int page){
+		PageList pageList = new PageList();
+		String sql = "select * from VIEW_TRAIN where TRAINID='" + trainid + "' order by COST desc";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";

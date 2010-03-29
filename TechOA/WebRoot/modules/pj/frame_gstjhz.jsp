@@ -21,6 +21,18 @@
   		tb.add('选择年月：');
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('datepick'));
+  		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
+  		
+  		function onExportClick(){
+  			var datepick = document.getElementById('datepick').value;
+  			if(window.XMLHttpRequest){ //Mozilla 
+      			var xmlHttpReq=new XMLHttpRequest();
+    		}else if(window.ActiveXObject){
+ 	  			var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    		}
+    		xmlHttpReq.open("GET", "/excel.do?action=export&model=GSTJHZ&datepick="+datepick, false);
+    		xmlHttpReq.send();
+  		}
 	});
 	
 	function commit(){

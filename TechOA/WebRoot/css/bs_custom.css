@@ -43,6 +43,10 @@ h1 {
     background-image:url(/images/icons/import.png);
 }
 
+.export .x-btn-text {
+    background-image:url(/images/icons/export.png);
+}
+
 .move .x-btn-text {
 	background-image:url(/images/icons/basket_remove.png);
 }

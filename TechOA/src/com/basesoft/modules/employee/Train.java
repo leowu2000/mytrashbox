@@ -11,6 +11,8 @@ public class Train {
 	public String result;
 	public float cost;
 	public String assess;
+	public String startdate;
+	public String enddate;
 	
 	public String getId() {
 		return id;
@@ -90,5 +92,21 @@ public class Train {
 
 	public void setAssess(String assess) {
 		this.assess = assess;
+	}
+
+	public String getStartdate() {
+		return startdate;
+	}
+
+	public void setStartdate(String startdate) {
+		this.startdate = startdate;
+	}
+
+	public String getEnddate() {
+		return enddate;
+	}
+
+	public void setEnddate(String enddate) {
+		this.enddate = enddate;
 	}
 }

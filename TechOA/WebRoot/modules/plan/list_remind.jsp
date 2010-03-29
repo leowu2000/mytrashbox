@@ -2,6 +2,8 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%@ page import="com.basesoft.util.*" %>
+<%@ page import="com.basesoft.modules.plan.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listAssess = (List)pageList.getList();
@@ -9,6 +11,9 @@ int pagenum = pageList.getPageInfo().getCurPage();
 String f_pjcode = request.getAttribute("f_pjcode").toString();
 String f_stagecode = request.getAttribute("f_stagecode").toString();
 String f_empname = request.getAttribute("f_empname").toString();
+
+ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -69,15 +74,9 @@ for(int i=0;i<listAssess.size();i++){
 	
 	float daypersent = plandays==0?0:passdays*100/plandays;
 	
-	if(daypersent<=10){
-		state = "<font color='blue'>开始启动</font>";
-	}else if(daypersent>10&&daypersent<=80){
-		state = "<font color='green'>正常运行</font>"; 
-	}else if(daypersent>80&&daypersent<100){
-		state = "<font color='red'>结尾阶段</font>"; 
-	}else if(persent>=100){
-		state = "<font color='gray'>已完成</font>";
-	}
+	Map mapPersent = planDAO.getPersent(daypersent);
+	
+	state = "<font color='" + mapPersent.get("COLOR") + "'>" + mapPersent.get("NAME") + "</font>";
 %>
             <tr align="center">
                 <td>&nbsp;<%=mapAssess.get("PJNAME")==null?"":mapAssess.get("PJNAME") %></td>
