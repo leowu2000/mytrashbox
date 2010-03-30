@@ -1562,7 +1562,7 @@ public class ExportView extends JFrame {
             public void run() {
                 DefaultListModel allTablesmodel = (DefaultListModel) ListTables.getModel();
                 dbTool.process(logList, allTablesmodel, selectedTablesModel, selectedStscModel, selectedYearsModel,
-                        selectedSnameModel, dbTool, txtDataDir.getText(), expType, Version.getSelectedIndex(),charBox.isSelected());
+                        selectedSnameModel, dbTool, txtDataDir.getText(), expType, Version.getSelectedIndex(),charBox.isSelected(),cbDriver.getSelectedIndex());
                 MessageLabel.setText("系统消息：导出成功结束,导出数据和报告已成功保存至[");
                 MessageLabel1.setText("<html><a href='file:///" + txtDataDir.getText() + "'>" + txtDataDir.getText() + "\\excel</a></html>");
                 MessageLabel2.setText("]请查看！");
