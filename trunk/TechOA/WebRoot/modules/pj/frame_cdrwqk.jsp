@@ -58,12 +58,18 @@ List listDepart = (List)request.getAttribute("listDepart");
 	
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
   		tb.add('选择部门：');
-  		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('departspan'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('选择年月：');
-  		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('datepick'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
+  		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
+  		
+  		function onExportClick(){
+  			var datepick = document.getElementById('datepick').value;
+  			var depart = document.getElementById('depart').value
+    		window.location.href = "/excel.do?action=export&model=CDRWQK&datepick=" + datepick + "&depart=" + depart;
+  		}
   		
   		comboBoxTree.setValue({id:'0',text:'请选择...'});
   		

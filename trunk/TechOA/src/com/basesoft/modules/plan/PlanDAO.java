@@ -1,5 +1,6 @@
 package com.basesoft.modules.plan;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import com.basesoft.core.CommonDAO;
 import com.basesoft.core.PageInfo;
 import com.basesoft.core.PageList;
+import com.basesoft.util.StringUtil;
 
 public class PlanDAO extends CommonDAO {
 
@@ -73,45 +75,32 @@ public class PlanDAO extends CommonDAO {
 	/**
 	 * 获取计划提醒列表
 	 * @param pjcode 工作令号
-	 * @param stagecode 阶段
+	 * @param datepick 年月
 	 * @param empname 责任人名称
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllRemind(String pjcode, String stagecode, String empname, int page){
+	public PageList findAllRemind(String pjcode, String datepick, String empname, int page){
 		PageList pageList = new PageList();
-		String sql = "select a.*,b.* from VIEW_PLAN a, (select sum(AMOUNT) as AMOUNT from WORKREPORT c,PLAN d where c.PJCODE=d.PJCODE and c.PJCODE_D=d.PJCODE_D and c.STAGECODE=d.STAGECODE and c.STARTDATE>=d.STARTDATE and c.STARTDATE<=d.ENDDATE) b ";
+		
+		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+		Date enddate = StringUtil.getEndOfMonth(startdate);
+		String sql = "select a.*,b.* from VIEW_PLAN a, (select sum(AMOUNT) as AMOUNT from WORKREPORT c,PLAN d where c.PJCODE=d.PJCODE and c.PJCODE_D=d.PJCODE_D and c.STAGECODE=d.STAGECODE and c.STARTDATE>=d.STARTDATE and c.STARTDATE<=d.ENDDATE) b where a.ENDDATE>='" + startdate + "' and a.ENDDATE<='" + enddate + "'";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
 		if("0".equals(pjcode)){//全部工作令
-			if("0".equals(stagecode)){//全部阶段
-				if("".equals(empname)){//全部人员
-					
-				}else {//人员名称模糊检索
-					sql = sql + " where EMPNAME like '%" + empname + "%'";
-				}
-			}else {//选择了阶段
-				if("".equals(empname)){//全部人员
-					sql = sql + " where STAGECODE='" + stagecode + "'";
-				}else {
-					sql = sql + " where STAGECODE='" + stagecode + "' and EMPNAME like '%" + empname + "%'";
-				}
+			if("".equals(empname)){//全部人员
+				
+			}else {//人员名称模糊检索
+				sql = sql + " and EMPNAME like '%" + empname + "%'";
 			}
 		}else {
-			if("0".equals(stagecode)){//全部阶段
-				if("".equals(empname)){//全部人员
-					sql = sql + " where PJCODE='" + pjcode + "'";
-				}else {//人员名称模糊检索
-					sql = sql + " where PJCODE='" + pjcode + "' and EMPNAME like '%" + empname + "%'";
-				}
-			}else {//选择了阶段
-				if("".equals(empname)){//全部人员
-					sql = sql + " where PJCODE='" + pjcode + "' and STAGECODE='" + stagecode + "'";
-				}else {
-					sql = sql + " where PJCODE='" + pjcode + "' and STAGECODE='" + stagecode + "' and EMPNAME like '%" + empname + "%'";
-				}
+			if("".equals(empname)){//全部人员
+				sql = sql + " and PJCODE='" + pjcode + "'";
+			}else {//人员名称模糊检索
+				sql = sql + " and PJCODE='" + pjcode + "' and EMPNAME like '%" + empname + "%'";
 			}
 		}
 		
@@ -128,6 +117,40 @@ public class PlanDAO extends CommonDAO {
 		pageList.setPageInfo(pageInfo);
 		
 		return pageList;
+	}
+	
+	/**
+	 * 获取计划提醒列表
+	 * @param pjcode 工作令号
+	 * @param datepick 年月
+	 * @param empname 责任人名称
+	 * @param page 页码
+	 * @return
+	 */
+	public List findAllRemind(String pjcode, String datepick, String empname){
+		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+		Date enddate = StringUtil.getEndOfMonth(startdate);
+		String sql = "select a.*,b.* from VIEW_PLAN a, (select sum(AMOUNT) as AMOUNT from WORKREPORT c,PLAN d where c.PJCODE=d.PJCODE and c.PJCODE_D=d.PJCODE_D and c.STAGECODE=d.STAGECODE and c.STARTDATE>=d.STARTDATE and c.STARTDATE<=d.ENDDATE) b where a.ENDDATE>='" + startdate + "' and a.ENDDATE<='" + enddate + "'";
+		
+		if("0".equals(pjcode)){//全部工作令
+			if("".equals(empname)){//全部人员
+				
+			}else {//人员名称模糊检索
+				sql = sql + " and EMPNAME like '%" + empname + "%'";
+			}
+		}else {
+			if("".equals(empname)){//全部人员
+				sql = sql + " and PJCODE='" + pjcode + "'";
+			}else {//人员名称模糊检索
+				sql = sql + " and PJCODE='" + pjcode + "' and EMPNAME like '%" + empname + "%'";
+			}
+		}
+		
+		sql = sql + " order by PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
+		
+		List list = jdbcTemplate.queryForList(sql);
+		
+		return list;
 	}
 	
 	/**
@@ -241,7 +264,7 @@ public class PlanDAO extends CommonDAO {
 	public Map getPersent(float persent){
 		Map map = new HashMap();
 		
-		String sql = "select * from PLAN_PERSENT where STARTPERSENT<=" + persent + " and ENDPERSENT>" + persent;
+		String sql = "select * from PLAN_PERSENT where STARTPERSENT<=" + persent + " and ENDPERSENT>=" + persent;
 			
 		List list = jdbcTemplate.queryForList(sql);
 		if(list.size()>0){

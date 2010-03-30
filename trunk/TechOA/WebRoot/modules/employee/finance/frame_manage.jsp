@@ -64,7 +64,9 @@
 		
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
 		if(method=='search'){
-			tb.add('&nbsp;&nbsp;&nbsp;');
+			document.getElementById('departspan').style.display = 'none';
+			document.getElementById('emname').style.display = 'none';
+			document.getElementById('search').style.display = 'none';
   			tb.add('选择年月：');
   			tb.add(document.getElementById('datepick'));
 		}else {
@@ -72,7 +74,6 @@
 			document.getElementById('emname').style.display = '';
 			document.getElementById('search').style.display = '';
 		
-			tb.add('&nbsp;&nbsp;&nbsp;');
   			tb.add('选择部门');
   			tb.add(document.getElementById('departspan'));
   			tb.add('&nbsp;&nbsp;&nbsp;');
@@ -117,7 +118,7 @@
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
   	<div id="toolbar"></div>
-	<span id="departspan" name="departspan" style="display:none;"></span>
+	<span id="departspan" name="departspan"></span>
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" onchange="commit();" value="<%=thisYearAndMonth %>" style="width: 50">
 	<input type="text" name="emname" style="width:60;"  style="display:none;">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();" style="display:none;">

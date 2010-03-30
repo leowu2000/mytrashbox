@@ -127,9 +127,7 @@ Ext.onReady(function(){
 			    Ext.get('pjcode').set({'disabled':'disabled'});
 			    AJAX_PJ(document.getElementById('pjcode').value);
 				Ext.get('pjcode_d').set({'value':data.item.pjcode__d});
-				Ext.get('pjcode_d').set({'disabled':'disabled'});
 				Ext.get('stagecode').set({'value':data.item.stagecode});
-				Ext.get('stagecode').set({'disabled':'disabled'});
 				Ext.get('ordercode').set({'value':data.item.ordercode});
 				Ext.get('note').set({'value':data.item.note});
 				Ext.get('symbol').set({'value':data.item.symbol});

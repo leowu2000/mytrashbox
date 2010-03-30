@@ -2,10 +2,9 @@ package com.basesoft.modules.excel;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import jxl.Workbook;
 import jxl.format.Alignment;
@@ -20,24 +19,290 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 
+import com.basesoft.modules.plan.PlanDAO;
+import com.basesoft.util.StringUtil;
+
 public class ExportExcel {
 	
-	public void exportExcel(List<Map<String, String>> list, 
-			HttpServletRequest request) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+	/**
+	 * 工时统计汇总表写成一个excel文件，返回这个文件的路径
+	 * @param list 数据列表
+	 * @param excelDAO
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_GSTJHZ(List<Map<String, String>> list , ExcelDAO excelDAO) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		String[] str = new String[1];
+		str[0] = "工时统计汇总";
+		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
 		
-		String pathTemp = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + "/temp.xls";
-		//System.out.println(pathTemp);
-		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + "/业务评定统计.xls";;
-		//System.out.println(path);
-		request.setAttribute("path", path);
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
 		
-		WritableWorkbook wb = readExcel(pathTemp, path);
-		writeSheet(wb.getSheet(0), list);
+		List listDepart = excelDAO.getDepartment();
+		int size = 3 + listDepart.size();
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, size-1, 0);
+		
+		//插入表头
+		String[] str1 = new String[size];
+		str1[0] = "序号";
+		str1[1] = "工作令号";
+		str1[2] = "本月合计";
+		for(int i=0;i<listDepart.size();i++){
+			Map mapDepart = (Map)listDepart.get(i);
+			str1[i + 3] = mapDepart.get("NAME").toString();
+		}
+		insertRowData(sheet, 1, str1);
+		
+		//插入内容部分
+		for (int i = 0; i < list.size(); i++) {
+			String[] str2 = new String[size];
+			Map<String, String> map = (Map<String, String>) list.get(i);
+			str2[0] = (i + 1) + "";
+			str2[1] = map.get("NAME");
+			str2[2] = String.valueOf(map.get("totalCount"));
+			for(int j=0;j<listDepart.size();j++){
+				str2[j + 3] = String.valueOf(map.get("departCount" + j));
+			}
+			
+			insertRowData(sheet, i + 2, str2);
+		}	
+		
 		wb.write();
 		wb.close();
-		request.setAttribute("wb", wb);
+		
+		return path;
 	}
 	
+	/**
+	 * 科研工时统计表写成一个excel文件，返回这个文件的路径
+	 * @param list 数据列表
+	 * @param excelDAO
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_KYGSTJ(List<Map<String, String>> list , ExcelDAO excelDAO) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		String[] str = new String[1];
+		str[0] = "科研工时统计";
+		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		List listPeriod = excelDAO.getDICTByType("5");
+		int size = 3 + listPeriod.size();
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, size-1, 0);
+		
+		//插入表头
+		String[] str1 = new String[size];
+		str1[0] = "序号";
+		str1[1] = "工作令号";
+		str1[2] = "合计";
+		for(int i=0;i<listPeriod.size();i++){
+			Map mapPeriod = (Map)listPeriod.get(i);
+			str1[i + 3] = mapPeriod.get("NAME").toString();
+		}
+		
+		insertRowData(sheet, 1, str1);
+		
+		for (int i = 0; i < list.size(); i++) {
+			String[] str2 = new String[size];
+			Map<String, String> map = (Map<String, String>) list.get(i);
+			str2[0] = (i + 1) + "";
+			str2[1] = map.get("PJCODE");
+			str2[2] = String.valueOf(map.get("TOTALCOUNT"));
+			for(int j=0;j<listPeriod.size();j++){
+				Map mapPeriod = (Map)listPeriod.get(j);
+				str2[j + 3] = String.valueOf(map.get(mapPeriod.get("CODE")));
+			}
+			
+			insertRowData(sheet, i + 2, str2);
+		}
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
+	 * 承担任务情况表写成一个excel文件，返回这个文件的路径
+	 * @param list 数据列表
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_CDRWQK(List<Map<String, String>> list) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		String[] str = new String[1];
+		str[0] = "承担任务情况";
+		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";;
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, 10, 0);
+		
+		//插入第一行表头
+		String[] str1 = new String[3];
+		str1[0] = "序号";
+		str1[1] = "工作令号";
+		str1[2] = "本期末安排人数及专业分类(人)";
+		insertRowData(sheet, 1, str1);
+		sheet.mergeCells(2, 1, 10, 1);
+		
+		//插入第二行表头
+		String[] str2 = new String[6];
+		str2[0] = "";
+		str2[1] = "";
+		str2[2] = "合计";
+		str2[3] = "本科及以上学历或中高级职称人员";
+		str2[4] = "大、中专学历或初级职称人员";
+		str2[5] = "合计中按专业分";
+		insertRowData(sheet, 2, str2);
+		sheet.mergeCells(5, 2, 10, 2);
+		
+		//插入第三行表头
+		String[] str3 = new String[11];
+		str3[0] = "";
+		str3[1] = "";
+		str3[2] = "";
+		str3[3] = "";
+		str3[4] = "";
+		str3[5] = "电讯";
+		str3[6] = "计算机硬件";
+		str3[7] = "结构";
+		str3[8] = "工艺";
+		str3[9] = "软件开发";
+		str3[10] = "其他";
+		insertRowData(sheet, 3, str3);
+		sheet.mergeCells(0, 1, 0, 3);
+		sheet.mergeCells(1, 1, 1, 3);
+		sheet.mergeCells(2, 2, 2, 3);
+		sheet.mergeCells(3, 2, 3, 3);
+		sheet.mergeCells(4, 2, 4, 3);
+		
+		for (int i = 0; i < list.size(); i++) {
+			String[] str4 = new String[11];
+			Map<String, String> map = (Map<String, String>) list.get(i);
+			str4[0] = (i + 1) + "";
+			str4[1] = map.get("PJCODE");
+			str4[2] = String.valueOf(map.get("TOTALCOUNT"));
+			str4[3] = String.valueOf(map.get("C1"));
+			str4[4] = String.valueOf(map.get("C2"));
+			str4[5] = String.valueOf(map.get("C3"));
+			str4[6] = String.valueOf(map.get("C4"));
+			str4[7] = String.valueOf(map.get("C5"));
+			str4[8] = String.valueOf(map.get("C6"));
+			str4[9] = String.valueOf(map.get("C7"));
+			str4[10] = String.valueOf(map.get("C8"));
+			
+			insertRowData(sheet, i + 4, str4);
+		}
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
+	 * 计划考核统计表写成一个excel文件，返回这个文件的路径
+	 * @param list 数据列表
+	 * @param planDAO
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_PLAN(List<Map<String, String>> list, PlanDAO planDAO, String datepick) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		String[] str = new String[1];
+		str[0] = datepick + "综合考核及产品计划完成率考核统计结果";
+		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, 11, 0);
+		
+		//插入表头
+		String str1[] = new String[12];
+		str1[0] = "产品令号";
+		str1[1] = "计划要求";
+		str1[2] = "计划完成情况";
+		str1[3] = "考核";
+		str1[4] = "内因/外因";
+		str1[5] = "分管部领导";
+		str1[6] = "责任单位";
+		str1[7] = "责任人";
+		str1[8] = "计划员";
+		str1[9] = "分管室领导";
+		str1[10] = "完成率(%)";
+		str1[11] = "备注";
+		
+		insertRowData(sheet, 1, str1);
+		
+		for (int i = 0; i < list.size(); i++) {
+			String[] str2 = new String[12];
+			Map<String, String> map = (Map<String, String>) list.get(i);
+		
+			//任务完成情况和完成率计算
+			Date now = new Date();
+			Date startdate = map.get("STARTDATE")==null?new Date():StringUtil.StringToDate(String.valueOf(map.get("STARTDATE")),"yyyy-MM-dd");
+			Date enddate = map.get("ENDDATE")==null?new Date():StringUtil.StringToDate(String.valueOf(map.get("ENDDATE")),"yyyy-MM-dd");
+			
+			int plandays = StringUtil.getBetweenDays(startdate, enddate);
+			int passdays = StringUtil.getBetweenDays(startdate, now);
+			//完成率
+			float daypersent = plandays==0?0:passdays*100/plandays;
+			//完成情况
+			Map mapPersent = planDAO.getPersent(daypersent);
+			String state = mapPersent.get("NAME")==null?"":mapPersent.get("NAME").toString();
+			
+			str2[0] = map.get("PJNAME")==null?"":map.get("PJNAME");
+            str2[1] = map.get("NOTE")==null?"":map.get("NOTE");
+            str2[2] = state;
+            str2[3] = map.get("ASSESS")==null?"":map.get("ASSESS");
+            str2[4] = "";
+            str2[5] = map.get("LEADER_SECTION")==null?"":map.get("LEADER_SECTION");
+            str2[6] = map.get("DEPARTNAME")==null?"":map.get("DEPARTNAME");
+            str2[7] = map.get("EMPNAME")==null?"":map.get("EMPNAME");
+            str2[8] = map.get("PLANNERNAME")==null?"":map.get("PLANNERNAME");
+            str2[9] = map.get("LEADER_ROOM")==null?"":map.get("LEADER_ROOM");
+            str2[10] = String.valueOf(daypersent);
+            str2[11] = map.get("REMARK")==null?"":map.get("REMARK");
+            
+            insertRowData(sheet, i + 2, str2);
+		}
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
+	 * 读取excel模版，实例化WritableWorkbook
+	 * @param pathTemp 模版路径
+	 * @param path 实际下载文件路径
+	 * @return
+	 * @throws IOException
+	 * @throws BiffException
+	 */
 	private WritableWorkbook readExcel(String pathTemp, String path) throws IOException, BiffException {
 		
 		File excel = new File(pathTemp);
@@ -48,6 +313,13 @@ public class ExportExcel {
 		return wb;
 	}
 	
+	/**
+	 * 在路径下生成文件，实例化WritableWorkbook
+	 * @param path 实际下载文件路径
+	 * @return
+	 * @throws IOException
+	 * @throws BiffException
+	 */
 	private WritableWorkbook readExcel(String path) throws IOException, BiffException {
 		
 		WritableWorkbook wb = Workbook.createWorkbook(new File(path));
@@ -56,22 +328,23 @@ public class ExportExcel {
 		return wb;
 	}
 	
-	private void writeSheet(WritableSheet sheet, List<Map<String, String>> list) throws WriteException {
+	/**
+	 * 获取地址
+	 * @param model
+	 * @return
+	 */
+	private String getPath(String model){
+		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1));
 		
-		for (int i = 0; i < list.size(); i++) {
-			String[] str = new String[8];
-			Map<String, String> map = (Map<String, String>) list.get(i);
-			str[0] = (i + 1) + "";
-			str[1] = map.get("sjmc");
-			str[2] = map.get("zdmc");
-			str[3] = map.get("ybcs");
-			str[4] = map.get("sbcs");
-			str[5] = map.get("cbcs");
-			str[6] = map.get("lbcs");
-			str[7] = map.get("wdsx");
-			
-			insertRowData(sheet, i + 2, str);
-		}		
+		if("GSTJHZ".equals(model)){//工时统计汇总
+			path = path + "工时统计汇总.xls";
+		}else if("KYGSTJ".equals(model)){//科研工时统计
+			path = path + "科研工时统计.xls";
+		}else if("CDRWQK".equals(model)){//承担任务情况
+			path = path + "承担任务情况.xls";
+		}
+		
+		return path;
 	}
 	
 	private void insertRowData(WritableSheet sheet, int row, String[] dataArr) throws WriteException {
@@ -111,5 +384,4 @@ public class ExportExcel {
  		Label label = new Label(col, row, data, wcf);   
  		sheet.addCell(label);
 	}
-	
 }

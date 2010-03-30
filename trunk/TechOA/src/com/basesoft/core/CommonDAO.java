@@ -142,7 +142,7 @@ public class CommonDAO {
 	 * @return
 	 */
 	public List<?> getDICTByType(String type){
-		return jdbcTemplate.queryForList("select * from DICT where TYPE='" + type + "' order by CODE");
+		return jdbcTemplate.queryForList("select * from DICT where TYPE='" + type + "' and CODE!='' order by CODE");
 	}
 	
 	/**
