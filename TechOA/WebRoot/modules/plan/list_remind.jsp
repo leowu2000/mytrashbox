@@ -9,7 +9,8 @@ PageList pageList = (PageList)request.getAttribute("pageList");
 List listAssess = (List)pageList.getList();
 int pagenum = pageList.getPageInfo().getCurPage();
 String f_pjcode = request.getAttribute("f_pjcode").toString();
-String f_stagecode = request.getAttribute("f_stagecode").toString();
+//String f_stagecode = request.getAttribute("f_stagecode").toString();
+String datepick = request.getAttribute("datepick").toString();
 String f_empname = request.getAttribute("f_empname").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
@@ -40,7 +41,7 @@ PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("plan.do?action=list_remind&pjcode=" + f_pjcode + "&stagecode=" + f_stagecode + "&empname=" + f_empname) %>
+<%=pageList.getPageInfo().getHtml("plan.do?action=list_remind&pjcode=" + f_pjcode + "&datepick=" + datepick + "&empname=" + f_empname) %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>产品令号</td>              
@@ -59,10 +60,10 @@ PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 <%
 for(int i=0;i<listAssess.size();i++){
 	Map mapAssess = (Map)listAssess.get(i);
-	int amount = mapAssess.get("AMOUNT")==null?0:Integer.parseInt(mapAssess.get("AMOUNT").toString());
-	int planedworkload = mapAssess.get("PLANEDWORKLOAD")==null?0:Integer.parseInt(mapAssess.get("PLANEDWORKLOAD").toString());
+	//int amount = mapAssess.get("AMOUNT")==null?0:Integer.parseInt(mapAssess.get("AMOUNT").toString());
+	//int planedworkload = mapAssess.get("PLANEDWORKLOAD")==null?0:Integer.parseInt(mapAssess.get("PLANEDWORKLOAD").toString());
 	//完成率
-	float persent = planedworkload==0?0:amount*100/planedworkload;
+	//float persent = planedworkload==0?0:amount*100/planedworkload;
 	//计划完成情况
 	String state = "";
 	Date now = new Date();

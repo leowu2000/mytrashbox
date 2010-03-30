@@ -33,6 +33,7 @@ public class PlanController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
 		String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
+		String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
 		f_empname = new String(f_empname.getBytes("ISO8859-1"),"UTF-8");
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
@@ -200,11 +201,11 @@ public class PlanController extends CommonController {
 		}else if("remind_list".equals(action)){//计划提醒列表
 			mv = new ModelAndView("modules/plan/list_remind");
 			
-			PageList pageList = planDAO.findAllRemind(f_pjcode, f_stagecode, f_empname, page);
+			PageList pageList = planDAO.findAllRemind(f_pjcode, datepick, f_empname, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("f_pjcode", f_pjcode);
-			mv.addObject("f_stagecode", f_stagecode);
+			mv.addObject("datepick", datepick);
 			mv.addObject("f_empname", f_empname);
 			return mv;
 		}else if("result_list".equals(action)){//综合查询个人计划项

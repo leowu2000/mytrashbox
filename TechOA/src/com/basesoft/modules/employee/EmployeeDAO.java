@@ -59,15 +59,15 @@ public class EmployeeDAO extends CommonDAO{
 				}
 			}
 			if("".equals(emname)){//没有名字过滤
-				sql = "select * from EMPLOYEE order by DEPARTCODE desc,LEVEL";
+				sql = "select * from EMPLOYEE where ROLECODE!='000' order by DEPARTCODE desc,LEVEL";
 			}else {
-				sql = "select * from EMPLOYEE where NAME like '%" + emname + "%' order by DEPARTCODE desc,LEVEL ";
+				sql = "select * from EMPLOYEE where ROLECODE!='000' and NAME like '%" + emname + "%' order by DEPARTCODE desc,LEVEL ";
 			}
 		}else {
 			if("".equals(emname)){
-				sql = "select * from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE = '" + departcode + "') order by DEPARTCODE desc,LEVEL";
+				sql = "select * from EMPLOYEE where ROLECODE!='000' and CODE in (select CODE from EMPLOYEE where DEPARTCODE = '" + departcode + "') order by DEPARTCODE desc,LEVEL";
 			}else {
-				sql = "select * from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE = '" + departcode + "') and NAME like '%" + emname + "%' order by DEPARTCODE desc,LEVEL";
+				sql = "select * from EMPLOYEE where ROLECODE!='000' and CODE in (select CODE from EMPLOYEE where DEPARTCODE = '" + departcode + "') and NAME like '%" + emname + "%' order by DEPARTCODE desc,LEVEL";
 			}
 		}
 		

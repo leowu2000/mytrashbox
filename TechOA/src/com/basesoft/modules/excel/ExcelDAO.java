@@ -1,7 +1,7 @@
 package com.basesoft.modules.excel;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -10,31 +10,85 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.basesoft.core.CommonDAO;
+import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.project.ProjectDAO;
 import com.basesoft.util.StringUtil;
 
 public class ExcelDAO extends CommonDAO {
 
 	ProjectDAO pjDAO;
+	PlanDAO planDAO;
 	
 	/**
-	 * 获取导入数据list
-	 * @param model 导出的模版
+	 * 获取要导出的工时统计汇总数据
 	 * @param datepick 日期
 	 * @return
 	 */
-	public Map getExportData(String model, String datepick){
-		Map map = new HashMap();
+	public List getExportData_GSTJHZ(String datepick){
+		List list = new ArrayList();
 		
-		if("GSTJHZ".equals(model)){//工时统计汇总
-			Date start = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
-			Date end = StringUtil.getEndOfMonth(start);
+		Date start = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+		Date end = StringUtil.getEndOfMonth(start);
 			
-			//List list
-			List listGstjhz = pjDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"));
+		list = pjDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"));
+		
+		return list;
+	}
+	
+	/**
+	 * 获取要导出的科研工时统计数据
+	 * @param datepick 日期
+	 * @param depart 部门
+	 * @return
+	 */
+	public List getExportData_KYGSTJ(String datepick, String depart){
+		List list = new ArrayList();
+		String start = "";
+		String end = datepick + "-25";
+		
+		if("01".equals(datepick.split("-")[1])){
+			start = (Integer.parseInt(datepick.split("-")[0])-1) + "-12-25";
+		}else {
+			start = datepick.split("-")[0] + "-" + (Integer.parseInt(datepick.split("-")[1])-1) + "-25";
 		}
 		
-		return map;
+		List listPeriod = getDICTByType("5");
+		list = pjDAO.getKygstj(start, end, listPeriod, depart);
+		
+		return list;
+	}
+	
+	/**
+	 * 获取要导出的承担任务情况数据
+	 * @param datepick 日期
+	 * @param depart 部门
+	 * @return
+	 */
+	public List getExportData_CDRWQK(String datepick, String depart){
+		List list = new ArrayList();
+		String start = "";
+		String end = datepick + "-25";
+		
+		if("01".equals(datepick.split("-")[1])){
+			start = (Integer.parseInt(datepick.split("-")[0])-1) + "-12-25";
+		}else {
+			start = datepick.split("-")[0] + "-" + (Integer.parseInt(datepick.split("-")[1])-1) + "-25";
+		}
+		
+		list = pjDAO.getCdrwqk(start, end, depart);
+		
+		return list;
+	}
+	
+	/**
+	 * 获取要导出的计划考核统计数据
+	 * @param f_pjcode 工作令
+	 * @param datepick 年月
+	 * @param f_empname 姓名模糊检索
+	 * @return
+	 */
+	public List getExportData_PLAN(String f_pjcode, String datepick, String f_empname){
+		return planDAO.findAllRemind(f_pjcode, datepick, f_empname);
 	}
 	
 	/**
@@ -590,5 +644,9 @@ public class ExcelDAO extends CommonDAO {
 	
 	public void setProjectDAO(ProjectDAO pjDAO){
 		this.pjDAO = pjDAO;
+	}
+	
+	public void setPlanDAO(PlanDAO planDAO){
+		this.planDAO = planDAO;
 	}
 }

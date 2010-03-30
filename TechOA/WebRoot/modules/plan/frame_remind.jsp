@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page import="com.basesoft.util.*" %>
 <%
 	List listPj = (List)request.getAttribute("listPj");
 	List listStage = (List)request.getAttribute("listStage");
@@ -23,13 +24,22 @@
   		tb.add('工作令号');
   		tb.add(document.getElementById('selpj'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('阶段');
-  		tb.add(document.getElementById('selstage'));
+  		tb.add('选择年月');
+  		tb.add(document.getElementById('datepick'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('按名字模糊查询');
   		tb.add(document.getElementById('empname'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
+  		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
+  		
+  		function onExportClick(){
+  			var pjcode = document.getElementById('selpj').value;
+	  		var datepick = document.getElementById('datepick').value;
+	  		var empname = document.getElementById('empname').value;
+    		window.location.href = "/excel.do?action=export&model=PLAN&f_pjcode=" + pjcode + "&datepick=" + datepick + "&f_empname=" + empname;
+  		}
 	});
 	
 	function IFrameResize(){
@@ -38,10 +48,14 @@
 	
 	function commit(){
 	  var pjcode = document.getElementById('selpj').value;
-	  var stagecode = document.getElementById('selstage').value;
+	  var datepick = document.getElementById('datepick').value;
+	  if(datepick == ''){
+	  	document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
+	  	datepick = document.getElementById('datepick').value;
+	  }
 	  var empname = document.getElementById('empname').value;
 	  
-	  document.getElementById('list_remind').src = "/plan.do?action=remind_list&f_pjcode=" + pjcode + "&f_stagecode=" + stagecode + "&f_empname=" + empname;
+	  document.getElementById('list_remind').src = "/plan.do?action=remind_list&f_pjcode=" + pjcode + "&datepick=" + datepick + "&f_empname=" + empname;
 	}
 	</script>
   </head>
@@ -57,16 +71,8 @@
 		<option value="<%=mapPj.get("PJCODE") %>"><%=mapPj.get("PJNAME") %></option>
 <%	} %>					
 	</select>
-	<select name="selstage" onchange="commit();">
-		<option value="0">全部</option>
-<%
-	for(int i=0;i<listStage.size();i++){
-		Map mapStage = (Map)listStage.get(i);
-%>				
-		<option value="<%=mapStage.get("STAGECODE") %>"><%=mapStage.get("STAGENAME") %></option>
-<%	} %>					
-	</select>
 	<input type="text" name="empname" style="width:60;">
+	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" onchange="commit();" style="width: 50">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
     <iframe name="list_remind" width="100%" frameborder="0" height="500"></iframe>
   </body>

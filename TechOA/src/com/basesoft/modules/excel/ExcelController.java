@@ -1,7 +1,11 @@
 package com.basesoft.modules.excel;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,10 +19,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.modules.excel.config.Config;
+import com.basesoft.modules.plan.PlanDAO;
 
 public class ExcelController extends CommonController {
 
 	ExcelDAO excelDAO;
+	PlanDAO planDAO;
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
@@ -59,17 +65,41 @@ public class ExcelController extends CommonController {
 		}else if("export".equals(action)){//excel导出
 			String model = ServletRequestUtils.getStringParameter(request, "model", "");
 			
-			//List list = excelDAO.
+			List list = new ArrayList();
 			
-			//byte[] b = (byte[])map.get("ATTACH");
+			ExportExcel exportExcel = new ExportExcel();
+			String path = "";
+			
+			if("GSTJHZ".equals(model)){//工时统计汇总
+				list = excelDAO.getExportData_GSTJHZ(datepick);
+				path = exportExcel.exportExcel_GSTJHZ(list, excelDAO);
+				
+			}else if("KYGSTJ".equals(model)){//科研工时统计
+				list = excelDAO.getExportData_KYGSTJ(datepick, depart);
+				path = exportExcel.exportExcel_KYGSTJ(list, excelDAO);
+			}else if("CDRWQK".equals(model)){//承担任务情况
+				list = excelDAO.getExportData_CDRWQK(datepick, depart);
+				path = exportExcel.exportExcel_CDRWQK(list);
+			}else if("PLAN".equals(model)){//计划
+				list = excelDAO.getExportData_PLAN(f_pjcode, datepick, f_empname);
+				path = exportExcel.exportExcel_PLAN(list, planDAO, datepick);
+			}
+			
+			
+			File file = new File(path);
+			String filename = file.getName();
+			InputStream fis = new BufferedInputStream(new FileInputStream(path));
+		    byte[] buffer = new byte[fis.available()];
+		    fis.read(buffer);
+		    fis.close();
 			
 			response.setHeader("Pragma", "No-cache");
 			response.setHeader("Cache-Control", "no-cache");
 			response.setDateHeader("Expiresponse", 0L);
 			response.setContentType("application/*");
-			response.setHeader("Content-Disposition", "attachment;filename=" + new String("".getBytes("GBK"),"ISO8859-1"));
+			response.setHeader("Content-Disposition", "attachment;filename=" + new String(filename.getBytes("GBK"),"ISO8859-1"));
 
-			//response.getOutputStream().write(b);
+			response.getOutputStream().write(buffer);
 			response.getOutputStream().flush();
 			response.getOutputStream().close();
 			return null;
@@ -80,5 +110,9 @@ public class ExcelController extends CommonController {
 
 	public void setExcelDAO(ExcelDAO excelDAO){
 		this.excelDAO = excelDAO;
+	}
+	
+	public void setPlanDAO(PlanDAO planDAO){
+		this.planDAO = planDAO;
 	}
 }
