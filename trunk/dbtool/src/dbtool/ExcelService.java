@@ -690,8 +690,13 @@ public class ExcelService {
         strContent_table.append("<td rowspan='2' class='title' nowrap> Ë÷  Òý </td>");
         for(String stcd:stsc){
             String stnm = dbTool.getStscName(jt2, stcd.replaceAll("'",""));
-            if("".trim().equals(stnm))
-                stnm = dbTool.getStscName2(jt1, stcd.replaceAll("'",""),version);
+            if("".trim().equals(stnm)){
+                        Object obj = dbTool.getStscName2(jt1, stcd.replaceAll("'",""),version);
+                        if(obj==null)
+                            stnm="";
+                        else
+                            stnm = obj.toString();
+                    }
                 if("".trim().equals(stnm))
                     stnm=stcd.replaceAll("'","");
             if(isTurnChar){
@@ -728,7 +733,7 @@ public class ExcelService {
                         boolean nullflg = true;
                         for(int n=0;n<resultList.size();n++){
                          Map stscMap = (Map)resultList.get(n);
-                         Object stscobj=(Object)stscMap.get(stsc[k].replaceAll("'",""));
+                         Object stscobj=(Object)stscMap.get(stsc[k].replaceAll("'","").trim());
                          if(stscobj==null){
                             nullflg = false;
                          }else{

@@ -264,7 +264,7 @@ public class DBTool {
         return map.get("STNM").toString();
     }
 
-    public String getStscName2(JdbcTemplate jdbcTemplate, String stcd, int version) {
+    public Object getStscName2(JdbcTemplate jdbcTemplate, String stcd, int version) {
         Map map = null;
         String searchSQL = "";
         if (version == 0) {
@@ -277,7 +277,7 @@ public class DBTool {
         } catch (Exception e) {
             return "";
         }
-        return map.get("STNM").toString();
+        return map.get("STNM");
     }
 
     public void clearTable(boolean isTarget, String table) {
@@ -293,7 +293,7 @@ public class DBTool {
             DefaultListModel selectedYearsModel,
             DefaultListModel selectedSnameModel,
             DBTool dbTool, String saveDir, int expType,
-            int version,boolean isTurnChar) {
+            int version,boolean isTurnChar,int dbtype) {
 
         expSuccessModel = expModel;
         String[] tables = new String[expModel.size()];
@@ -341,7 +341,7 @@ public class DBTool {
                 outputInfoExcel(table, logList, selectedSnameModel, stscStr);
             }
             //生成数据索引
-            insertDataIndexTable(table, stscStr, stnameStr, logList, version, expType, saveDir,isTurnChar);
+            insertDataIndexTable(table, stscStr, stnameStr, logList, version, expType, saveDir,isTurnChar,dbtype);
             if (i == tables.length) {
                 ((DefaultListModel) (logList.getModel())).addElement("正在生成导出报告 ......");
             }
@@ -359,7 +359,7 @@ public class DBTool {
     }
 
      public void insertDataIndexTable(String table, String stcdStr,
-            String stnameStr, JList logList, int version, int expType, String saveDir,boolean isTurnChar) {
+            String stnameStr, JList logList, int version, int expType, String saveDir,boolean isTurnChar,int dbtype) {
         String indexFiled = getIndexFiled(table);
         outputError("\r\n"+table,"===准备在字段-"+indexFiled+"-上生成索引","");
         if (!indexFiled.trim().equals("")) {//首先保证这张表可以生成数据索引
@@ -384,14 +384,21 @@ public class DBTool {
                             resultDesc= "SELECT SUM(A.INDEXY) AS RESU FROM (SELECT STCD,COUNT("
                                     + "DISTINCT (DATEPART(yyyy,"+indexFiled.toUpperCase()+"))) "
                                     +"AS INDEXY FROM "+table.toUpperCase()+" "+makeStcdSqlCol(stcdStr)+" GROUP BY STCD) AS A";
-//                            stscSQL = "SELECT DISTINCT STCD,DATEPART (yyyy," + indexFiled.toUpperCase() + ") as YEARS,COUNT(*) AS TOTAL FROM " + table.toUpperCase()
-//                                    + " "+makeStcdSqlCol(stcdStr)+" GROUP BY STCD,DATEPART (yyyy," + indexFiled.toUpperCase() + ")"
-//                                    + " ORDER BY STCD,YEARS ASC ";
+
                             stscSQL =  "SELECT TAB.STCD,min(TAB.YEARS) as MINY,max(TAB.YEARS) AS MAXY,sum(TAB.TOTAL) AS ALLSUM FROM "
                                         +"(SELECT STCD,DATEPART (yyyy,"+indexFiled.toUpperCase()+") as YEARS,"
                                         +" COUNT(*) AS TOTAL FROM "+table.toUpperCase()+" "+makeStcdSqlCol(stcdStr)
                                         + " GROUP BY STCD,DATEPART "
                                         +"(yyyy,"+indexFiled.toUpperCase()+") ) TAB GROUP BY TAB.STCD";
+                            if(dbtype==2){
+                                resultDesc= "SELECT SUM(COUNT("
+                                        + "DISTINCT (DATEPART(yyyy,"+indexFiled.toUpperCase()+")))) "
+                                        +"AS RESU FROM "+table.toUpperCase()+" "+makeStcdSqlCol(stcdStr)+" GROUP BY STCD";
+                                stscSQL = "SELECT STCD,MIN(DATEPART (yyyy,"+indexFiled.toUpperCase()+")) AS MINY, MAX(DATEPART "
+                                            +"(yyyy,"+indexFiled.toUpperCase()+")) AS MAXY,"
+                                            +"COUNT(*) AS ALLSUM FROM "+table.toUpperCase()+" "+makeStcdSqlCol(stcdStr)
+                                            + "GROUP BY STCD";
+                            }
                         } else {
                             searchSQL = "SELECT DISTINCT STCD," + indexFiled.toUpperCase() + " as YEARS,COUNT(*) AS TOTAL FROM " + table.toUpperCase()
                                     + " GROUP BY STCD," + indexFiled.toUpperCase()
@@ -404,6 +411,14 @@ public class DBTool {
                                         +" COUNT(*) AS TOTAL FROM "+table.toUpperCase()+" "+makeStcdSqlCol(stcdStr)
                                         + " GROUP BY STCD,"+indexFiled.toUpperCase()+" "
                                         +" ) TAB GROUP BY TAB.STCD";
+                            if(dbtype==2){
+                                resultDesc= "SELECT SUM(COUNT("
+                                        + "DISTINCT "+indexFiled.toUpperCase()+")) "
+                                        +"AS RESU FROM "+table.toUpperCase()+" "+makeStcdSqlCol(stcdStr)+" GROUP BY STCD";
+                                stscSQL = "SELECT STCD,MIN("+indexFiled.toUpperCase()+") AS MINY, MAX("+indexFiled.toUpperCase()+") AS MAXY,"
+                                            +"COUNT(*) AS ALLSUM FROM "+table.toUpperCase()+" "+makeStcdSqlCol(stcdStr)
+                                            + "GROUP BY STCD";
+                            }
                         }
                         List rows = jt1.queryForList(searchSQL);
                         List rowsStsc = jt1.queryForList(stscSQL);
@@ -412,7 +427,8 @@ public class DBTool {
                         while (itStsc.hasNext()) {
                             Map map = (Map) itStsc.next();
                             Map stcdMap = new HashMap();
-                            stcdMap.put(map.get("STCD").toString(), map.get("MINY").toString()+","+map.get("MAXY").toString()+","+map.get("ALLSUM").toString());
+                            
+                            stcdMap.put(map.get("STCD").toString().trim(), map.get("MINY")+","+map.get("MAXY")+","+map.get("ALLSUM"));
                             stscList.add(stcdMap);
                         }
                         resultStscMap.put(table, stscList);
@@ -437,6 +453,7 @@ public class DBTool {
                                 }
                             }
                         }
+//                        System.out.println(resultDesc);
                         Map resuMap = jt1.queryForMap(resultDesc);
                         if(resuMap!=null)
                             dataDescMap.put(table,resuMap.get("RESU"));
@@ -609,8 +626,13 @@ public class DBTool {
                 for (int k = 0; k < values.length; k++) {
                     if (k == 0) {
                         String stnm = getStscName(jt2, values[0]);
-                        if("".trim().equals(stnm))
-                            stnm = getStscName2(jt1, values[0],version);
+                        if("".trim().equals(stnm)){
+                            Object obj = getStscName2(jt1, values[0],version);
+                            if(obj==null)
+                                stnm="";
+                            else
+                                stnm = obj.toString();
+                        }
                         if(isTurnChar)
                             stnm = new String(stnm.getBytes("ISO-8859-1"),"GBK");
                         str += stnm + "\t" + values[k] + "\t";
