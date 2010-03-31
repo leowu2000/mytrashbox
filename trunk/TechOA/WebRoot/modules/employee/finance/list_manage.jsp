@@ -85,6 +85,7 @@ Ext.onReady(function(){
 		tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 		tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
 		tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
+		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
 	}
 
     if(!win){
@@ -172,6 +173,13 @@ Ext.onReady(function(){
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
     }
+    
+    function onExportClick(){
+  		var seldepart = '<%=seldepart %>';
+		var emname = '<%=emname %>';
+		var datepick = '<%=datepick %>';
+    	window.location.href = "/excel.do?action=export&model=JBF&seldepart=" + seldepart + "&emname=" + emname + "&datepick=" + datepick;
+  	}
 });
 
 </script>

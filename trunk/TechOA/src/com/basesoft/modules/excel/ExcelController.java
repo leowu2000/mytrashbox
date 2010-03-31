@@ -83,6 +83,9 @@ public class ExcelController extends CommonController {
 			}else if("PLAN".equals(model)){//计划
 				list = excelDAO.getExportData_PLAN(f_pjcode, datepick, f_empname);
 				path = exportExcel.exportExcel_PLAN(list, planDAO, datepick);
+			}else if("JBF".equals(model)){//加班费
+				list = excelDAO.getExportData_JBF(seldepart, datepick, emname);
+				path = exportExcel.exportExcel_JBF(list, datepick);
 			}
 			
 			
