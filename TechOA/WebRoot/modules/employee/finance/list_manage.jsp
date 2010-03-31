@@ -191,7 +191,7 @@ Ext.onReady(function(){
 <%
 if(!"search".equals(method)){
 %>
-<%=pageList.getPageInfo().getHtml("finance.do?action=list_manage&page="+pagenum+"&seldepart="+seldepart+"&empname="+emname+"&datepick="+datepick) %>
+<%=pageList.getPageInfo().getHtml("finance.do?action=list_manage&seldepart="+seldepart+"&empname="+emname+"&datepick="+datepick) %>
 <%} %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">

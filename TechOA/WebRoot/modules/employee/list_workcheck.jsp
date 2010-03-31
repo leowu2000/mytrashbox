@@ -1,5 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.basesoft.util.*" %>
+<%@ page import="com.basesoft.modules.employee.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 	List listDate = (List)request.getAttribute("listDate");
 	List listWorkCheck = (List)request.getAttribute("listWorkCheck");
@@ -16,6 +18,9 @@
 	String method = request.getAttribute("method").toString();
 	
 	String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
+	
+	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+	HolidayDAO holidayDAO = (HolidayDAO)ctx.getBean("holidayDAO");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -52,6 +57,8 @@ Ext.onReady(function(){
 	}else {
 %>
 	tb.add({text: '填写考勤记录',cls: 'x-btn-text-icon add',handler: onAddClick});
+	tb.add({text: '节假日管理',cls: 'x-btn-text-icon xiugai',handler: onHolidayClick});
+	tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
 <%
 	}
 %>
@@ -99,7 +106,18 @@ Ext.onReady(function(){
     function onBackClick(btn){
     	history.back(-1);
     }
+    
+    function onExportClick(){
+  		var depart = '<%=depart %>';
+		var datepick = '<%=datepick %>';
+    	window.location.href = "/excel.do?action=export&model=KQJL&depart=" + depart + "&datepick=" + datepick;
+  	}
 
+	function onHolidayClick(){
+		var depart = '<%=depart %>';
+		var datepick = '<%=datepick %>';
+    	window.location.href = "/holiday.do?action=list&depart=" + depart + "&datepick=" + datepick;
+	}
 });
 	</script>
   </head>
@@ -130,24 +148,26 @@ Ext.onReady(function(){
 %>    		
     		<td rowspan="2">姓名</td>
 <%
-	int tempMonth = 0;
 	for(int i=0;i<listDate.size();i++){
-		Calendar c =  Calendar.getInstance();
-		c.setTime((Date)listDate.get(i));
+		boolean isWeekend = StringUtil.isWeekEnd((Date)listDate.get(i));
 		
-		if(i == 0){
-			tempMonth = c.MONTH;
-		}
-		
-		if(c.MONTH != tempMonth){
+		String isHoliday = holidayDAO.isHoliday(listDate.get(i).toString());
+		if("true".equals(isHoliday)){
+%>
+			<td rowspan="2"><span style="color: red;" title="节日"><%=StringUtil.DateToString((Date)listDate.get(i),"dd") %></span></td>
+<%
+		}else if(isWeekend){
 %>    		
-			<td rowspan="2"><%=StringUtil.DateToString((Date)listDate.get(i),"dd") %></td>
+			<td rowspan="2"><span style="color: blue;" title="周末"><%=StringUtil.DateToString((Date)listDate.get(i),"dd") %></span></td>
 <%
 		}else {
 %>
 			<td rowspan="2"><%=StringUtil.DateToString((Date)listDate.get(i),"dd") %></td>
-<%
+<%	
 		}
+%>
+
+<%
 	}
 %>
 			<td colspan="5">缺勤小结(小时)</td>			
@@ -165,7 +185,7 @@ Ext.onReady(function(){
 %>    	
 		<tr align="center">
 <%  
-	if(!"003".equals(emprole)&&!"search".equals(method)){	
+	if(!"search".equals(method)){	
 %>		
 			<td><input type="checkbox" name="check" value="<%=mapWorkCheck.get("EMPCODE") %>" class="ainput"></td>
 <%

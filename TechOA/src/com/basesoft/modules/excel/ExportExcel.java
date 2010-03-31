@@ -297,7 +297,7 @@ public class ExportExcel {
 	}
 	
 	/**
-	 * 计划考核统计表写成一个excel文件，返回这个文件的路径
+	 * 员工加班费表写成一个excel文件，返回这个文件的路径
 	 * @param list 数据列表
 	 * @param planDAO
 	 * @throws IOException
@@ -356,6 +356,99 @@ public class ExportExcel {
             str2[13] = map.get("BZ")==null?"":map.get("BZ");
             
             insertRowData(sheet, i + 2, str2);
+		}
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
+	 * 考勤记录表写成一个excel文件，返回这个文件的路径
+	 * @param list 数据列表
+	 * @param planDAO
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_KQJL(List<Map<String, String>> list, String datepick) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		
+		
+		String[] str = new String[1];
+		str[0] = datepick + "职工考勤记录";
+		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		String start = "";
+		String end = datepick + "-25";
+		
+		if("01".equals(datepick.split("-")[1])){
+			start = (Integer.parseInt(datepick.split("-")[0])-1) + "-12-25";
+		}else {
+			start = datepick.split("-")[0] + "-" + (Integer.parseInt(datepick.split("-")[1])-1) + "-25";
+		}
+		int length = 7 + StringUtil.getBetweenDays(StringUtil.StringToDate(start, "yyyy-MM-dd"), StringUtil.StringToDate(end, "yyyy-MM-dd"));
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, length, 0);
+		
+		//插入表头
+		String str1[] = new String[length+1];
+		str1[0] = "姓名";
+		str1[1] = (Integer.parseInt(datepick.split("-")[1]) -1) + "月份";
+		str1[length - 31] = Integer.parseInt(datepick.split("-")[1]) + "月份";
+		str1[length-6] = "缺勤小结（小时）";
+		
+		insertRowData(sheet, 1, str1);
+		sheet.mergeCells(1, 1, length - 31, 1);
+		sheet.mergeCells(length - 30, 1, length - 7, 1);
+		sheet.mergeCells(length - 6, 1, length, 1);
+		
+		String str2[] = new String[length+1];
+		for(int i=1;i<=length-31;i++){//上个月25号以后
+			str2[i] = String.valueOf(24 + i);
+		}
+		int j = 1;
+		for(int i=length-30;i<=length-7;i++){//本月1到25号
+			str2[i] = String.valueOf(j);
+			j = j + 1;
+		}
+		str2[length-6] = "迟到";
+		str2[length-5] = "早退";
+		str2[length-4] = "病假";
+		str2[length-3] = "事假";
+		str2[length-2] = "旷工";
+		
+		insertRowData(sheet, 2, str2);
+		sheet.mergeCells(0, 1, 0, 2);
+		
+		for (int i = 0; i < list.size(); i++) {
+			String[] str3 = new String[length+1];
+			Map<String, String> map = (Map<String, String>) list.get(i);
+		
+			str3[0] = map.get("NAME")==null?"":map.get("NAME");
+			for(int k=1;k<=length-31;k++){//上个月25号以后的
+				String date = start.split("-")[0] + "-0" + start.split("-")[1] + "-" + (24 + k);
+				str3[k] = map.get(date);
+			}
+			int l = 1;
+			for(int k=length-30;k<=length-7;k++){//本月1日至25日
+				String date = end.split("-")[0] + "-" + end.split("-")[1] + "-";
+				if(l>10){
+					date = date + l;
+				}else {
+					date = date + "0" + l;
+				}
+				str3[k] = map.get(date);
+				l = l + 1;
+			}
+            
+            insertRowData(sheet, i + 3, str3);
 		}
 		
 		wb.write();

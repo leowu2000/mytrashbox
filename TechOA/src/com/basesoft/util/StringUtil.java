@@ -218,4 +218,23 @@ public class StringUtil {
 		
 		return b;
 	}
+	
+	/**
+	 * 判断日期是否为周末
+	 * @param date
+	 * @return
+	 */
+	public static boolean isWeekEnd(Date date){
+		boolean b = false;
+		
+		Calendar ca = Calendar.getInstance();
+		ca.setTime(date);
+		int dayOfWeek = ca.get(ca.DAY_OF_WEEK);
+		
+		if(dayOfWeek==1||dayOfWeek==7){
+			b = true;
+		}
+		
+		return b;
+	}
 }

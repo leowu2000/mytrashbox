@@ -501,3 +501,27 @@ INSERT INTO PLAN_PERSENT VALUES('1','初始运行',0,20,'green',1);
 INSERT INTO PLAN_PERSENT VALUES('2','正常运行',20,60,'blue',2);
 INSERT INTO PLAN_PERSENT VALUES('3','后期运行',60,80,'orange',3);
 INSERT INTO PLAN_PERSENT VALUES('4','结尾阶段',80,100,'red',4);
+
+/*==============================================================*/
+/* Table: HOLIDAY                                               */
+/*==============================================================*/
+create table HOLIDAY  (
+   HOLIDAY              DATE                            not null,
+   NAME                 VARCHAR(50),
+   VALID                VARCHAR(10),
+   constraint PK_HOLIDAY primary key (HOLIDAY)
+);
+
+comment on table HOLIDAY is
+'节假日';
+
+comment on column HOLIDAY.HOLIDAY is
+'节假日';
+
+comment on column HOLIDAY.NAME is
+'节日名称';
+
+comment on column HOLIDAY.VALID is
+'是否有效';
+
+
