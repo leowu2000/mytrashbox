@@ -275,7 +275,7 @@ public class EmployeeController extends CommonController {
 			
 			List<Date> listDate = StringUtil.getDateList(start,end);
 			
-			List listWorkCheck = emDAO.findWorkCheck(start, end, depart, emcode, method);
+			List listWorkCheck = emDAO.findWorkCheck(start, end, depart, method, emcode);
 			
 			//考勤项列表
 			List listCheck = emDAO.getDICTByType("4");

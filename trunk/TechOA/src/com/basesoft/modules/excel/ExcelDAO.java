@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.basesoft.core.CommonDAO;
+import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.employee.FinanceDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.project.ProjectDAO;
@@ -20,6 +21,7 @@ public class ExcelDAO extends CommonDAO {
 	ProjectDAO pjDAO;
 	PlanDAO planDAO;
 	FinanceDAO financeDAO;
+	EmployeeDAO emDAO;
 	
 	/**
 	 * 获取要导出的工时统计汇总数据
@@ -43,7 +45,7 @@ public class ExcelDAO extends CommonDAO {
 	 * @param depart 部门
 	 * @return
 	 */
-	public List getExportData_KYGSTJ(String datepick, String depart){
+	public List getExportData_KYGSTJ(String depart, String datepick){
 		List list = new ArrayList();
 		String start = "";
 		String end = datepick + "-25";
@@ -66,7 +68,7 @@ public class ExcelDAO extends CommonDAO {
 	 * @param depart 部门
 	 * @return
 	 */
-	public List getExportData_CDRWQK(String datepick, String depart){
+	public List getExportData_CDRWQK(String depart, String datepick){
 		List list = new ArrayList();
 		String start = "";
 		String end = datepick + "-25";
@@ -102,6 +104,29 @@ public class ExcelDAO extends CommonDAO {
 	 */
 	public List getExportData_JBF(String seldepart, String datepick, String emname){
 		return financeDAO.findAll(seldepart, datepick, emname);
+	}
+	
+	/**
+	 * 获取要导出的考勤记录统计数据
+	 * @param datepick 日期
+	 * @param depart 部门
+	 * @return
+	 */
+	public List getExportData_KQJL(String depart, String datepick){
+		List list = new ArrayList();
+		String start = "";
+		String end = datepick + "-25";
+		
+		if("01".equals(datepick.split("-")[1])){
+			start = (Integer.parseInt(datepick.split("-")[0])-1) + "-12-25";
+		}else {
+			start = datepick.split("-")[0] + "-" + (Integer.parseInt(datepick.split("-")[1])-1) + "-25";
+		}
+		
+		List listPeriod = getDICTByType("5");
+		list = emDAO.findWorkCheck(start, end, depart, "", "");
+		
+		return list;
 	}
 	
 	/**
@@ -665,5 +690,9 @@ public class ExcelDAO extends CommonDAO {
 	
 	public void setFinanceDAO(FinanceDAO financeDAO){
 		this.financeDAO = financeDAO;
+	}
+	
+	public void setEmployeeDAO(EmployeeDAO emDAO){
+		this.emDAO = emDAO;
 	}
 }

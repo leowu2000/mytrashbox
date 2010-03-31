@@ -214,7 +214,7 @@ function havaCardno(){
   <body>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("card.do?action=list_manage&page="+pagenum+"&seldepart="+seldepart+"&empname="+emname) %>
+<%=pageList.getPageInfo().getHtml("card.do?action=list_manage&seldepart="+seldepart+"&empname="+emname) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

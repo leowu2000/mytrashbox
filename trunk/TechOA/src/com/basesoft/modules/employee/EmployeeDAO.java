@@ -117,14 +117,13 @@ public class EmployeeDAO extends CommonDAO{
 	 * @param empcode 员工code
 	 * @return
 	 */
-	public List<?> findWorkCheck(String start, String end, String depart, String empcode, String method){
+	public List<?> findWorkCheck(String start, String end, String depart, String method, String empcode){
 		List<Date> listDate = StringUtil.getDateList(start, end);
 		List returnList = new ArrayList();
-		
-		//获取雇员信息
-		Map mapEm = findByCode("EMPLOYEE", empcode);
-		
-		if("003".equals(mapEm.get("ROLECODE").toString())||"search".equals(method)){//普通员工只能看到自己的考勤
+
+		if("search".equals(method)){//综合信息查询只查找单个人员的考勤信息
+			//获取雇员信息
+			Map mapEm = findByCode("EMPLOYEE", empcode);
 			Map returnMap = new HashMap();
 			returnMap.put("NAME", mapEm.get("NAME"));
 			returnMap.put("EMPCODE", mapEm.get("CODE"));

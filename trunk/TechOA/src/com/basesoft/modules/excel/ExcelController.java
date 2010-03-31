@@ -75,10 +75,10 @@ public class ExcelController extends CommonController {
 				path = exportExcel.exportExcel_GSTJHZ(list, excelDAO);
 				
 			}else if("KYGSTJ".equals(model)){//科研工时统计
-				list = excelDAO.getExportData_KYGSTJ(datepick, depart);
+				list = excelDAO.getExportData_KYGSTJ(depart, datepick);
 				path = exportExcel.exportExcel_KYGSTJ(list, excelDAO);
 			}else if("CDRWQK".equals(model)){//承担任务情况
-				list = excelDAO.getExportData_CDRWQK(datepick, depart);
+				list = excelDAO.getExportData_CDRWQK(depart, datepick);
 				path = exportExcel.exportExcel_CDRWQK(list);
 			}else if("PLAN".equals(model)){//计划
 				list = excelDAO.getExportData_PLAN(f_pjcode, datepick, f_empname);
@@ -86,6 +86,9 @@ public class ExcelController extends CommonController {
 			}else if("JBF".equals(model)){//加班费
 				list = excelDAO.getExportData_JBF(seldepart, datepick, emname);
 				path = exportExcel.exportExcel_JBF(list, datepick);
+			}else if("KQJL".equals(model)){//考勤记录
+				list = excelDAO.getExportData_KQJL(depart, datepick);
+				path = exportExcel.exportExcel_KQJL(list, datepick);
 			}
 			
 			
