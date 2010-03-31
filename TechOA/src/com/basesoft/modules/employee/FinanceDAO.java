@@ -57,6 +57,38 @@ public class FinanceDAO extends EmployeeDAO {
 	}
 	
 	/**
+	 * 获取全部财务信息
+	 * @param departcode 所选单位
+	 * @param emname 模糊查询人名
+	 * @param datepick 日期
+	 * @return
+	 */
+	public List findAll(String departcode, String datepick, String emname){
+		String sql = "";
+		
+		Date startdate = StringUtil.StringToDate(datepick + "-01", "yyyy-MM-dd"); 
+		Date enddate = StringUtil.getEndOfMonth(startdate);
+		
+		if("0".equals(departcode)){//所有部门
+			if("".equals(emname)){//所有人员
+				sql = "select * from EMP_FINANCIAL where RQ>='" + startdate + "' and RQ<='" + enddate + "'";
+			}else {//按姓名模糊查询
+				sql = "select * from EMP_FINANCIAL where EMPNAME like '%" + emname + "%' and RQ>='" + startdate + "' and RQ<='" + enddate + "'";
+			}
+		}else {//所选部门
+			if("".equals(emname)){
+				sql = "select * from EMP_FINANCIAL where DEPARTCODE='" + departcode + "' and RQ>='" + startdate + "' and RQ<='" + enddate + "'";
+			}else {
+				sql = "select * from EMP_FINANCIAL where DEPARTCODE='" + departcode + "' and EMPNAME like '%" + emname + "%' and RQ>='" + startdate + "' and RQ<='" + enddate + "'";
+			}
+		}
+		
+		sql = sql + " order by DEPARTCODE,EMPCODE";
+		
+		return jdbcTemplate.queryForList(sql);
+	}
+	
+	/**
 	 * 根据id获取实例
 	 * @param id
 	 * @return

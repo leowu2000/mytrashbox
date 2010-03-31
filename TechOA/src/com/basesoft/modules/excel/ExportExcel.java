@@ -10,6 +10,7 @@ import jxl.Workbook;
 import jxl.format.Alignment;
 import jxl.format.Border;
 import jxl.format.BorderLineStyle;
+import jxl.format.Colour;
 import jxl.format.VerticalAlignment;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
@@ -285,6 +286,74 @@ public class ExportExcel {
             str2[9] = map.get("LEADER_ROOM")==null?"":map.get("LEADER_ROOM");
             str2[10] = String.valueOf(daypersent);
             str2[11] = map.get("REMARK")==null?"":map.get("REMARK");
+            
+            insertRowData(sheet, i + 2, str2);
+		}
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
+	 * 计划考核统计表写成一个excel文件，返回这个文件的路径
+	 * @param list 数据列表
+	 * @param planDAO
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_JBF(List<Map<String, String>> list, String datepick) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		String[] str = new String[1];
+		str[0] = datepick + "加班费统计结果";
+		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, 13, 0);
+		
+		//插入表头
+		String str1[] = new String[14];
+		str1[0] = "人员编号";
+		str1[1] = "姓名";
+		str1[2] = "部门";
+		str1[3] = "加班费";
+		str1[4] = "评审费";
+		str1[5] = "稿酬";
+		str1[6] = "酬金";
+		str1[7] = "外场补贴";
+		str1[8] = "车公里补贴";
+		str1[9] = "劳保";
+		str1[10] = "过江补贴";
+		str1[11] = "返聘补贴";
+		str1[12] = "项目名称";
+		str1[13] = "备注";
+		
+		insertRowData(sheet, 1, str1);
+		
+		for (int i = 0; i < list.size(); i++) {
+			String[] str2 = new String[14];
+			Map<String, String> map = (Map<String, String>) list.get(i);
+		
+			str2[0] = map.get("EMPCODE")==null?"":map.get("EMPCODE");
+            str2[1] = map.get("EMPNAME")==null?"":map.get("EMPNAME");
+            str2[2] = map.get("DEPARTNAME")==null?"":map.get("DEPARTNAME");
+            str2[3] = map.get("JBF")==null?"":String.valueOf(map.get("JBF"));
+            str2[4] = map.get("PSF")==null?"":String.valueOf(map.get("PSF"));
+            str2[5] = map.get("GC")==null?"":String.valueOf(map.get("GC"));
+            str2[6] = map.get("CJ")==null?"":String.valueOf(map.get("CJ"));
+            str2[7] = map.get("WCBT")==null?"":String.valueOf(map.get("WCBT"));
+            str2[8] = map.get("CGLBT")==null?"":String.valueOf(map.get("CGLBT"));
+            str2[9] = map.get("LB")==null?"":String.valueOf(map.get("LB"));
+            str2[10] = map.get("GJBT")==null?"":String.valueOf(map.get("GJBT"));
+            str2[11] = map.get("FPBT")==null?"":String.valueOf(map.get("FPBT"));
+            str2[12] = map.get("XMMC")==null?"":map.get("XMMC");
+            str2[13] = map.get("BZ")==null?"":map.get("BZ");
             
             insertRowData(sheet, i + 2, str2);
 		}

@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.basesoft.core.CommonDAO;
+import com.basesoft.modules.employee.FinanceDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.project.ProjectDAO;
 import com.basesoft.util.StringUtil;
@@ -18,6 +19,7 @@ public class ExcelDAO extends CommonDAO {
 
 	ProjectDAO pjDAO;
 	PlanDAO planDAO;
+	FinanceDAO financeDAO;
 	
 	/**
 	 * 获取要导出的工时统计汇总数据
@@ -89,6 +91,17 @@ public class ExcelDAO extends CommonDAO {
 	 */
 	public List getExportData_PLAN(String f_pjcode, String datepick, String f_empname){
 		return planDAO.findAllRemind(f_pjcode, datepick, f_empname);
+	}
+	
+	/**
+	 * 获取要导出的加班费统计数据
+	 * @param seldepart 工作令
+	 * @param datepick 年月
+	 * @param empname 姓名模糊检索
+	 * @return
+	 */
+	public List getExportData_JBF(String seldepart, String datepick, String emname){
+		return financeDAO.findAll(seldepart, datepick, emname);
 	}
 	
 	/**
@@ -648,5 +661,9 @@ public class ExcelDAO extends CommonDAO {
 	
 	public void setPlanDAO(PlanDAO planDAO){
 		this.planDAO = planDAO;
+	}
+	
+	public void setFinanceDAO(FinanceDAO financeDAO){
+		this.financeDAO = financeDAO;
 	}
 }
