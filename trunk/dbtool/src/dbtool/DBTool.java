@@ -79,14 +79,23 @@ public class DBTool {
             ((DefaultListModel) (logList.getModel())).addElement("正在分析表：【" + getTabCnnm(jt2, table) + "】_" + table + "的数据 ......");
         outputError("\r\n"+table,"copyTable=searChsql:",searChsql);
         try {
-            if (expType != 0) {
-                clearTable(true, table.toUpperCase());
-            }
+//            if (expType != 0) {
+//                clearTable(true, table.toUpperCase());
+//            }
             String result[] = makeFiledsAndParamets(table);
             if(result==null){
                 outputError("\r\n"+table, "=copyTable=",getTabCnnm(jt2, table)+"数据表数据为空系统跳过");
             }
             else{
+                //建表操作，纯脆复制表数据
+//                String createSql = "CREATE TABLE "+table.toUpperCase()+" (";
+//                for(String tbFld:result[0].split(",")){
+//                    createSql+=" "+tbFld.toUpperCase()+" CHAR(255),";
+//                }
+//                createSql = createSql.substring(0,createSql.length()-1)+")";
+//                outputError("\r\n"+table, "=copyTable=建表＝＝",createSql);
+//                jt2.execute(createSql);
+                //建表结束
                 if(expType==0)
                     ((DefaultListModel) (logList.getModel())).addElement("正在分析表：【" + getTabCnnm(jt2, table) + "】_" + table + "的数据 ......");
                 final String fields = result[0];
@@ -128,7 +137,7 @@ public class DBTool {
             } else {
                 errorTab += "," + getTabCnnm(jt2, table);
             }
-            ((DefaultListModel) (logList.getModel())).addElement("         ※系统检测到表结构错误，无法执行【" + getTabCnnm(jt2, table) + "】的入库操作，请修改导出方式为【只导出文本文件】※");
+            ((DefaultListModel) (logList.getModel())).addElement("         ※系统检测到表结构错误，无法执行【" + getTabCnnm(jt2, table) + "】的导出操作※");
             outputError("\r\n"+table, "=copyTable=",e.getMessage());
             return false;
         }
@@ -361,8 +370,9 @@ public class DBTool {
      public void insertDataIndexTable(String table, String stcdStr,
             String stnameStr, JList logList, int version, int expType, String saveDir,boolean isTurnChar,int dbtype) {
         String indexFiled = getIndexFiled(table);
-        outputError("\r\n"+table,"===准备在字段-"+indexFiled+"-上生成索引","");
+        
         if (!indexFiled.trim().equals("")) {//首先保证这张表可以生成数据索引
+            outputError("\r\n"+table,"===准备在字段-"+indexFiled+"-上生成索引","");
             try {
                 int row = jt1.queryForInt("select count(*) from " + table.toUpperCase());
                 if (row > 0) {
@@ -397,7 +407,7 @@ public class DBTool {
                                 stscSQL = "SELECT STCD,MIN(DATEPART (yyyy,"+indexFiled.toUpperCase()+")) AS MINY, MAX(DATEPART "
                                             +"(yyyy,"+indexFiled.toUpperCase()+")) AS MAXY,"
                                             +"COUNT(*) AS ALLSUM FROM "+table.toUpperCase()+" "+makeStcdSqlCol(stcdStr)
-                                            + "GROUP BY STCD";
+                                            + " GROUP BY STCD";
                             }
                         } else {
                             searchSQL = "SELECT DISTINCT STCD," + indexFiled.toUpperCase() + " as YEARS,COUNT(*) AS TOTAL FROM " + table.toUpperCase()
@@ -417,9 +427,12 @@ public class DBTool {
                                         +"AS RESU FROM "+table.toUpperCase()+" "+makeStcdSqlCol(stcdStr)+" GROUP BY STCD";
                                 stscSQL = "SELECT STCD,MIN("+indexFiled.toUpperCase()+") AS MINY, MAX("+indexFiled.toUpperCase()+") AS MAXY,"
                                             +"COUNT(*) AS ALLSUM FROM "+table.toUpperCase()+" "+makeStcdSqlCol(stcdStr)
-                                            + "GROUP BY STCD";
+                                            + " GROUP BY STCD";
                             }
                         }
+                        outputError("\r\n"+table, "===insertDataIndexTable===searchSQL",searchSQL);
+                        outputError("\r\n"+table, "===insertDataIndexTable===resultDesc",resultDesc);
+                        outputError("\r\n"+table, "===insertDataIndexTable===stscSQL",stscSQL);
                         List rows = jt1.queryForList(searchSQL);
                         List rowsStsc = jt1.queryForList(stscSQL);
                         List stscList = new ArrayList();
@@ -473,6 +486,8 @@ public class DBTool {
                 outputError("\r\n"+table, "===insertDataIndexTable_new=",ex.getMessage());
 //                ((DefaultListModel) (logList.getModel())).addElement("         ※无法生成【" + getTabCnnm(jt2, table) + "】的数据索引，请确认日期字段【"+indexFiled+"】是否存在※");
             }
+        }else{
+            outputError("\r\n"+table,"===没有索引字段定义，略过索引","");
         }
         
     }
@@ -517,8 +532,9 @@ public class DBTool {
             searChsql = "select * from " + table.toUpperCase();
             countChsql = "select count(*) from " + table.toUpperCase();
         }
-        outputError("\r\n"+table,"createExcelTable=searChsql:",searChsql);
-        outputError("\r\n"+table,"createExcelTable=countChsql:",countChsql);
+//        System.out.println(searChsql);
+        outputError("\r\n"+table,"createExcelTable=searChsql==countChsql:",searChsql);
+//        outputError("\r\n"+table,"createExcelTable=countChsql:",countChsql);
         try {
             final String tablename = getTabCnnm(jt2, table);
             //总记录数
@@ -584,6 +600,7 @@ public class DBTool {
                             fields=new StringBuffer("");
                         } catch (IOException ex) {
                              ex.printStackTrace();
+                             outputError("\r\n"+table,"createExcelTable=error:",ex.getMessage());
                         }
                         }
                         k++;
@@ -649,6 +666,7 @@ public class DBTool {
             fw.close();
         } catch (Exception ex) {
             ex.printStackTrace();
+            outputError("\r\n"+table, "===outPutIndexToFile=",ex.getMessage());
         }
     }
 

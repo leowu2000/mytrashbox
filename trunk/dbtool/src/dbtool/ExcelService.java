@@ -224,7 +224,7 @@ public class ExcelService {
 
     }
 
-    public static void createReportHtml(String savePath,
+    public static void createReportHtml_Old(String savePath,
             DefaultListModel expSuccessModel,
             String errorTab,
             DBTool dbTool,
@@ -706,7 +706,7 @@ public class ExcelService {
                     Logger.getLogger(ExcelService.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            strContent_table.append("<td class='title'colspan='2'>"+stnm+"<br>["+stcd.replaceAll("'","")+"]</td>");
+            strContent_table.append("<td class='title' colspan='2'>"+stnm+"<br>["+stcd.replaceAll("'","")+"]</br></td>");
         }
         strContent_table.append("<td rowspan='2' class='title' nowrap>合计(站年)</td>");
         strContent_table.append("</tr><tr bgcolor='#E8EFFF' height='20'>");
@@ -765,7 +765,7 @@ public class ExcelService {
                 strContent_table.append("</tr>");
             }
         }
-        StringBuffer strContent_detail = new StringBuffer("<tr bgcolor='#E8EFFF' height='30'><td colspan='"+colNum+"' aling='center'>如果生成数据索引失败，请对照c盘下的tables.xls文件，确认数据表存在，并且索引字段名称跟您的数据库对应。</td></tr></table></body></html>");
+        StringBuffer strContent_detail = new StringBuffer("<tr bgcolor='#E8EFFF' height='30'><td colspan='"+colNum+"' align='center'>如果生成数据索引失败，请对照c盘下的tables.xls文件，确认数据表存在，并且索引字段名称跟您的数据库对应。</td></tr></table></body></html>");
         StringBuffer strContent = new StringBuffer("");
         strContent.append(strContent_head);
         strContent.append(strContent_table);
