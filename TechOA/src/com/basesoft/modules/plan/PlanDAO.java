@@ -14,45 +14,45 @@ public class PlanDAO extends CommonDAO {
 
 	/**
 	 * 按照检索条件找出所有符合条件的计划
-	 * @param pjcode 工作令号
-	 * @param stagecode 阶段编码
+	 * @param level 考核级别
+	 * @param type 计划类别
 	 * @param emname 人员名字
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String pjcode, String stagecode, String empname, int page){
+	public PageList findAll(String level, String type, String empname, int page){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		if("0".equals(pjcode)){//全部工作令
-			if("0".equals(stagecode)){//全部阶段
+		if("0".equals(level)){//全部级别
+			if("0".equals(type)){//全部类别
 				if("".equals(empname)){//全部人员
 					sql = "select * from VIEW_PLAN where 1=1";
 				}else {//人员名称模糊检索
 					sql = "select * from VIEW_PLAN where EMPNAME like '%" + empname + "%'";
 				}
-			}else {//选择了阶段
+			}else {//选择了类别
 				if("".equals(empname)){//全部人员
-					sql = "select * from VIEW_PLAN where STAGECODE='" + stagecode + "'";
+					sql = "select * from VIEW_PLAN where TYPE='" + type + "'";
 				}else {
-					sql = "select * from VIEW_PLAN where STAGECODE='" + stagecode + "' and EMPNAME like '%" + empname + "%'";
+					sql = "select * from VIEW_PLAN where TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}
 		}else {
-			if("0".equals(stagecode)){//全部阶段
+			if("0".equals(type)){//全部类别
 				if("".equals(empname)){//全部人员
-					sql = "select * from VIEW_PLAN where PJCODE='" + pjcode + "'";
+					sql = "select * from VIEW_PLAN where LEVEL='" + level + "'";
 				}else {//人员名称模糊检索
-					sql = "select * from VIEW_PLAN where PJCODE='" + pjcode + "' and EMPNAME like '%" + empname + "%'";
+					sql = "select * from VIEW_PLAN where LEVEL='" + level + "' and EMPNAME like '%" + empname + "%'";
 				}
-			}else {//选择了阶段
+			}else {//选择了类别
 				if("".equals(empname)){//全部人员
-					sql = "select * from VIEW_PLAN where PJCODE='" + pjcode + "' and STAGECODE='" + stagecode + "'";
+					sql = "select * from VIEW_PLAN where LEVEL='" + level + "' and TYPE='" + type + "'";
 				}else {
-					sql = "select * from VIEW_PLAN where PJCODE='" + pjcode + "' and STAGECODE='" + stagecode + "' and EMPNAME like '%" + empname + "%'";
+					sql = "select * from VIEW_PLAN where LEVEL='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}
 		}
@@ -80,27 +80,43 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllRemind(String pjcode, String datepick, String empname, int page){
+	public PageList findAllRemind(String level, String type, String datepick, String empname, int page){
 		PageList pageList = new PageList();
 		
 		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 		Date enddate = StringUtil.getEndOfMonth(startdate);
-		String sql = "select a.*,b.* from VIEW_PLAN a, (select sum(AMOUNT) as AMOUNT from WORKREPORT c,PLAN d where c.PJCODE=d.PJCODE and c.PJCODE_D=d.PJCODE_D and c.STAGECODE=d.STAGECODE and c.STARTDATE>=d.STARTDATE and c.STARTDATE<=d.ENDDATE) b where a.ENDDATE>='" + startdate + "' and a.ENDDATE<='" + enddate + "'";
+		String sql = "select * from VIEW_PLAN where ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "'";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		if("0".equals(pjcode)){//全部工作令
-			if("".equals(empname)){//全部人员
-				
-			}else {//人员名称模糊检索
-				sql = sql + " and EMPNAME like '%" + empname + "%'";
+		if("0".equals(level)){//全部级别
+			if("0".equals(type)){//全部类别
+				if("".equals(empname)){//全部人员
+					
+				}else {//人员名称模糊检索
+					sql = sql + " and EMPNAME like '%" + empname + "%'";
+				}
+			}else {//选择了类别
+				if("".equals(empname)){//全部人员
+					sql = sql + " and TYPE='" + type + "'";
+				}else {//人员名称模糊检索
+					sql = sql + " and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+				}
 			}
 		}else {
-			if("".equals(empname)){//全部人员
-				sql = sql + " and PJCODE='" + pjcode + "'";
-			}else {//人员名称模糊检索
-				sql = sql + " and PJCODE='" + pjcode + "' and EMPNAME like '%" + empname + "%'";
+			if("0".equals(type)){//全部类别
+				if("".equals(empname)){//全部人员
+					sql = sql + " and LEVEL='" + level + "'";
+				}else {//人员名称模糊检索
+					sql = sql + " and LEVEL='" + level + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}else {//选择了类别
+				if("".equals(empname)){//全部人员
+					sql = sql + " and LEVEL='" + level + "' and TYPE='" + type + "'";
+				}else {//人员名称模糊检索
+					sql = sql + " and LEVEL='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+				}
 			}
 		}
 		
@@ -127,22 +143,38 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public List findAllRemind(String pjcode, String datepick, String empname){
+	public List findAllRemind(String level, String type, String datepick, String empname){
 		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 		Date enddate = StringUtil.getEndOfMonth(startdate);
 		String sql = "select a.*,b.* from VIEW_PLAN a, (select sum(AMOUNT) as AMOUNT from WORKREPORT c,PLAN d where c.PJCODE=d.PJCODE and c.PJCODE_D=d.PJCODE_D and c.STAGECODE=d.STAGECODE and c.STARTDATE>=d.STARTDATE and c.STARTDATE<=d.ENDDATE) b where a.ENDDATE>='" + startdate + "' and a.ENDDATE<='" + enddate + "'";
 		
-		if("0".equals(pjcode)){//全部工作令
-			if("".equals(empname)){//全部人员
-				
-			}else {//人员名称模糊检索
-				sql = sql + " and EMPNAME like '%" + empname + "%'";
+		if("0".equals(level)){//全部级别
+			if("0".equals(type)){//全部类别
+				if("".equals(empname)){//全部人员
+					
+				}else {//人员名称模糊检索
+					sql = sql + " and EMPNAME like '%" + empname + "%'";
+				}
+			}else {//选择了类别
+				if("".equals(empname)){//全部人员
+					sql = sql + " and TYPE='" + type + "'";
+				}else {//人员名称模糊检索
+					sql = sql + " and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+				}
 			}
 		}else {
-			if("".equals(empname)){//全部人员
-				sql = sql + " and PJCODE='" + pjcode + "'";
-			}else {//人员名称模糊检索
-				sql = sql + " and PJCODE='" + pjcode + "' and EMPNAME like '%" + empname + "%'";
+			if("0".equals(type)){//全部类别
+				if("".equals(empname)){//全部人员
+					sql = sql + " and LEVEL='" + level + "'";
+				}else {//人员名称模糊检索
+					sql = sql + " and LEVEL='" + level + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}else {//选择了类别
+				if("".equals(empname)){//全部人员
+					sql = sql + " and LEVEL='" + level + "' and TYPE='" + type + "'";
+				}else {//人员名称模糊检索
+					sql = sql + " and LEVEL='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+				}
 			}
 		}
 		
@@ -232,6 +264,8 @@ public class PlanDAO extends CommonDAO {
 		plan.setPlannercode(map.get("PLANNERCODE")==null?"":map.get("PLANNERCODE").toString());
 		plan.setPlannername(map.get("PLANNERNAME")==null?"":map.get("PLANNERNAME").toString());
 		plan.setOrdercode(map.get("ORDERCODE")==null?0:Integer.parseInt(map.get("ORDERCODE").toString()));
+		plan.setLevel(map.get("LEVEL")==null?"":map.get("LEVEL").toString());
+		plan.setType(map.get("TYPE")==null?"":map.get("TYPE").toString());
 		
 		return plan;
 	}

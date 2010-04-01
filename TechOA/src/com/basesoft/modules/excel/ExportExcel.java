@@ -270,6 +270,9 @@ public class ExportExcel {
 			int passdays = StringUtil.getBetweenDays(startdate, now);
 			//完成率
 			float daypersent = plandays==0?0:passdays*100/plandays;
+			if(daypersent>100){
+				daypersent = 100;
+			}
 			//完成情况
 			Map mapPersent = planDAO.getPersent(daypersent);
 			String state = mapPersent.get("NAME")==null?"":mapPersent.get("NAME").toString();

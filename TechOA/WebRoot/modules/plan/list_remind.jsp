@@ -8,8 +8,8 @@
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listAssess = (List)pageList.getList();
 int pagenum = pageList.getPageInfo().getCurPage();
-String f_pjcode = request.getAttribute("f_pjcode").toString();
-//String f_stagecode = request.getAttribute("f_stagecode").toString();
+String f_level = request.getAttribute("f_level").toString();
+String f_type = request.getAttribute("f_type").toString();
 String datepick = request.getAttribute("datepick").toString();
 String f_empname = request.getAttribute("f_empname").toString();
 
@@ -41,7 +41,7 @@ PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("plan.do?action=list_remind&pjcode=" + f_pjcode + "&datepick=" + datepick + "&empname=" + f_empname) %>
+<%=pageList.getPageInfo().getHtml("plan.do?action=list_remind&f_level=" + f_level + "&f_type=" + f_type + "&datepick=" + datepick + "&empname=" + f_empname) %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>产品令号</td>              
@@ -74,6 +74,9 @@ for(int i=0;i<listAssess.size();i++){
 	int passdays = StringUtil.getBetweenDays(startdate, now);
 	
 	float daypersent = plandays==0?0:passdays*100/plandays;
+	if(daypersent>100){
+		daypersent = 100;
+	}
 	
 	Map mapPersent = planDAO.getPersent(daypersent);
 	

@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
-	List listPj = (List)request.getAttribute("listPj");
-	List listStage = (List)request.getAttribute("listStage");
+	List listLevel = (List)request.getAttribute("listLevel");
+	List listType = (List)request.getAttribute("listType");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -19,12 +19,11 @@
 	<script type="text/javascript">
 	Ext.onReady(function(){
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
+  		tb.add('考核级别');
+  		tb.add(document.getElementById('sellevel'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('工作令号');
-  		tb.add(document.getElementById('selpj'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('阶段');
-  		tb.add(document.getElementById('selstage'));
+  		tb.add('计划分类');
+  		tb.add(document.getElementById('seltype'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('按名字模糊查询');
   		tb.add(document.getElementById('empname'));
@@ -37,33 +36,33 @@
 	}
 	
 	function commit(){
-	  var pjcode = document.getElementById('selpj').value;
-	  var stagecode = document.getElementById('selstage').value;
+	  var level = document.getElementById('sellevel').value;
+	  var type = document.getElementById('seltype').value;
 	  var empname = document.getElementById('empname').value;
 	  
-	  document.getElementById('list_manage').src = "/plan.do?action=list&f_pjcode=" + pjcode + "&f_stagecode=" + stagecode + "&f_empname=" + empname;
+	  document.getElementById('list_manage').src = "/plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + empname;
 	}
 	</script>
   </head>
   
   <body onload="commit();IFrameResize();" onresize="IFrameResize();">
   	<div id="toolbar"></div>
-	<select name="selpj" onchange="commit();">
+	<select name="sellevel" onchange="commit();">
 		<option value="0">全部</option>
 <%
-	for(int i=0;i<listPj.size();i++){
-		Map mapPj = (Map)listPj.get(i);
+	for(int i=0;i<listLevel.size();i++){
+		Map mapLevel = (Map)listLevel.get(i);
 %>				
-		<option value="<%=mapPj.get("PJCODE") %>"><%=mapPj.get("PJNAME") %></option>
+		<option value="<%=mapLevel.get("CODE") %>"><%=mapLevel.get("NAME") %></option>
 <%	} %>					
 	</select>
-	<select name="selstage" onchange="commit();">
+	<select name="seltype" onchange="commit();">
 		<option value="0">全部</option>
 <%
-	for(int i=0;i<listStage.size();i++){
-		Map mapStage = (Map)listStage.get(i);
+	for(int i=0;i<listType.size();i++){
+		Map mapType = (Map)listType.get(i);
 %>				
-		<option value="<%=mapStage.get("STAGECODE") %>"><%=mapStage.get("STAGENAME") %></option>
+		<option value="<%=mapType.get("CODE") %>"><%=mapType.get("NAME") %></option>
 <%	} %>					
 	</select>
 	<input type="text" name="empname" style="width:60;">

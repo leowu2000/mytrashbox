@@ -91,8 +91,8 @@ public class ExcelDAO extends CommonDAO {
 	 * @param f_empname 姓名模糊检索
 	 * @return
 	 */
-	public List getExportData_PLAN(String f_pjcode, String datepick, String f_empname){
-		return planDAO.findAllRemind(f_pjcode, datepick, f_empname);
+	public List getExportData_PLAN(String f_level, String f_type, String datepick, String f_empname){
+		return planDAO.findAllRemind(f_level, f_type, datepick, f_empname);
 	}
 	
 	/**
@@ -127,40 +127,6 @@ public class ExcelDAO extends CommonDAO {
 		list = emDAO.findWorkCheck(start, end, depart, "", "");
 		
 		return list;
-	}
-	
-	/**
-	 * 导入excel数据入库
-	 * @param data 数据
-	 * @param table 表
-	 * @param date 日期
-	 * @return
-	 * @throws Exception
-	 */
-	public String insertData(JSONObject data, String table, String date) throws Exception{
-		String errorMessage = "";
-		
-		if("DEPARTMENT".equals(table)){//导入部门
-			errorMessage = insertDepart(data);
-		}else if("EMPLOYEE".equals(table)){//导入人员
-			errorMessage = insertEmployee(data);
-		}else if("EMP_FINANCIAL".equals(table)){//导入人员财务信息
-			errorMessage = insertFinance(data, date);
-		}else if("EMP_CARD".equals(table)){//导入人员一卡通信息
-			errorMessage = insertCard(data);
-		}else if("EMP_POS".equals(table)){//导入班车打卡信息
-			errorMessage = insertPos(data);
-		}else if("GOODS".equals(table)){//物资资产
-			errorMessage = insertGoods(data);
-		}else if("PLAN".equals(table)){//计划
-			errorMessage = insertPlan(data);
-		}else if("ASSETS".equals(table)){//固定资产
-			errorMessage = insertAssets(data);
-		}else if("WORKCHECK".equals(table)){//考勤
-			errorMessage = insertWorkcheck(data, date);
-		}
-		
-		return errorMessage;
 	}
 	
 	/**
@@ -489,7 +455,7 @@ public class ExcelDAO extends CommonDAO {
 	 * @param data 
 	 * @return
 	 */
-	public String insertPlan(JSONObject data) throws Exception{
+	public String insertPlan(JSONObject data, String level, String type) throws Exception{
 		String errorMessage = "";
 		
 		//循环数据行
@@ -497,7 +463,7 @@ public class ExcelDAO extends CommonDAO {
 		for(int i=0;i<rows.length();i++){
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
-			String pjcode = row.optString("PJCODE");
+			String pjname = row.optString("PJCODE");
 			int ordercode = row.optInt("ORDERCODE");
 			String note = row.optString("NOTE");
 			String symbol = row.optString("SYMBOL");
@@ -511,6 +477,8 @@ public class ExcelDAO extends CommonDAO {
 			String leader_room = row.optString("LEADER_ROOM");
 			String leader_section = row.optString("LEADER_SECTION");
 			
+			//根据工作令名称找出工作令编码
+			String pjcode  = findCodeByName("PROJECT", pjname);
 			//根据部门名称找出部门编码
 			String departcode = findCodeByName("DEPARTMENT", departname);
 			//根据责任人姓名找出责任人编码
@@ -520,7 +488,7 @@ public class ExcelDAO extends CommonDAO {
 			//生成32位uuid
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			String insertSql = "insert into PLAN values('" + uuid + "','" + empcode + "','" + empname + "','" + departcode + "','" + departname + "','" + pjcode + "','0','','" + new Date() + "','" + enddate + "',0,'" + note + "','" + symbol + "','" + assess + "','" + remark + "','" + leader_station + "','" + leader_section + "','" + leader_room + "','" + plannercode + "','" + plannername + "'," + ordercode + ")";
+			String insertSql = "insert into PLAN values('" + uuid + "','" + empcode + "','" + empname + "','" + departcode + "','" + departname + "','" + pjcode + "','0','','" + new Date() + "','" + enddate + "',0,'" + note + "','" + symbol + "','" + assess + "','" + remark + "','" + leader_station + "','" + leader_section + "','" + leader_room + "','" + plannercode + "','" + plannername + "'," + ordercode + ", '" + level + "', '" + type + "')";
 			
 			try{
 				insert(insertSql);
