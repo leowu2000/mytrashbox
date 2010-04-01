@@ -4,22 +4,24 @@
 <%@ page import="com.basesoft.core.*" %>
 <%
 PageList pageList = (PageList)request.getAttribute("pageList");
+List listPersent = (List)request.getAttribute("listPersent");
 List listPj = (List)request.getAttribute("listPj");
 List listStage = (List)request.getAttribute("listStage");
-List listPersent = (List)request.getAttribute("listPersent");
+List listLevel = (List)request.getAttribute("listLevel");
+List listType = (List)request.getAttribute("listType");
 
 int pagenum = pageList.getPageInfo().getCurPage();
-String f_pjcode = request.getAttribute("f_pjcode").toString();
-String f_stagecode = request.getAttribute("f_stagecode").toString();
+String level = request.getAttribute("f_level").toString();
+String type = request.getAttribute("f_type").toString();
 String f_empname = request.getAttribute("f_empname").toString();
 f_empname = URLEncoder.encode(f_empname,"UTF-8");
 
 String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
+errorMessage = new String(errorMessage.getBytes("ISO8859-1"), "UTF-8");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<title>计划管理</title>
 		<style type="text/css">
 		<!--
@@ -34,6 +36,11 @@ String errorMessage = request.getAttribute("errorMessage")==null?"":request.getA
 		}
 		-->
 		</style>		
+		<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
 <%@ include file="../../common/meta.jsp" %>
 <script src="../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
@@ -100,7 +107,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add&page=<%=pagenum %>&f_pjcode=<%=f_pjcode %>&f_stagecode=<%=f_stagecode %>&f_empname=<%=f_empname %>';
+    	action = url+'?action=add&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
        	Ext.get('pjcode').set({'disabled':''});
@@ -135,8 +142,15 @@ Ext.onReady(function(){
 				comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
 				Ext.get('assess').set({'value':data.item.assess});
 				Ext.get('remark').set({'value':data.item.remark});
+				Ext.get('level').set({'value':data.item.level});
+				Ext.get('level').set({'disabled':'disabled'});
+				Ext.get('type').set({'value':data.item.type});
+				Ext.get('type').set({'disabled':'disabled'});
+				Ext.get('leader_station').set({'value':data.item.leader__station});
+				Ext.get('leader_section').set({'value':data.item.leader__section});
+				Ext.get('leader_room').set({'value':data.item.leader__room});
 				
-		    	action = url+'?action=update&page=<%=pagenum %>&f_pjcode=<%=f_pjcode %>&f_stagecode=<%=f_stagecode %>&f_empname=<%=f_empname %>';
+		    	action = url+'?action=update&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -152,7 +166,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&f_pjcode=<%=f_pjcode %>&f_stagecode=<%=f_stagecode %>&f_empname=<%=f_empname %>';       
+      			Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -195,14 +209,14 @@ Ext.onReady(function(){
 	});
 	
 	function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN&f_pjcode=<%=f_pjcode %>&f_stagecode=<%=f_stagecode %>&page=<%=pagenum %>&f_empname=<%=f_empname %>';
+		action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN&f_level=<%=level %>&f_type=<%=type %>&page=<%=pagenum %>&f_empname=<%=f_empname %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
     }
     
     function onSetClick(btn){
-		action = url + '?action=setpersent&f_pjcode=<%=f_pjcode %>&f_stagecode=<%=f_stagecode %>&page=<%=pagenum %>&f_empname=<%=f_empname %>';
+		action = url + '?action=setpersent&f_level=<%=level %>&f_type=<%=type %>&page=<%=pagenum %>&f_empname=<%=f_empname %>';
     	win3.setTitle('设置完成情况百分比');
         win3.show(btn.dom);
     }
@@ -266,7 +280,7 @@ function AJAX_PJ(pjcode){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("plan.do?action=list&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + f_empname) %>
+<%=pageList.getPageInfo().getHtml("plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + f_empname) %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>选　择</td>
@@ -317,6 +331,32 @@ for(int i=0;i<listPlan.size();i++){
 	        <form id="dataForm" name="dataForm" action="" method="post">
 	        	<input type="hidden" name="id">
                 <table>
+                  <tr>
+				    <td>考核级别</td>
+				    <td><select name="level" style="width:200;">
+<%
+					for(int i=0;i<listLevel.size();i++){
+						Map mapLevel = (Map)listLevel.get(i);
+%>				    	
+						<option value='<%=mapLevel.get("CODE") %>'><%=mapLevel.get("NAME") %></option>
+<%
+					}
+%>
+				    </select></td>
+				  </tr>	
+				  <tr>
+				    <td>计划类别</td>
+				    <td><select name="type" style="width:200;">
+<%
+					for(int i=0;i<listType.size();i++){
+						Map mapType = (Map)listType.get(i);
+%>				    	
+						<option value='<%=mapType.get("CODE") %>'><%=mapType.get("NAME") %></option>
+<%
+					}
+%>
+				    </select></td>
+				  </tr>	
                   <tr>
 				    <td>工作令号</td>
 				    <td><select name="pjcode" onchange="AJAX_PJ(this.value);" style="width:200;">
@@ -375,6 +415,18 @@ for(int i=0;i<listPlan.size();i++){
 				    <td>备注</td>
 				    <td><input type="text" name="remark" style="width:200"></td>
 				  </tr>
+				  <tr>
+				    <td>所领导</td>
+				    <td><input type="text" name="leader_station" style="width:200"></td>
+				  </tr>
+				  <tr>
+				    <td>部领导</td>
+				    <td><input type="text" name="leader_section" style="width:200"></td>
+				  </tr>
+				  <tr>
+				    <td>室领导</td>
+				    <td><input type="text" name="leader_room" style="width:200"></td>
+				  </tr>
 				</table>
 	        </form>
     </div>
@@ -386,6 +438,32 @@ for(int i=0;i<listPlan.size();i++){
 	        <form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
 	        	<input type="hidden" name="page" value="<%=pagenum %>">
                 <table>
+                  <tr>
+				    <td>考核级别</td>
+				    <td><select name="level" style="width:200;">
+<%
+					for(int i=0;i<listLevel.size();i++){
+						Map mapLevel = (Map)listLevel.get(i);
+%>				    	
+						<option value='<%=mapLevel.get("CODE") %>'><%=mapLevel.get("NAME") %></option>
+<%
+					}
+%>
+				    </select></td>
+				  </tr>	
+				  <tr>
+				    <td>计划类别</td>
+				    <td><select name="type" style="width:200;">
+<%
+					for(int i=0;i<listType.size();i++){
+						Map mapType = (Map)listType.get(i);
+%>				    	
+						<option value='<%=mapType.get("CODE") %>'><%=mapType.get("NAME") %></option>
+<%
+					}
+%>
+				    </select></td>
+				  </tr>	
 				  <tr>
 				    <td>选择文件</td>
 				    <td><input type="file" name="file" style="width:200"></td>

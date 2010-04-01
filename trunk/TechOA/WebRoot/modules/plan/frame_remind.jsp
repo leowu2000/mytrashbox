@@ -1,8 +1,8 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.basesoft.util.*" %>
 <%
-	List listPj = (List)request.getAttribute("listPj");
-	List listStage = (List)request.getAttribute("listStage");
+	List listLevel = (List)request.getAttribute("listLevel");
+	List listType = (List)request.getAttribute("listType");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -20,9 +20,11 @@
 	<script type="text/javascript">
 	Ext.onReady(function(){
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
+  		tb.add('考核级别');
+  		tb.add(document.getElementById('sellevel'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('工作令号');
-  		tb.add(document.getElementById('selpj'));
+  		tb.add('考核级别');
+  		tb.add(document.getElementById('seltype'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('选择年月');
   		tb.add(document.getElementById('datepick'));
@@ -35,10 +37,11 @@
   		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
   		
   		function onExportClick(){
-  			var pjcode = document.getElementById('selpj').value;
+  			var level = document.getElementById('sellevel').value;
+  			var type = document.getElementById('seltype').value;
 	  		var datepick = document.getElementById('datepick').value;
 	  		var empname = document.getElementById('empname').value;
-    		window.location.href = "/excel.do?action=export&model=PLAN&f_pjcode=" + pjcode + "&datepick=" + datepick + "&f_empname=" + empname;
+    		window.location.href = "/excel.do?action=export&model=PLAN&f_level=" + level + "&f_type=" + type + "&datepick=" + datepick + "&f_empname=" + empname;
   		}
 	});
 	
@@ -47,7 +50,8 @@
 	}
 	
 	function commit(){
-	  var pjcode = document.getElementById('selpj').value;
+	  var level = document.getElementById('sellevel').value;
+  	  var type = document.getElementById('seltype').value;
 	  var datepick = document.getElementById('datepick').value;
 	  if(datepick == ''){
 	  	document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
@@ -55,20 +59,29 @@
 	  }
 	  var empname = document.getElementById('empname').value;
 	  
-	  document.getElementById('list_remind').src = "/plan.do?action=remind_list&f_pjcode=" + pjcode + "&datepick=" + datepick + "&f_empname=" + empname;
+	  document.getElementById('list_remind').src = "/plan.do?action=remind_list&f_level=" + level + "&f_type=" + type + "&datepick=" + datepick + "&f_empname=" + empname;
 	}
 	</script>
   </head>
   
   <body onload="commit();IFrameResize();" onresize="IFrameResize();">
   	<div id="toolbar"></div>
-	<select name="selpj" onchange="commit();">
+	<select name="sellevel" onchange="commit();">
 		<option value="0">全部</option>
 <%
-	for(int i=0;i<listPj.size();i++){
-		Map mapPj = (Map)listPj.get(i);
+	for(int i=0;i<listLevel.size();i++){
+		Map mapLevel = (Map)listLevel.get(i);
 %>				
-		<option value="<%=mapPj.get("PJCODE") %>"><%=mapPj.get("PJNAME") %></option>
+		<option value="<%=mapLevel.get("CODE") %>"><%=mapLevel.get("NAME") %></option>
+<%	} %>					
+	</select>
+	<select name="seltype" onchange="commit();">
+		<option value="0">全部</option>
+<%
+	for(int i=0;i<listType.size();i++){
+		Map mapType = (Map)listType.get(i);
+%>				
+		<option value="<%=mapType.get("CODE") %>"><%=mapType.get("NAME") %></option>
 <%	} %>					
 	</select>
 	<input type="text" name="empname" style="width:60;">

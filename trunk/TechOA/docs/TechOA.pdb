@@ -3022,7 +3022,7 @@ TableComment 0 Microsoft Sans Serif,8,N</a:FontList>
 <o:TableSymbol Id="o43">
 <a:CreationDate>1270017821</a:CreationDate>
 <a:ModificationDate>1270018009</a:ModificationDate>
-<a:Rect>((-6529,-35004), (5623,-29186))</a:Rect>
+<a:Rect>((-6529,-34517), (5623,-29673))</a:Rect>
 <a:LineColor>16711680</a:LineColor>
 <a:FillColor>12648384</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -5913,35 +5913,23 @@ TableComment 0 Microsoft Sans Serif,8,N</a:FontList>
 <a:Code>HOLIDAY</a:Code>
 <a:CreationDate>1270017821</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1270019854</a:ModificationDate>
+<a:ModificationDate>1270020581</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>节假日</a:Comment>
 <c:Columns>
 <o:Column Id="o259">
-<a:ObjectID>F193A819-321B-4F98-A3D5-952737E379B5</a:ObjectID>
-<a:Name>ID</a:Name>
-<a:Code>ID</a:Code>
-<a:CreationDate>1270019849</a:CreationDate>
-<a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1270019854</a:ModificationDate>
-<a:Modifier>Administrator</a:Modifier>
-<a:Comment>ID</a:Comment>
-<a:DataType>VARCHAR(32)</a:DataType>
-<a:Length>32</a:Length>
-<a:Mandatory>1</a:Mandatory>
-</o:Column>
-<o:Column Id="o260">
 <a:ObjectID>B4B3E21B-72FD-47BD-A2F9-0E64F3864A0D</a:ObjectID>
 <a:Name>HOLIDAY</a:Name>
 <a:Code>HOLIDAY</a:Code>
 <a:CreationDate>1270018008</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1270018008</a:ModificationDate>
+<a:ModificationDate>1270020581</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>节假日</a:Comment>
 <a:DataType>DATE</a:DataType>
+<a:Mandatory>1</a:Mandatory>
 </o:Column>
-<o:Column Id="o261">
+<o:Column Id="o260">
 <a:ObjectID>FC04B446-CBDD-49FF-A563-36C81009F1DD</a:ObjectID>
 <a:Name>NAME</a:Name>
 <a:Code>NAME</a:Code>
@@ -5953,7 +5941,7 @@ TableComment 0 Microsoft Sans Serif,8,N</a:FontList>
 <a:DataType>VARCHAR(50)</a:DataType>
 <a:Length>50</a:Length>
 </o:Column>
-<o:Column Id="o262">
+<o:Column Id="o261">
 <a:ObjectID>EF004B03-595F-46B1-9124-04F00F3AC3ED</a:ObjectID>
 <a:Name>VALID</a:Name>
 <a:Code>VALID</a:Code>
@@ -5967,13 +5955,13 @@ TableComment 0 Microsoft Sans Serif,8,N</a:FontList>
 </o:Column>
 </c:Columns>
 <c:Keys>
-<o:Key Id="o263">
+<o:Key Id="o262">
 <a:ObjectID>C7A6AE10-FF67-48F8-B6BE-021C4C3F8F54</a:ObjectID>
 <a:Name>Key_1</a:Name>
 <a:Code>Key_1</a:Code>
 <a:CreationDate>1270019854</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1270019854</a:ModificationDate>
+<a:ModificationDate>1270020581</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <c:Key.Columns>
 <o:Column Ref="o259"/>
@@ -5981,12 +5969,12 @@ TableComment 0 Microsoft Sans Serif,8,N</a:FontList>
 </o:Key>
 </c:Keys>
 <c:PrimaryKey>
-<o:Key Ref="o263"/>
+<o:Key Ref="o262"/>
 </c:PrimaryKey>
 </o:Table>
 </c:Tables>
 <c:DefaultGroups>
-<o:Group Id="o264">
+<o:Group Id="o263">
 <a:ObjectID>804740C2-E88C-4384-A610-28D190D69647</a:ObjectID>
 <a:Name>PUBLIC</a:Name>
 <a:Code>PUBLIC</a:Code>
@@ -5997,7 +5985,7 @@ TableComment 0 Microsoft Sans Serif,8,N</a:FontList>
 </o:Group>
 </c:DefaultGroups>
 <c:TargetModels>
-<o:TargetModel Id="o265">
+<o:TargetModel Id="o264">
 <a:ObjectID>78183391-3E98-4016-B3BF-FD64D1B7D737</a:ObjectID>
 <a:Name>ORACLE Version 10g</a:Name>
 <a:Code>ORACLE10g</a:Code>

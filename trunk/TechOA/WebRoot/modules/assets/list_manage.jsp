@@ -18,6 +18,7 @@ List listDepart = (List)request.getAttribute("listDepart");
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 AssetsDAO assetsDAO = (AssetsDAO)ctx.getBean("assetsDAO");
 String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
+errorMessage = new String(errorMessage.getBytes("ISO8859-1"), "UTF-8");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

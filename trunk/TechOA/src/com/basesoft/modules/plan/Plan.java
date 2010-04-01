@@ -23,6 +23,8 @@ public class Plan {
 	public String plannercode;
 	public String plannername;
 	public int ordercode;
+	public String level;
+	public String type;
 	
 	public String getId() {
 		return id;
@@ -190,5 +192,21 @@ public class Plan {
 
 	public void setOrdercode(int ordercode) {
 		this.ordercode = ordercode;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

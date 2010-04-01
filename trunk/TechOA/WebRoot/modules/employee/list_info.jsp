@@ -26,9 +26,6 @@ String errorMessage = request.getAttribute("errorMessage")==null?"":request.getA
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	<link href="css/bs_base.css" type="text/css" rel="stylesheet">
-	<link href="css/bs_button.css" type="text/css" rel="stylesheet">
-	<link href="css/bs_custom.css" type="text/css" rel="stylesheet">
 	<%@ include file="../../common/meta.jsp" %>
 	<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">

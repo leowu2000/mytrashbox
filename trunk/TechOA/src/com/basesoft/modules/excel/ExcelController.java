@@ -40,6 +40,8 @@ public class ExcelController extends CommonController {
 		String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
 		String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
+		String f_level = ServletRequestUtils.getStringParameter(request, "f_level", "");
+		String f_type = ServletRequestUtils.getStringParameter(request, "f_type", "");
 		f_empname = new String(f_empname.getBytes("ISO8859-1"),"UTF-8");
 		String status = ServletRequestUtils.getStringParameter(request, "status", "");
 		String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
@@ -57,11 +59,32 @@ public class ExcelController extends CommonController {
 				JSONObject config_Conversion = Config.getJSONObjectByName(table + "_Conversion");
 				JSONObject data = ExcelToJSON.parse(file, config_Conversion);
 				
-				errorMessage = excelDAO.insertData(data, table, date);
+				if("DEPARTMENT".equals(table)){//导入部门
+					errorMessage = excelDAO.insertDepart(data);
+				}else if("EMPLOYEE".equals(table)){//导入人员
+					errorMessage = excelDAO.insertEmployee(data);
+				}else if("EMP_FINANCIAL".equals(table)){//导入人员财务信息
+					errorMessage = excelDAO.insertFinance(data, date);
+				}else if("EMP_CARD".equals(table)){//导入人员一卡通信息
+					errorMessage = excelDAO.insertCard(data);
+				}else if("EMP_POS".equals(table)){//导入班车打卡信息
+					errorMessage = excelDAO.insertPos(data);
+				}else if("GOODS".equals(table)){//物资资产
+					errorMessage = excelDAO.insertGoods(data);
+				}else if("PLAN".equals(table)){//计划
+					String level = ServletRequestUtils.getStringParameter(request, "level", "");
+					String type = ServletRequestUtils.getStringParameter(request, "type", "");
+					errorMessage = excelDAO.insertPlan(data, level, type);
+				}else if("ASSETS".equals(table)){//固定资产
+					errorMessage = excelDAO.insertAssets(data);
+				}else if("WORKCHECK".equals(table)){//考勤
+					errorMessage = excelDAO.insertWorkcheck(data, date);
+				}
+				
 			}
 			
 			
-			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp);
+			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp + "&f_level=" + f_level + "&f_type=" + f_type);
 		}else if("export".equals(action)){//excel导出
 			String model = ServletRequestUtils.getStringParameter(request, "model", "");
 			
@@ -73,7 +96,6 @@ public class ExcelController extends CommonController {
 			if("GSTJHZ".equals(model)){//工时统计汇总
 				list = excelDAO.getExportData_GSTJHZ(datepick);
 				path = exportExcel.exportExcel_GSTJHZ(list, excelDAO);
-				
 			}else if("KYGSTJ".equals(model)){//科研工时统计
 				list = excelDAO.getExportData_KYGSTJ(depart, datepick);
 				path = exportExcel.exportExcel_KYGSTJ(list, excelDAO);
@@ -81,7 +103,7 @@ public class ExcelController extends CommonController {
 				list = excelDAO.getExportData_CDRWQK(depart, datepick);
 				path = exportExcel.exportExcel_CDRWQK(list);
 			}else if("PLAN".equals(model)){//计划
-				list = excelDAO.getExportData_PLAN(f_pjcode, datepick, f_empname);
+				list = excelDAO.getExportData_PLAN(f_level, f_type, datepick, f_empname);
 				path = exportExcel.exportExcel_PLAN(list, planDAO, datepick);
 			}else if("JBF".equals(model)){//加班费
 				list = excelDAO.getExportData_JBF(seldepart, datepick, emname);
