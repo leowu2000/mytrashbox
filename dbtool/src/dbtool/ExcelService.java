@@ -694,18 +694,21 @@ public class ExcelService {
                         Object obj = dbTool.getStscName2(jt1, stcd.replaceAll("'",""),version);
                         if(obj==null)
                             stnm="";
-                        else
-                            stnm = obj.toString();
+                        else{
+                            if(isTurnChar){
+                                try {
+                                    stnm = new String(obj.toString().getBytes("ISO-8859-1"),"GBK");
+                                } catch (UnsupportedEncodingException ex) {
+                                    Logger.getLogger(ExcelService.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }else{
+                                stnm=obj.toString();
+                            }
+                        }
                     }
                 if("".trim().equals(stnm))
                     stnm=stcd.replaceAll("'","");
-            if(isTurnChar){
-                try {
-                    stnm = new String(stnm.getBytes("ISO-8859-1"), "GBK");
-                } catch (UnsupportedEncodingException ex) {
-                    Logger.getLogger(ExcelService.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            
             strContent_table.append("<td class='title' colspan='2'>"+stnm+"<br>["+stcd.replaceAll("'","")+"]</br></td>");
         }
         strContent_table.append("<td rowspan='2' class='title' nowrap>ºÏ¼Æ(Õ¾Äê)</td>");

@@ -2150,9 +2150,9 @@ public class ExportView extends JFrame {
         String queryStcdSQL = "";
 
         if (Version.getSelectedIndex() == 1) {//符合4.0的标准
-            queryStcdSQL = "select *  from HY_STSC_A where stnm like '%" + selectedValue + "%'";
+            queryStcdSQL = "select *  from HY_STSC_A where STNM like '%" + selectedValue + "%'";
         } else {
-            queryStcdSQL = "select *  from STHD where stnm like '%" + selectedValue + "%'";
+            queryStcdSQL = "select *  from STHD where STNM like '%" + selectedValue + "%'";
         }
         if (!selectedStscModel.isEmpty()) {
             String expStsc = "";
@@ -2163,7 +2163,7 @@ public class ExportView extends JFrame {
                     expStsc += "," + "'" + selectedStscModel.get(i).toString() + "'";
                 }
             }
-            queryStcdSQL += " and stcd not in(" + expStsc + ")";
+            queryStcdSQL += " and STCD not in(" + expStsc + ")";
         }
         listParamModel_source.removeAllElements();
         liststscModel_source.removeAllElements();

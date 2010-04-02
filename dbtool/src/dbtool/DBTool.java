@@ -2,8 +2,11 @@ package dbtool;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -541,7 +544,7 @@ public class DBTool {
             final int totalRecords = jt1.queryForInt(countChsql);
             final String path = saveDir;
             if(totalRecords>0){
-                final FileWriter fw = new FileWriter(path + "\\excel\\" + tablename +".txt");
+                final OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(path + "\\excel\\" + tablename +".txt"),"GBK");
                 ((DefaultListModel) (logList.getModel())).addElement("         →正在写入文件【" + saveDir + "\\excel\\" + tablename + ".txt】,请等待...");
                 jt1.query(searChsql,  new RowMapper() {
                     int k=0;
@@ -630,11 +633,11 @@ public class DBTool {
     public void outPutIndexToFile(String table, String saveDir, List afterList, int version,boolean isTurnChar) {
         try {
             File files = new File(saveDir + "\\excel\\dataIndex.txt");
-            FileWriter fw = null;
+            OutputStreamWriter  fw = null;
             if (files.exists()) {
-                fw = new FileWriter(saveDir + "\\excel\\dataIndex.txt", true);
+                fw = new OutputStreamWriter (new FileOutputStream(saveDir + "\\excel\\dataIndex.txt", true),"GB2312");
             } else {
-                fw = new FileWriter(saveDir + "\\excel\\dataIndex.txt");
+                fw = new OutputStreamWriter (new FileOutputStream(saveDir + "\\excel\\dataIndex.txt"),"GB2312");
                 fw.write("表编号\t表名称\t测站名称\t测站编码\t年份\t数据量\r\n");
             }
             for (int i = 0; i < afterList.size(); i++) {
@@ -669,6 +672,50 @@ public class DBTool {
             outputError("\r\n"+table, "===outPutIndexToFile=",ex.getMessage());
         }
     }
+
+//    public void outputStreamIndexToFile(String table, String saveDir, List afterList, int version,boolean isTurnChar) {
+//        try {
+//            File files = new File(saveDir + "\\excel\\dataIndex.txt");
+//            OutputStream  fw = null;
+//            if (files.exists()) {
+//                fw = new FileOutputStream(saveDir + "\\excel\\dataIndex.txt", true);
+//            } else {
+//                fw = new FileOutputStream(saveDir + "\\excel\\dataIndex.txt");
+//                String title = "表编号\t表名称\t测站名称\t测站编码\t年份\t数据量\r\n";
+//                fw.write(title.getBytes());
+//            }
+//            for (int i = 0; i < afterList.size(); i++) {
+//                String[] values = ((String) afterList.get(i).toString()).split(",");
+//                String str = table + "\t" + getTabCnnm(jt2, table) + "\t";
+//                for (int k = 0; k < values.length; k++) {
+//                    if (k == 0) {
+//                        String stnm = getStscName(jt2, values[0]);
+//                        if("".trim().equals(stnm)){
+//                            Object obj = getStscName2(jt1, values[0],version);
+//                            if(obj==null)
+//                                stnm="";
+//                            else
+//                                stnm = obj.toString();
+//                        }
+//                        if(isTurnChar)
+//                            stnm = new String(stnm.getBytes("ISO-8859-1"));
+//                        str += stnm + "\t" + values[k] + "\t";
+//                    } else {
+//                        if ((k + 1) == values.length) {
+//                            str += values[k] + "\r\n";
+//                        } else {
+//                            str += values[k] + "\t";
+//                        }
+//                    }
+//                }
+//                fw.write(str.getBytes());
+//            }
+//            fw.close();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            outputError("\r\n"+table, "===outPutIndexToFile=",ex.getMessage());
+//        }
+//    }
 
     public void outputLog(String table, String saveDir, long sdate, long indexsdate, boolean flg) {
         try {
@@ -739,6 +786,7 @@ public class DBTool {
                     final int cols = meta.getColumnCount();
                     for (int i = 0; i < cols; i++) {
                         String colname = meta.getColumnName(i + 1);
+//                        String coltype = meta.get
 //                        if(colname.toUpperCase().equals("YR"))
 //                            colname = compareYearColumn(tablename);
                         fields += colname + ",";
