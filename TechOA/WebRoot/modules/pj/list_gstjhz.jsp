@@ -2,6 +2,8 @@
 <%
 	List listDepart = (List)request.getAttribute("listDepart");
 	List listGstjhz = (List)request.getAttribute("listGstjhz");
+	
+	int colcount = 3 + listDepart.size();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -17,9 +19,15 @@
 	<link href="css/bs_base.css" type="text/css" rel="stylesheet">
 	<link href="css/bs_button.css" type="text/css" rel="stylesheet">
 	<link href="css/bs_custom.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript">
+	function setTjt(){
+		document.getElementById('tjt').src = "/pj.do?action=imageout&type=gstjhz";
+		parent.IFrameResize();
+	}
+	</script>
   </head>
   
-  <body>
+  <body onload="setTjt();">
   	<center><h2>工时统计汇总表</h2></center>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
@@ -48,6 +56,9 @@
 <%} %>
 		</tr>
 <%} %>
+		<tr align="center">
+			<td colspan="<%=colcount %>"><image id="tjt" name="tjt"></td>
+		</tr>
 	</table>
   </body>
 </html>

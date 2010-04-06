@@ -3,6 +3,7 @@
 <%
 	String datepick = request.getAttribute("datepick").toString();
 	List listCdrwqk = (List) request.getAttribute("listCdrwqk");
+	
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -18,9 +19,15 @@
 		<link href="css/bs_base.css" type="text/css" rel="stylesheet">
 		<link href="css/bs_button.css" type="text/css" rel="stylesheet">
 		<link href="css/bs_custom.css" type="text/css" rel="stylesheet">
+		<script type="text/javascript">
+	function setTjt(){
+		document.getElementById('tjt').src = "/pj.do?action=imageout&type=cdrwqk";
+		parent.IFrameResize();
+	}
+	</script>
 	</head>
 
-	<body>
+	<body onload="setTjt();">
 		<center>
 			<h2>
 				工程技术人员承担任务情况
@@ -134,6 +141,9 @@
 						<%
 							}
 						%>
+						<tr align="center">
+							<td colspan="11"><image id="tjt" name="tjt"></td>
+						</tr>
 					</table>
 				</td>
 			</tr>

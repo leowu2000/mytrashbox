@@ -341,7 +341,7 @@ INSERT INTO MENU VALUES('002','工作报告','2','',9,'1','0','2.png');
 INSERT INTO MENU VALUES('021','个人工作报告','1','workreport.do?action=list',10,'1','002','2.png');
 INSERT INTO MENU VALUES('022','审核工作报告','1','workreport.do?action=auditlist',11,'1','002','2.png');
 INSERT INTO MENU VALUES('003','统计汇总','2','',12,'1','0','3.png');
-INSERT INTO MENU VALUES('031','工时统计汇总','1','modules/pj/frame_gstjhz.jsp',13,'1','003','3.png');
+INSERT INTO MENU VALUES('031','工时统计汇总','1','pj.do?action=frame_gstjhz',13,'1','003','3.png');
 INSERT INTO MENU VALUES('032','科研工时统计','1','pj.do?action=frame_kygstj',14,'1','003','3.png');
 INSERT INTO MENU VALUES('033','承担任务情况','1','pj.do?action=frame_cdrwqk',15,'1','003','3.png');
 INSERT INTO MENU VALUES('004','人事管理','2','',17,'1','0','4.png');

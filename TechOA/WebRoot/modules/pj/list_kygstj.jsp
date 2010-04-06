@@ -4,6 +4,8 @@
 	String datepick = request.getAttribute("datepick").toString();
 	List listPeriod = (List) request.getAttribute("listPeriod");
 	List listKygstj = (List) request.getAttribute("listKygstj");
+	
+	int colcount = 3 + listPeriod.size();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -19,9 +21,15 @@
 		<link href="css/bs_base.css" type="text/css" rel="stylesheet">
 		<link href="css/bs_button.css" type="text/css" rel="stylesheet">
 		<link href="css/bs_custom.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">
+	function setTjt(){
+		document.getElementById('tjt').src = "/pj.do?action=imageout&type=kygstj";
+		parent.IFrameResize();
+	}
+</script>
 	</head>
 
-	<body>
+	<body onload="setTjt();">
 		<center>
 			<h2>
 				科研工时统计表
@@ -101,7 +109,9 @@
 					</table>
 				</td>
 			</tr>
-			
+			<tr align="center">
+				<td colspan="<%=colcount %>"><image id="tjt" name="tjt"></td>
+			</tr>
 			<tr>
 				<td colspan="3">
 					<span style="font-size: 13px;">注：统计时段为上月25日至本月25日</span>
