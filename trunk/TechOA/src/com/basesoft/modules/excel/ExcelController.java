@@ -87,6 +87,7 @@ public class ExcelController extends CommonController {
 			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp + "&f_level=" + f_level + "&f_type=" + f_type);
 		}else if("export".equals(action)){//excel导出
 			String model = ServletRequestUtils.getStringParameter(request, "model", "");
+			String imagepath = request.getRealPath("\\chart\\");
 			
 			List list = new ArrayList();
 			
@@ -94,14 +95,17 @@ public class ExcelController extends CommonController {
 			String path = "";
 			
 			if("GSTJHZ".equals(model)){//工时统计汇总
+				imagepath = imagepath + "\\gstjhz.png";
 				list = excelDAO.getExportData_GSTJHZ(datepick);
-				path = exportExcel.exportExcel_GSTJHZ(list, excelDAO);
+				path = exportExcel.exportExcel_GSTJHZ(list, excelDAO, imagepath);
 			}else if("KYGSTJ".equals(model)){//科研工时统计
+				imagepath = imagepath + "\\kygstj.png";
 				list = excelDAO.getExportData_KYGSTJ(depart, datepick);
-				path = exportExcel.exportExcel_KYGSTJ(list, excelDAO);
+				path = exportExcel.exportExcel_KYGSTJ(list, excelDAO, imagepath);
 			}else if("CDRWQK".equals(model)){//承担任务情况
+				imagepath = imagepath + "\\cdrwqk.png";
 				list = excelDAO.getExportData_CDRWQK(depart, datepick);
-				path = exportExcel.exportExcel_CDRWQK(list);
+				path = exportExcel.exportExcel_CDRWQK(list, imagepath);
 			}else if("PLAN".equals(model)){//计划
 				list = excelDAO.getExportData_PLAN(f_level, f_type, datepick, f_empname);
 				path = exportExcel.exportExcel_PLAN(list, planDAO, datepick);

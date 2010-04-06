@@ -10,12 +10,12 @@ import jxl.Workbook;
 import jxl.format.Alignment;
 import jxl.format.Border;
 import jxl.format.BorderLineStyle;
-import jxl.format.Colour;
 import jxl.format.VerticalAlignment;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
+import jxl.write.WritableImage;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
@@ -34,7 +34,7 @@ public class ExportExcel {
 	 * @throws WriteException
 	 * @throws IndexOutOfBoundsException
 	 */
-	public String exportExcel_GSTJHZ(List<Map<String, String>> list , ExcelDAO excelDAO) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+	public String exportExcel_GSTJHZ(List<Map<String, String>> list, ExcelDAO excelDAO, String imagepath) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
 		String[] str = new String[1];
 		str[0] = "工时统计汇总";
 		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
@@ -73,6 +73,9 @@ public class ExportExcel {
 			
 			insertRowData(sheet, i + 2, str2);
 		}	
+		//导出图片
+		WritableImage ri=new WritableImage(0,list.size() + 3,listDepart.size() + 4,list.size() + 5,new File(imagepath));   
+		sheet.addImage(ri);   
 		
 		wb.write();
 		wb.close();
@@ -89,7 +92,7 @@ public class ExportExcel {
 	 * @throws WriteException
 	 * @throws IndexOutOfBoundsException
 	 */
-	public String exportExcel_KYGSTJ(List<Map<String, String>> list , ExcelDAO excelDAO) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+	public String exportExcel_KYGSTJ(List<Map<String, String>> list , ExcelDAO excelDAO, String imagepath) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
 		String[] str = new String[1];
 		str[0] = "科研工时统计";
 		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
@@ -130,6 +133,10 @@ public class ExportExcel {
 			insertRowData(sheet, i + 2, str2);
 		}
 		
+		//导出图片
+		WritableImage ri=new WritableImage(0,list.size() + 3,listPeriod.size() + 4,list.size() + 5,new File(imagepath));   
+		sheet.addImage(ri); 
+		
 		wb.write();
 		wb.close();
 		
@@ -144,7 +151,7 @@ public class ExportExcel {
 	 * @throws WriteException
 	 * @throws IndexOutOfBoundsException
 	 */
-	public String exportExcel_CDRWQK(List<Map<String, String>> list) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+	public String exportExcel_CDRWQK(List<Map<String, String>> list, String imagepath) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
 		String[] str = new String[1];
 		str[0] = "承担任务情况";
 		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";;
@@ -212,6 +219,9 @@ public class ExportExcel {
 			
 			insertRowData(sheet, i + 4, str4);
 		}
+		//导出图片
+		WritableImage ri=new WritableImage(0, list.size() + 5, 13, list.size() + 8,new File(imagepath));   
+		sheet.addImage(ri); 
 		
 		wb.write();
 		wb.close();

@@ -1,5 +1,6 @@
 package com.basesoft.modules.project;
 
+import java.io.FileInputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -27,8 +28,11 @@ public class ProjectController extends CommonController {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String path = request.getRealPath("\\chart\\");
 		
-		if("gstjhz".equals(action)){//工时统计汇总表
+		if("frame_gstjhz".equals(action)){//工时统计汇总frame
+			mv = new ModelAndView("modules/pj/frame_gstjhz");
+		}else if("gstjhz".equals(action)){//工时统计汇总表
 			mv = new ModelAndView("modules/pj/list_gstjhz");
 			
 			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
@@ -40,9 +44,10 @@ public class ProjectController extends CommonController {
 			List listDepart = projectDAO.getDepartment();
 			List listGstjhz = projectDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"));
 			
+			ChartUtil.createChart("gstjhz", listGstjhz, path, projectDAO);
+			
 			mv.addObject("listDepart", listDepart);
 			mv.addObject("listGstjhz", listGstjhz);
-			
 		}else if("frame_kygstj".equals(action)){//科研工时统计frame
 			mv = new ModelAndView("modules/pj/frame_kygstj");
 		}else if("kygstj".equals(action)){//科研工时统计
@@ -60,6 +65,8 @@ public class ProjectController extends CommonController {
 			}
 			List listPeriod = projectDAO.getDICTByType("5");
 			List listKygstj = projectDAO.getKygstj(start, end, listPeriod, depart);
+			
+			ChartUtil.createChart("kygstj", listKygstj, path, projectDAO);
 			
 			mv.addObject("listKygstj", listKygstj);
 			mv.addObject("listPeriod", listPeriod);
@@ -82,6 +89,8 @@ public class ProjectController extends CommonController {
 			}
 			
 			List listCdrwqk = projectDAO.getCdrwqk(start, end, depart);
+			
+			ChartUtil.createChart("cdrwqk", listCdrwqk, path, projectDAO);
 			
 			mv.addObject("datepick", datepick);
 			mv.addObject("listCdrwqk", listCdrwqk);
@@ -176,6 +185,21 @@ public class ProjectController extends CommonController {
 				projectDAO.delete(deleteSql);
 			}
 			response.sendRedirect("pj.do?action=list&page=" + page);
+			return null;
+		}else if("imageout".equals(action)){//给出图片流
+			String type = ServletRequestUtils.getStringParameter(request, "type", "");
+			
+			FileInputStream fis = new FileInputStream(path + "\\" + type + ".png");
+			byte[] b = new byte[fis.available()];
+			fis.read(b);
+			fis.close();
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expiresponse", 0L);
+			response.setContentType("image/*");
+			response.getOutputStream().write(b);
+			response.getOutputStream().close();
 			return null;
 		}
 		

@@ -94,7 +94,7 @@
 	</script>
   </head>
   
- <body onload="commit();IFrameResize();" onresize="IFrameResize();">
+ <body onload="IFrameResize();" onresize="IFrameResize();">
  	<div id="toolbar"></div>
  	<span id="departspan" name="departspan"></span>
     <input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" onchange="commit();" style="width:50;">
