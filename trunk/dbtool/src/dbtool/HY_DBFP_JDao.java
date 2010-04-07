@@ -17,7 +17,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 public class HY_DBFP_JDao {
 
-    public static List<List<Map<String, String>>> findAllList(String tbid, String colSql, String subSql, int type, DBTool dbTool,int version) {
+    public static List<List<Map<String, String>>> findAllList(String tbid, String colSql, String subSql, 
+            int type, DBTool dbTool,int version,int dbtype,boolean isTurnChar) {
         List<List<Map<String, String>>> resultList = new ArrayList<List<Map<String, String>>>();
         JdbcTemplate conn = null;
         if (type == 0) {
@@ -26,29 +27,32 @@ public class HY_DBFP_JDao {
             conn = dbTool.getJt2();
         }
         String sSQL="";
-        String checkSQL = "";
+//        String checkSQL = "";
+//
+//        if(version==0){
+//            if(type==0)
+//                checkSQL = "select * from FIELDS WHERE tablename='" + tbid + "' and fielde='STCD'";
+//            else
+//                checkSQL = "select * from HY_DBFP_J WHERE TBID='" + tbid + "' and upper(FLID)='STCD'";
+//        }else{
+//            checkSQL = "select * from HY_DBFP_J WHERE TBID='" + tbid + "' and upper(FLID)='STCD'";
+//        }
 
-        if(version==0){
-            if(type==0)
-                checkSQL = "select * from FIELDS WHERE tablename='" + tbid + "' and fielde='STCD'";
+//        List rows = conn.queryForList(checkSQL);
+//        if ("HY_STSC_A".trim().equalsIgnoreCase(tbid)
+//                ||"STHD".trim().equalsIgnoreCase(tbid)
+//                ||"HY_DATBDL_I".trim().equalsIgnoreCase(tbid)) {
+            if(dbtype==2)
+                  sSQL = "set rowcount 500 select " + colSql + " from " + tbid.toUpperCase();
             else
-                checkSQL = "select * from HY_DBFP_J WHERE TBID='" + tbid + "' and upper(FLID)='STCD'";
-        }else{
-            checkSQL = "select * from HY_DBFP_J WHERE TBID='" + tbid + "' and upper(FLID)='STCD'";
-        }
-
-        List rows = conn.queryForList(checkSQL);
-        if ("HY_STSC_A".trim().equalsIgnoreCase(tbid)
-                ||"STHD".trim().equalsIgnoreCase(tbid)
-                ||"HY_DATBDL_I".trim().equalsIgnoreCase(tbid)) {
-            sSQL = "select top 500 " + colSql + " from " + tbid.toUpperCase();
-        } else {
-            if (rows != null && rows.size() > 0) {
-                sSQL = "select top 500 " + colSql + " from " + tbid.toUpperCase() + dbTool.makeStcdSqlCol(subSql).toUpperCase();
-            } else {
                 sSQL = "select top 500 " + colSql + " from " + tbid.toUpperCase();
-            }
-        }
+//        } else {
+//            if (rows != null && rows.size() > 0) {
+//                sSQL = "select top 500 " + colSql + " from " + tbid.toUpperCase();
+//            } else {
+//                sSQL = "select top 500 " + colSql + " from " + tbid.toUpperCase();
+//            }
+//        }
         List rows2 = conn.queryForList(sSQL);
         Iterator it = rows2.iterator();
         while (it.hasNext()) {
@@ -57,7 +61,12 @@ public class HY_DBFP_JDao {
             List<Map<String, String>> colList = new ArrayList<Map<String, String>>();
             for (int i = 0; i < arr.length; i++) {
                 Map<String, String> map = new HashMap<String, String>();
-                map.put(arr[i], resultmap.get(arr[i]) == null ? "" : resultmap.get(arr[i]).toString());
+                if(isTurnChar){
+                    try{
+                    map.put(arr[i], resultmap.get(arr[i]) == null ? "" : new String(resultmap.get(arr[i]).toString().getBytes("iso-8859-1"),"GBK"));
+                    }catch(Exception e){e.printStackTrace();}
+                }else
+                    map.put(arr[i], resultmap.get(arr[i]) == null ? "" : resultmap.get(arr[i]).toString());
                 colList.add(map);
             }
             resultList.add(colList);

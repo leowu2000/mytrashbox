@@ -90,30 +90,30 @@ public class ToOrder {
 	}
 
 	public static void main(String arg[]) {
-//		ToOrder action = new ToOrder();
-//		List befor = new ArrayList();
-//                befor.add(action.getTem("10400151","1985","1"));
-//		befor.add(action.getTem("10400150","1985","1"));
-//		befor.add(action.getTem("10400150","1986","2"));
-//		befor.add(action.getTem("10400150","1987","3"));
-//		befor.add(action.getTem("10400150","2004","4"));
-//                befor.add(action.getTem("10400150","2005","4"));
-//		befor.add(action.getTem("10400171","1985","5"));
-//		befor.add(action.getTem("10400171","1987","6"));
-//		befor.add(action.getTem("10400171","1988","7"));
-//		befor.add(action.getTem("10400171","2008","8"));
-//		befor.add(action.getTem("10400171","2009","9"));
-//		befor.add(action.getTem("10400171","2010","10"));
-//                befor.add(action.getTem("10400171","2012","10"));
-//                befor.add(action.getTem("10400172","2012","10"));
-//		List after = action.toOrder(befor);
-//                for(int i=0;i<after.size();i++){
-//                    System.out.println(after.get(i));
-//                }
-                   Date   date   =   Calendar.getInstance().getTime();
-                  SimpleDateFormat   sdf   =   new   SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-                  String   sDate   =   sdf.format(date);
-                System.out.println(sDate);
+		ToOrder action = new ToOrder();
+		List befor = new ArrayList();
+                befor.add(action.getTem("10400151","1985","1"));
+		befor.add(action.getTem("10400150","1985","1"));
+		befor.add(action.getTem("10400150","1986","2"));
+		befor.add(action.getTem("10400150","1987","3"));
+		befor.add(action.getTem("10400150","2004","4"));
+                befor.add(action.getTem("10400150","2005","4"));
+		befor.add(action.getTem("10400171","1985","5"));
+		befor.add(action.getTem("10400171","1987","6"));
+		befor.add(action.getTem("10400171","1988","7"));
+		befor.add(action.getTem("10400171","2008","8"));
+		befor.add(action.getTem("10400171","2009","9"));
+		befor.add(action.getTem("10400171","2010","10"));
+                befor.add(action.getTem("10400171","2011","10"));
+                befor.add(action.getTem("10400172","2012","10"));
+		List after = action.toOrder(befor);
+                for(int i=0;i<after.size();i++){
+                    System.out.println(after.get(i));
+                }
+//                   Date   date   =   Calendar.getInstance().getTime();
+//                  SimpleDateFormat   sdf   =   new   SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+//                  String   sDate   =   sdf.format(date);
+//                System.out.println(sDate);
 
 	}
         public static List toOrder(List beforeOrder){
@@ -139,21 +139,21 @@ public class ToOrder {
                                 total += new Integer(obj.getTotal()).intValue();
                                 eDate = obj.getYear();
                             }
-                            if(i+1!=beforeOrder.size()){
-                                int s_year = new Integer(obj.getYear()).intValue();
-                                int e_year = new Integer(objnext.getYear()).intValue();
-                                if(s_year+1==e_year){
-                                    isBegin = false;
-                                    continue;
-                                }else{
-                                    afterOrder.add(stcd+","+sDate+"-"+eDate+","+total);
-                                    isBegin = true;
-                                    continue;
-                                }
+//                            if(i+1!=beforeOrder.size()){
+                            int s_year = new Integer(obj.getYear()).intValue();
+                            int e_year = new Integer(objnext.getYear()).intValue();
+                            if(s_year+1==e_year){
+                                isBegin = false;
+                                continue;
                             }else{
                                 afterOrder.add(stcd+","+sDate+"-"+eDate+","+total);
-                                isBegin = false;
+                                isBegin = true;
+                                continue;
                             }
+//                            }else{
+//                                afterOrder.add(stcd+","+sDate+"-"+eDate+","+total);
+//                                isBegin = false;
+//                            }
                         }else{
                             if(isBegin){
                                 total = new Integer(obj.getTotal()).intValue();
@@ -166,10 +166,26 @@ public class ToOrder {
                             isBegin = true;
                         }
                     }else{
-                        sDate =  obj.getYear();
-                        eDate =  obj.getYear();
-                        total = new Integer(obj.getTotal()).intValue();
-                        afterOrder.add(stcd+","+sDate+"-"+eDate+","+total);
+                        TemClass objPer = (TemClass) beforeOrder.get(i-1);
+                        if(stcd.trim().equals(objPer.getStcd())){
+                            int e_year = new Integer(obj.getYear()).intValue();
+                            int s_year = new Integer(objPer.getYear()).intValue();
+                            if(s_year+1==e_year){
+                                total += new Integer(obj.getTotal()).intValue();
+                                afterOrder.add(stcd+","+sDate+"-"+e_year+","+total);
+                            }else{
+                                sDate =  obj.getYear();
+                                eDate =  obj.getYear();
+                                total = new Integer(obj.getTotal()).intValue();
+                                afterOrder.add(stcd+","+sDate+"-"+eDate+","+total);
+                            }
+                        }else{
+                            sDate =  obj.getYear();
+                            eDate =  obj.getYear();
+                            total = new Integer(obj.getTotal()).intValue();
+                            afterOrder.add(stcd+","+sDate+"-"+eDate+","+total);
+                        }
+                        
                     }
                     
                 }
