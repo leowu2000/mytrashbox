@@ -60,7 +60,9 @@ var vali = "";
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
-	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
+	tb.add({text: '修  改',cls: 'x-btn-text-icon xiugai',handler: onUpdateClick});
+	tb.add({text: '标志确认',cls: 'x-btn-text-icon update',handler: onConfirmClick});
+	tb.add({text: '标志完成',cls: 'x-btn-text-icon save',handler: onCompleteClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
 	tb.add({text: '设置完成情况百分比',cls: 'x-btn-text-icon xiugai',handler: onSetClick});
 	tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
@@ -167,6 +169,36 @@ Ext.onReady(function(){
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     		if(btn=='yes'){
       			Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';       
+      			Ext.getDom('listForm').submit();
+       		}
+    	});
+    }
+    
+    function onConfirmClick(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+		
+		Ext.Msg.confirm('确认','注意，标记确认后不可进行反馈',function(btn){
+    		if(btn=='yes'){
+      			Ext.getDom('listForm').action=url+'?action=confirm&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';       
+      			Ext.getDom('listForm').submit();
+       		}
+    	});
+    }
+    
+    function onCompleteClick(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+		
+		Ext.Msg.confirm('确认','注意，标记完成后不可进行修改',function(btn){
+    		if(btn=='yes'){
+      			Ext.getDom('listForm').action=url+'?action=complete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -284,6 +316,8 @@ function AJAX_PJ(pjcode){
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>选　择</td>
+                <td>考核级别</td>
+                <td>计划分类</td>
                 <td>产品令号</td>              
                 <td>序号</td>
                 <td>计划内容</td>
@@ -297,14 +331,35 @@ function AJAX_PJ(pjcode){
                 <td>计划员</td>
                 <td>室领导</td>
                 <td>部领导</td>
+                <td>状态</td>
             </tr>
 <%
 List listPlan = pageList.getList();
 for(int i=0;i<listPlan.size();i++){
 	Map mapPlan = (Map)listPlan.get(i);
+	String status = mapPlan.get("STATUS").toString();
+	if("1".equals(status)){
+		status = "新下发";
+	}else if("2".equals(status)){
+		status = "已反馈";
+	}else if("3".equals(status)){
+		status = "已确认";
+	}else if("4".equals(status)){
+		status = "已完成";
+	}
 %>
             <tr align="center">
-                <td><input type="checkbox" name="check" value="<%=mapPlan.get("ID") %>" class="ainput"></td>
+                <td>
+<%
+				if(!"已完成".equals(status)){
+%>                
+                	<input type="checkbox" name="check" value="<%=mapPlan.get("ID") %>" class="ainput">
+<%
+				}
+%>                	                
+                </td>
+                <td>&nbsp;<%=mapPlan.get("LEVELNAME")==null?"":mapPlan.get("LEVELNAME") %></td>
+                <td>&nbsp;<%=mapPlan.get("TYPENAME")==null?"":mapPlan.get("TYPENAME") %></td>
                 <td>&nbsp;<%=mapPlan.get("PJNAME")==null?"":mapPlan.get("PJNAME") %></td>
                 <td>&nbsp;<%=mapPlan.get("ORDERCODE")==null?"":mapPlan.get("ORDERCODE") %></td>
                 <td>&nbsp;<%=mapPlan.get("NOTE")==null?"":mapPlan.get("NOTE") %></td>
@@ -313,11 +368,24 @@ for(int i=0;i<listPlan.size();i++){
                 <td>&nbsp;<%=mapPlan.get("DEPARTNAME")==null?"":mapPlan.get("DEPARTNAME") %></td>
                 <td>&nbsp;<%=mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME") %></td>
                 <td>&nbsp;<%=mapPlan.get("ASSESS")==null?"":mapPlan.get("ASSESS") %></td>
-                <td>&nbsp;<%=mapPlan.get("REMARK")==null?"":mapPlan.get("REMARK") %></td>
+                <td>&nbsp;
+<%
+				if("已反馈".equals(status)){
+%>                
+                	<font color="red"><%=mapPlan.get("REMARK")==null?"":mapPlan.get("REMARK") %></font>
+<%
+				}else {
+%>
+					<%=mapPlan.get("REMARK")==null?"":mapPlan.get("REMARK") %>
+<%
+				}
+%>                	
+                </td>
                 <td>&nbsp;<%=mapPlan.get("LEADER_STATION")==null?"":mapPlan.get("LEADER_STATION") %></td>
                 <td>&nbsp;<%=mapPlan.get("PLANNERNAME")==null?"":mapPlan.get("PLANNERNAME") %></td>
                 <td>&nbsp;<%=mapPlan.get("LEADER_ROOM")==null?"":mapPlan.get("LEADER_ROOM") %></td>
                 <td>&nbsp;<%=mapPlan.get("LEADER_SECTION")==null?"":mapPlan.get("LEADER_SECTION") %></td>
+                <td>&nbsp;<%=status %></td>
             </tr>
 <%} %>            
 </table>

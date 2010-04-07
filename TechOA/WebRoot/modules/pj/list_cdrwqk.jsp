@@ -19,12 +19,19 @@
 		<link href="css/bs_base.css" type="text/css" rel="stylesheet">
 		<link href="css/bs_button.css" type="text/css" rel="stylesheet">
 		<link href="css/bs_custom.css" type="text/css" rel="stylesheet">
-		<script type="text/javascript">
+<style type="text/css">
+body {
+	font-size: 20px;
+	font-weight: normal;
+}
+#the-table { border:1px solid #bbb;border-collapse:collapse;margin: 5px auto 5px auto; font-size: 20px;color:#696969;}
+</style>
+<script type="text/javascript">
 	function setTjt(){
 		document.getElementById('tjt').src = "/pj.do?action=imageout&type=cdrwqk";
 		parent.IFrameResize();
 	}
-	</script>
+</script>
 	</head>
 
 	<body onload="setTjt();">

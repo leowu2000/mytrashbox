@@ -195,11 +195,11 @@ public class ChartUtil {
         plot.setForegroundAlpha(0.5f);   
         //水平标题
         CategoryAxis domainAxis = plot.getDomainAxis();
-        domainAxis.setLabelFont(new Font("黑体",Font.BOLD,14));
+        domainAxis.setLabelFont(new Font("黑体",Font.BOLD,18));
         domainAxis.setTickLabelFont(new Font("黑体",Font.BOLD,12));
         //垂直标题
         ValueAxis rangeAxis=plot.getRangeAxis();
-        rangeAxis.setLabelFont(new Font("黑体",Font.BOLD,15));
+        rangeAxis.setLabelFont(new Font("黑体",Font.BOLD,18));
         rangeAxis.setTickLabelFont(new Font("黑体",Font.BOLD,12));
         //标题
         TextTitle textTitle = jfreechart.getTitle();

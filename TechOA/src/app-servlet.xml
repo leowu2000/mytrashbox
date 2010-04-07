@@ -26,6 +26,7 @@
 				/excel.do=ExcelController
 				/train.do=TrainController
 				/holiday.do=HolidayController
+				/car.do=CarController
 			</value>
 		</property>
 	</bean>
@@ -64,5 +65,6 @@
 	<bean name="ExcelController" class="com.basesoft.modules.excel.ExcelController"></bean>
 	<bean name="TrainController" class="com.basesoft.modules.employee.TrainController"></bean>
 	<bean name="HolidayController" class="com.basesoft.modules.employee.HolidayController"></bean>
+	<bean name="CarController" class="com.basesoft.modules.employee.CarController"></bean>
 </beans>
 

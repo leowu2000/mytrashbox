@@ -132,7 +132,7 @@ public class PlanController extends CommonController {
 				enddate  = "'" + enddate + "'";
 			}
 			
-			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcode + "', '" + mapEmp.get("NAME") + "', '" + mapEmp.get("DEPARTCODE") + "', '" + departname + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', '" + new Date() + "', " + enddate + ", " + planedworkload + ", '" + note + "', '" + symbol + "', '" + assess + "', '" + remark + "', '" + leader_station + "', '" + leader_section + "', '" + leader_room + "', '" + plannercode + "', '" + plannername + "', " + ordercode + ", '" + level + "', '" + type + "')");
+			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcode + "', '" + mapEmp.get("NAME") + "', '" + mapEmp.get("DEPARTCODE") + "', '" + departname + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', '" + new Date() + "', " + enddate + ", " + planedworkload + ", '" + note + "', '" + symbol + "', '" + assess + "', '" + remark + "', '" + leader_station + "', '" + leader_section + "', '" + leader_room + "', '" + plannercode + "', '" + plannername + "', " + ordercode + ", '" + level + "', '" + type + "', '1')");
 			
 			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
 		}else if("query".equals(action)){//查找
@@ -170,6 +170,22 @@ public class PlanController extends CommonController {
 			for(int i=0;i<check.length;i++){
 				String deleteSql = "delete from PLAN where ID='" + check[i] + "'";
 				planDAO.delete(deleteSql);
+			}
+			
+			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
+		}else if("confirm".equals(action)){//确认
+			String[] check=request.getParameterValues("check");
+			for(int i=0;i<check.length;i++){
+				String updateSql = "update PLAN set STATUS='3' where ID='" + check[i] + "'";
+				planDAO.delete(updateSql);
+			}
+			
+			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
+		}else if("complete".equals(action)){//完成
+			String[] check=request.getParameterValues("check");
+			for(int i=0;i<check.length;i++){
+				String updateSql = "update PLAN set STATUS='4' where ID='" + check[i] + "'";
+				planDAO.delete(updateSql);
 			}
 			
 			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
@@ -233,6 +249,31 @@ public class PlanController extends CommonController {
 			mv.addObject("pageList", pageList);
 			mv.addObject("method", method);
 			return mv;	
+		}else if("feedback".equals(action)){//计划反馈
+			mv = new ModelAndView("modules/plan/list_feedback");
+			
+			PageList pageList = planDAO.findAllResult(emcode, page);
+			mv.addObject("pageList", pageList);
+			return mv;	
+		}else if("feedbackquery".equals(action)){//查找备注信息
+			String planid = ServletRequestUtils.getStringParameter(request, "planid", "");
+			
+			Plan plan = planDAO.findById(planid);
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expiresponse", 0L);
+			response.setContentType("application/*;charset=utf-8");
+			response.getWriter().write(plan.getRemark());
+			response.getWriter().close();
+		}else if("feedbackupdate".equals(action)){//反馈信息更新
+			String planid = ServletRequestUtils.getStringParameter(request, "planid", "");
+			String remark = ServletRequestUtils.getStringParameter(request, "remark", "");
+			
+			String updateSql = "update PLAN set REMARK='" + remark + "', STATUS='2' where ID='" + planid + "'";
+			planDAO.update(updateSql);
+			
+			response.sendRedirect("plan.do?action=feedback&page=" + page);
 		}
 		
 		return null;

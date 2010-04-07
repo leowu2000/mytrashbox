@@ -85,7 +85,7 @@ public class PlanDAO extends CommonDAO {
 		
 		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 		Date enddate = StringUtil.getEndOfMonth(startdate);
-		String sql = "select * from VIEW_PLAN where ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "'";
+		String sql = "select * from VIEW_PLAN where ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' and STATUS='3'";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
