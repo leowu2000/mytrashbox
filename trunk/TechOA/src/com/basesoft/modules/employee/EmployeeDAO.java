@@ -313,7 +313,7 @@ public class EmployeeDAO extends CommonDAO{
 	 * @param emcode 人员编码
 	 * @return
 	 */
-	public boolean havaPhoto(String empcode){
+	public boolean havePhoto(String empcode){
 		int count = jdbcTemplate.queryForInt("select count(*)from ATTACHMENT where RTABLE='EMPLOYEE' and RCOLUMN='CODE' and RVALUE='" + empcode + "' and type='1'");
 		
 		if(count==1){

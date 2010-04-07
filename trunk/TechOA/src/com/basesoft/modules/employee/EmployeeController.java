@@ -143,7 +143,7 @@ public class EmployeeController extends CommonController {
 			List listDegree = emDAO.getDICTByType("2");
 			List listPro = emDAO.getDICTByType("3");
 			//获取是否有照片
-			boolean havaPhoto = emDAO.havaPhoto(empcode);
+			boolean havePhoto = emDAO.havePhoto(empcode);
 			
 			mv.addObject("listChildDepart", listChildDepart);
 			mv.addObject("listMajor", listMajor);
@@ -151,8 +151,46 @@ public class EmployeeController extends CommonController {
 			mv.addObject("listPro", listPro);
 			mv.addObject("mapEm", mapEm);
 			mv.addObject("listAttach", listAttach);
-			mv.addObject("havePhoto", havaPhoto);
+			mv.addObject("havePhoto", havePhoto);
 			mv.addObject("method", method);
+		}else if("manage_self".equals(action)){//人事管理详细信息
+			mv = new ModelAndView("modules/employee/detail_manage_self");
+			
+			//获取人员信息
+			Map mapEm = emDAO.findByCode("EMPLOYEE", emcode);
+			//部门名称
+	    	String departname = "";
+	    	if(mapEm.get("DEPARTCODE")!=null){
+	    		departname = emDAO.findNameByCode("DEPARTMENT",mapEm.get("DEPARTCODE").toString());
+	    	}
+	    	//专业名称
+	    	String majorname = "";
+	    	if(mapEm.get("MAJORCODE")!=null){
+	    		majorname = emDAO.findNameByCode("DICT",mapEm.get("MAJORCODE").toString());
+	    	}
+	    	//学历名称
+	    	String degreename = "";
+	    	if(mapEm.get("DEGREECODE")!=null){
+	    		degreename = emDAO.findNameByCode("DICT",mapEm.get("DEGREECODE").toString());
+	    	}
+	    	//职称名称
+	    	String proname = "";
+	    	if(mapEm.get("PROCODE")!=null){
+	    		proname = emDAO.findNameByCode("DICT",mapEm.get("PROCODE").toString());
+	    	}
+	    	mapEm.put("DEPART", departname);
+	    	mapEm.put("MAJOR", majorname);
+	    	mapEm.put("DEGREE", degreename);
+	    	mapEm.put("PRO", proname);
+	    	
+			//获取附件信息
+			List listAttach = emDAO.getAttachs("EMPLOYEE", "CODE", emcode, "2");
+			//获取是否有照片
+			boolean havePhoto = emDAO.havePhoto(emcode);
+			
+			mv.addObject("mapEm", mapEm);
+			mv.addObject("listAttach", listAttach);
+			mv.addObject("havePhoto", havePhoto);
 		}else if("query".equals(action)){//查找返回修改
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			Employee employee = emDAO.findById(id);
@@ -191,11 +229,29 @@ public class EmployeeController extends CommonController {
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", ""); 
 			response.sendRedirect("em.do?action=manage&empcode="+empcode);
 			return null;
+		}else if("update_self".equals(action)){//员工信息更新操作
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			
+			String loginid = ServletRequestUtils.getStringParameter(request, "loginid", "");
+			String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
+			String email = ServletRequestUtils.getStringParameter(request, "email", "");
+			String blog = ServletRequestUtils.getStringParameter(request, "blog", "");
+			String selfweb = ServletRequestUtils.getStringParameter(request, "selfweb", "");
+			String stcphone = ServletRequestUtils.getStringParameter(request, "stcphone", "");
+			String mobphone = ServletRequestUtils.getStringParameter(request, "mobphone", "");
+			String address = ServletRequestUtils.getStringParameter(request, "address", "");
+			String post = ServletRequestUtils.getStringParameter(request, "post", "");
+			
+			emDAO.update("update EMPLOYEE set LOGINID='" + loginid + "',NAME='" + emname + "',EMAIL='" + email + "',BLOG='" + blog + "',SELFWEB='" + selfweb + "',STCPHONE='" + stcphone + "',MOBPHONE='" + mobphone + "',ADDRESS='" + address + "',POST='" + post + "' where ID='" + id + "'");
+			
+			response.sendRedirect("em.do?action=manage_self");
+			return null;
 		}else if("addattach".equals(action)){//新增附件
 			String type = ServletRequestUtils.getStringParameter(request, "type", "");  
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", ""); 
+			String method = ServletRequestUtils.getStringParameter(request, "method", ""); 
 			
-			boolean havePhoto = emDAO.havaPhoto(empcode);
+			boolean havePhoto = emDAO.havePhoto(empcode);
 			
 			MultipartHttpServletRequest mpRequest = (MultipartHttpServletRequest)request;
 			MultipartFile file = mpRequest.getFile("file");
@@ -210,7 +266,11 @@ public class EmployeeController extends CommonController {
 				}
 			}
 			
-			response.sendRedirect("em.do?action=manage&empcode="+empcode);
+			if("self".equals(method)){
+				response.sendRedirect("em.do?action=manage_self");
+			}else {
+				response.sendRedirect("em.do?action=manage&empcode="+empcode);
+			}
 			return null;
 		}else if("photo".equals(action)){//image的src
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", ""); 
