@@ -76,7 +76,8 @@ public class ExportView extends JFrame {
         tbMainSelect.remove(DataView);//数据查看的页面，在没有设置参数的时候不显示
         tbMainSelect.remove(dataIndexPanel);//数据索引页面，设置数据库初始参数后，一直显示
         jButton5.setVisible(false);//隐藏“重新读取”的按钮
-//        exportType.setSelectedIndex(2);
+        exportType.setSelectedIndex(0);
+        exportType.setEnabled(false);
         charBox.setEnabled(false);
         ButtonGroup bgroup = new ButtonGroup();
         bgroup.add(jRadioButtonAll);
@@ -1314,21 +1315,21 @@ public class ExportView extends JFrame {
         int driveClassIndex = cbDriver.getSelectedIndex();
 
         if (driveClassIndex == 1) {//sqlserver
-            txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
+            txtPort.setEnabled(true);txtIP.setEnabled(true);//exportType.setEnabled(true);
             txtPort.setText("1433");
             charBox.setSelected(false);
             charBox.setEnabled(false);
             jLabel11.setText(" 数据库名称：");
         }
         if (driveClassIndex == 2) {//sysbase
-            txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
+            txtPort.setEnabled(true);txtIP.setEnabled(true);//exportType.setEnabled(true);
             charBox.setEnabled(true);
             charBox.setSelected(true);
             txtPort.setText("5000");
             jLabel11.setText(" 数据库名称：");
         }
         if (driveClassIndex == 3) {//oracle
-            txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
+            txtPort.setEnabled(true);txtIP.setEnabled(true);//exportType.setEnabled(true);
             charBox.setSelected(false);
             charBox.setEnabled(false);
             txtPort.setText("1521");
@@ -1890,7 +1891,7 @@ public class ExportView extends JFrame {
         List<List<Map<String, String>>> resulstList = null;
         String tabid = HY_DBTP_JDao.getTabid(exportTabList.getSelectedValue().toString(), dbTool);
         try {
-            colStr = dbTool.getFileds(tabid, dbTool, type);
+            colStr = dbTool.getFileds(tabid, dbTool, type,cbDriver.getSelectedIndex());
             if (colStr == null || colStr.trim().equals(";")) {
                 JOptionPane.showMessageDialog(null, "没有可供查看数据！", "提示", 1);
             } else {
@@ -1908,7 +1909,8 @@ public class ExportView extends JFrame {
                         }
                     }
                 }
-                resulstList = HY_DBFP_JDao.findAllList(tabid, colStr, stscStr, type, dbTool, Version.getSelectedIndex());
+                resulstList = HY_DBFP_JDao.findAllList(tabid, colStr, stscStr, type, dbTool,
+                        Version.getSelectedIndex(),cbDriver.getSelectedIndex(),charBox.isSelected());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

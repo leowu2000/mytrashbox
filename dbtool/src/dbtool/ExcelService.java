@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
@@ -16,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import org.springframework.jdbc.core.RowMapper;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -31,7 +31,7 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class ExcelService {
-
+    private static int cuntNumbert = 450;
     @SuppressWarnings({"unchecked", "deprecation"})
     public static void createXls(String reportName, String savePath, String colAndName, List rowList) {
         if (colAndName != null && !"".trim().equals(colAndName) && reportName != null && !"".trim().equals(reportName)) {
@@ -649,7 +649,8 @@ public class ExcelService {
             DefaultListModel selectedSnameModel,
             DefaultListModel listTabModel,int type,
             String stscstr,Map dataIndexMap,
-            Map dataDescMap,Map resultStscMap,boolean isTurnChar,int version) {
+            Map dataDescMap,Map resultStscMap,
+            boolean isTurnChar,int version) {
         JdbcTemplate jt1 = dbTool.getJt1();
         JdbcTemplate jt2 = dbTool.getJt2();
         String[] tables = null;
@@ -788,6 +789,7 @@ public class ExcelService {
             e.printStackTrace();
         }
     }
+
     public static void main(String args[]) {
         try {
             String[] stcdList = readStcdFromExcel(null);
@@ -799,4 +801,310 @@ public class ExcelService {
             ex.printStackTrace();
         }
     }
+
+    public static void createReportHtmlCutStcd(String savePath,
+            DefaultListModel expSuccessModel,
+            String errorTab,
+            DBTool dbTool,
+            DefaultListModel selectedStscModel,
+            DefaultListModel selectedSnameModel,
+            DefaultListModel listTabModel,int type,
+            String stscstr,Map dataIndexMap,
+            Map dataDescMap,Map resultStscMap,
+            boolean isTurnChar,int version) {
+        JdbcTemplate jt1 = dbTool.getJt1();
+        JdbcTemplate jt2 = dbTool.getJt2();
+        String[] tables = null;
+        String reportStcd[] = dbTool.makeReportStcdSqlCol(stscstr,cuntNumbert);
+        
+
+        int tabNameRowspan = reportStcd.length*3;
+        if (!expSuccessModel.isEmpty()) {
+            tables = new String[expSuccessModel.size()];
+            for (int i = 0; i < expSuccessModel.size(); i++) {
+                tables[i] = HY_DBTP_JDao.getTabid(expSuccessModel.get(i).toString(), dbTool);
+            }
+        }
+        StringBuffer strContent_table=new StringBuffer("");
+        String desFile = savePath + "\\excel\\Report.html";
+        listTabModel.removeElement("数据索引表");
+        if (tables != null && tables.length > 0) {
+                for (String table : tables) {
+                   
+                    if(reportStcd!=null){
+                        for(int kk=0;kk<reportStcd.length;kk++ ){
+                            String realStcdToHtml=reportStcd[kk];
+                            String stsc[] = realStcdToHtml.split(",");
+                                if(kk==0){
+                                    strContent_table.append("<tr bgcolor='#FFFFFF' height='20'>");
+                                    strContent_table.append("<td rowspan='"+tabNameRowspan+"'><a href='#' onclick='return false;' title='"+table+"'>"+ dbTool.getTabCnnm(jt2, table) +"</a></td>");
+                                    strContent_table.append("<td rowspan='"+tabNameRowspan+"'>" + dbTool.getCount(jt1, table) + "</td>");
+                                    strContent_table.append("<td rowspan='"+tabNameRowspan+"'>" + dbTool.getCountToExcel(jt1, table,stscstr,dbTool.isHaveStcdCol(table)) + "</td>");
+                                    Object result=dataIndexMap.get(table);
+                                    if (result==null) result="";
+                                    if("失败".trim().equals(result))//getIndexFiled(table)
+                                        strContent_table.append("<td rowspan='"+tabNameRowspan+"'><a href='#' onclick='return false;' title='请确认表－"+table+"－中存在索引字段:"+dbTool.getIndexFiled(table)+"'>" + result+ "</td>");
+                                    else
+                                        strContent_table.append("<td rowspan='"+tabNameRowspan+"'>" + result+ "</td>");
+                                    for(String stcd:stsc){
+                                        String stnm = dbTool.getStscName(jt2, stcd.replaceAll("'",""));
+                                        if("".trim().equals(stnm)){
+                                                    Object obj = dbTool.getStscName2(jt1, stcd.replaceAll("'",""),version);
+                                                    if(obj==null)
+                                                        stnm="";
+                                                    else{
+                                                        if(isTurnChar){
+                                                            try {
+                                                                stnm = new String(obj.toString().getBytes("ISO-8859-1"),"GBK");
+                                                            } catch (UnsupportedEncodingException ex) {
+                                                                Logger.getLogger(ExcelService.class.getName()).log(Level.SEVERE, null, ex);
+                                                            }
+                                                        }else{
+                                                            stnm=obj.toString();
+                                                        }
+                                                    }
+                                                }
+                                            if("".trim().equals(stnm))
+                                                stnm=stcd.replaceAll("'","");
+
+                                        strContent_table.append("<td class='title' colspan='2'>"+stnm+"<br>["+stcd.replaceAll("'","")+"]</br></td>");
+                                    }
+
+                                    Object resultdesc = dataDescMap.get(table);
+                                    if (resultdesc==null) resultdesc="";
+                                    strContent_table.append("<td rowspan='"+tabNameRowspan+"'>"+resultdesc+"</td>");
+                                    strContent_table.append("</tr><tr bgcolor='#E8EFFF' height='20'>");
+                                    for(String stcd:stsc){
+                                        strContent_table.append("<td class='title' nowrap>  年   份 </td>");
+                                        strContent_table.append("<td class='title' nowrap>导出条数</td>");
+                                    }
+                                    strContent_table.append("</tr>");
+                                    strContent_table.append("<tr>");
+                                    List resultList = (List)resultStscMap.get(table);
+                                    if(resultList!=null && resultList.size()>0){
+                                        for(int k = 0; k<stsc.length;k++){
+                                            boolean nullflg = true;
+                                            for(int n=0;n<resultList.size();n++){
+                                             Map stscMap = (Map)resultList.get(n);
+                                             Object stscobj=(Object)stscMap.get(stsc[k].replaceAll("'","").trim());
+                                             if(stscobj==null){
+                                                nullflg = false;
+                                             }else{
+                                                String stscStr[] = stscobj.toString().split(",");
+                                                strContent_table.append("<td bgcolor='#FFFFFF'>"+stscStr[0]+"-"+stscStr[1]+"</td>");
+                                                strContent_table.append("<td bgcolor='#FFFFFF'>"+stscStr[2]+"</td>");
+                                                 nullflg = true;break;
+                                             }
+                                            }
+                                            if(!nullflg){
+                                                strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
+                                                strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
+                                                nullflg = true;
+                                            }
+                                        }
+                                        if(stsc.length<cuntNumbert){
+                                            for(int cc=0;cc<cuntNumbert-stsc.length;cc++){
+                                                strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
+                                                strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        for(int k = 0; k<stsc.length;k++){
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
+                                        }
+                                        if(reportStcd.length>1){
+                                            if(stsc.length<cuntNumbert){
+                                                for(int cc=0;cc<cuntNumbert-stsc.length;cc++){
+                                                    strContent_table.append("<td class='title' colspan='2'>&nbsp;</td>");
+                                                }
+                                            }
+                                        }
+                                        
+                                    }
+                                    
+                                    strContent_table.append("</tr>");
+                                }else{
+                                strContent_table.append("<tr>");
+                               
+                                //再次输出测站编码名称
+                                for(String stcd:stsc){
+                                    String stnm = dbTool.getStscName(jt2, stcd.replaceAll("'",""));
+                                    if("".trim().equals(stnm)){
+                                                Object obj = dbTool.getStscName2(jt1, stcd.replaceAll("'",""),version);
+                                                if(obj==null)
+                                                    stnm="";
+                                                else{
+                                                    if(isTurnChar){
+                                                        try {
+                                                            stnm = new String(obj.toString().getBytes("ISO-8859-1"),"GBK");
+                                                        } catch (UnsupportedEncodingException ex) {
+                                                            Logger.getLogger(ExcelService.class.getName()).log(Level.SEVERE, null, ex);
+                                                        }
+                                                    }else{
+                                                        stnm=obj.toString();
+                                                    }
+                                                }
+                                            }
+                                        if("".trim().equals(stnm))
+                                            stnm=stcd.replaceAll("'","");
+
+                                    strContent_table.append("<td class='title' colspan='2'>"+stnm+"<br>["+stcd.replaceAll("'","")+"]</br></td>");
+                                }
+                                if(stsc.length<cuntNumbert){
+                                    for(int cc=0;cc<cuntNumbert-stsc.length;cc++){
+                                        strContent_table.append("<td class='title' colspan='2'>&nbsp;</td>");
+                                    }
+                                }
+                                strContent_table.append("</tr><tr bgcolor='#E8EFFF' height='20'>");
+                                for(String stcd:stsc){
+                                    strContent_table.append("<td class='title' nowrap>  年   份 </td>");
+                                    strContent_table.append("<td class='title' nowrap>导出条数</td>");
+                                }
+                                if(stsc.length<cuntNumbert){
+                                    for(int cc=0;cc<cuntNumbert-stsc.length;cc++){
+                                        strContent_table.append("<td class='title' nowrap>&nbsp;</td>");
+                                        strContent_table.append("<td class='title' nowrap>&nbsp;</td>");
+                                    }
+                                }
+                                strContent_table.append("</tr>");
+                                strContent_table.append("<tr>");
+//                                strContent_table.append("<td>" + dbTool.getCountToExcel(jt1, table,realStcdToHtml,dbTool.isHaveStcdCol(table)) + "</td>");
+                                //表格实际导出数据详细信息
+                                List resultList = (List)resultStscMap.get(table);
+                                if(resultList!=null && resultList.size()>0){
+                                    for(int k = 0; k<stsc.length;k++){
+                                        boolean nullflg = true;
+                                        for(int n=0;n<resultList.size();n++){
+                                         Map stscMap = (Map)resultList.get(n);
+                                         Object stscobj=(Object)stscMap.get(stsc[k].replaceAll("'","").trim());
+                                         if(stscobj==null){
+                                            nullflg = false;
+                                         }else{
+                                            String stscStr[] = stscobj.toString().split(",");
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>"+stscStr[0]+"-"+stscStr[1]+"</td>");
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>"+stscStr[2]+"</td>");
+                                             nullflg = true;break;
+                                         }
+                                        }
+                                        if(!nullflg){
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
+                                            nullflg = true;
+                                        }
+                                    }
+                                    if(stsc.length<cuntNumbert){
+                                        for(int cc=0;cc<cuntNumbert-stsc.length;cc++){
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>"+kk+"</td>");
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>"+kk+"</td>");
+                                        }
+                                    }
+                                }else{
+                                    for(int k = 0; k<stsc.length;k++){
+                                        strContent_table.append("<td bgcolor='#FFFFFF'>"+kk+"</td>");
+                                        strContent_table.append("<td bgcolor='#FFFFFF'>"+kk+"</td>");
+                                    }
+                                    if(stsc.length<cuntNumbert){
+                                        for(int cc=0;cc<cuntNumbert-stsc.length;cc++){
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>"+kk+"</td>");
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>"+kk+"</td>");
+                                        }
+                                    }
+                                }
+                                strContent_table.append("</tr>");
+                            }
+
+                        }
+                        try {
+//                            FileOutputStream resultFile = new  FileOutputStream(desFile,true);
+                            OutputStreamWriter opsw =  new OutputStreamWriter(new FileOutputStream(desFile,true),"GBK");
+//                            PrintWriter printFile =  new PrintWriter(resultFile);
+                            opsw.write(strContent_table.toString());
+                            strContent_table= new StringBuffer("");
+//                            resultFile.close();
+                            opsw.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    
+                }
+            }
+            
+        }//
+    public static void writeReportHtmlDetail(String savePath){
+            String desFile = savePath + "\\excel\\Report.html";
+            int colNum = 2*cuntNumbert+5;
+            StringBuffer strContent_detail = new StringBuffer("<tr bgcolor='#E8EFFF' height='30'><td colspan='"+colNum+"' align='center'>如果生成数据索引失败，请对照c盘下的tables.xls文件，确认数据表存在，并且索引字段名称跟您的数据库对应。</td></tr></table></body></html>");
+            try {
+               FileOutputStream resultFile = new  FileOutputStream(desFile,true);
+                PrintWriter printFile =  new PrintWriter(resultFile,true);
+                printFile.println(strContent_detail);
+                resultFile.close();
+                printFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    }
+    public static void writeReportHtmlHead(String savePath,
+            String errorTab,
+            DBTool dbTool,
+            DefaultListModel listTabModel,
+            String stscstr) {
+        String reportStcd[] = dbTool.makeReportStcdSqlCol(stscstr,cuntNumbert);
+        StringBuffer strContent_table=new StringBuffer("");
+        StringBuffer strContent_head = new StringBuffer("");
+        int colNum = 2*cuntNumbert+5;
+        String desFile = savePath + "\\excel\\Report.html";
+        listTabModel.removeElement("数据索引表");
+        strContent_head.append("<html><head><title>REPORT</title><meta http-equiv='Content-Type' content='text/html; charset=gbk'></head>");
+        strContent_head.append("<style type='text/css'>");
+        strContent_head.append(".title {font-size: 10pt;padding-top: 2px;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:center;}"
+                              +".title2 {font-size: 10pt;padding-top: 2px;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;}"
+                              +"a {text-decoration: none;color: #484833;}a:hover {text-decoration: underline;color: #6B6B4B;}</style><body scroll=auto>");
+        strContent_table.append("<table width='98%' align='center' border='0' 'cellspacing='1' bgcolor='#CCCCCC'>");
+        strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 14pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:center;' colspan='"+colNum+"'>数据导出报告</td></tr>");
+        if (!listTabModel.isEmpty()) {
+            strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 10pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;' colspan='"+colNum+"'>以下为未选择报表</td></tr>");
+            for (int i = 0; i < listTabModel.size(); i++) {
+                strContent_table.append("<tr bgcolor='#FFFFFF'><td colspan='2'>" + HY_DBTP_JDao.getTabid(listTabModel.get(i).toString(), dbTool) + "</td><td colspan='"+(colNum-2)+"'>" + listTabModel.get(i) + "</td></tr>");
+            }
+        }
+        if (errorTab != null && errorTab.length() > 0) {
+            strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 10pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;' colspan='"+colNum+"'>以下报表和导出结构标准不一致未能成功导出</td></tr>");
+            for (int i = 0; i < errorTab.split(",").length; i++) {
+                strContent_table.append("<tr bgcolor='#FFFFFF'><td colspan='3'>" + HY_DBTP_JDao.getTabid(errorTab.split(",")[i],dbTool) + "</td><td colspan='"+(colNum-3)+"'>" + errorTab.split(",")[i] + "</td></tr>");
+            }
+        }
+        strContent_table.append("<tr bgcolor='#E8EFFF' height='30'>");
+        strContent_table.append("<td class='title' nowrap>表名称</td>");
+        strContent_table.append("<td class='title' nowrap>源数据条数</td>");
+        strContent_table.append("<td class='title' nowrap>导出条数</td>");
+        strContent_table.append("<td class='title' nowrap> 索  引 </td>");
+        if(reportStcd.length>1)
+            strContent_table.append("<td class='title' colspan='"+2*cuntNumbert+"' nowrap> 导出数据详细信息 </td>");
+        else
+            strContent_table.append("<td class='title' colspan='"+2*reportStcd[0].split(",").length+"' nowrap> 导出数据详细信息 </td>");
+
+            strContent_table.append("<td class='title' nowrap>导出合计(站年)</td>");
+            strContent_table.append("</tr>");
+
+            StringBuffer strContent = new StringBuffer("");
+            strContent.append(strContent_head);
+            strContent.append(strContent_table);
+            File file = new File(desFile);
+            if (file.exists()) {
+                file.delete();
+            }
+            try {
+                FileWriter resultFile = new FileWriter(file);
+                PrintWriter printFile =  new PrintWriter(resultFile);
+                printFile.println(strContent);
+                resultFile.close();
+                printFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 }
