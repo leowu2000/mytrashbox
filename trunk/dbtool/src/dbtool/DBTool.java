@@ -38,7 +38,6 @@ public class DBTool {
 
     Connection cnSource, cnTarget;
     JdbcTemplate jt1, jt2;
-//    PageTemplate jt1, jt2;
     String saveDirs="";
     DefaultListModel expSuccessModel = new DefaultListModel();
     String errorTab = "";
@@ -94,7 +93,7 @@ public class DBTool {
                 
                 ((DefaultListModel) (logList.getModel())).addElement("         ↓正在导出【" + getTabCnnm(jt2, table) + "】的数据，请等待...");
                 if (isHaveStcdCol(table)) {
-                    String resultstcd[] = makeStcdSqlCol(stsc);
+                    String resultstcd[] = makeStcdSqlCol(stsc,200,false);
                     for(String search_stcdsql:resultstcd){
                         searChsql = "select * from " + table.toUpperCase()+" "+search_stcdsql;
                         wirteToDatabase(table,saveDir,searChsql,logList,expType,version,isTurnChar,result);
@@ -178,75 +177,53 @@ public class DBTool {
      * @param stsc
      * @return
      */
-    public String[] makeStcdSqlCol(String stsc) {
+    public String[] makeStcdSqlCol(String stsc,int cutNum,boolean flg) {
         String stscSql = "";
         String result[] = null;
         String stscArr[] = stsc.split(",");
         int count = stscArr.length;
-        if(count>200){
-            int p = count/200;
-            if(count%200!=0)
-                p = count/200+1;
+        if(count>cutNum){
+            int p = count/cutNum;
+            if(count%cutNum!=0)
+                p = count/cutNum+1;
             result = new String[p];
             for(int k=0;k<p;k++){
-                int endInt = (k+1)*200;
+                int endInt = (k+1)*cutNum;
                 if(endInt>count)
                     endInt = count;
-                for(int i=k*200;i<endInt;i++){
-                    if(stscSql.trim().equals(""))
-                        stscSql = " WHERE STCD="+stscArr[i];
-                     else
-                        stscSql +=" OR STCD="+stscArr[i];
+                for(int i=k*cutNum;i<endInt;i++){
+                    if(flg){
+                        if(stscSql.trim().equals(""))
+                            stscSql = stscArr[i];
+                         else
+                            stscSql +=","+ stscArr[i];
+                    }else{
+                        if(stscSql.trim().equals(""))
+                            stscSql = " WHERE STCD="+stscArr[i];
+                         else
+                            stscSql +=" OR STCD="+stscArr[i];
+                    }
                 }
                 result[k]=stscSql;
                 stscSql = "";
             }
         }else{
             result = new String[1];
-            for(int i=0;i<count;i++){
-                if(stscSql.trim().equals(""))
-                    stscSql = " WHERE STCD="+stscArr[i];
-                else
-                    stscSql +=" OR STCD="+stscArr[i];
+            if(flg)
+                stscSql=stsc;
+            else{
+                for(int i=0;i<count;i++){
+                    if(stscSql.trim().equals(""))
+                        stscSql = " WHERE STCD="+stscArr[i];
+                    else
+                        stscSql +=" OR STCD="+stscArr[i];
+                }
             }
             result[0]=stscSql;
         }
         return result;
     }
-    /**
-     * 生成导出报告专用
-     * @param stsc
-     * @return
-     */
-    public String[] makeReportStcdSqlCol(String stsc,int cuntNumbert) {
-        String stscSql = "";
-        String result[] = null;
-        String stscArr[] = stsc.split(",");
-        int count = stscArr.length;
-        if(count>cuntNumbert){
-            int p = count/cuntNumbert;
-            if(count%cuntNumbert!=0)
-                p = count/cuntNumbert+1;
-            result = new String[p];
-            for(int k=0;k<p;k++){
-                int endInt = (k+1)*cuntNumbert;
-                if(endInt>count)
-                    endInt = count;
-                for(int i=k*cuntNumbert;i<endInt;i++){
-                    if(stscSql.trim().equals(""))
-                        stscSql = stscArr[i];
-                     else
-                        stscSql +=","+ stscArr[i];
-                }
-                result[k]=stscSql;
-                stscSql = "";
-            }
-        }else{
-            result = new String[1];
-            result[0]=stsc;
-        }
-        return result;
-    }
+
     /**
      * 查询反回表的数据索引字段名称
      * @param table
@@ -264,20 +241,6 @@ public class DBTool {
             }
             return colmap.get("FILDID").toString();
         }
-    }
-
-    public boolean isHaveStcdColFor3(String table) {
-        boolean flag = false;
-        if ("STHD".trim().equalsIgnoreCase(table) || "ADDV".trim().equalsIgnoreCase(table)) {
-            flag = false;
-        } else {
-            String sql = "SELECT count(*) FROM INFORMATION_SCHEMA.columns where column_name='stcd' and table_name='" + table + "'";
-            int row2 = jt1.queryForInt(sql);
-            if (row2 > 0) {
-                flag = true;
-            }
-        }
-        return flag;
     }
 
     public Connection getConnection(String URL, String user, String password) {
@@ -436,7 +399,7 @@ public class DBTool {
          * 将测站编码重新组织,防止SQL
          * 的parameters过多
          */
-        rpareStsc = makeStcdSqlCol(stscStr);//重新组织后的测站编码
+        rpareStsc = makeStcdSqlCol(stscStr,200,false);//重新组织后的测站编码
         // 拷贝数据
         int i = 0;
         for (String table : tables) {
@@ -559,7 +522,6 @@ public class DBTool {
                     /**
                      * 将测站编码重新组织,防止SQL 的parameters过多
                      */
-//                    String[] resultSQL = makeStcdSqlCol(stcdStr);//重新组织后的测站编码
                      List stscList = new ArrayList();
                      String stscSQL="";
                      int stcdYear = 0;
@@ -947,30 +909,13 @@ public class DBTool {
         }
     }
 
-    /**
-     * 比对字段名称YR和YEAR
-     * 如果字段为YR并且描述中有YR字段，那么返回YR
-     * 否则查看数据库中是否有YEAR字段，如果有则反回YEAR
-     */
-    public String compareYearColumn(String table){
-        List rows = jt2.queryForList("select * from HY_DBFP_J WHERE TBID='" + table + "' and upper(FLID)='YR'");
-        if(rows.size()>0)
-            return "YR";
-        else{
-            List rows2 = jt2.queryForList("select * from HY_DBFP_J WHERE TBID='" + table + "' and upper(FLID)='YEAR'");
-            if(rows2.size()>0)
-                return "YEAR";
-            else
-                return "";
-        }
-    }
     public String[] makeFiledsAndParamets(final String tablename,int dbtype){
         String searchSQL = "";
         if(dbtype==2)
             searchSQL = "SET rowcount 1 SELECT column FROM "+tablename.toUpperCase();
         else
             searchSQL = "SELECT TOP 1 * FROM "+tablename.toUpperCase();
-        List rows = jt1.query("select top 1 * from "+tablename.toUpperCase(), new RowMapper() {
+        List rows = jt1.query(searchSQL, new RowMapper() {
                 public Object mapRow(final ResultSet rs, int rowNum) throws SQLException {
                     String result[] = new String[2];
                     String fields="";
@@ -979,9 +924,6 @@ public class DBTool {
                     final int cols = meta.getColumnCount();
                     for (int i = 0; i < cols; i++) {
                         String colname = meta.getColumnName(i + 1);
-//                        String coltype = meta.get
-//                        if(colname.toUpperCase().equals("YR"))
-//                            colname = compareYearColumn(tablename);
                         fields += colname + ",";
                         params += "?,";
                     }
@@ -1039,25 +981,7 @@ public class DBTool {
         }
         return colmap.get("FLDCNNM").toString();
     }
-    /**
-     * 统计站年
-     * @param args
-     */
-    public String getResultDescription(String stcd,String tabid){
-        if(isHaveStcdCol(tabid))
-            return "";
-        else{
-            String indexField = getIndexFiled(tabid);
-            if("indexField".trim().equals(""))
-                return "";
-            else{
-                String sql = "SELECT SUM(A.INDEXY) AS RESU FROM (SELECT STCD,COUNT("
-                            + "DISTINCT (DATEPART(yyyy,PTBGDT))) "
-                            +"AS INDEXY FROM hy_dcQ_d GROUP BY STCD) AS A";
-            }
-        }
-        return "";
-    }
+   
      public static void main(String[] args) {
         DBTool dbTool = new DBTool("c://config.properties");
     }

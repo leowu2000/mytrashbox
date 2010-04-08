@@ -815,7 +815,7 @@ public class ExcelService {
         JdbcTemplate jt1 = dbTool.getJt1();
         JdbcTemplate jt2 = dbTool.getJt2();
         String[] tables = null;
-        String reportStcd[] = dbTool.makeReportStcdSqlCol(stscstr,cuntNumbert);
+        String reportStcd[] = dbTool.makeStcdSqlCol(stscstr,cuntNumbert,true);
         
 
         int tabNameRowspan = reportStcd.length*3;
@@ -1052,7 +1052,7 @@ public class ExcelService {
             DBTool dbTool,
             DefaultListModel listTabModel,
             String stscstr) {
-        String reportStcd[] = dbTool.makeReportStcdSqlCol(stscstr,cuntNumbert);
+        String reportStcd[] = dbTool.makeStcdSqlCol(stscstr,cuntNumbert,true);
         StringBuffer strContent_table=new StringBuffer("");
         StringBuffer strContent_head = new StringBuffer("");
         int colNum = 2*cuntNumbert+5;
