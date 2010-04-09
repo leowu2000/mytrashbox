@@ -138,6 +138,7 @@ Ext.onReady(function(){
   </head>
   
   <body>
+  <h1>参与人员管理管理</h1>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
 <%=pageList.getPageInfo().getHtml("train.do?action=manage&page1=" + page1) %>

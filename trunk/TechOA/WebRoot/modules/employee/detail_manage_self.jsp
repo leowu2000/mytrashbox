@@ -93,6 +93,7 @@ Ext.onReady(function(){
   </head>
   
   <body>
+  	<h1>个人信息管理</h1>
   	<div id="toolbar1"></div>  
 	<form id="listForm" name="listForm" action="" method="post">
 	<br><br>

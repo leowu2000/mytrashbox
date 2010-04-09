@@ -117,6 +117,17 @@
   </head>
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
+<%
+if("search".equals(method)){
+%>  
+  	<h1>财务信息</h1>
+<%
+}else {
+%>  	
+	<h1>财务管理</h1>
+<%
+}
+%>
   	<div id="toolbar"></div>
 	<span id="departspan" name="departspan"></span>
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" onchange="commit();" value="<%=thisYearAndMonth %>" style="width: 50">

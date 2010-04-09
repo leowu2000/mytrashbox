@@ -45,6 +45,7 @@
   </head>
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
+  	<h1>班车管理</h1>
   	<div id="toolbar"></div>
 	<select id="selbc" name="selbc">
 		<option value="0">请选择...</option>

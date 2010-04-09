@@ -242,6 +242,7 @@ Ext.onReady(function(){
   </head>
   
   <body>
+  <h1>物资管理</h1>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
 <%=pageList.getPageInfo().getHtml("goods.do?action=list") %>

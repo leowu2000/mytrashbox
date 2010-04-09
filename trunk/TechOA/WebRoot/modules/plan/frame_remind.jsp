@@ -65,6 +65,7 @@
   </head>
   
   <body onload="commit();IFrameResize();" onresize="IFrameResize();">
+  	<h1>考核统计</h1>
   	<div id="toolbar"></div>
 	<select name="sellevel" onchange="commit();">
 		<option value="0">全部</option>

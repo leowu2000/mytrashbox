@@ -258,7 +258,6 @@ Ext.onReady(function(){
     		<td>领用单位</td>
     		<td>领用人</td>
     		<td>领用时间</td>
-    		<!-- <td>历史情况</td> -->
     		<td>上次年检时间</td>
     		<td>下次年检时间</td>
     	</tr>
@@ -306,7 +305,6 @@ Ext.onReady(function(){
 			<td>&nbsp;<%=departname %></td>
 			<td>&nbsp;<%=empname %></td>
 			<td>&nbsp;<%=mapAssets.get("LENDDATE")==null?"":mapAssets.get("LENDDATE") %></td>
-			<!-- <td><a href="modules/assets/history.jsp">查看</a></td> -->
 			<td>&nbsp;<%=checkdate %></td>
 <%
 		if(isRemind){

@@ -47,6 +47,7 @@ Ext.onReady(function(){
   </head>
   
   <body >
+  	<h1>固定资产领用信息</h1>
   	<div id="toolbar"></div>
 	<form id="listForm" name="listForm" action="" method="post">
 <%=pageList.getPageInfo().getHtml("assets.do?action=sellend&empcode=" + empcode) %>

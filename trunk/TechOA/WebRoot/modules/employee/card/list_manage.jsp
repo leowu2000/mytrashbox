@@ -212,6 +212,13 @@ function havaCardno(){
   </head>
   
   <body>
+<%
+if("search".equals(method)){
+%> 
+	<h1>一卡通信息</h1>
+<%
+}
+%> 
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
 <%=pageList.getPageInfo().getHtml("card.do?action=list_manage&seldepart="+seldepart+"&empname="+emname) %>

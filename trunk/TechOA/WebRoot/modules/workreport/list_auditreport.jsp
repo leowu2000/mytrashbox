@@ -75,6 +75,7 @@ Ext.onReady(function(){
 </script>
 	</head>
 	<body>
+	<h1>审核工作报告</h1>
 	<div id="toolbar"></div>
 		<div id="tabs1">
 			<div id="main" class="tab-content">
