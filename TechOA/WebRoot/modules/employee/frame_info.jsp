@@ -71,6 +71,7 @@
   </head>
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
+  	<h1>用户管理</h1>
   	<div id="toolbar"></div>
   	<span id="departspan" name="departspan"></span>
     <iframe name="list_info" width="100%" frameborder="0" height="500"></iframe>

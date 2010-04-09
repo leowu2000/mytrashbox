@@ -122,6 +122,7 @@
   </head>
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
+  	<h1>培训统计</h1>
   	<div id="toolbar"></div>
   	<select name="type" id="type" onchange="changeType(this.value);">
   		<option value="1">人员</option>

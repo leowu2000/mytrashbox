@@ -148,6 +148,17 @@ Ext.onReady(function(){
   </head>
   
   <body>
+<%
+if("search".equals(method)){
+%> 
+	<h1>人事信息</h1>
+<%
+}else {
+%>
+	<h1>人员基本信息管理</h1>
+<%
+}
+%> 
   	<div id="toolbar1"></div>  
 	<form id="listForm" name="listForm" action="" method="post">
 	<br><br>

@@ -41,6 +41,7 @@ Ext.onReady(function(){
   </head>
   
   <body>
+  <h1>物资资产领用信息</h1>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
 <%=pageList.getPageInfo().getHtml("goods.do?action=sellend&empcode=" + empcode) %>

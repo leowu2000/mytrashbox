@@ -44,6 +44,7 @@
   </head>
   
   <body onload="commit();IFrameResize();" onresize="IFrameResize();">
+  	<h1>工时统计汇总</h1>
     <div id="toolbar"></div>
     <input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" onchange="commit();" style="width: 50">
     <iframe name="list_gstjhz" width="100%" frameborder="0" height="500"></iframe>

@@ -80,6 +80,7 @@
   </head>
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
+  	<h1>人员信息综合查询</h1>
   	<div id="toolbar"></div>
 	<span id="departspan" name="departspan"></span>
 	<input type="text" name="emname" style="width:60;">

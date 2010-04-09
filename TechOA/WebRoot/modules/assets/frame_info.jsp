@@ -104,6 +104,17 @@
   </head>
   
   <body onload="init();commit();IFrameResize();" onresize="IFrameResize();">
+<%
+if("1".equals(manage)){
+%>    
+	<h1>固定资产管理</h1>
+<%
+}else {
+%>
+	<h1>固定资产查询</h1>
+<%
+}
+%>
   	<div id="toolbar"></div>
   	<select name="selstatus" onchange="changeStatus();">
   		<option value="0">全部</option>

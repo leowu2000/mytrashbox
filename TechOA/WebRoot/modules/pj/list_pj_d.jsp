@@ -14,7 +14,7 @@ String pjcode = request.getAttribute("pjcode").toString();
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<title>工作令管理</title>
+		<title>分系统管理</title>
 		<style type="text/css">
 		<!--
 		input{
@@ -156,6 +156,7 @@ Ext.onReady(function(){
 </script>
 	</head>
 	<body>
+	<h1>分系统管理</h1>
 	<div id="toolbar"></div>
 		<div id="tabs1">
 			<div id="main" class="tab-content">

@@ -87,6 +87,7 @@
   </head>
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
+  	<h1>班车刷卡信息</h1>
   	<div id="toolbar"></div>
 	<span id="departspan" name="departspan"></span>
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="datepick" onchange="commit();" style="width: 70">

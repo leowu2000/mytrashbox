@@ -14,7 +14,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>一卡通管理</title>
+    <title>节假日管理</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -132,6 +132,7 @@ function validate(){
   </head>
   
   <body>
+  <h1>节假日管理</h1>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
 <%=pageList.getPageInfo().getHtml("holiday.do?action=list&depart=" + depart + "&datepick=" + datepick) %>

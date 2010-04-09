@@ -48,7 +48,6 @@ AssetsDAO assetsDAO = (AssetsDAO)ctx.getBean("assetsDAO");
     		<td>领用单位</td>
     		<td>领用人</td>
     		<td>领用时间</td>
-    		<td>历史情况</td>
     	</tr>
 <%
     for(int i=0;i<listAssets.size();i++){
@@ -85,7 +84,6 @@ AssetsDAO assetsDAO = (AssetsDAO)ctx.getBean("assetsDAO");
 			<td>&nbsp;<%=departname %></td>
 			<td>&nbsp;<%=empname %></td>
 			<td>&nbsp;<%=mapAssets.get("LENDDATE")==null?"":mapAssets.get("LENDDATE") %></td>
-			<td><a href="modules/assets/history.jsp">查看</a></td>
 		</tr>
 <%  } %>
     </table>

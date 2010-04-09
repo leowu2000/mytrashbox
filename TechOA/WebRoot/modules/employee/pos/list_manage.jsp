@@ -172,6 +172,13 @@ Ext.onReady(function(){
   </head>
   
   <body>
+<%
+if("search".equals(method)){
+%> 
+	<h1>班车刷卡信息</h1>
+<%
+}
+%> 
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
 <%=pageList.getPageInfo().getHtml("pos.do?action=list_manage&seldepart="+seldepart+"&empname="+emname+"&datepick="+datepick) %>
