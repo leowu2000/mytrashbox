@@ -1317,21 +1317,21 @@ public class ExportView extends JFrame {
         int driveClassIndex = cbDriver.getSelectedIndex();
 
         if (driveClassIndex == 1) {//sqlserver
-            txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
+            txtPort.setEnabled(true);txtIP.setEnabled(true);//exportType.setEnabled(true);
             txtPort.setText("1433");
             charBox.setSelected(false);
             charBox.setEnabled(false);
             jLabel11.setText(" 数据库名称：");
         }
         if (driveClassIndex == 2) {//sysbase
-            txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
+            txtPort.setEnabled(true);txtIP.setEnabled(true);//exportType.setEnabled(true);
             charBox.setEnabled(true);
             charBox.setSelected(true);
             txtPort.setText("5000");
             jLabel11.setText(" 数据库名称：");
         }
         if (driveClassIndex == 3) {//oracle
-            txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
+            txtPort.setEnabled(true);txtIP.setEnabled(true);//exportType.setEnabled(true);
             charBox.setSelected(false);
             charBox.setEnabled(false);
             txtPort.setText("1521");
@@ -1342,7 +1342,7 @@ public class ExportView extends JFrame {
             charBox.setSelected(false);
             charBox.setEnabled(false);
             exportType.setSelectedIndex(0);
-            exportType.setEnabled(false);
+            //exportType.setEnabled(false);
             txtPort.setEnabled(false);
             txtIP.setEnabled(false);
             jLabel11.setText(" 数据源名称：");
@@ -1403,8 +1403,7 @@ public class ExportView extends JFrame {
                             jComboBox1.setEnabled(true);
                         }
                         try {
-                            boolean flg=false;
-                                flg = FileAccess.deleteDirectory(txtDataDir.getText());
+                            boolean flg = FileAccess.deleteDirectory(txtDataDir.getText());
                             if (flg) {
                                 dbTool = new DBTool(DiverClass, JdbcUrl, txtUser.getText(),
                                         txtPass.getText(), txtDataDir.getText());
@@ -1501,17 +1500,17 @@ public class ExportView extends JFrame {
                                 listStsc.setModel(listParamModel_source);
                                 SelectedStsc.setModel(selectedSnameModel);
                             } else {
-
-                                if(dbTool!=null){
-                                    dbTool.shutdown();
-                                }
+//                                if(dbTool!=null){
+//                                    dbTool.shutdown();
+//                                }
                                 tbMainSelect.remove(SelectTable);
                                 tbMainSelect.add("参数设置", ParametSet);
+                                JOptionPane.showMessageDialog(null, "导出目录删除失败，请关闭所有打开的导出目录下的文件重试！", "错误", 0);
                             }
 
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            JOptionPane.showMessageDialog(null, "数据库连接失败，请确认参数设置！", "错误", 0);
+                            JOptionPane.showMessageDialog(null, "读取配置文件或者测站信息表失败，请确认参数设置！", "错误", 0);
                             dbTool.shutdown();
                             tbMainSelect.remove(SelectTable);
                             tbMainSelect.add("参数设置", ParametSet);
@@ -2218,8 +2217,13 @@ public class ExportView extends JFrame {
                             JdbcUrl = "jdbc:jtds:sqlserver://" + txtIP.getText() + ":" + serverPort + "/" + DataName.getText();
                         }
                         if (driveClassIndex == 2) {//sysbase
-                            DiverClass = "com.sybase.jdbc3.jdbc.SybDriver";
-                            JdbcUrl = "jdbc:sybase:Tds:" + txtIP.getText() + ":" + serverPort + "/" + DataName.getText();
+                            if(charBox.isSelected()){
+                                DiverClass = "com.sybase.jdbc3.jdbc.SybDriver";
+                                JdbcUrl = "jdbc:sybase:Tds:" + txtIP.getText() + ":" + serverPort + "/" + DataName.getText()+"?charset=cp850";
+                            }else{
+                                 DiverClass = "com.sybase.jdbc3.jdbc.SybDriver";
+                                 JdbcUrl = "jdbc:sybase:Tds:" + txtIP.getText() + ":" + serverPort + "/" + DataName.getText();
+                            }
                         }
                         if (driveClassIndex == 3) {//sysbase
                             DiverClass = "oracle.jdbc.driver.OracleDriver";
@@ -2234,6 +2238,14 @@ public class ExportView extends JFrame {
                 try{
                     dbTool = new DBTool(DiverClass, JdbcUrl, txtUser.getText(),
                                             txtPass.getText(), txtDataDir.getText());
+                    JdbcTemplate jt_Target = dbTool.getJt1();
+                    String checkSQL = "";
+                    if (Version.getSelectedIndex() == 1) {//符合4.0的标准
+                        checkSQL = "SELECT COUNT(*) FROM HY_STSC_A";
+                    } else {
+                        checkSQL = "SELECT COUNT(*) FROM STHD";
+                    }
+                    int checkCount = jt_Target.queryForInt(checkSQL);
                     dbTool.shutdown();
                     JOptionPane.showMessageDialog(null, "连接成功!", "提示",JOptionPane.INFORMATION_MESSAGE);
 
