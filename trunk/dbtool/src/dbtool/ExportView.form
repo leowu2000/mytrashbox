@@ -152,8 +152,8 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="txtPass" pref="642" max="32767" attributes="2"/>
                                           <Group type="102" alignment="1" attributes="0">
-                                              <Component id="txtDataDir" pref="282" max="32767" attributes="1"/>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="txtDataDir" min="-2" pref="271" max="-2" attributes="1"/>
+                                              <EmptySpace pref="29" max="32767" attributes="0"/>
                                               <Component id="jLabel14" min="-2" pref="61" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="exportType" min="-2" pref="195" max="-2" attributes="1"/>
@@ -365,7 +365,7 @@
             <Component class="javax.swing.JComboBox" name="exportType">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new javax.swing.DefaultComboBoxModel(new String[] {&#xa;&quot;&#x53ea;&#x5bfc;&#x51fa;&#x6587;&#x672c;&#x6587;&#x4ef6;&quot;,&quot;&#x53ea;&#x5bfc;&#x51fa;&#x6570;&#x636e;&#x5e93;&#x6587;&#x4ef6;&quot;,&quot;&#x540c;&#x65f6;&#x5bfc;&#x51fa;&#x6587;&#x672c;&#x6587;&#x4ef6;&#x548c;&#x6570;&#x636e;&#x5e93;&#x6587;&#x4ef6;&quot;&#xa;})" type="code"/>
+                  <Connection code="new javax.swing.DefaultComboBoxModel(new String[] {&#xa;    &quot;&#x53ea;&#x5bfc;&#x51fa;&#x6587;&#x672c;&#x6587;&#x4ef6;&quot;,&quot;&#x53ea;&#x5bfc;&#x51fa;&#x6570;&#x636e;&#x5e93;&#x6587;&#x4ef6;&quot;,&quot;&#x540c;&#x65f6;&#x5bfc;&#x51fa;&#x6587;&#x672c;&#x6587;&#x4ef6;&#x548c;&#x6570;&#x636e;&#x5e93;&#x6587;&#x4ef6;&quot;,&quot;&#x53ea;&#x751f;&#x6210;&#x7d22;&#x5f15;&#x548c;&#x5bfc;&#x51fa;&#x62a5;&#x544a;&quot;&#xa;})" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="exportType" noResource="true"/>
               </Properties>
@@ -1040,22 +1040,25 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane5" alignment="0" pref="781" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="MessageLabel" min="-2" pref="305" max="-2" attributes="0"/>
+                              <Component id="jScrollPane5" pref="781" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="MessageLabel" min="-2" pref="249" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="MessageLabel1" min="-2" pref="77" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="MessageLabel2" min="-2" pref="84" max="-2" attributes="0"/>
-                              <EmptySpace pref="84" max="32767" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="MessageLabel2" pref="69" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="125" max="-2" attributes="0"/>
                               <Component id="btnExportPerStep" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnExport" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="exitBtn" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1071,9 +1074,9 @@
                               <Component id="btnExport" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="exitBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="MessageLabel2" min="-2" pref="23" max="-2" attributes="0"/>
-                          <Component id="MessageLabel1" min="-2" pref="23" max="-2" attributes="0"/>
                           <Component id="MessageLabel" min="-2" pref="23" max="-2" attributes="0"/>
+                          <Component id="MessageLabel1" min="-2" pref="23" max="-2" attributes="0"/>
+                          <Component id="MessageLabel2" min="-2" pref="23" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>

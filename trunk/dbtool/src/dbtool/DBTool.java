@@ -38,6 +38,7 @@ public class DBTool {
 
     Connection cnSource, cnTarget;
     JdbcTemplate jt1, jt2;
+
     String saveDirs="";
     DefaultListModel expSuccessModel = new DefaultListModel();
     String errorTab = "";
@@ -392,7 +393,7 @@ public class DBTool {
                 tables[i] = HY_DBTP_JDao.getTabid(expModel.get(i).toString(), dbTool);
             }
         }
-        if (expType != 0) {
+        if (expType != 0 && expType!=3) {
             ((DefaultListModel) (logList.getModel())).addElement("清空目标数据库完成");
         }
         /**
@@ -403,29 +404,39 @@ public class DBTool {
         // 拷贝数据
         int i = 0;
         for (String table : tables) {
-            for(int timer=0;timer<3000;timer++){boolean temflg = true;}
-            i++;
-//            Long sdate = System.currentTimeMillis();
-            boolean flg = false;
-            if (expType == 0) {
-                ((DefaultListModel) (logList.getModel())).addElement("正在分析表：【" + getTabCnnm(jt2, table) + "】_" + table + "的数据 ......");
-                flg = createExcelTable(table, rpareStsc, saveDir, logList, expType,isTurnChar);
-            } else {
-                flg = copyTable(table, stscStr, saveDir, logList, expType, version,isTurnChar,dbtype);
-            }
-            if (flg) {
-                outputInfoExcel(table, logList, selectedSnameModel, stscStr);
-            }
-            //生成数据索引
-            insertDataIndexTable(table, stscStr, stnameStr, logList, version, expType, saveDir,isTurnChar,dbtype);
-            if (i == tables.length) {
-                ((DefaultListModel) (logList.getModel())).addElement("正在生成导出报告 ......");
-            }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(DBTool.class.getName()).log(Level.SEVERE, null, ex);
-                outputError("", "===process=Thread=",ex.getMessage());
+            if(expType==3){
+                if(i==0)
+                    ((DefaultListModel) (logList.getModel())).addElement("正在生成数据索引 ......");
+                insertDataIndexTable(table, stscStr, stnameStr, logList, version, expType, saveDir,isTurnChar,dbtype);
+                i++;
+                 if (i == tables.length)
+                     ((DefaultListModel) (logList.getModel())).addElement("正在生成导出报告 ......");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DBTool.class.getName()).log(Level.SEVERE, null, ex);
+                    outputError("", "===process=Thread=",ex.getMessage());
+                }
+            }else{
+                    i++;
+                    boolean flg = false;
+                    if (expType == 0) {
+                        ((DefaultListModel) (logList.getModel())).addElement("正在分析表：【" + getTabCnnm(jt2, table) + "】_" + table + "的数据 ......");
+                        flg = createExcelTable(table, rpareStsc, saveDir, logList, expType,isTurnChar);
+                    } else 
+                        flg = copyTable(table, stscStr, saveDir, logList, expType, version,isTurnChar,dbtype);                    
+                    if (flg) 
+                        outputInfoExcel(table, logList, selectedSnameModel, stscStr);
+                    //生成数据索引
+                    insertDataIndexTable(table, stscStr, stnameStr, logList, version, expType, saveDir,isTurnChar,dbtype);
+                    if (i == tables.length) 
+                        ((DefaultListModel) (logList.getModel())).addElement("正在生成导出报告 ......");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DBTool.class.getName()).log(Level.SEVERE, null, ex);
+                    outputError("", "===process=Thread=",ex.getMessage());
+                }
             }
         }
         //保存导出报告
@@ -456,7 +467,8 @@ public class DBTool {
      public void insertDataIndexTable(String table, String stcdStr,
             String stnameStr, JList logList, int version, int expType, String saveDir,boolean isTurnChar,int dbtype) {
         String indexFiled = getIndexFiled(table);
-        
+        if(expType==3)
+            ((DefaultListModel) (logList.getModel())).addElement("正在分析表["+getTabCnnm(jt2,table)+"]_"+table+"请等待......");
         if (!indexFiled.trim().equals("")) {//首先保证这张表可以生成数据索引
             outputError("\r\n"+table,"===准备在字段-"+indexFiled+"-上生成索引","");
             try {
@@ -500,7 +512,7 @@ public class DBTool {
                             beforList.add(order.getTem(map.get("STCD").toString(), map.get("YEARS").toString(), map.get("TOTAL").toString()));
                         }
                         List afterList = ToOrder.toOrder(beforList);
-                        if (expType == 0 || expType == 2) {
+                        if (expType == 0 || expType == 2 || expType==3) {
                             outPutIndexToFile(table, saveDir, afterList, version,isTurnChar);
                         }
                         if (expType == 1 || expType == 2) {
@@ -515,9 +527,9 @@ public class DBTool {
                         }
                         dataIndexMap.put(table, "成功");
                     }catch (Exception ex) {
-                        dataIndexMap.put(table, "错误");
+//                        dataIndexMap.put(table, "错误");
                         ex.printStackTrace();
-                        outputError("\r\n"+table, "===insertDataIndexTable_new=",ex.getMessage());
+                        outputError("\r\n"+table, "===insertDataIndexTable=",ex.getMessage());
                     }
                     /**
                      * 将测站编码重新组织,防止SQL 的parameters过多
@@ -606,18 +618,39 @@ public class DBTool {
                              dataDescMap.put(table,"");
                         }
                     }
+                     if(expType==3)
+                       ((DefaultListModel) (logList.getModel())).addElement("         √ 表[ "+getTabCnnm(jt2,table)+" ]_ "+table+" 生成索引成功");
                 }else{
                     dataIndexMap.put(table, "");
+                    if(expType==3)
+                       ((DefaultListModel) (logList.getModel())).addElement("         表[ "+getTabCnnm(jt2,table)+" ]_ "+table+" 数据为空");
                 }
             } catch (Exception ex) {
                 dataIndexMap.put(table, "错误");
+                if(expType==3){
+                     ((DefaultListModel) (logList.getModel())).addElement("         表[ "+getTabCnnm(jt2,table)+" ]_"+table+"在字段[ "+indexFiled+" ]上生成索引失败...");
+                     expSuccessModel.removeElement(getTabCnnm(jt2, table));
+                    if ("".trim().equals(errorTab)) {
+                        errorTab = getTabCnnm(jt2, table);
+                    } else {
+                        errorTab += "," + getTabCnnm(jt2, table);
+                    }
+                }
                 ex.printStackTrace();
                 outputError("\r\n"+table, "===insertDataIndexTable_new=",ex.getMessage());
             }
         }else{
+            if(expType==3){
+                ((DefaultListModel) (logList.getModel())).addElement("         ※ 表["+getTabCnnm(jt2,table)+"]_"+table+",没有定义索引信息 ※");
+                 expSuccessModel.removeElement(getTabCnnm(jt2, table));
+                    if ("".trim().equals(errorTab)) {
+                        errorTab = getTabCnnm(jt2, table);
+                    } else {
+                        errorTab += "," + getTabCnnm(jt2, table);
+                    }
+            }
             outputError("\r\n"+table,"===没有索引字段定义，略过索引","");
         }
-        
     }
 
     public Connection getCnSource() {
