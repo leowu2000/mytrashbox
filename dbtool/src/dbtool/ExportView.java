@@ -363,7 +363,7 @@ public class ExportView extends JFrame {
         });
 
         exportType.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
-            "只导出文本文件","只导出数据库文件","同时导出文本文件和数据库文件"
+            "只导出文本文件","只导出数据库文件","同时导出文本文件和数据库文件","只生成索引和导出报告"
         }));
         exportType.setName("exportType"); // NOI18N
         exportType.addActionListener(new java.awt.event.ActionListener() {
@@ -423,7 +423,7 @@ public class ExportView extends JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(28, 28, 28)
-                                .addComponent(txtIP, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE))
+                                .addComponent(txtIP, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -432,7 +432,7 @@ public class ExportView extends JFrame {
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                                 .addComponent(jLabel17)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(Version, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -446,22 +446,22 @@ public class ExportView extends JFrame {
                                     .addComponent(jLabel11))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(DataName, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
-                                    .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)))))
+                                    .addComponent(DataName, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+                                    .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)
                             .addGroup(ParametSetLayout.createSequentialGroup()
                                 .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
+                                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ParametSetLayout.createSequentialGroup()
-                                        .addComponent(txtDataDir, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-                                        .addGap(18, 18, 18)
+                                        .addComponent(txtDataDir, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(exportType, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -978,20 +978,22 @@ public class ExportView extends JFrame {
             .addGroup(ExpDataLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(ExpDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE)
                     .addGroup(ExpDataLayout.createSequentialGroup()
-                        .addComponent(MessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(ExpDataLayout.createSequentialGroup()
+                        .addComponent(MessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(MessageLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(MessageLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(MessageLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+                        .addGap(125, 125, 125)
                         .addComponent(btnExportPerStep)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnExport)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(exitBtn)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(exitBtn)
+                        .addGap(28, 28, 28))))
         );
         ExpDataLayout.setVerticalGroup(
             ExpDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1004,9 +1006,9 @@ public class ExportView extends JFrame {
                         .addComponent(btnExportPerStep)
                         .addComponent(btnExport)
                         .addComponent(exitBtn))
-                    .addComponent(MessageLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MessageLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(MessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(MessageLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -1315,21 +1317,21 @@ public class ExportView extends JFrame {
         int driveClassIndex = cbDriver.getSelectedIndex();
 
         if (driveClassIndex == 1) {//sqlserver
-            txtPort.setEnabled(true);txtIP.setEnabled(true);//exportType.setEnabled(true);
+            txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
             txtPort.setText("1433");
             charBox.setSelected(false);
             charBox.setEnabled(false);
             jLabel11.setText(" 数据库名称：");
         }
         if (driveClassIndex == 2) {//sysbase
-            txtPort.setEnabled(true);txtIP.setEnabled(true);//exportType.setEnabled(true);
+            txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
             charBox.setEnabled(true);
             charBox.setSelected(true);
             txtPort.setText("5000");
             jLabel11.setText(" 数据库名称：");
         }
         if (driveClassIndex == 3) {//oracle
-            txtPort.setEnabled(true);txtIP.setEnabled(true);//exportType.setEnabled(true);
+            txtPort.setEnabled(true);txtIP.setEnabled(true);exportType.setEnabled(true);
             charBox.setSelected(false);
             charBox.setEnabled(false);
             txtPort.setText("1521");
@@ -1402,7 +1404,7 @@ public class ExportView extends JFrame {
                         }
                         try {
                             boolean flg=false;
-                                   flg = FileAccess.deleteDirectory(txtDataDir.getText());
+                                flg = FileAccess.deleteDirectory(txtDataDir.getText());
                             if (flg) {
                                 dbTool = new DBTool(DiverClass, JdbcUrl, txtUser.getText(),
                                         txtPass.getText(), txtDataDir.getText());
@@ -1563,8 +1565,9 @@ public class ExportView extends JFrame {
             public void run() {
                 DefaultListModel allTablesmodel = (DefaultListModel) ListTables.getModel();
                 dbTool.process(logList, allTablesmodel, selectedTablesModel, selectedStscModel, selectedYearsModel,
-                        selectedSnameModel, dbTool, txtDataDir.getText(), expType, Version.getSelectedIndex(),charBox.isSelected(),cbDriver.getSelectedIndex());
-                MessageLabel.setText("系统消息：导出成功结束,导出数据和报告已成功保存至[");
+                        selectedSnameModel, dbTool, txtDataDir.getText(), expType,
+                        Version.getSelectedIndex(),charBox.isSelected(),cbDriver.getSelectedIndex());
+                MessageLabel.setText("系统消息：导出成功结束,可查看目录[");
                 MessageLabel1.setText("<html><a href='file:///" + txtDataDir.getText() + "'>" + txtDataDir.getText() + "\\excel</a></html>");
                 MessageLabel2.setText("]请查看！");
                 MessageLabel1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

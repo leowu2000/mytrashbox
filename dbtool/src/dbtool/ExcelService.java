@@ -996,19 +996,19 @@ public class ExcelService {
                                     }
                                     if(stsc.length<cuntNumbert){
                                         for(int cc=0;cc<cuntNumbert-stsc.length;cc++){
-                                            strContent_table.append("<td bgcolor='#FFFFFF'>"+kk+"</td>");
-                                            strContent_table.append("<td bgcolor='#FFFFFF'>"+kk+"</td>");
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
                                         }
                                     }
                                 }else{
                                     for(int k = 0; k<stsc.length;k++){
-                                        strContent_table.append("<td bgcolor='#FFFFFF'>"+kk+"</td>");
-                                        strContent_table.append("<td bgcolor='#FFFFFF'>"+kk+"</td>");
+                                        strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
+                                        strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
                                     }
                                     if(stsc.length<cuntNumbert){
                                         for(int cc=0;cc<cuntNumbert-stsc.length;cc++){
-                                            strContent_table.append("<td bgcolor='#FFFFFF'>"+kk+"</td>");
-                                            strContent_table.append("<td bgcolor='#FFFFFF'>"+kk+"</td>");
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
+                                            strContent_table.append("<td bgcolor='#FFFFFF'>&nbsp;</td>");
                                         }
                                     }
                                 }
