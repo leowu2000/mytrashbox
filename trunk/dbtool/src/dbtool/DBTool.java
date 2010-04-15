@@ -584,7 +584,7 @@ public class DBTool {
                                 if(dbtype==2){
                                     resultDesc= "SELECT SUM(COUNT("
                                             + "DISTINCT "+indexFiled.toUpperCase()+")) "
-                                            +"AS RESU FROM "+table.toUpperCase()+" "+stscSQL+" GROUP BY STCD";
+                                            +"AS RESU FROM "+table.toUpperCase()+" "+stscForSQL+" GROUP BY STCD";
                                     stscSQL = "SELECT STCD,MIN("+indexFiled.toUpperCase()+") AS MINY, MAX("+indexFiled.toUpperCase()+") AS MAXY,"
                                                 +"COUNT(*) AS ALLSUM FROM "+table.toUpperCase()+" "+stscForSQL
                                                 + " GROUP BY STCD";
