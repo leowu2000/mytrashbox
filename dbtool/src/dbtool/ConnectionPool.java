@@ -70,22 +70,22 @@ public class ConnectionPool {
 //            Connection conn = DriverManager
 //                            .getConnection(url, "nyb", "nyb");
 //            Class.forName("net.sourceforge.jtds.jdbc.Driver"); // ORACLE
-            String url = "jdbc:sybase:Tds:192.168.2.253:5000/12313213?charset=cp850";
+            String url = "jdbc:sybase:Tds:192.168.2.250:5000/HYDB?charset=cp850";
             Connection conn = DriverManager
                             .getConnection(url, "sa", "");
             if(conn!=null)
                 System.out.println("连接成功");
-//            Statement stmt = conn.createStatement();
-//            String sSQL = " USE HYDB";
-//            stmt.execute(sSQL);
-//            sSQL="select * from STHD";
-//            ResultSet rs = stmt.executeQuery(sSQL);
-//            while (rs.next()) {
-//                System.out.println(rs.getString("STNM")+"===="+new String(rs.getString("STNM").getBytes("ISO-8859-1"),"GBK"));
-//            }
-//            while (rs.next()) {
-//                    System.out.println("\"INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('"+rs.getString("tablename")+"','"+rs.getString("fielde")+"','"+rs.getString("fieldc")+"','"+rs.getString("fielde")+"',"+rs.getString("format")+")\",");
-//            }
+            Statement stmt = conn.createStatement();
+            String sSQL = " USE HYDB";
+            stmt.execute(sSQL);
+            sSQL="select * from STHD";
+            ResultSet rs = stmt.executeQuery(sSQL);
+            while (rs.next()) {
+                System.out.println(rs.getString("STNM")+"===="+new String(rs.getString("STNM").getBytes("ISO-8859-1"),"GBK"));
+            }
+            while (rs.next()) {
+                    System.out.println("\"INSERT INTO HY_DBFP_J(TBID,FLID,FLDCNNM,FLDENNM,FLDTPL)VALUES('"+rs.getString("tablename")+"','"+rs.getString("fielde")+"','"+rs.getString("fieldc")+"','"+rs.getString("fielde")+"',"+rs.getString("format")+")\",");
+            }
 
 //            Connection con;
 //             Statement statement;
