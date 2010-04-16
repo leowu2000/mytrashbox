@@ -3,9 +3,11 @@
 <%@ page import="com.basesoft.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%
-	//PageList pageList = (PageList)request.getAttribute("pageList");
-	List listCar = (List)request.getAttribute("listCar");//pagelist.getList();
-	int pagenum = 1;//pageList.getPageInfo().getCurPage();
+	PageList pageList = (PageList)request.getAttribute("pageList");
+	List listOrder = pageList.getList();
+	int pagenum = pageList.getPageInfo().getCurPage();
+	
+	List listCar = (List)request.getAttribute("listCar");
 	
 	String method = request.getAttribute("method")==null?"":request.getAttribute("method").toString();
 	
@@ -15,7 +17,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>班车管理</title>
+    <title>班车预约</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -74,9 +76,11 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add&page=<%=pagenum %>';
+    	action = url+'?action=order_add';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
+       	var carcode = document.getElementById('carcode').value;
+       	changeCar(carcode)
         win.show(btn.dom);
     }
     
@@ -87,7 +91,7 @@ Ext.onReady(function(){
 			return false;
 		}
 		Ext.Ajax.request({
-			url: url+'?action=query&id='+selValue,
+			url: url+'?action=order_query&id='+selValue,
 			method: 'GET',
 			success: function(transport) {
 				c = 'update';
@@ -100,7 +104,7 @@ Ext.onReady(function(){
 				Ext.get('sendlocate').set({'value':data.item.sendlocate});
 				Ext.get('sendtime').set({'value':data.item.sendtime});
 				
-		    	action = url+'?action=update&page=<%=pagenum %>';
+		    	action = url+'?action=order_update&page=<%=pagenum %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -116,7 +120,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>';       
+	    		Ext.getDom('listForm').action=url+'?action=order_delete&page=<%=pagenum %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
@@ -134,13 +138,26 @@ Ext.onReady(function(){
     }
 });
 
+function changeCar(carcode){
+	if(window.XMLHttpRequest){ //Mozilla 
+      var xmlHttpReq=new XMLHttpRequest();
+    }else if(window.ActiveXObject){
+ 	  var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    }
+    xmlHttpReq.open("GET", "/car.do?action=AJAX_CAR&carcode=" + carcode, false);
+    xmlHttpReq.send();
+    if(xmlHttpReq.responseText!=''){
+        document.getElementById('waytd').innerHTML = xmlHttpReq.responseText;
+    }
+}
+
 //-->
 </script>
   </head>
   
   <body>
+  <h1>班车预约</h1>
   <div id="toolbar"></div>
-  <h1>班车管理</h1>
 <form id="listForm" name="listForm" action="" method="post">
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
@@ -152,30 +169,34 @@ Ext.onReady(function(){
     	<%
     		}
     	%>
+    		<td>预约时间</td>
     		<td>班车编号</td>
     		<td>班车车牌号</td>
     		<td>班车路线</td>
-    		<td>司机电话</td>
-    		<td>发车地点</td>
-    		<td>发车时间</td>
 <%
-	for(int i=0;i<listCar.size();i++){
-		Map mapCar = (Map)listCar.get(i);
+	for(int i=0;i<listOrder.size();i++){
+		Map mapOrder = (Map)listOrder.get(i);
 %>
 		<tr>
 		<%
     		if(!"search".equals(method)){
     	%>
-			<td><input type="checkbox" name="check" value="<%=mapCar.get("CARDNO") %>" class="ainput"></td>
+			<td>
+			<%
+				if(1==1){
+			%>
+				<input type="checkbox" name="check" value="<%=mapOrder.get("CARDNO") %>" class="ainput">
+			<%
+				}
+			%>
+			</td>
 		<%
     		}
 		%>
-			<td><%=mapCar.get("CODE")==null?"":mapCar.get("CODE") %></td>
-			<td><%=mapCar.get("CARNO")==null?"":mapCar.get("CARNO") %></td>
-			<td><%=mapCar.get("WAY")==null?"":mapCar.get("WAY") %></td>
-			<td><%=mapCar.get("PHONE")==null?"":mapCar.get("PHONE") %></td>
-			<td><%=mapCar.get("SENDLOCATE")==null?"":mapCar.get("SENDLOCATE") %></td>
-			<td><%=mapCar.get("SENDTIME")==null?"":mapCar.get("SENDTIME") %></td>
+			<td><%=mapOrder.get("ORDERTIME")==null?"":mapOrder.get("ORDERTIME") %></td>
+			<td><%=mapOrder.get("CARCODE")==null?"":mapOrder.get("CARCODE") %></td>
+			<td><%=mapOrder.get("CARNO")==null?"":mapOrder.get("CARNO") %></td>
+			<td><%=mapOrder.get("WAY")==null?"":mapOrder.get("WAY") %></td>
 		</tr>
 <%
 	} 
@@ -189,29 +210,26 @@ Ext.onReady(function(){
 	        	<input type="hidden" name="id" >
                 <table>
 				  <tr>
-				    <td>班车编号</td>
-				    <td><input type="text" name="code" style="width:200"></td>
+				    <td>预约时间</td>
+				    <td><input type="text" name="ordertime" style="width:200" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss") %>'})" value="<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss") %>"></td>
 				  </tr>
 				  <tr>
-				    <td>车牌号</td>
-				    <td><input type="text" name="carno" style="width:200"></td>
+				    <td>车次</td>
+				    <td><select name="carcode" onchange="changeCar(this.value);">
+<%
+						for(int i=0;i<listCar.size();i++){
+							Map mapCar = (Map)listCar.get(i);
+%>				
+							<option value="<%=mapCar.get("CODE") %>"><%=mapCar.get("NAME") %></option>
+<%	 
+						}
+%>					
+					</select></td>
 				  </tr>	
 				  <tr>
 				    <td>路线</td>
-				    <td><textarea name="way" rows="3" style="width:200"></textarea></td>
+				    <td name="waytd" id="waytd"></td>
 				  </tr>	
-				  <tr>
-				    <td>司机电话</td>
-				    <td><input type="text" name="phone" style="width:200"></td>
-				  </tr>
-				  <tr>
-				    <td>发车地点</td>
-				    <td><input type="text" name="sendlocate" style="width:200"></td>
-				  </tr>
-				  <tr>
-				    <td>发车时间</td>
-				    <td><input type="text" name="sendtime" style="width:200" onclick="WdatePicker({dateFmt:'HH:mm:ss'})"></td>
-				  </tr>
 				</table>
 	        </form>
     </div>

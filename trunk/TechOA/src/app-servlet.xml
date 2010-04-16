@@ -18,6 +18,7 @@
 				/cost.do=CostController
 				/menu.do=MenuController
 				/plan.do=PlanController
+				/plantype.do=PlanTypeController
 				/goods.do=GoodsController
 				/card.do=CardController
 				/finance.do=FinanceController
@@ -27,6 +28,7 @@
 				/train.do=TrainController
 				/holiday.do=HolidayController
 				/car.do=CarController
+				/infoequip.do=InfoEquipController
 			</value>
 		</property>
 	</bean>
@@ -57,6 +59,7 @@
 	<bean name="CostController" class="com.basesoft.modules.cost.CostController"></bean>
 	<bean name="MenuController" class="com.basesoft.modules.menu.MenuController"></bean>
 	<bean name="PlanController" class="com.basesoft.modules.plan.PlanController"></bean>
+	<bean name="PlanTypeController" class="com.basesoft.modules.plan.PlanTypeController"></bean>
 	<bean name="GoodsController" class="com.basesoft.modules.goods.GoodsController"></bean>
 	<bean name="CardController" class="com.basesoft.modules.employee.CardController"></bean>
 	<bean name="FinanceController" class="com.basesoft.modules.employee.FinanceController"></bean>
@@ -66,5 +69,6 @@
 	<bean name="TrainController" class="com.basesoft.modules.employee.TrainController"></bean>
 	<bean name="HolidayController" class="com.basesoft.modules.employee.HolidayController"></bean>
 	<bean name="CarController" class="com.basesoft.modules.employee.CarController"></bean>
+	<bean name="InfoEquipController" class="com.basesoft.modules.infoequip.InfoEquipController"></bean>
 </beans>
 

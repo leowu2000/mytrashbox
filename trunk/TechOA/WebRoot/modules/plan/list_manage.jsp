@@ -115,6 +115,8 @@ Ext.onReady(function(){
        	Ext.get('pjcode').set({'disabled':''});
        	Ext.get('pjcode_d').set({'disabled':''});
        	Ext.get('stagecode').set({'disabled':''});
+       	Ext.get('typecode').set({'disabled':''});
+		Ext.get('typecode2').set({'disabled':''});
        	AJAX_PJ(document.getElementById('pjcode').value);
        	comboBoxTree.setValue({id:'0',text:'请选择...'});
         win.show(btn.dom);
@@ -144,10 +146,11 @@ Ext.onReady(function(){
 				comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
 				Ext.get('assess').set({'value':data.item.assess});
 				Ext.get('remark').set({'value':data.item.remark});
-				Ext.get('level').set({'value':data.item.level});
-				Ext.get('level').set({'disabled':'disabled'});
-				Ext.get('type').set({'value':data.item.type});
-				Ext.get('type').set({'disabled':'disabled'});
+				Ext.get('typecode').set({'value':data.item.type});
+				Ext.get('typecode').set({'disabled':'disabled'});
+				changeType();
+				Ext.get('typecode2').set({'value':data.item.type2});
+				Ext.get('typecode2').set({'disabled':'disabled'});
 				Ext.get('leader_station').set({'value':data.item.leader__station});
 				Ext.get('leader_section').set({'value':data.item.leader__section});
 				Ext.get('leader_room').set({'value':data.item.leader__room});
@@ -304,10 +307,39 @@ function AJAX_PJ(pjcode){
     }
 }
 
+function changeType(){
+	var typecode = document.getElementById('typecode').value;
+
+	if(window.XMLHttpRequest){ //Mozilla 
+      var xmlHttpReq=new XMLHttpRequest();
+    }else if(window.ActiveXObject){
+ 	  var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    }
+    xmlHttpReq.open("GET", "/plan.do?action=AJAX_TYPE&typecode=" + typecode, false);
+    xmlHttpReq.send();
+    if(xmlHttpReq.responseText!=''){
+        document.getElementById('selType2td').innerHTML = xmlHttpReq.responseText;
+    }
+}
+
+function changeType2(){
+	var typecode = document.getElementById('typecode3').value;
+
+	if(window.XMLHttpRequest){ //Mozilla 
+      var xmlHttpReq=new XMLHttpRequest();
+    }else if(window.ActiveXObject){
+ 	  var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    }
+    xmlHttpReq.open("GET", "/plan.do?action=AJAX_TYPE&typecode=" + typecode, false);
+    xmlHttpReq.send();
+    if(xmlHttpReq.responseText!=''){
+        document.getElementById('selType2td2').innerHTML = xmlHttpReq.responseText;
+    }
+}
 //-->
 </script>
 	</head>
-	<body>
+	<body onload="changeType();changeType2();">
 	<div id="toolbar"></div>
 		<div id="tabs1">
 			<div id="main" class="tab-content">
@@ -316,8 +348,6 @@ function AJAX_PJ(pjcode){
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>选　择</td>
-                <td>考核级别</td>
-                <td>计划分类</td>
                 <td>产品令号</td>              
                 <td>序号</td>
                 <td>计划内容</td>
@@ -358,8 +388,6 @@ for(int i=0;i<listPlan.size();i++){
 				}
 %>                	                
                 </td>
-                <td>&nbsp;<%=mapPlan.get("LEVELNAME")==null?"":mapPlan.get("LEVELNAME") %></td>
-                <td>&nbsp;<%=mapPlan.get("TYPENAME")==null?"":mapPlan.get("TYPENAME") %></td>
                 <td>&nbsp;<%=mapPlan.get("PJNAME")==null?"":mapPlan.get("PJNAME") %></td>
                 <td>&nbsp;<%=mapPlan.get("ORDERCODE")==null?"":mapPlan.get("ORDERCODE") %></td>
                 <td>&nbsp;<%=mapPlan.get("NOTE")==null?"":mapPlan.get("NOTE") %></td>
@@ -400,21 +428,8 @@ for(int i=0;i<listPlan.size();i++){
 	        	<input type="hidden" name="id">
                 <table>
                   <tr>
-				    <td>考核级别</td>
-				    <td><select name="level" style="width:200;">
-<%
-					for(int i=0;i<listLevel.size();i++){
-						Map mapLevel = (Map)listLevel.get(i);
-%>				    	
-						<option value='<%=mapLevel.get("CODE") %>'><%=mapLevel.get("NAME") %></option>
-<%
-					}
-%>
-				    </select></td>
-				  </tr>	
-				  <tr>
 				    <td>计划类别</td>
-				    <td><select name="type" style="width:200;">
+				    <td><select name="typecode" style="width:200;" onchange="changeType();">
 <%
 					for(int i=0;i<listType.size();i++){
 						Map mapType = (Map)listType.get(i);
@@ -424,6 +439,14 @@ for(int i=0;i<listPlan.size();i++){
 					}
 %>
 				    </select></td>
+				  </tr>	
+				  <tr>
+				    <td>计划类别2</td>
+				    <td name="selType2td" id="selType2td">
+				    	<select>
+				    		<option>请选择...</option>
+				    	</select>
+				    </td>
 				  </tr>	
                   <tr>
 				    <td>工作令号</td>
@@ -477,8 +500,17 @@ for(int i=0;i<listPlan.size();i++){
 				  </tr>	
 				  <tr>
 				    <td>考核</td>
-				    <td><input type="text" name="assess" style="width:200"></td>
-				  </tr>
+				    <td><select name="assess" style="width:200;">
+<%
+					for(int i=0;i<listLevel.size();i++){
+						Map mapLevel = (Map)listLevel.get(i);
+%>				    	
+						<option value='<%=mapLevel.get("NAME") %>'><%=mapLevel.get("NAME") %></option>
+<%
+					}
+%>
+				    </select></td>
+				  </tr>	
 				  <tr>
 				    <td>备注</td>
 				    <td><input type="text" name="remark" style="width:200"></td>
@@ -506,22 +538,9 @@ for(int i=0;i<listPlan.size();i++){
 	        <form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
 	        	<input type="hidden" name="page" value="<%=pagenum %>">
                 <table>
-                  <tr>
-				    <td>考核级别</td>
-				    <td><select name="level" style="width:200;">
-<%
-					for(int i=0;i<listLevel.size();i++){
-						Map mapLevel = (Map)listLevel.get(i);
-%>				    	
-						<option value='<%=mapLevel.get("CODE") %>'><%=mapLevel.get("NAME") %></option>
-<%
-					}
-%>
-				    </select></td>
-				  </tr>	
 				  <tr>
 				    <td>计划类别</td>
-				    <td><select name="type" style="width:200;">
+				    <td><select name="typecode3" style="width:200;" onchange="changeType2();">
 <%
 					for(int i=0;i<listType.size();i++){
 						Map mapType = (Map)listType.get(i);
@@ -532,6 +551,14 @@ for(int i=0;i<listPlan.size();i++){
 %>
 				    </select></td>
 				  </tr>	
+				  <tr>
+				    <td>计划类别2</td>
+				    <td name="selType2td2" id="selType2td2">
+				    	<select>
+				    		<option>请选择...</option>
+				    	</select>
+				    </td>
+				  </tr>		
 				  <tr>
 				    <td>选择文件</td>
 				    <td><input type="file" name="file" style="width:200"></td>

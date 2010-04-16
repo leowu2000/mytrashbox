@@ -37,20 +37,68 @@
 		</relation>
 		<relation>
 			<id>5</id>
+			<name>副岗</name>
+			<column>SECJOB</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>6</id>
+			<name>职务级别</name>
+			<column>LEVEL</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>7</id>
+			<name>电子邮件</name>
+			<column>EMAIL</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>8</id>
+			<name>博客链接</name>
+			<column>BLOG</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>9</id>
+			<name>个人网页</name>
+			<column>SELFWEB</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>10</id>
 			<name>固定电话</name>
 			<column>STCPHONE</column>
 			<format></format>
 		</relation>
 		<relation>
-			<id>6</id>
+			<id>11</id>
 			<name>手机号码</name>
 			<column>MOBPHONE</column>
 			<format></format>
 		</relation>
 		<relation>
-			<id>7</id>
-			<name>家庭电话</name>
-			<column>STCPHONE2</column>
+			<id>12</id>
+			<name>家庭住址</name>
+			<column>ADDRESS</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>13</id>
+			<name>邮政编码</name>
+			<column>POST</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>14</id>
+			<name>专业</name>
+			<column>MAJOR</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>15</id>
+			<name>学历</name>
+			<column>DEGREE</column>
 			<format></format>
 		</relation>
 	</body>

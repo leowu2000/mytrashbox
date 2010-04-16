@@ -43,8 +43,8 @@ public class PlanController extends CommonController {
 		if("list_frame".equals(action)){//计划管理frame
 			mv = new ModelAndView("modules/plan/frame_manage");
 			
-			List listLevel = planDAO.getDICTByType("6");
-			List listType = planDAO.getDICTByType("7");
+			List listLevel = planDAO.getLevel();
+			List listType = planDAO.getType();
 			
 			mv.addObject("listLevel", listLevel);
 			mv.addObject("listType", listType);
@@ -55,8 +55,8 @@ public class PlanController extends CommonController {
 			PageList pageList = planDAO.findAll(f_level, f_type, f_empname, page);
 			List listPersent = planDAO.getListPersent();
 			
-			List listLevel = planDAO.getDICTByType("6");
-			List listType = planDAO.getDICTByType("7");
+			List listLevel = planDAO.getLevel();
+			List listType = planDAO.getType();
 			List listPj = planDAO.getProject();
 			List listStage = planDAO.getDICTByType("5");
 			
@@ -72,6 +72,32 @@ public class PlanController extends CommonController {
 			mv.addObject("errorMessage", errorMessage);
 			mv.addObject("listPersent", listPersent);
 			return mv;
+		}else if("AJAX_TYPE".equals(action)){//工作令号选择ajax
+			StringBuffer sb = new StringBuffer();
+			String typecode = ServletRequestUtils.getStringParameter(request, "typecode", "");
+			
+			List listType2 = planDAO.getType2(typecode);
+			
+			sb.append("<select name='typecode2' style='width:200;'>")
+			  .append("<option value='0'>请选择...</option>");
+			
+			for(int i=0;i<listType2.size();i++){
+				Map mapType2 = (Map)listType2.get(i);
+				sb.append("<option value='")
+				  .append(mapType2.get("CODE"))
+				  .append("'>")
+				  .append(mapType2.get("NAME"))
+				  .append("</option>");
+			}
+			
+			sb.append("</select>");
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=UTF-8");
+			response.getWriter().write(sb.toString());
+			response.getWriter().close();
 		}else if("AJAX_PJ".equals(action)){//工作令号选择ajax
 			StringBuffer sb = new StringBuffer();
 			String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
@@ -99,8 +125,6 @@ public class PlanController extends CommonController {
 			response.getWriter().write(sb.toString());
 			response.getWriter().close();
 		}else if("add".equals(action)){//新增计划
-			String level = ServletRequestUtils.getStringParameter(request, "level", "");
-			String type = ServletRequestUtils.getStringParameter(request, "type", "");
 			String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
 			String pjcode_d = ServletRequestUtils.getStringParameter(request, "pjcode_d", "");
 			String stagecode = ServletRequestUtils.getStringParameter(request, "stagecode", "");
@@ -114,6 +138,9 @@ public class PlanController extends CommonController {
 			String leader_station = ServletRequestUtils.getStringParameter(request, "leader_station", "");
 			String leader_section = ServletRequestUtils.getStringParameter(request, "leader_section", "");
 			String leader_room = ServletRequestUtils.getStringParameter(request, "leader_room", "");
+			
+			String typecode = ServletRequestUtils.getStringParameter(request, "typecode", "");
+			String typecode2 = ServletRequestUtils.getStringParameter(request, "typecode2", "");
 			
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			
@@ -132,7 +159,7 @@ public class PlanController extends CommonController {
 				enddate  = "'" + enddate + "'";
 			}
 			
-			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcode + "', '" + mapEmp.get("NAME") + "', '" + mapEmp.get("DEPARTCODE") + "', '" + departname + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', '" + new Date() + "', " + enddate + ", " + planedworkload + ", '" + note + "', '" + symbol + "', '" + assess + "', '" + remark + "', '" + leader_station + "', '" + leader_section + "', '" + leader_room + "', '" + plannercode + "', '" + plannername + "', " + ordercode + ", '" + level + "', '" + type + "', '1')");
+			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcode + "', '" + mapEmp.get("NAME") + "', '" + mapEmp.get("DEPARTCODE") + "', '" + departname + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', '" + new Date() + "', " + enddate + ", " + planedworkload + ", '" + note + "', '" + symbol + "', '" + assess + "', '" + remark + "', '" + leader_station + "', '" + leader_section + "', '" + leader_room + "', '" + plannercode + "', '" + plannername + "', " + ordercode + ", '" + typecode + "', '" + typecode2 + "', '1')");
 			
 			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
 		}else if("query".equals(action)){//查找
@@ -221,8 +248,8 @@ public class PlanController extends CommonController {
 		}else if("remind_frame".equals(action)){//计划提醒frame
 			mv = new ModelAndView("modules/plan/frame_remind");
 			
-			List listLevel = planDAO.getDICTByType("6");
-			List listType = planDAO.getDICTByType("7");
+			List listLevel = planDAO.getLevel();
+			List listType = planDAO.getType();
 			
 			mv.addObject("listLevel", listLevel);
 			mv.addObject("listType", listType);
