@@ -29,6 +29,7 @@
 				/holiday.do=HolidayController
 				/car.do=CarController
 				/infoequip.do=InfoEquipController
+				/customequip.do=CustomEquipController
 			</value>
 		</property>
 	</bean>
@@ -70,5 +71,6 @@
 	<bean name="HolidayController" class="com.basesoft.modules.employee.HolidayController"></bean>
 	<bean name="CarController" class="com.basesoft.modules.employee.CarController"></bean>
 	<bean name="InfoEquipController" class="com.basesoft.modules.infoequip.InfoEquipController"></bean>
+	<bean name="CustomEquipController" class="com.basesoft.modules.customequip.CustomEquipController"></bean>
 </beans>
 
