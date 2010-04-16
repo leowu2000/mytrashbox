@@ -72,9 +72,9 @@ public class ExcelController extends CommonController {
 				}else if("GOODS".equals(table)){//物资资产
 					errorMessage = excelDAO.insertGoods(data);
 				}else if("PLAN".equals(table)){//计划
-					String level = ServletRequestUtils.getStringParameter(request, "level", "");
-					String type = ServletRequestUtils.getStringParameter(request, "type", "");
-					errorMessage = excelDAO.insertPlan(data, level, type);
+					String type = ServletRequestUtils.getStringParameter(request, "typecode3", "");
+					String type2 = ServletRequestUtils.getStringParameter(request, "typecode2", "");
+					errorMessage = excelDAO.insertPlan(data, type, type2);
 				}else if("ASSETS".equals(table)){//固定资产
 					errorMessage = excelDAO.insertAssets(data);
 				}else if("WORKCHECK".equals(table)){//考勤

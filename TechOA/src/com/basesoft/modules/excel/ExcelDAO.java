@@ -146,16 +146,26 @@ public class ExcelDAO extends CommonDAO {
 			String code = row.optString("CODE");
 			String departname = row.optString("DEPARTNAME");
 			String mainjob = row.optString("MAINJOB");
+			String secjob = row.optString("SECJOB");
+			String level = row.optString("LEVEL");
+			String email = row.optString("EMAIL");
+			String blog = row.optString("BLOG");
+			String selfweb = row.optString("SELFWEB");
 			String stcphone = row.optString("STCPHONE");
 			String mobphone = row.optString("MOBPHONE");
-			String stcphone2 = row.optString("STCPHONE2");
+			String address = row.optString("ADDRESS");
+			String post = row.optString("POST");
+			String major = row.optString("MAJOR");
+			String degree = row.optString("DEGREE");
 			
 			//根据部门名称找出部门编码
 			String departcode = findCodeByName("DEPARTMENT", departname);
+			String majorcode = findCodeByName("DICT", major);
+			String degreecode = findCodeByName("DICT", degree);
 			//生成32位uuid
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			String insertSql = "insert into EMPLOYEE (ID,LOGINID,PASSWORD,CODE,ROLECODE,NAME,DEPARTCODE,MAINJOB,STCPHONE,MOBPHONE,STCPHONE2) values('" + uuid + "','" + code + "','1','" + code + "','003','" + name + "','" + departcode + "','" + mainjob + "','" + stcphone + "','" + mobphone + "','" + stcphone2 + "')";
+			String insertSql = "insert into EMPLOYEE (ID,LOGINID,PASSWORD,CODE,ROLECODE,NAME,DEPARTCODE,MAINJOB,SECJOB,LEVEL,EMAIL,BLOG,SELFWEB,STCPHONE,MOBPHONE,ADDRESS,POST,MAJORCODE,DEGREECODE) values('" + uuid + "','" + code + "','1','" + code + "','003','" + name + "','" + departcode + "','" + mainjob + "','" + secjob + "','" + level + "','" + email + "','" + blog + "','" + selfweb + "','" + stcphone + "','" + mobphone + "','" + address + "','" + post + "','" + majorcode + "','" + degreecode + "')";
 			
 			try{
 				insert(insertSql);
@@ -455,7 +465,7 @@ public class ExcelDAO extends CommonDAO {
 	 * @param data 
 	 * @return
 	 */
-	public String insertPlan(JSONObject data, String level, String type) throws Exception{
+	public String insertPlan(JSONObject data, String type, String type2) throws Exception{
 		String errorMessage = "";
 		
 		//循环数据行
@@ -488,7 +498,7 @@ public class ExcelDAO extends CommonDAO {
 			//生成32位uuid
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			String insertSql = "insert into PLAN values('" + uuid + "','" + empcode + "','" + empname + "','" + departcode + "','" + departname + "','" + pjcode + "','0','','" + new Date() + "','" + enddate + "',0,'" + note + "','" + symbol + "','" + assess + "','" + remark + "','" + leader_station + "','" + leader_section + "','" + leader_room + "','" + plannercode + "','" + plannername + "'," + ordercode + ", '" + level + "', '" + type + "', '1')";
+			String insertSql = "insert into PLAN values('" + uuid + "','" + empcode + "','" + empname + "','" + departcode + "','" + departname + "','" + pjcode + "','0','','" + new Date() + "','" + enddate + "',0,'" + note + "','" + symbol + "','" + assess + "','" + remark + "','" + leader_station + "','" + leader_section + "','" + leader_room + "','" + plannercode + "','" + plannername + "'," + ordercode + ", '" + type + "', '" + type2 + "', '1')";
 			
 			try{
 				insert(insertSql);

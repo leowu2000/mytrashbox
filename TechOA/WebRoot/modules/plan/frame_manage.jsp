@@ -54,7 +54,7 @@
 	for(int i=0;i<listLevel.size();i++){
 		Map mapLevel = (Map)listLevel.get(i);
 %>				
-		<option value="<%=mapLevel.get("CODE") %>"><%=mapLevel.get("NAME") %></option>
+		<option value="<%=mapLevel.get("NAME") %>"><%=mapLevel.get("NAME") %></option>
 <%	} %>					
 	</select>
 	<select name="seltype" onchange="commit();">

@@ -44,15 +44,15 @@ public class PlanDAO extends CommonDAO {
 		}else {
 			if("0".equals(type)){//全部类别
 				if("".equals(empname)){//全部人员
-					sql = "select * from VIEW_PLAN where LEVEL='" + level + "'";
+					sql = "select * from VIEW_PLAN where ASSESS='" + level + "'";
 				}else {//人员名称模糊检索
-					sql = "select * from VIEW_PLAN where LEVEL='" + level + "' and EMPNAME like '%" + empname + "%'";
+					sql = "select * from VIEW_PLAN where ASSESS='" + level + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}else {//选择了类别
 				if("".equals(empname)){//全部人员
-					sql = "select * from VIEW_PLAN where LEVEL='" + level + "' and TYPE='" + type + "'";
+					sql = "select * from VIEW_PLAN where ASSESS='" + level + "' and TYPE='" + type + "'";
 				}else {
-					sql = "select * from VIEW_PLAN where LEVEL='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+					sql = "select * from VIEW_PLAN where ASSESS='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}
 		}
@@ -107,15 +107,15 @@ public class PlanDAO extends CommonDAO {
 		}else {
 			if("0".equals(type)){//全部类别
 				if("".equals(empname)){//全部人员
-					sql = sql + " and LEVEL='" + level + "'";
+					sql = sql + " and ASSESS='" + level + "'";
 				}else {//人员名称模糊检索
-					sql = sql + " and LEVEL='" + level + "' and EMPNAME like '%" + empname + "%'";
+					sql = sql + " and ASSESS='" + level + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}else {//选择了类别
 				if("".equals(empname)){//全部人员
-					sql = sql + " and LEVEL='" + level + "' and TYPE='" + type + "'";
+					sql = sql + " and ASSESS='" + level + "' and TYPE='" + type + "'";
 				}else {//人员名称模糊检索
-					sql = sql + " and LEVEL='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+					sql = sql + " and ASSESS='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}
 		}
@@ -165,15 +165,15 @@ public class PlanDAO extends CommonDAO {
 		}else {
 			if("0".equals(type)){//全部类别
 				if("".equals(empname)){//全部人员
-					sql = sql + " and LEVEL='" + level + "'";
+					sql = sql + " and ASSESS='" + level + "'";
 				}else {//人员名称模糊检索
-					sql = sql + " and LEVEL='" + level + "' and EMPNAME like '%" + empname + "%'";
+					sql = sql + " and ASSESS='" + level + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}else {//选择了类别
 				if("".equals(empname)){//全部人员
-					sql = sql + " and LEVEL='" + level + "' and TYPE='" + type + "'";
+					sql = sql + " and ASSESS='" + level + "' and TYPE='" + type + "'";
 				}else {//人员名称模糊检索
-					sql = sql + " and LEVEL='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+					sql = sql + " and ASSESS='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}
 		}
@@ -264,8 +264,8 @@ public class PlanDAO extends CommonDAO {
 		plan.setPlannercode(map.get("PLANNERCODE")==null?"":map.get("PLANNERCODE").toString());
 		plan.setPlannername(map.get("PLANNERNAME")==null?"":map.get("PLANNERNAME").toString());
 		plan.setOrdercode(map.get("ORDERCODE")==null?0:Integer.parseInt(map.get("ORDERCODE").toString()));
-		plan.setLevel(map.get("LEVEL")==null?"":map.get("LEVEL").toString());
 		plan.setType(map.get("TYPE")==null?"":map.get("TYPE").toString());
+		plan.setType2(map.get("TYPE2")==null?"":map.get("TYPE2").toString());
 		
 		return plan;
 	}
@@ -306,5 +306,30 @@ public class PlanDAO extends CommonDAO {
 		}
 		
 		return map;
+	}
+	
+	/**
+	 * 获取考核级别
+	 * @return
+	 */
+	public List getLevel(){
+		return jdbcTemplate.queryForList("select DISTINCT ASSESS as NAME from PLAN");
+	}
+	
+	/**
+	 * 获取计划分类
+	 * @return
+	 */
+	public List getType(){
+		return jdbcTemplate.queryForList("select * from PLAN_TYPE where TYPE='1' order by ORDERCODE");
+	}
+	
+	/**
+	 * 获取计划2分类
+	 * @param typecode 计划1分类代码
+	 * @return
+	 */
+	public List getType2(String typecode){
+		return jdbcTemplate.queryForList("select * from PLAN_TYPE where TYPE='2' and PARENT='" + typecode + "' order by ORDERCODE");
 	}
 }

@@ -57,6 +57,7 @@
 	<bean id="costDAO" class="com.basesoft.modules.cost.CostDAO"></bean>
 	<bean id="menuDAO" class="com.basesoft.modules.menu.MenuDAO"></bean>
 	<bean id="planDAO" class="com.basesoft.modules.plan.PlanDAO"></bean>
+	<bean id="planTypeDAO" class="com.basesoft.modules.plan.PlanTypeDAO"></bean>
 	<bean id="goodsDAO" class="com.basesoft.modules.goods.GoodsDAO"></bean>
 	<bean id="cardDAO" class="com.basesoft.modules.employee.CardDAO"></bean>
 	<bean id="financeDAO" class="com.basesoft.modules.employee.FinanceDAO"></bean>
@@ -66,4 +67,5 @@
 	<bean id="trainDAO" class="com.basesoft.modules.employee.TrainDAO"></bean>
 	<bean id="holidayDAO" class="com.basesoft.modules.employee.HolidayDAO"></bean>
 	<bean id="carDAO" class="com.basesoft.modules.employee.CarDAO"></bean>
+	<bean id="infoEquipDAO" class="com.basesoft.modules.infoequip.InfoEquipDAO"></bean>
 </beans>
