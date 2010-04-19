@@ -158,7 +158,7 @@ public class ExcelDAO extends CommonDAO {
 			String major = row.optString("MAJOR");
 			String degree = row.optString("DEGREE");
 			
-			//根据部门名称找出部门编码
+			//根据名称找出编码
 			String departcode = findCodeByName("DEPARTMENT", departname);
 			String majorcode = findCodeByName("DICT", major);
 			String degreecode = findCodeByName("DICT", degree);

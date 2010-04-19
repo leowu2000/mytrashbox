@@ -172,7 +172,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add&page=<%=pagenum %>';
+    	action = url+'?action=add';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -230,7 +230,7 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=goods.do?action=list&table=GOODS&page=<%=pagenum %>';
+		action = 'excel.do?action=import&redirect=goods.do?action=list&table=GOODS';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);

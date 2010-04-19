@@ -186,7 +186,7 @@ for(int i=0;i<listProject.size();i++){
 %>
             <tr align="center">
                 <td><input type="checkbox" name="check" value="<%=mapProject.get("ID") %>" class="ainput"></td>
-                <td>&nbsp;<a href="/pj_d.do?action=list&pjcode=<%=mapProject.get("CODE") %>"><%=mapProject.get("NAME") %></a></td>
+                <td>&nbsp;<a href="/pj_d.do?action=list&pjcode=<%=mapProject.get("CODE") %>&page=<%=pagenum %>"><%=mapProject.get("NAME") %></a></td>
                 <td>&nbsp;<%=status %></td>
                 <td>&nbsp;<%=managername %></td>
                 <!-- <td>&nbsp;<%=members %></td> -->

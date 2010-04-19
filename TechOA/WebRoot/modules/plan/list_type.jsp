@@ -16,7 +16,7 @@ PlanTypeDAO planTypeDAO = (PlanTypeDAO)ctx.getBean("planTypeDAO");
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<title>部门管理</title>
+		<title>计划分类管理</title>
 		<style type="text/css">
 		<!--
 		input{
@@ -95,7 +95,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','删除一级分类将删除其下的二级分类，确定删除?',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=delete';       
+      			Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});

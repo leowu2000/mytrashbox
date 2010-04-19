@@ -2,6 +2,8 @@
 <%@ page import="java.net.*"%>
 <%@ page import="com.basesoft.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
+<%@ page import="com.basesoft.modules.employee.*" %>
 <%
 	PageList pageList = (PageList)request.getAttribute("pageList");
 	List listOrder = pageList.getList();
@@ -9,9 +11,8 @@
 	
 	List listCar = (List)request.getAttribute("listCar");
 	
-	String method = request.getAttribute("method")==null?"":request.getAttribute("method").toString();
-	
-	String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
+	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+	CarDAO carDAO = (CarDAO)ctx.getBean("carDAO");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -29,35 +30,27 @@
 <script src="../../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
-var errorMessage = '<%=errorMessage %>';
-if(errorMessage!=''){
-	alert(errorMessage);
-}
-
 var win;
-var win2;
 var action;
 var url='/car.do';
-var method = '<%=method %>';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
-	if(method=='search'){
-		tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
-	}else {
-		tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
-		tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
-		tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
-		//tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
-	}
+	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
+	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
+	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
 
     if(!win){
         win = new Ext.Window({
         	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
 	        {text:'提交',handler: function(){
-		        	Ext.getDom('dataForm').action=action; 
-	    	    	Ext.getDom('dataForm').submit();
+	        		if(validate()){
+	        			Ext.getDom('dataForm').action=action; 
+	    	    		Ext.getDom('dataForm').submit();
+	        		}else {
+	        			return false;
+	        		}
 	    	    }
 	        },
 	        {text:'关闭',handler: function(){win.hide();}}
@@ -65,22 +58,13 @@ Ext.onReady(function(){
         });
     }
     
-    if(!win2){
-        win2 = new Ext.Window({
-        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
-	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
-	        {text:'关闭',handler: function(){win2.hide();}}
-	        ]
-        });
-    }
-    
     function onAddClick(btn){
-    	action = url+'?action=order_add';
+    	action = url+'?action=add_order';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
-       	var carcode = document.getElementById('carcode').value;
-       	changeCar(carcode)
+       	var carid = document.getElementById('carid').value;
+       	changeCar(carid);
+       	changeCar_sendtime(carid);
         win.show(btn.dom);
     }
     
@@ -91,20 +75,16 @@ Ext.onReady(function(){
 			return false;
 		}
 		Ext.Ajax.request({
-			url: url+'?action=order_query&id='+selValue,
+			url: url+'?action=query_order&id='+selValue,
 			method: 'GET',
 			success: function(transport) {
-				c = 'update';
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
-				Ext.get('code').set({'value':data.item.code});
-				Ext.get('carno').set({'value':data.item.carno});
-				Ext.get('way').set({'value':data.item.way});
-				Ext.get('phone').set({'value':data.item.phone});
-				Ext.get('sendlocate').set({'value':data.item.sendlocate});
-				Ext.get('sendtime').set({'value':data.item.sendtime});
-				
-		    	action = url+'?action=order_update&page=<%=pagenum %>';
+				Ext.get('carid').set({'value':data.item.carid});
+				changeCar(data.item.carid);
+       			changeCar_sendtime(data.item.carid);
+       			Ext.get('sendtime').set({'value':data.item.sendtime});
+		    	action = url+'?action=update_order&page=<%=pagenum %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -120,35 +100,50 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=order_delete&page=<%=pagenum %>';       
+	    		Ext.getDom('listForm').action=url+'?action=delete_order&page=<%=pagenum %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
     }
-    
-    function onBackClick(btn){
-    	history.back(-1);
-    }
-    
-    function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=card.do?action=list_manage&table=EMP_CARD&page=<%=pagenum %>';
-    	win2.setTitle('导入excel');
-       	Ext.getDom('dataForm2').reset();
-        win2.show(btn.dom);
-    }
 });
 
-function changeCar(carcode){
+function changeCar(carid){
 	if(window.XMLHttpRequest){ //Mozilla 
       var xmlHttpReq=new XMLHttpRequest();
     }else if(window.ActiveXObject){
  	  var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
     }
-    xmlHttpReq.open("GET", "/car.do?action=AJAX_CAR&carcode=" + carcode, false);
+    xmlHttpReq.open("GET", "/car.do?action=AJAX_CAR&carid=" + carid, false);
     xmlHttpReq.send();
     if(xmlHttpReq.responseText!=''){
         document.getElementById('waytd').innerHTML = xmlHttpReq.responseText;
     }
+}
+
+function changeCar_sendtime(carid){
+	if(window.XMLHttpRequest){ //Mozilla 
+      var xmlHttpReq=new XMLHttpRequest();
+    }else if(window.ActiveXObject){
+ 	  var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    }
+    xmlHttpReq.open("GET", "/car.do?action=AJAX_SENDTIME&carid=" + carid, false);
+    xmlHttpReq.send();
+    if(xmlHttpReq.responseText!=''){
+        document.getElementById('timetd').innerHTML = xmlHttpReq.responseText;
+    }
+}
+
+function validate(){
+	var date = new Date();
+	var time = date.getHours();
+	var sendtime = document.getElementById('sendtime').value.substring(0,2);
+	
+	if(sendtime>time){
+		return true;
+	}else {
+		alert("所选时间已过！");
+		return false;
+	}
 }
 
 //-->
@@ -162,41 +157,55 @@ function changeCar(carcode){
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
-    	<%
-    		if(!"search".equals(method)){
-    	%>
     		<td>选择</td>
-    	<%
-    		}
-    	%>
-    		<td>预约时间</td>
+    		<td>预约日期</td>
     		<td>班车编号</td>
     		<td>班车车牌号</td>
     		<td>班车路线</td>
+    		<td>发车时间</td>
+    		<td>状态</td>
 <%
 	for(int i=0;i<listOrder.size();i++){
 		Map mapOrder = (Map)listOrder.get(i);
+		String status = mapOrder.get("STATUS").toString();
+		
+		boolean canEdit = false;
+		String statusname = "";
+		if("0".equals(status)){
+			canEdit = true;
+			statusname = "新增加";
+		}else {
+			statusname = "已确认";
+		}
+		
+		Car car = carDAO.findById(mapOrder.get("CARID").toString());
 %>
 		<tr>
-		<%
-    		if(!"search".equals(method)){
-    	%>
 			<td>
 			<%
-				if(1==1){
+				if(canEdit){
 			%>
-				<input type="checkbox" name="check" value="<%=mapOrder.get("CARDNO") %>" class="ainput">
+				<input type="checkbox" name="check" value="<%=mapOrder.get("ID") %>" class="ainput">
 			<%
 				}
 			%>
 			</td>
-		<%
-    		}
-		%>
-			<td><%=mapOrder.get("ORDERTIME")==null?"":mapOrder.get("ORDERTIME") %></td>
-			<td><%=mapOrder.get("CARCODE")==null?"":mapOrder.get("CARCODE") %></td>
-			<td><%=mapOrder.get("CARNO")==null?"":mapOrder.get("CARNO") %></td>
-			<td><%=mapOrder.get("WAY")==null?"":mapOrder.get("WAY") %></td>
+			<td>&nbsp;<%=mapOrder.get("ORDERDATE")==null?"":mapOrder.get("ORDERDATE") %></td>
+			<td>&nbsp;<%=car.getCarcode()==null?"":car.getCarcode() %></td>
+			<td>&nbsp;<%=car.getCarno()==null?"":car.getCarno() %></td>
+			<td>&nbsp;<%=car.getWay()==null?"":car.getWay() %></td>
+			<td>&nbsp;<%=mapOrder.get("ORDERSENDTIME")==null?"":mapOrder.get("ORDERSENDTIME") %></td>
+<%
+		if("0".equals(status)){
+%>			
+			<td>&nbsp;<font color="green"><%=statusname %></font></td>
+<%
+		}else {
+%>			
+			<td>&nbsp;<font color="red"><%=statusname %></font></td>
+<%
+		}
+%>
 		</tr>
 <%
 	} 
@@ -210,17 +219,13 @@ function changeCar(carcode){
 	        	<input type="hidden" name="id" >
                 <table>
 				  <tr>
-				    <td>预约时间</td>
-				    <td><input type="text" name="ordertime" style="width:200" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss") %>'})" value="<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss") %>"></td>
-				  </tr>
-				  <tr>
 				    <td>车次</td>
-				    <td><select name="carcode" onchange="changeCar(this.value);">
+				    <td><select name="carid" onchange="changeCar(this.value);changeCar_sendtime(this.value)" style="width:200;">
 <%
 						for(int i=0;i<listCar.size();i++){
 							Map mapCar = (Map)listCar.get(i);
 %>				
-							<option value="<%=mapCar.get("CODE") %>"><%=mapCar.get("NAME") %></option>
+							<option value="<%=mapCar.get("ID") %>"><%=mapCar.get("CARCODE") %></option>
 <%	 
 						}
 %>					
@@ -230,24 +235,15 @@ function changeCar(carcode){
 				    <td>路线</td>
 				    <td name="waytd" id="waytd"></td>
 				  </tr>	
+				  <tr>
+				    <td>选择时间</td>
+				    <td name="timetd" id="timetd" style="width:200;">
+				    	<select><option>请选择...</option></select>
+				    </td>
+				  </tr>
 				</table>
 	        </form>
     </div>
 </div>
-
-<div id="dlg2" class="x-hidden">
-    <div class="x-window-header">Dialog</div>
-    <div class="x-window-body" id="dlg-body">
-	        <form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
-	        	<input type="hidden" name="page" value="<%=pagenum %>">
-                <table>
-				  <tr>
-				    <td>选择文件</td>
-				    <td><input type="file" name="file" style="width:200"></td>
-				  </tr>	
-				</table>
-			</form>
-	</div>
-</div>  
   </body>
 </html>

@@ -109,7 +109,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';
+    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
        	Ext.get('pjcode').set({'disabled':''});
@@ -244,7 +244,7 @@ Ext.onReady(function(){
 	});
 	
 	function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN&f_level=<%=level %>&f_type=<%=type %>&page=<%=pagenum %>&f_empname=<%=f_empname %>';
+		action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);

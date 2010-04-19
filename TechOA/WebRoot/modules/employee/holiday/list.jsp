@@ -54,7 +54,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add&page=<%=pagenum %>&depart=<%=depart %>&datepick=<%=datepick %>';
+    	action = url+'?action=add&depart=<%=depart %>&datepick=<%=datepick %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);

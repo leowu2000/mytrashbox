@@ -109,7 +109,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';
+    	action = url+'?action=add&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -168,17 +168,14 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=finance.do?action=list_manage&table=EMP_FINANCIAL&seldepart=<%=seldepart %>&page=<%=pagenum %>&emname=<%=emname %>&datepick=<%=datepick %>';
+		action = 'excel.do?action=import&redirect=finance.do?action=list_manage&table=EMP_FINANCIAL&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
     }
     
     function onExportClick(){
-  		var seldepart = '<%=seldepart %>';
-		var emname = '<%=emname %>';
-		var datepick = '<%=datepick %>';
-    	window.location.href = "/excel.do?action=export&model=JBF&seldepart=" + seldepart + "&emname=" + emname + "&datepick=" + datepick;
+    	window.location.href = "/excel.do?action=export&model=JBF&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>";
   	}
 });
 

@@ -128,7 +128,7 @@ public class WorkReportController extends CommonController {
 		
 			workReportDAO.update(updateSql);
 			
-			response.sendRedirect("workreport.do?action=list");
+			response.sendRedirect("workreport.do?action=list&page=" + page);
 			return null;
 		}else if("delete".equals(action)){//删除操作
 			String[] check=request.getParameterValues("check");
@@ -136,7 +136,7 @@ public class WorkReportController extends CommonController {
 				String deleteSql = "delete from WORKREPORT where ID='" + check[i] + "'";
 				workReportDAO.delete(deleteSql);
 			}
-			response.sendRedirect("workreport.do?action=list");
+			response.sendRedirect("workreport.do?action=list&page=" + page);
 			return null;
 		}else if("submit".equals(action)){//提交操作
 			String[] check=request.getParameterValues("check");
@@ -144,7 +144,7 @@ public class WorkReportController extends CommonController {
 				String updateSql = "update WORKREPORT set FLAG=1 where ID='" + check[i] + "'";
 				workReportDAO.update(updateSql);
 			}
-			response.sendRedirect("workreport.do?action=list");
+			response.sendRedirect("workreport.do?action=list&page=" + page);
 			return null;
 		}else if("pass".equals(action)){//审批通过
 			String[] check=request.getParameterValues("check");
@@ -152,7 +152,7 @@ public class WorkReportController extends CommonController {
 				String updateSql = "update WORKREPORT set FLAG=2 where ID='" + check[i] + "'";
 				workReportDAO.update(updateSql);
 			}
-			response.sendRedirect("workreport.do?action=auditlist");
+			response.sendRedirect("workreport.do?action=auditlist&page=" + page);
 			return null;
 		}else if("deny".equals(action)){//审批退回
 			String[] check=request.getParameterValues("check");
@@ -160,7 +160,7 @@ public class WorkReportController extends CommonController {
 				String updateSql = "update WORKREPORT set FLAG=3 where ID='" + check[i] + "'";
 				workReportDAO.update(updateSql);
 			}
-			response.sendRedirect("workreport.do?action=auditlist");
+			response.sendRedirect("workreport.do?action=auditlist&page=" + page);
 			return null;
 		}
 		

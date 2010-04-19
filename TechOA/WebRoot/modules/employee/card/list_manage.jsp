@@ -118,7 +118,7 @@ Ext.onReady(function(){
     
     function onAddClick(btn){
     	c = 'add';
-    	action = url+'?action=add&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>';
+    	action = url+'?action=add&seldepart=<%=seldepart %>&emname=<%=emname %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
        	Ext.get('cardno').set({'disabled':''});
@@ -173,7 +173,7 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=card.do?action=list_manage&table=EMP_CARD&seldepart=<%=seldepart %>&page=<%=pagenum %>&emname=<%=emname %>';
+		action = 'excel.do?action=import&redirect=card.do?action=list_manage&table=EMP_CARD&seldepart=<%=seldepart %>&emname=<%=emname %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);

@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.basesoft.util.*" %>
 <%
-	List listBc = (List)request.getAttribute("listBc");
+	List listCar = (List)request.getAttribute("listCar");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -21,14 +21,14 @@
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('选择班次');
-  		tb.add(document.getElementById('selbc'));
+  		tb.add(document.getElementById('carid'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('选择日期');
   		tb.add(document.getElementById('datepick'));
   		
-  		var selbc = document.getElementById('selbc').value;
+  		var carid = document.getElementById('carid').value;
 	    var datepick = document.getElementById('datepick').value;
-	    document.getElementById('list_order').src = "/car.do?action=list_order_manage&selbc=" + selbc + "&datepick=" + datepick;
+	    document.getElementById('list_order').src = "/car.do?action=list_order_manage&carid=" + carid + "&datepick=" + datepick;
 	});
 	
 	function IFrameResize(){
@@ -36,10 +36,10 @@
 	}
 	
 	function commit(){
-	  var selbc = document.getElementById('selbc').value;
+	  var carid = document.getElementById('carid').value;
 	  var datepick = document.getElementById('datepick').value;
 	  
-	  document.getElementById('list_order').src = "/car.do?action=list_order_manage&selbc=" + selbc + "&datepick=" + datepick;
+	  document.getElementById('list_order').src = "/car.do?action=list_order_manage&carid=" + carid + "&datepick=" + datepick;
 	}
 	</script>
   </head>
@@ -47,13 +47,13 @@
   <body onload="IFrameResize();" onresize="IFrameResize();">
   	<h1>班车预约统计</h1>
   	<div id="toolbar"></div>
-	<select id="selbc" name="selbc">
+	<select id="carid" name="carid" onchange="commit();">
 		<option value="0">请选择...</option>
 <%
-	for(int i=0;i<listBc.size();i++){
-		Map mapBc = (Map)listBc.get(i);
+	for(int i=0;i<listCar.size();i++){
+		Map mapCar = (Map)listCar.get(i);
 %>		
-		<option value="<%=mapBc.get("CODE") %>"><%=mapBc.get("NAME") %></option>
+		<option value="<%=mapCar.get("ID") %>"><%=mapCar.get("CARCODE") %></option>
 <%
 	}
 %>

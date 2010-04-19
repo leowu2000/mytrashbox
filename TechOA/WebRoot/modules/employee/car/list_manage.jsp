@@ -3,9 +3,9 @@
 <%@ page import="com.basesoft.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%
-	//PageList pageList = (PageList)request.getAttribute("pageList");
-	List listCar = (List)request.getAttribute("listCar");//pagelist.getList();
-	int pagenum = 1;//pageList.getPageInfo().getCurPage();
+	PageList pageList = (PageList)request.getAttribute("pageList");
+	List listCar = pageList.getList();
+	int pagenum = pageList.getPageInfo().getCurPage();
 	
 	String method = request.getAttribute("method")==null?"":request.getAttribute("method").toString();
 	
@@ -46,6 +46,7 @@ Ext.onReady(function(){
 		tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 		tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 		tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+		tb.add({text: '配置发车时间',cls: 'x-btn-text-icon xiugai',handler: onSetClick});
 		//tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 	}
 
@@ -74,7 +75,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add&page=<%=pagenum %>';
+    	action = url+'?action=add';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -90,15 +91,14 @@ Ext.onReady(function(){
 			url: url+'?action=query&id='+selValue,
 			method: 'GET',
 			success: function(transport) {
-				c = 'update';
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
-				Ext.get('code').set({'value':data.item.code});
+				Ext.get('carcode').set({'value':data.item.carcode});
 				Ext.get('carno').set({'value':data.item.carno});
 				Ext.get('way').set({'value':data.item.way});
+				Ext.get('drivername').set({'value':data.item.drivername});
 				Ext.get('phone').set({'value':data.item.phone});
 				Ext.get('sendlocate').set({'value':data.item.sendlocate});
-				Ext.get('sendtime').set({'value':data.item.sendtime});
 				
 		    	action = url+'?action=update&page=<%=pagenum %>';
 	    		win.setTitle('修改');
@@ -122,15 +122,25 @@ Ext.onReady(function(){
     	});
     }
     
-    function onBackClick(btn){
-    	history.back(-1);
-    }
-    
     function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=card.do?action=list_manage&table=EMP_CARD&page=<%=pagenum %>';
+		action = 'excel.do?action=import&redirect=card.do?action=list_manage&table=EMP_CARD';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
+    }
+    
+    function onSetClick(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+		
+		window.location.href = url + '?action=list_manage_sendtime&page=<%=pagenum %>&carid=' + selValue;
+    }
+    
+    function onBackClick(){
+    	history.back(-1);
     }
 });
 
@@ -139,9 +149,10 @@ Ext.onReady(function(){
   </head>
   
   <body>
-  <div id="toolbar"></div>
   <h1>班车管理</h1>
+  <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
+<%=pageList.getPageInfo().getHtml("car.do?action=list_manage") %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
@@ -155,9 +166,9 @@ Ext.onReady(function(){
     		<td>班车编号</td>
     		<td>班车车牌号</td>
     		<td>班车路线</td>
+    		<td>司机姓名</td>
     		<td>司机电话</td>
     		<td>发车地点</td>
-    		<td>发车时间</td>
 <%
 	for(int i=0;i<listCar.size();i++){
 		Map mapCar = (Map)listCar.get(i);
@@ -166,16 +177,16 @@ Ext.onReady(function(){
 		<%
     		if(!"search".equals(method)){
     	%>
-			<td><input type="checkbox" name="check" value="<%=mapCar.get("CARDNO") %>" class="ainput"></td>
+			<td><input type="checkbox" name="check" value="<%=mapCar.get("ID") %>" class="ainput"></td>
 		<%
     		}
 		%>
-			<td><%=mapCar.get("CODE")==null?"":mapCar.get("CODE") %></td>
+			<td><%=mapCar.get("CARCODE")==null?"":mapCar.get("CARCODE") %></td>
 			<td><%=mapCar.get("CARNO")==null?"":mapCar.get("CARNO") %></td>
 			<td><%=mapCar.get("WAY")==null?"":mapCar.get("WAY") %></td>
+			<td><%=mapCar.get("DRIVERNAME")==null?"":mapCar.get("DRIVERNAME") %></td>
 			<td><%=mapCar.get("PHONE")==null?"":mapCar.get("PHONE") %></td>
 			<td><%=mapCar.get("SENDLOCATE")==null?"":mapCar.get("SENDLOCATE") %></td>
-			<td><%=mapCar.get("SENDTIME")==null?"":mapCar.get("SENDTIME") %></td>
 		</tr>
 <%
 	} 
@@ -190,7 +201,7 @@ Ext.onReady(function(){
                 <table>
 				  <tr>
 				    <td>班车编号</td>
-				    <td><input type="text" name="code" style="width:200"></td>
+				    <td><input type="text" name="carcode" style="width:200"></td>
 				  </tr>
 				  <tr>
 				    <td>车牌号</td>
@@ -201,16 +212,16 @@ Ext.onReady(function(){
 				    <td><textarea name="way" rows="3" style="width:200"></textarea></td>
 				  </tr>	
 				  <tr>
+				    <td>司机姓名</td>
+				    <td><input type="text" name="drivername" style="width:200"></td>
+				  </tr>
+				  <tr>
 				    <td>司机电话</td>
 				    <td><input type="text" name="phone" style="width:200"></td>
 				  </tr>
 				  <tr>
 				    <td>发车地点</td>
 				    <td><input type="text" name="sendlocate" style="width:200"></td>
-				  </tr>
-				  <tr>
-				    <td>发车时间</td>
-				    <td><input type="text" name="sendtime" style="width:200" onclick="WdatePicker({dateFmt:'HH:mm:ss'})"></td>
 				  </tr>
 				</table>
 	        </form>
