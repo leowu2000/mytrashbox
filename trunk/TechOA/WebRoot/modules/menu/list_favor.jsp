@@ -55,7 +55,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add_favor&page=<%=pagenum %>';
+    	action = url+'?action=add_favor';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);

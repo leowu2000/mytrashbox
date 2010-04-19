@@ -6,6 +6,8 @@ PageList listReport = (PageList)request.getAttribute("listReport");
 List listProject = (List)request.getAttribute("listProject");
 List listStage = (List)request.getAttribute("listStage");
 
+int pagenum = listReport.getPageInfo().getCurPage();
+
 String method = request.getAttribute("method").toString();
 
 String emrole = session.getAttribute("EMROLE").toString();
@@ -74,7 +76,7 @@ Ext.onReady(function(){
 			return false;
 		}
 		Ext.Ajax.request({
-			url: url+'?action=query&id='+selValue,
+			url: url+'?action=query&id=' + selValue + "&page=<%=pagenum %>",
 			method: 'GET',
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
@@ -103,7 +105,7 @@ Ext.onReady(function(){
     	Ext.Msg.confirm('确认','确实要删除记录么？',function(btn){
     		if(btn=='yes'){
     		   
-            	Ext.getDom('listForm').action=url+'?action=delete';       
+            	Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>';       
             	Ext.getDom('listForm').submit();
     		}
     	});
@@ -119,7 +121,7 @@ Ext.onReady(function(){
     	Ext.Msg.confirm('确认','确实要上报么？',function(btn){
     		if(btn=='yes'){
     		   
-            	Ext.getDom('listForm').action=url+'?action=submit';       
+            	Ext.getDom('listForm').action=url+'?action=submit&page=<%=pagenum %>';       
             	Ext.getDom('listForm').submit();
     		}
     	});

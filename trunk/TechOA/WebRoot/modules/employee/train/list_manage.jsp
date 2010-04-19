@@ -64,7 +64,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add&page=<%=pagenum %>';
+    	action = url+'?action=add';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -118,7 +118,7 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=train.do?action=list_manage&table=TRAIN&page=<%=pagenum %>';
+		action = 'excel.do?action=import&redirect=train.do?action=list_manage&table=TRAIN';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);

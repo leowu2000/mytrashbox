@@ -85,7 +85,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add_emp&page=<%=pagenum %>&page1=<%=page1 %>&trainid=<%=trainid %>';
+    	action = url+'?action=add_emp&page1=<%=page1 %>&trainid=<%=trainid %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);

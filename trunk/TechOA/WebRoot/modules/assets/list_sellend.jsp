@@ -15,7 +15,7 @@ int pagenum = pageList.getPageInfo().getCurPage();
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>固定资产维护</title>
+    <title>固定资产领用信息</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">

@@ -135,7 +135,7 @@ Ext.onReady(function(){
 			alert('请选择数据项！');
 			return false;
 		}
-		action = url+'?action=changepass&seldepart=<%=seldepart %>&id=' + selValue;
+		action = url+'?action=changepass&page=<%=pagenum %>&seldepart=<%=seldepart %>&id=' + selValue;
     	win1.setTitle('修改密码');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
@@ -157,7 +157,7 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=em.do?action=infolist&table=EMPLOYEE&seldepart=<%=seldepart %>&page=<%=pagenum %>';
+		action = 'excel.do?action=import&redirect=em.do?action=infolist&table=EMPLOYEE&seldepart=<%=seldepart %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);

@@ -437,31 +437,15 @@ comment on column CAR.SENDLOCATE is
 '发车地点';
 
 /*==============================================================*/
-/* Table: CAR_SENDTIME                                          */
-/*==============================================================*/
-create table CAR_SENDTIME  (
-   CARCODE              VARCHAR(20),
-   SENDTIME             VARCHAR(20)
-);
-
-comment on table CAR_SENDTIME is
-'班车发车时间表';
-
-comment on column CAR_SENDTIME.CARCODE is
-'车次';
-
-comment on column CAR_SENDTIME.SENDTIME is
-'发车时间';
-
-/*==============================================================*/
 /* Table: CAR_ORDER                                             */
 /*==============================================================*/
 create table CAR_ORDER  (
    ID                   VARCHAR(32)                     not null,
-   CARCODE              VARCHAR(20),
+   CARID                VARCHAR(32),
    EMPCODE              VARCHAR(20),
    ORDERSENDTIME        VARCHAR(20),
-   ORDERTIME            TIMESTAMP,
+   ORDERDATE            DATE,
+   STATUS               VARCHAR(10),
    constraint PK_CAR_ORDER primary key (ID)
 );
 
@@ -471,7 +455,7 @@ comment on table CAR_ORDER is
 comment on column CAR_ORDER.ID is
 'ID';
 
-comment on column CAR_ORDER.CARCODE is
+comment on column CAR_ORDER.CARID is
 '车次';
 
 comment on column CAR_ORDER.EMPCODE is
@@ -480,5 +464,39 @@ comment on column CAR_ORDER.EMPCODE is
 comment on column CAR_ORDER.ORDERSENDTIME is
 '预约发车时间';
 
-comment on column CAR_ORDER.ORDERTIME is
-'预约时间';
+comment on column CAR_ORDER.ORDERDATE is
+'预约日期';
+
+comment on column CAR_ORDER.STATUS is
+'状态';
+
+
+/*==============================================================*/
+/* Table: CAR_SENDTIME                                          */
+/*==============================================================*/
+create table CAR_SENDTIME  (
+   ID                   VARCHAR(32)                     not null,
+   CARID                VARCHAR(32),
+   SENDTIME             VARCHAR(20),
+   constraint PK_CAR_SENDTIME primary key (ID)
+);
+
+comment on table CAR_SENDTIME is
+'班车发车时间表';
+
+comment on column CAR_SENDTIME.ID is
+'ID';
+
+comment on column CAR_SENDTIME.CARID is
+'班车ID';
+
+comment on column CAR_SENDTIME.SENDTIME is
+'发车时间';
+
+INSERT INTO CAR VALUES('1','1号','苏A54321','研究所-火车站','王师傅','13912345678','研究所门口');
+
+INSERT INTO CAR_SENDTIME VALUES('111','1','15:00');
+INSERT INTO CAR_SENDTIME VALUES('112','1','17:00');
+INSERT INTO CAR_SENDTIME VALUES('113','1','19:00');
+INSERT INTO CAR_SENDTIME VALUES('114','1','21:00');
+INSERT INTO CAR_SENDTIME VALUES('115','1','23:00');

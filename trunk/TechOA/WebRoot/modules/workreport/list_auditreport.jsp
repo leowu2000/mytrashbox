@@ -6,6 +6,8 @@ PageList listReport = (PageList)request.getAttribute("listReport");
 List listProject = (List)request.getAttribute("listProject");
 List listStage = (List)request.getAttribute("listStage");
 
+int pagenum = listReport.getPageInfo().getCurPage();
+
 String emrole = session.getAttribute("EMROLE").toString();
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -48,7 +50,7 @@ Ext.onReady(function(){
     	Ext.Msg.confirm('确认','确实要审核通过么？',function(btn){
     		if(btn=='yes'){
     		   
-            	Ext.getDom('listForm').action=url+'?action=pass';       
+            	Ext.getDom('listForm').action=url+'?action=pass&page=<%=pagenum %>';       
             	Ext.getDom('listForm').submit();
     		}
     	});
@@ -64,7 +66,7 @@ Ext.onReady(function(){
     	Ext.Msg.confirm('确认','确实要退回么？',function(btn){
     		if(btn=='yes'){
     		   
-            	Ext.getDom('listForm').action=url+'?action=deny';       
+            	Ext.getDom('listForm').action=url+'?action=deny&page=<%=pagenum %>';       
             	Ext.getDom('listForm').submit();
     		}
     	});

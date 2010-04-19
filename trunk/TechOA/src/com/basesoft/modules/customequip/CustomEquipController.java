@@ -17,7 +17,7 @@ import com.basesoft.util.StringUtil;
 
 public class CustomEquipController extends CommonController {
 
-	CustomEquipDAO infoEquipDAO;
+	CustomEquipDAO customEquipDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -38,8 +38,8 @@ public class CustomEquipController extends CommonController {
 			String status = ServletRequestUtils.getStringParameter(request, "status", "0");
 			
 			//获得部门列表和人员列表
-			List listAssetsDepart = infoEquipDAO.getAssetDepart(status);
-			List listAssetsEmp = infoEquipDAO.getAssetEmpByDepart(depart, status);
+			List listAssetsDepart = customEquipDAO.getAssetDepart(status);
+			List listAssetsEmp = customEquipDAO.getAssetEmpByDepart(depart, status);
 			
 			mv.addObject("listAssetsEmp", listAssetsEmp);
 			mv.addObject("listAssetsDepart", listAssetsDepart);
@@ -53,7 +53,7 @@ public class CustomEquipController extends CommonController {
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
 			
-			PageList pageList = infoEquipDAO.getInfoEquips(status, depart, emp, page);
+			PageList pageList = customEquipDAO.getInfoEquips(status, depart, emp, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("status", status);
@@ -66,9 +66,9 @@ public class CustomEquipController extends CommonController {
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
 			
-			PageList pageList = infoEquipDAO.getInfoEquips(status, depart, emp, page);
+			PageList pageList = customEquipDAO.getInfoEquips(status, depart, emp, page);
 			
-			List listDepart = infoEquipDAO.getDepartment();
+			List listDepart = customEquipDAO.getDepartment();
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("status", status);
@@ -124,7 +124,7 @@ public class CustomEquipController extends CommonController {
 			}
 			
 			String insertSql = "insert into ASSETS values('" + id + "', '" + code + "', '" + name + "', '" + model + "', " + buydate + ", " + producdate + ", " + buycost + ", " + nowcost + ", " + life + ", '1', null, null, null," + checkdate + ", " + checkyear + ")";
-			infoEquipDAO.insert(insertSql);
+			customEquipDAO.insert(insertSql);
 			
 			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
@@ -137,7 +137,7 @@ public class CustomEquipController extends CommonController {
 			//循环按id删除
 			for(int i=0;i<check.length;i++){
 				String deleteSql = "delete from ASSETS where ID='" + check[i] + "'";
-				infoEquipDAO.delete(deleteSql);
+				customEquipDAO.delete(deleteSql);
 			}
 			
 			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
@@ -151,10 +151,10 @@ public class CustomEquipController extends CommonController {
 			String departcode = ServletRequestUtils.getStringParameter(request, "departcode", "");
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
 			
-			Map mapEmp = infoEquipDAO.findByCode("EMPLOYEE", empcode);
+			Map mapEmp = customEquipDAO.findByCode("EMPLOYEE", empcode);
 			
 			String updateSql = "update ASSETS set STATUS='2', DEPARTCODE='" + mapEmp.get("DEPARTCODE") + "', EMPCODE='" + empcode + "', LENDDATE='" + StringUtil.DateToString(new Date(), "yyyy-MM-dd") + "' where ID='" + id + "'";
-			infoEquipDAO.update(updateSql);
+			customEquipDAO.update(updateSql);
 			
 			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
@@ -166,7 +166,7 @@ public class CustomEquipController extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
 			String updateSql = "update ASSETS set STATUS='1', DEPARTCODE=null, EMPCODE=null, LENDDATE=null where ID='" + id + "'";
-			infoEquipDAO.update(updateSql);
+			customEquipDAO.update(updateSql);
 			
 			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
@@ -178,7 +178,7 @@ public class CustomEquipController extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
 			String updateSql = "update ASSETS set STATUS='3', DEPARTCODE=null, EMPCODE=null, LENDDATE=null where ID='" + id + "'";
-			infoEquipDAO.update(updateSql);
+			customEquipDAO.update(updateSql);
 			
 			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
@@ -191,7 +191,7 @@ public class CustomEquipController extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
 			String updateSql = "update ASSETS set CHECKDATE='" + checkdate + "' where ID='" + id + "'";
-			infoEquipDAO.update(updateSql);
+			customEquipDAO.update(updateSql);
 			
 			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
@@ -199,12 +199,12 @@ public class CustomEquipController extends CommonController {
 			mv = new ModelAndView("modules/infoequip/list_sellend");
 			
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
-			Map mapEmp = infoEquipDAO.findByCode("EMPLOYEE", empcode);
+			Map mapEmp = customEquipDAO.findByCode("EMPLOYEE", empcode);
 			String empname = mapEmp.get("NAME")==null?"":mapEmp.get("NAME").toString();
 			String departcode = mapEmp.get("DEPARTCODE")==null?"":mapEmp.get("DEPARTCODE").toString();
-			String departname = infoEquipDAO.findNameByCode("DEPARTMENT", departcode);
+			String departname = customEquipDAO.findNameByCode("DEPARTMENT", departcode);
 			
-			PageList pageList = infoEquipDAO.findSelLend(empcode, page);
+			PageList pageList = customEquipDAO.findSelLend(empcode, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("empcode", empcode);
@@ -215,7 +215,7 @@ public class CustomEquipController extends CommonController {
 		return mv;
 	}
 
-	public void setinfoEquipDAO(CustomEquipDAO infoEquipDAO){
-		this.infoEquipDAO = infoEquipDAO;
+	public void setcustomEquipDAO(CustomEquipDAO customEquipDAO){
+		this.customEquipDAO = customEquipDAO;
 	}
 }
