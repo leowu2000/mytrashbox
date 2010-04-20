@@ -48,41 +48,74 @@ public class ExcelController extends CommonController {
 		String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
 		String errorMessage = "";
 		
-		if("import".equals(action)){//excel导入
+		if("preview".equals(action)){//导入预览
+			if("DEPARTMENT".equals(table)){//导入部门
+				mv = new ModelAndView("modules/excel/preview_depart");
+			}else if("EMPLOYEE".equals(table)){//导入人员
+				mv = new ModelAndView("modules/excel/preview_employee");
+				mv.addObject("seldepart", seldepart);
+			}else if("EMP_FINANCIAL".equals(table)){//导入人员财务信息
+				mv = new ModelAndView("modules/excel/preview_finance");
+				mv.addObject("seldepart", seldepart);
+				mv.addObject("emname", emname);
+				mv.addObject("datepick", datepick);
+				mv.addObject("date", date);
+			}else if("EMP_CARD".equals(table)){//导入人员一卡通信息
+				mv = new ModelAndView("modules/excel/preview_card");
+				mv.addObject("seldepart", seldepart);
+				mv.addObject("emname", emname);
+			}else if("EMP_POS".equals(table)){//导入班车打卡信息
+				mv = new ModelAndView("modules/excel/preview_pos");
+				mv.addObject("seldepart", seldepart);
+				mv.addObject("emname", emname);
+				mv.addObject("datepick", datepick);
+			}else if("GOODS".equals(table)){//物资资产
+				mv = new ModelAndView("modules/excel/preview_goods");
+			}else if("PLAN".equals(table)){//计划
+				mv = new ModelAndView("modules/excel/preview_plan");
+			}else if("ASSETS".equals(table)){//固定资产
+				mv = new ModelAndView("modules/excel/preview_assets");
+			}else if("WORKCHECK".equals(table)){//考勤
+				mv = new ModelAndView("modules/excel/preview_workcheck");
+			}
 			
 			MultipartHttpServletRequest mpRequest = (MultipartHttpServletRequest)request;
+			JSONObject data = new JSONObject();
 			if (((MultipartFile) mpRequest.getFileMap().get("file")).getSize() != 0) {//有选择文件
 				//以输入流来读取文件
 				InputStream file = ((MultipartFile) mpRequest.getFileMap().get("file")).getInputStream();
 				
 				//Excel转换为JSON数据
 				JSONObject config_Conversion = Config.getJSONObjectByName(table + "_Conversion");
-				JSONObject data = ExcelToJSON.parse(file, config_Conversion);
-				
-				if("DEPARTMENT".equals(table)){//导入部门
-					errorMessage = excelDAO.insertDepart(data);
-				}else if("EMPLOYEE".equals(table)){//导入人员
-					errorMessage = excelDAO.insertEmployee(data);
-				}else if("EMP_FINANCIAL".equals(table)){//导入人员财务信息
-					errorMessage = excelDAO.insertFinance(data, date);
-				}else if("EMP_CARD".equals(table)){//导入人员一卡通信息
-					errorMessage = excelDAO.insertCard(data);
-				}else if("EMP_POS".equals(table)){//导入班车打卡信息
-					errorMessage = excelDAO.insertPos(data);
-				}else if("GOODS".equals(table)){//物资资产
-					errorMessage = excelDAO.insertGoods(data);
-				}else if("PLAN".equals(table)){//计划
-					String type = ServletRequestUtils.getStringParameter(request, "typecode3", "");
-					String type2 = ServletRequestUtils.getStringParameter(request, "typecode2", "");
-					errorMessage = excelDAO.insertPlan(data, type, type2);
-				}else if("ASSETS".equals(table)){//固定资产
-					errorMessage = excelDAO.insertAssets(data);
-				}else if("WORKCHECK".equals(table)){//考勤
-					errorMessage = excelDAO.insertWorkcheck(data, date);
-				}
-				
+				data = ExcelToJSON.parse(file, config_Conversion);
 			}
 			
+			mv.addObject("data", data);
+			return mv;
+		}else if("import".equals(action)){//excel导入
+			JSONObject data = new JSONObject(request.getParameter("data"));
+			
+			if("DEPARTMENT".equals(table)){//导入部门
+				errorMessage = excelDAO.insertDepart(data);
+			}else if("EMPLOYEE".equals(table)){//导入人员
+				errorMessage = excelDAO.insertEmployee(data);
+			}else if("EMP_FINANCIAL".equals(table)){//导入人员财务信息
+				errorMessage = excelDAO.insertFinance(data, date);
+			}else if("EMP_CARD".equals(table)){//导入人员一卡通信息
+				errorMessage = excelDAO.insertCard(data);
+			}else if("EMP_POS".equals(table)){//导入班车打卡信息
+				errorMessage = excelDAO.insertPos(data);
+			}else if("GOODS".equals(table)){//物资资产
+				errorMessage = excelDAO.insertGoods(data);
+			}else if("PLAN".equals(table)){//计划
+				String type = ServletRequestUtils.getStringParameter(request, "typecode3", "");
+				String type2 = ServletRequestUtils.getStringParameter(request, "typecode2", "");
+				errorMessage = excelDAO.insertPlan(data, type, type2);
+			}else if("ASSETS".equals(table)){//固定资产
+				errorMessage = excelDAO.insertAssets(data);
+			}else if("WORKCHECK".equals(table)){//考勤
+				errorMessage = excelDAO.insertWorkcheck(data, date);
+			}
 			
 			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp + "&f_level=" + f_level + "&f_type=" + f_type);
 		}else if("export".equals(action)){//excel导出

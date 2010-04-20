@@ -130,10 +130,11 @@ public class EmployeeDAO extends CommonDAO{
 			for(int i=0;i<listDate.size();i++){//循环日期,给出这一个月的考勤记录，没有的放空
 				Date date = listDate.get(i);
 				
-				List l = jdbcTemplate.queryForList("select * from VIEW_WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE='" + StringUtil.DateToString(date, "yyyy-MM-dd") + "'");
+				List l = jdbcTemplate.queryForList("select * from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE='" + StringUtil.DateToString(date, "yyyy-MM-dd") + "'");
 				if(l.size()>0){
 					Map m = (Map)l.get(0);
-					returnMap.put(StringUtil.DateToString(date, "yyyy-MM-dd"), m.get("RESULTNAME"));
+					String resultname = findNameByCode("DICT", m.get("CHECKRESULT").toString());
+					returnMap.put(StringUtil.DateToString(date, "yyyy-MM-dd"), resultname);
 				}else {
 					returnMap.put(StringUtil.DateToString(date, "yyyy-MM-dd"), "");
 				}
@@ -155,10 +156,11 @@ public class EmployeeDAO extends CommonDAO{
 				returnMap.put("EMPCODE", mapEmployee.get("CODE"));
 				for(int j=0;j<listDate.size();j++){//循环日期,给出这一个月的考勤记录，没有的放空
 					Date date = listDate.get(j);
-					List l = jdbcTemplate.queryForList("select * from VIEW_WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE='" + StringUtil.DateToString(date, "yyyy-MM-dd") + "'");
+					List l = jdbcTemplate.queryForList("select * from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE='" + StringUtil.DateToString(date, "yyyy-MM-dd") + "'");
 					if(l.size()>0){
 						Map m = (Map)l.get(0);
-						returnMap.put(StringUtil.DateToString(date, "yyyy-MM-dd"), m.get("RESULTNAME"));
+						String resultname = findNameByCode("DICT", m.get("CHECKRESULT").toString());
+						returnMap.put(StringUtil.DateToString(date, "yyyy-MM-dd"), resultname);
 					}else {
 						returnMap.put(StringUtil.DateToString(date, "yyyy-MM-dd"), "");
 					}

@@ -92,9 +92,11 @@ for(int i=0;i<listAssess.size();i++){
 	Map mapPersent = planDAO.getPersent(daypersent);
 	
 	state = "<font color='" + mapPersent.get("COLOR") + "'>" + mapPersent.get("NAME") + "</font>";
+	
+	String pjname = planDAO.findNameByCode("PROJECT", mapAssess.get("PJCODE").toString());
 %>
             <tr align="center">
-                <td>&nbsp;<%=mapAssess.get("PJNAME")==null?"":mapAssess.get("PJNAME") %></td>
+                <td>&nbsp;<%=pjname %></td>
                 <td>&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
                 <td>&nbsp;<%=state %></td>
                 <td>&nbsp;<%=mapAssess.get("ASSESS")==null?"":mapAssess.get("ASSESS") %></td>

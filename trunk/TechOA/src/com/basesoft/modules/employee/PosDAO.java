@@ -28,9 +28,9 @@ public class PosDAO extends CardDAO {
 				}
 			}else {
 				if("".equals(emname)){//按所选日期
-					sql = "select * from EMP_POS where SWIPETIME>=to_date('" + datepick + " 00:00:00','yyyy-MM-dd hh24:mi:ss') and SWIPETIME<=to_date('" + datepick + " 23:59:59','yyyy-MM-dd hh24:mi:ss')";
+					sql = "select * from EMP_POS where SWIPETIME like '%" + datepick + "%'";
 				}else {//按所选时间并按名字模糊查询
-					sql = "select * from EMP_POS where SWIPETIME>=to_date('" + datepick + " 00:00:00','yyyy-MM-dd hh24:mi:ss') and SWIPETIME<=to_date('" + datepick + " 23:59:59','yyyy-MM-dd hh24:mi:ss') and EMPNAME like '%" + emname + "%'";
+					sql = "select * from EMP_POS where SWIPETIME like '%" + datepick + "%' and EMPNAME like '%" + emname + "%'";
 				}
 			}
 		}else{
@@ -42,9 +42,9 @@ public class PosDAO extends CardDAO {
 				}
 			}else {
 				if("".equals(emname)){//按所选时间所选单位
-					sql = "select * from EMP_POS where DEPARTCODE='" + seldepart + "' and SWIPETIME>=to_date('" + datepick + " 00:00:00','yyyy-MM-dd hh24:mi:ss') and SWIPETIME<=to_date('" + datepick + " 23:59:59','yyyy-MM-dd hh24:mi:ss')";
+					sql = "select * from EMP_POS where DEPARTCODE='" + seldepart + "' and SWIPETIME like '%" + datepick + "%'";
 				}else {//按所选时间、所选单位并按名字模糊查询
-					sql = "select * from EMP_POS where DEPARTCODE='" + seldepart + "' and SWIPETIME>=to_date('" + datepick + " 00:00:00','yyyy-MM-dd hh24:mi:ss') and SWIPETIME<=to_date('" + datepick + " 23:59:59','yyyy-MM-dd hh24:mi:ss') and EMPNAME like '%" + emname + "%'";
+					sql = "select * from EMP_POS where DEPARTCODE='" + seldepart + "' and SWIPETIME like '%" + datepick + "%' and EMPNAME like '%" + emname + "%'";
 				}
 			}
 		}

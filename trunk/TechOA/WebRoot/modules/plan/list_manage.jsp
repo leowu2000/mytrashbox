@@ -2,6 +2,8 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.net.*" %>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.modules.plan.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listPersent = (List)request.getAttribute("listPersent");
@@ -18,6 +20,9 @@ f_empname = URLEncoder.encode(f_empname,"UTF-8");
 
 String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 errorMessage = new String(errorMessage.getBytes("ISO8859-1"), "UTF-8");
+
+ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -377,6 +382,8 @@ for(int i=0;i<listPlan.size();i++){
 	}else if("4".equals(status)){
 		status = "已完成";
 	}
+	
+	String pjname = planDAO.findNameByCode("PROJECT", mapPlan.get("PJCODE").toString());
 %>
             <tr align="center">
                 <td>
@@ -388,7 +395,7 @@ for(int i=0;i<listPlan.size();i++){
 				}
 %>                	                
                 </td>
-                <td>&nbsp;<%=mapPlan.get("PJNAME")==null?"":mapPlan.get("PJNAME") %></td>
+                <td>&nbsp;<%=pjname %></td>
                 <td>&nbsp;<%=mapPlan.get("ORDERCODE")==null?"":mapPlan.get("ORDERCODE") %></td>
                 <td>&nbsp;<%=mapPlan.get("NOTE")==null?"":mapPlan.get("NOTE") %></td>
                 <td>&nbsp;<%=mapPlan.get("SYMBOL")==null?"":mapPlan.get("SYMBOL") %></td>

@@ -1,14 +1,18 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.modules.workreport.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 PageList listReport = (PageList)request.getAttribute("listReport");
 List listProject = (List)request.getAttribute("listProject");
 List listStage = (List)request.getAttribute("listStage");
-
 int pagenum = listReport.getPageInfo().getCurPage();
 
 String emrole = session.getAttribute("EMROLE").toString();
+
+ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+WorkReportDAO wrDAO = (WorkReportDAO)ctx.getBean("workReportDAO");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -89,7 +93,8 @@ Ext.onReady(function(){
                 <td>上报人</td>
                 <td>日  期</td>              
                 <td>名  称</td>
-                <td>项目名称</td>
+                <td>工作令号</td>
+                <td>分系统</td>
                 <td>投入阶段</td>
                 <td>投入工时</td>
                 <td>备注</td>
@@ -110,17 +115,23 @@ for(int i=0;i<list.size();i++){
 	}else {
 		flag = "已退回";
 	}
+	
+	String empname = wrDAO.findNameByCode("EMPLOYEE", map.get("EMPCODE").toString());
+	String pjname = wrDAO.findNameByCode("PROJECT", map.get("PJCODE").toString());
+	String pjname_d = wrDAO.findNameByCode("PROJECT_D", map.get("PJCODE_D").toString());
+	String stagename = wrDAO.findNameByCode("DICT", map.get("STAGECODE").toString());
 %>
             <tr align="center">
                 <td><input type="checkbox" name="check" value="<%=map.get("ID") %>" class="ainput"></td>
-                <td><%=map.get("EMPNAME") %></td>
-                <td><%=map.get("STARTDATE") %></td>
-                <td><%=map.get("NAME") %></td>
-                <td><%=map.get("PJNAME") %></td>
-                <td><%=map.get("STAGENAME") %></td>   
-                <td><%=map.get("AMOUNT") %></td>
-                <td><%=map.get("BZ") %></td>
-                <td><%=flag %></td>
+                <td>&nbsp;<%=empname %></td>
+                <td>&nbsp;<%=map.get("STARTDATE") %></td>
+                <td>&nbsp;<%=map.get("NAME") %></td>
+                <td>&nbsp;<%=pjname %></td>
+                <td>&nbsp;<%=pjname_d %></td>
+                <td>&nbsp;<%=stagename %></td>   
+                <td>&nbsp;<%=map.get("AMOUNT") %></td>
+                <td>&nbsp;<%=map.get("BZ") %></td>
+                <td>&nbsp;<%=flag %></td>
             </tr>
 <%} %>            
 </table>

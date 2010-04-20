@@ -104,7 +104,17 @@ Ext.onReady(function(){
         win2 = new Ext.Window({
         	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'预览',handler: 
+	        	function(){
+	        		if(document.getElementById('file').value == ''){
+	        			alert('请选择文件！');
+	        			return false;
+	        		}else {
+	        			Ext.getDom('dataForm2').action=action; 
+	        			Ext.getDom('dataForm2').submit();
+	        		}
+	        	}
+	        },
 	        {text:'关闭',handler: function(){win2.hide();}}
 	        ]
         });
@@ -157,7 +167,7 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=em.do?action=infolist&table=EMPLOYEE&seldepart=<%=seldepart %>';
+		action = 'excel.do?action=preview&table=EMPLOYEE&seldepart=<%=seldepart %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
