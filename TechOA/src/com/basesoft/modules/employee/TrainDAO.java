@@ -72,27 +72,27 @@ public class TrainDAO extends EmployeeDAO {
 		
 		if("1".equals(type)){//人员
 			if("0".equals(empcode)){//全部人员
-				sql = "select * from VIEW_TRAIN order by EMPCODE";
+				sql = "select * from TRAIN order by EMPCODE";
 			}else {
-				sql = "select * from VIEW_TRAIN where EMPCODE='" + empcode + "' order by EMPCODE";
+				sql = "select * from TRAIN where EMPCODE='" + empcode + "' order by EMPCODE";
 			}
 		}else if("2".equals(type)){//课程
 			if("".equals(seltrain)){//全部课程
-				sql = "select * from VIEW_TRAIN order by NAME";
+				sql = "select * from TRAIN order by NAME";
 			}else {
-				sql = "select * from VIEW_TRAIN where NAME='" + seltrain + "' order by EMPCODE";
+				sql = "select * from TRAIN where NAME='" + seltrain + "' order by EMPCODE";
 			}
 		}else if("3".equals(type)){//考核
 			if("".equals(selassess)){//全部考核
-				sql = "select * from VIEW_TRAIN order by ASSESS";
+				sql = "select * from TRAIN order by ASSESS";
 			}else {
-				sql = "select * from VIEW_TRAIN where ASSESS='" + selassess + "' order by ASSESS";
+				sql = "select * from TRAIN where ASSESS='" + selassess + "' order by ASSESS";
 			}
 		}else if("4".equals(type)){//成本
 			if(cost==0){//全部成本
-				sql = "select * from VIEW_TRAIN order by COST desc";
+				sql = "select * from TRAIN order by COST desc";
 			}else {//成本小于所填写的
-				sql = "select * from VIEW_TRAIN where COST<=" + cost + " order by COST desc";
+				sql = "select * from TRAIN where COST<=" + cost + " order by COST desc";
 			}
 		}
 		
@@ -160,7 +160,7 @@ public class TrainDAO extends EmployeeDAO {
 	 */
 	public PageList findAllTrainEmp(String trainid, int page){
 		PageList pageList = new PageList();
-		String sql = "select * from VIEW_TRAIN where TRAINID='" + trainid + "' order by COST desc";
+		String sql = "select * from TRAIN where TRAINID='" + trainid + "'";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;

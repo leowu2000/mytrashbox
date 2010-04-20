@@ -60,11 +60,6 @@ PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 <%
 for(int i=0;i<listAssess.size();i++){
 	Map mapAssess = (Map)listAssess.get(i);
-	//int amount = mapAssess.get("AMOUNT")==null?0:Integer.parseInt(mapAssess.get("AMOUNT").toString());
-	//int planedworkload = mapAssess.get("PLANEDWORKLOAD")==null?0:Integer.parseInt(mapAssess.get("PLANEDWORKLOAD").toString());
-	//完成率
-	//float persent = planedworkload==0?0:amount*100/planedworkload;
-	//计划完成情况
 	String state = "";
 	Date now = new Date();
 	Date startdate = mapAssess.get("STARTDATE")==null?new Date():StringUtil.StringToDate(mapAssess.get("STARTDATE").toString(),"yyyy-MM-dd");
@@ -81,9 +76,11 @@ for(int i=0;i<listAssess.size();i++){
 	Map mapPersent = planDAO.getPersent(daypersent);
 	
 	state = "<font color='" + mapPersent.get("COLOR") + "'>" + mapPersent.get("NAME") + "</font>";
+	
+	String pjname = planDAO.findNameByCode("PROJECT", mapAssess.get("PJCODE").toString());
 %>
             <tr align="center">
-                <td>&nbsp;<%=mapAssess.get("PJNAME")==null?"":mapAssess.get("PJNAME") %></td>
+                <td>&nbsp;<%=pjname %></td>
                 <td>&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
                 <td>&nbsp;<%=state %></td>
                 <td>&nbsp;<%=mapAssess.get("ASSESS")==null?"":mapAssess.get("ASSESS") %></td>

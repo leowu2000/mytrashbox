@@ -2,6 +2,8 @@
 <%@ page import="java.net.*"%>
 <%@ page import="com.basesoft.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.modules.employee.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 	PageList pageList = (PageList)request.getAttribute("pageList");
 	List listTrain = pageList.getList();
@@ -16,6 +18,8 @@
 	String cost = request.getAttribute("cost").toString();
 	String method = request.getAttribute("method")==null?"":request.getAttribute("method").toString();
 	
+	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+	TrainDAO trainDAO = (TrainDAO)ctx.getBean("trainDAO");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -54,6 +58,7 @@
 <%
 	for(int i=0;i<listTrain.size();i++){
 		Map mapTrain = (Map)listTrain.get(i);
+		Train train = trainDAO.findByTId_D(mapTrain.get("TRAINID").toString());
 %>
 		<tr align="center">
 	<%
@@ -65,7 +70,7 @@
 	%>
 			<td><%=mapTrain.get("EMPCODE")==null?"":mapTrain.get("EMPCODE") %></td>
 			<td><%=mapTrain.get("EMPNAME")==null?"":mapTrain.get("EMPNAME") %></td>
-			<td><a href="train.do?action=detail&trainid=<%=mapTrain.get("TRAINID") %>"><%=mapTrain.get("NAME")==null?"":mapTrain.get("NAME") %></a></td>
+			<td><a href="train.do?action=detail&trainid=<%=mapTrain.get("TRAINID") %>"><%=train.getName() %></a></td>
 			<td><%=mapTrain.get("ASSESS")==null?"":mapTrain.get("ASSESS") %></td>
 		</tr>
 <%

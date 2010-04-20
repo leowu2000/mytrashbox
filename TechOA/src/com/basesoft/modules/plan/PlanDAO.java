@@ -30,29 +30,29 @@ public class PlanDAO extends CommonDAO {
 		if("0".equals(level)){//全部级别
 			if("0".equals(type)){//全部类别
 				if("".equals(empname)){//全部人员
-					sql = "select * from VIEW_PLAN where 1=1";
+					sql = "select * from PLAN where 1=1";
 				}else {//人员名称模糊检索
-					sql = "select * from VIEW_PLAN where EMPNAME like '%" + empname + "%'";
+					sql = "select * from PLAN where EMPNAME like '%" + empname + "%'";
 				}
 			}else {//选择了类别
 				if("".equals(empname)){//全部人员
-					sql = "select * from VIEW_PLAN where TYPE='" + type + "'";
+					sql = "select * from PLAN where TYPE='" + type + "'";
 				}else {
-					sql = "select * from VIEW_PLAN where TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+					sql = "select * from PLAN where TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}
 		}else {
 			if("0".equals(type)){//全部类别
 				if("".equals(empname)){//全部人员
-					sql = "select * from VIEW_PLAN where ASSESS='" + level + "'";
+					sql = "select * from PLAN where ASSESS='" + level + "'";
 				}else {//人员名称模糊检索
-					sql = "select * from VIEW_PLAN where ASSESS='" + level + "' and EMPNAME like '%" + empname + "%'";
+					sql = "select * from PLAN where ASSESS='" + level + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}else {//选择了类别
 				if("".equals(empname)){//全部人员
-					sql = "select * from VIEW_PLAN where ASSESS='" + level + "' and TYPE='" + type + "'";
+					sql = "select * from PLAN where ASSESS='" + level + "' and TYPE='" + type + "'";
 				}else {
-					sql = "select * from VIEW_PLAN where ASSESS='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+					sql = "select * from PLAN where ASSESS='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}
 		}
@@ -85,7 +85,7 @@ public class PlanDAO extends CommonDAO {
 		
 		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 		Date enddate = StringUtil.getEndOfMonth(startdate);
-		String sql = "select * from VIEW_PLAN where ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' and STATUS='3'";
+		String sql = "select * from PLAN where ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' and STATUS='3'";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
@@ -146,7 +146,7 @@ public class PlanDAO extends CommonDAO {
 	public List findAllRemind(String level, String type, String datepick, String empname){
 		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 		Date enddate = StringUtil.getEndOfMonth(startdate);
-		String sql = "select a.*,b.* from VIEW_PLAN a, (select sum(AMOUNT) as AMOUNT from WORKREPORT c,PLAN d where c.PJCODE=d.PJCODE and c.PJCODE_D=d.PJCODE_D and c.STAGECODE=d.STAGECODE and c.STARTDATE>=d.STARTDATE and c.STARTDATE<=d.ENDDATE) b where a.ENDDATE>='" + startdate + "' and a.ENDDATE<='" + enddate + "'";
+		String sql = "select a.*,b.* from PLAN a, (select sum(AMOUNT) as AMOUNT from WORKREPORT c,PLAN d where c.PJCODE=d.PJCODE and c.PJCODE_D=d.PJCODE_D and c.STAGECODE=d.STAGECODE and c.STARTDATE>=d.STARTDATE and c.STARTDATE<=d.ENDDATE) b where a.ENDDATE>='" + startdate + "' and a.ENDDATE<='" + enddate + "'";
 		
 		if("0".equals(level)){//全部级别
 			if("0".equals(type)){//全部类别
@@ -192,7 +192,7 @@ public class PlanDAO extends CommonDAO {
 	 */
 	public PageList findAllResult(String empcode, int page){
 		PageList pageList = new PageList();
-		String sql = "select * from VIEW_PLAN a where EMPCODE='" + empcode + "'";
+		String sql = "select * from PLAN a where EMPCODE='" + empcode + "'";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
@@ -217,7 +217,7 @@ public class PlanDAO extends CommonDAO {
 	 * @return
 	 */
 	public List<?> findPjList(){
-		String sql = "select DISTINCT PJCODE, PJNAME from VIEW_PLAN";
+		String sql = "select DISTINCT PJCODE, PJNAME from PLAN";
 		
 		return jdbcTemplate.queryForList(sql);
 	}
@@ -227,7 +227,7 @@ public class PlanDAO extends CommonDAO {
 	 * @return
 	 */
 	public List<?> findStageList(){
-		String sql = "select DISTINCT STAGECODE, STAGENAME from VIEW_PLAN";
+		String sql = "select DISTINCT STAGECODE, STAGENAME from PLAN";
 		
 		return jdbcTemplate.queryForList(sql);
 	}
@@ -240,7 +240,7 @@ public class PlanDAO extends CommonDAO {
 	public Plan findById(String id){
 		Plan plan = new Plan();
 		
-		String sql = "select * from VIEW_PLAN where ID='" + id + "'";
+		String sql = "select * from PLAN where ID='" + id + "'";
 		Map map = jdbcTemplate.queryForMap(sql);
 		
 		plan.setId(id);

@@ -1,16 +1,19 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.modules.workreport.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 PageList listReport = (PageList)request.getAttribute("listReport");
 List listProject = (List)request.getAttribute("listProject");
 List listStage = (List)request.getAttribute("listStage");
-
 int pagenum = listReport.getPageInfo().getCurPage();
 
 String method = request.getAttribute("method").toString();
-
 String emrole = session.getAttribute("EMROLE").toString();
+
+ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+WorkReportDAO wrDAO = (WorkReportDAO)ctx.getBean("workReportDAO");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -187,6 +190,9 @@ for(int i=0;i<list.size();i++){
 	}else {
 		flag = "已退回";
 	}
+	String pjname = wrDAO.findNameByCode("PROJECT", map.get("PJCODE").toString());
+	String pjname_d = wrDAO.findNameByCode("PROJECT_D", map.get("PJCODE_D").toString());
+	String stagename = wrDAO.findNameByCode("DICT", map.get("STAGECODE").toString());
 %>
             <tr>
 <%
@@ -200,14 +206,14 @@ for(int i=0;i<list.size();i++){
 <%
 	}
 %>                
-                <td><%=map.get("STARTDATE")==null?"":map.get("STARTDATE") %></td>
-                <td><%=map.get("NAME") %></td>
-                <td><%=map.get("PJNAME") %></td>
-                <td><%=map.get("PJNAME_D") %></td>
-                <td><%=map.get("STAGENAME") %></td>   
-                <td><%=map.get("AMOUNT") %></td>
-                <td><%=map.get("BZ") %></td>
-                <td><%=flag %></td>
+                <td>&nbsp;<%=map.get("STARTDATE")==null?"":map.get("STARTDATE") %></td>
+                <td>&nbsp;<%=map.get("NAME") %></td>
+                <td>&nbsp;<%=pjname %></td>
+                <td>&nbsp;<%=pjname_d %></td>
+                <td>&nbsp;<%=stagename %></td>   
+                <td>&nbsp;<%=map.get("AMOUNT") %></td>
+                <td>&nbsp;<%=map.get("BZ") %></td>
+                <td>&nbsp;<%=flag %></td>
             </tr>
 <%} %>            
 </table>

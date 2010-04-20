@@ -2,6 +2,8 @@
 <%@ page import="java.net.*"%>
 <%@ page import="com.basesoft.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.modules.employee.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 	PageList pageList = (PageList)request.getAttribute("pageList");
 	List listTrainEmp = pageList.getList();
@@ -9,6 +11,8 @@
 	
 	String trainid = request.getAttribute("trainid")==null?"":request.getAttribute("trainid").toString();
 	int page1 = request.getAttribute("page1")==null?1:Integer.parseInt(request.getAttribute("page1").toString());
+	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+	TrainDAO trainDAO = (TrainDAO)ctx.getBean("trainDAO");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -153,12 +157,13 @@ Ext.onReady(function(){
 <%
 	for(int i=0;i<listTrainEmp.size();i++){
 		Map mapTrainEmp = (Map)listTrainEmp.get(i);
+		Train train = trainDAO.findByTId_D(mapTrainEmp.get("TRAINID").toString());
 %>
 		<tr>
 			<td><input type="checkbox" name="check" value="<%=mapTrainEmp.get("ID") %>" class="ainput"></td>
-			<td><%=mapTrainEmp.get("NAME")==null?"":mapTrainEmp.get("NAME") %></td>
-			<td><%=mapTrainEmp.get("EMPNAME")==null?"":mapTrainEmp.get("EMPNAME") %></td>
-			<td><%=mapTrainEmp.get("ASSESS")==null?"":mapTrainEmp.get("ASSESS") %></td>
+			<td>&nbsp;<%=train.getName() %></td>
+			<td>&nbsp;<%=mapTrainEmp.get("EMPNAME")==null?"":mapTrainEmp.get("EMPNAME") %></td>
+			<td>&nbsp;<%=mapTrainEmp.get("ASSESS")==null?"":mapTrainEmp.get("ASSESS") %></td>
 		</tr>
 <%
 	} 

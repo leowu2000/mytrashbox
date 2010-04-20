@@ -132,7 +132,7 @@ Ext.onReady(function(){
         win3 = new Ext.Window({
         	el:'dlg3',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm3').action=action; Ext.getDom('dataForm3').submit();}},
+	        {text:'预览',handler: function(){Ext.getDom('dataForm3').action=action; Ext.getDom('dataForm3').submit();}},
 	        {text:'关闭',handler: function(){win3.hide();}}
 	        ]
         });
@@ -225,7 +225,7 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=assets.do?action=list_manage&table=ASSETS';
+		action = 'excel.do?action=import&table=ASSETS';
     	win3.setTitle('导入excel');
        	Ext.getDom('dataForm3').reset();
         win3.show(btn.dom);

@@ -172,9 +172,9 @@ public class ExcelDAO extends CommonDAO {
 			}catch(Exception e){
 				System.out.println(e);
 				if("".equals(errorMessage)){
-					errorMessage = "第" + i + "行数据有错误，请检查！";
+					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
 				}
 				continue;
 			}
@@ -204,15 +204,15 @@ public class ExcelDAO extends CommonDAO {
 			String empcode = row.optString("EMPCODE");
 			String empname = row.optString("EMPNAME");
 			String departname = row.optString("DEPARTNAME");
-			double jbf = row.optDouble("JBF");
-			double psf = row.optDouble("PSF");
-			double gc = row.optDouble("GC");
-			double cj = row.optDouble("CJ");
-			double wcbt = row.optDouble("WCBT");
-			double cglbt = row.optDouble("CGLBT");
-			double lb = row.optDouble("LB");
-			double gjbt = row.optDouble("GJBT");
-			double fpbt = row.optDouble("FPBT");
+			double jbf = "".equals(row.optString("JBF"))?0:row.optDouble("JBF");
+			double psf = "".equals(row.optString("PSF"))?0:row.optDouble("PSF");
+			double gc = "".equals(row.optString("GC"))?0:row.optDouble("GC");
+			double cj = "".equals(row.optString("CJ"))?0:row.optDouble("CJ");
+			double wcbt = "".equals(row.optString("WCBT"))?0:row.optDouble("WCBT");
+			double cglbt = "".equals(row.optString("CGLBT"))?0:row.optDouble("CGLBT");
+			double lb = "".equals(row.optString("LB"))?0:row.optDouble("LB");
+			double gjbt = "".equals(row.optString("GJBT"))?0:row.optDouble("GJBT");
+			double fpbt = "".equals(row.optString("FPBT"))?0:row.optDouble("FPBT");
 			String xmmc = row.optString("XMMC");
 			String bz = row.optString("BZ");
 			
@@ -228,9 +228,9 @@ public class ExcelDAO extends CommonDAO {
 			}catch(Exception e){
 				System.out.println(e);
 				if("".equals(errorMessage)){
-					errorMessage = "第" + i + "行数据有错误，请检查！";
+					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
 				}
 				continue;
 			}
@@ -283,9 +283,9 @@ public class ExcelDAO extends CommonDAO {
 			}catch(Exception e){
 				System.out.println(e);
 				if("".equals(errorMessage)){
-					errorMessage = "第" + i + "行数据有错误，请检查！";
+					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
 				}
 				continue;
 			}
@@ -316,8 +316,8 @@ public class ExcelDAO extends CommonDAO {
 			String empname = row.optString("EMPNAME");
 			String departname = row.optString("DEPARTNAME");
 			String posmachine = row.optString("POSMACHINE");
-			String cost = row.optString("COST");
-			String poscode = row.optString("POSCODE");
+			String cost = "".equals(row.optString("COST"))?"0":row.optString("COST");
+			String poscode = "".equals(row.optString("POSCODE"))?"0":row.optString("POSCODE");
 			String cardno = row.optString("CARDNO");
 			
 			//根据部门名称找出部门编码
@@ -332,9 +332,9 @@ public class ExcelDAO extends CommonDAO {
 			}catch(Exception e){
 				System.out.println(e);
 				if("".equals(errorMessage)){
-					errorMessage = "第" + i + "行数据有错误，请检查！";
+					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
 				}
 				continue;
 			}
@@ -386,9 +386,9 @@ public class ExcelDAO extends CommonDAO {
 			}catch(Exception e){
 				System.out.println(e);
 				if("".equals(errorMessage)){
-					errorMessage = "第" + i + "行数据有错误，请检查！";
+					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
 				}
 				continue;
 			}
@@ -445,9 +445,9 @@ public class ExcelDAO extends CommonDAO {
 			}catch(Exception e){
 				System.out.println(e);
 				if("".equals(errorMessage)){
-					errorMessage = "第" + i + "行数据有错误，请检查！";
+					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
 				}
 				continue;
 			}
@@ -505,9 +505,9 @@ public class ExcelDAO extends CommonDAO {
 			}catch(Exception e){
 				System.out.println(e);
 				if("".equals(errorMessage)){
-					errorMessage = "第" + i + "行数据有错误，请检查！";
+					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
 				}
 				continue;
 			}
@@ -587,9 +587,9 @@ public class ExcelDAO extends CommonDAO {
 			}catch(Exception e){
 				System.out.println(e);
 				if("".equals(errorMessage)){
-					errorMessage = "第" + i + "行数据有错误，请检查！";
+					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
 				}
 				continue;
 			}
@@ -643,9 +643,9 @@ public class ExcelDAO extends CommonDAO {
 			}catch(Exception e){
 				System.out.println(e);
 				if("".equals(errorMessage)){
-					errorMessage = "第" + i + "行数据有错误，请检查！";
+					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + i + "行数据有错误，请检查！";
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
 				}
 				continue;
 			}
