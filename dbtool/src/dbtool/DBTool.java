@@ -1,5 +1,6 @@
 package dbtool;
 
+import dbtool.ToOrder.TemClass;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -103,9 +104,9 @@ public class DBTool {
                     searChsql = "select * from " + table.toUpperCase();
                     wirteToDatabase(table,saveDir,searChsql,logList,expType,version,isTurnChar,result);
                 }
-                if (expType == 2) {
-                    createExcelTable(table, rpareStsc, saveDir, logList, expType,isTurnChar);
-                }
+//                if (expType == 2) {
+                createExcelTable(table, rpareStsc, saveDir, logList, expType,isTurnChar);
+//                }
             }
         }catch(Exception ex){
             ex.printStackTrace();
@@ -393,7 +394,7 @@ public class DBTool {
                 tables[i] = HY_DBTP_JDao.getTabid(expModel.get(i).toString(), dbTool);
             }
         }
-        if (expType != 0 && expType!=3) {
+        if (expType == 1) {
             ((DefaultListModel) (logList.getModel())).addElement("清空目标数据库完成");
         }
         /**
@@ -404,7 +405,7 @@ public class DBTool {
         // 拷贝数据
         int i = 0;
         for (String table : tables) {
-            if(expType==3){
+            if(expType == 2){
                 if(i==0)
                     ((DefaultListModel) (logList.getModel())).addElement("正在生成数据索引 ......");
                 insertDataIndexTable(table, stscStr, stnameStr, logList, version, expType, saveDir,isTurnChar,dbtype);
@@ -439,17 +440,18 @@ public class DBTool {
                 }
             }
         }
-        //保存导出报告
-        if(stscStr.split(",").length>450){
-            ExcelService.writeReportHtmlHead(saveDir,errorTab,dbTool,listTablesModel,stscStr);
-            ExcelService.createReportHtmlCutStcd(saveDir, expSuccessModel, errorTab, dbTool, selectedStscModel, selectedSnameModel,
-                    listTablesModel, expType, stscStr,dataIndexMap,dataDescMap,resultStscMap,isTurnChar,version);
-            ExcelService.writeReportHtmlDetail(saveDir);
-        }else{
-            ExcelService.createReportHtml2(saveDir, expSuccessModel, errorTab, dbTool, selectedStscModel, selectedSnameModel,
-                    listTablesModel, expType, stscStr,dataIndexMap,dataDescMap,resultStscMap,isTurnChar,version);
+        if(expType != 2){
+             //保存导出报告
+            if(stscStr.split(",").length>450){
+                ExcelService.writeReportHtmlHead(saveDir,errorTab,dbTool,listTablesModel,stscStr);
+                ExcelService.createReportHtmlCutStcd(saveDir, expSuccessModel, errorTab, dbTool, selectedStscModel, selectedSnameModel,
+                        listTablesModel, expType, stscStr,dataIndexMap,dataDescMap,resultStscMap,isTurnChar,version);
+                ExcelService.writeReportHtmlDetail(saveDir);
+            }else{
+                ExcelService.createReportHtml2(saveDir, expSuccessModel, errorTab, dbTool, selectedStscModel, selectedSnameModel,
+                        listTablesModel, expType, stscStr,dataIndexMap,dataDescMap,resultStscMap,isTurnChar,version);
+            }
         }
-        
         ((DefaultListModel) (logList.getModel())).addElement("==导出工作成功结束！==");
     }
     /**
@@ -467,7 +469,7 @@ public class DBTool {
      public void insertDataIndexTable(String table, String stcdStr,
             String stnameStr, JList logList, int version, int expType, String saveDir,boolean isTurnChar,int dbtype) {
         String indexFiled = getIndexFiled(table);
-        if(expType==3)
+        if(expType == 2)
             ((DefaultListModel) (logList.getModel())).addElement("正在分析表["+getTabCnnm(jt2,table)+"]_"+table+"请等待......");
         if (!indexFiled.trim().equals("")) {//首先保证这张表可以生成数据索引
             outputError("\r\n"+table,"===准备在字段-"+indexFiled+"-上生成索引","");
@@ -511,11 +513,14 @@ public class DBTool {
                             Map map = (Map) it.next();
                             beforList.add(order.getTem(map.get("STCD").toString(), map.get("YEARS").toString(), map.get("TOTAL").toString()));
                         }
+                        //输出详细的导出日志信息，表，站，单年，数据量
+//                      if (expType == 0 || expType == 2 || expType==3)
+                        outPutAllIndexToFile(table, saveDir, beforList, version,isTurnChar);
                         List afterList = ToOrder.toOrder(beforList);
-                        if (expType == 0 || expType == 2 || expType==3) {
-                            outPutIndexToFile(table, saveDir, afterList, version,isTurnChar);
-                        }
-                        if (expType == 1 || expType == 2) {
+                        //输出详细的导出日志信息，表，站，起始年－结束年，数据量
+//                      if (expType == 0 || expType == 2 || expType==3)
+                        outPutIndexToFile(table, saveDir, afterList, version,isTurnChar);
+                        if (expType == 1) {
                             if (afterList != null && afterList.size() > 0) {
                                 for (int w = 0; w < afterList.size(); w++) {
                                     String[] values = ((String) afterList.get(w).toString()).split(",");
@@ -618,16 +623,16 @@ public class DBTool {
                              dataDescMap.put(table,"");
                         }
                     }
-                     if(expType==3)
+                     if(expType == 2)
                        ((DefaultListModel) (logList.getModel())).addElement("         √ 表[ "+getTabCnnm(jt2,table)+" ]_ "+table+" 生成索引成功");
                 }else{
                     dataIndexMap.put(table, "");
-                    if(expType==3)
+                    if(expType == 2)
                        ((DefaultListModel) (logList.getModel())).addElement("         表[ "+getTabCnnm(jt2,table)+" ]_ "+table+" 数据为空");
                 }
             } catch (Exception ex) {
                 dataIndexMap.put(table, "错误");
-                if(expType==3){
+                if(expType == 2){
                      ((DefaultListModel) (logList.getModel())).addElement("         表[ "+getTabCnnm(jt2,table)+" ]_"+table+"在字段[ "+indexFiled+" ]上生成索引失败...");
                      expSuccessModel.removeElement(getTabCnnm(jt2, table));
                     if ("".trim().equals(errorTab)) {
@@ -640,7 +645,7 @@ public class DBTool {
                 outputError("\r\n"+table, "===insertDataIndexTable_new=",ex.getMessage());
             }
         }else{
-            if(expType==3){
+            if(expType == 2){
                 ((DefaultListModel) (logList.getModel())).addElement("         ※ 表["+getTabCnnm(jt2,table)+"]_"+table+",没有定义索引信息 ※");
                  expSuccessModel.removeElement(getTabCnnm(jt2, table));
                     if ("".trim().equals(errorTab)) {
@@ -848,6 +853,47 @@ public class DBTool {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+    }
+     /**
+     * 将索引信息写入文件，如果索引文件存在则追加
+     * 表编号 表名称 测站名称 测站编码 年份 数据量
+     * @param table
+     * @param saveDir
+     * @param afterList
+     * @param version
+     * @param isTurnChar
+     */
+    public void outPutAllIndexToFile(String table, String saveDir, List befoList, int version,boolean isTurnChar) {
+        try {
+            File files = new File(saveDir + "\\excel\\dataIndex.txt");
+            OutputStreamWriter  fw = null;
+            if (files.exists()) {
+                fw = new OutputStreamWriter (new FileOutputStream(saveDir + "\\excel\\dataAllIndex.txt", true),"GB2312");
+            } else {
+                fw = new OutputStreamWriter (new FileOutputStream(saveDir + "\\excel\\dataAllIndex.txt"),"GB2312");
+                fw.write("表编号\t表名称\t测站名称\t测站编码\t年份\t数据量\r\n");
+            }
+            for (int i = 0; i < befoList.size(); i++) {
+                TemClass tmp = ((TemClass) befoList.get(i));
+                String str = table + "\t" + getTabCnnm(jt2, table) + "\t";
+                String stnm = getStscName(jt2, tmp.getStcd());
+                if("".trim().equals(stnm)){
+                    Object obj = getStscName2(jt1, tmp.getStcd(),version);
+                    if(obj==null)
+                        stnm="";
+                    else
+                        stnm = obj.toString();
+                    if(isTurnChar)
+                        stnm = new String(stnm.getBytes("ISO-8859-1"),"GBK");
+                }
+                str += stnm + "\t" + tmp.getYear() + "\t";
+               str += tmp.getTotal() + "\r\n";
+                fw.write(str);
+            }
+            fw.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
     /**
      * 将索引信息写入文件，如果索引文件存在则追加
