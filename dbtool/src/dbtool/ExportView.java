@@ -2133,16 +2133,16 @@ public class ExportView extends JFrame {
     private void exportTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportTypeActionPerformed
         // TODO add your handling code here:
         if(exportType.getSelectedIndex() == 0){
-            jLabel15.setText("只导出文本文件:导出本地数据库中符合导出条件的所有数据，并且写入文本文件。");
+            jLabel15.setText("导出方式说明:导出本地数据库中符合导出条件的所有数据，并且写入文本文件。");
             jLabel16.setText("              ");
         }
         if(exportType.getSelectedIndex() == 1){
-            jLabel15.setText("同时导出文本文件和数据库：导出本地数据库中符合导出条件的所有数据，并且在写入文本文件的同时写入本导出工具的临时数据库。");
-            jLabel16.setText("                 这个导出方式要求您本地数据库结构和标准结构完全一致，否则无法执行导出。");
+            jLabel15.setText("导出方式说明：导出本地数据库中符合导出条件的所有数据，并且在写入文本文件的同时写入本导出工具的临时数据库。");
+            jLabel16.setText("    本导出方式要求您本地数据库结构和标准结构完全一致，否则无法执行导出。");
         }
         if(exportType.getSelectedIndex() == 2){
-            jLabel15.setText("只生成本地数据库索引目录：不执行导出数据操作，将您本地数据库中的数据索引以文本文件形式输出，如果数据导出成功。需要重新");
-            jLabel16.setText("                生成数据索引可以通过此选项再次生成。运行此操作前请先备份导出的数据。");
+            jLabel15.setText("导出方式说明：不执行导出数据操作，将您本地数据库中的数据索引以文本文件形式输出，如果数据导出成功。需要重新生成");
+            jLabel16.setText("    数据索引可以通过此选项再次生成。运行此操作前请先备份导出的数据。");
         }
     }//GEN-LAST:event_exportTypeActionPerformed
 
