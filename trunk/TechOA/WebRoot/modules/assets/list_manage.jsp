@@ -225,7 +225,7 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=import&table=ASSETS';
+		action = 'excel.do?action=preview&table=ASSETS';
     	win3.setTitle('导入excel');
        	Ext.getDom('dataForm3').reset();
         win3.show(btn.dom);
@@ -285,12 +285,16 @@ Ext.onReady(function(){
     		empname = assetsDAO.findNameByCode("EMPLOYEE", mapAssets.get("EMPCODE").toString());
     	}
     	
-    	String checkdate = mapAssets.get("CHECKDATE").toString();
-    	int year = Integer.parseInt(checkdate.substring(0,4));
-    	int checkyear = Integer.parseInt(mapAssets.get("CHECKYEAR").toString());
-    	String nextcheckdate = (year + checkyear) + checkdate.substring(4);
+    	String nextcheckdate = "";
+    	boolean isRemind = false;
+    	String checkdate = mapAssets.get("CHECKDATE")==null?"":mapAssets.get("CHECKDATE").toString();
+    	if(!"".equals(checkdate)){
+    		int year = Integer.parseInt(checkdate.substring(0,4));
+        	int checkyear = Integer.parseInt(mapAssets.get("CHECKYEAR").toString());
+        	nextcheckdate = (year + checkyear) + checkdate.substring(4);
+        	isRemind = StringUtil.isRemind(StringUtil.StringToDate(nextcheckdate,"yyyy-MM-dd"),15);
+    	}
     	
-    	boolean isRemind = StringUtil.isRemind(StringUtil.StringToDate(nextcheckdate,"yyyy-MM-dd"),15);
 %>    	
 		<tr align="center">
 			<td><input type="checkbox" name="check" value="<%=mapAssets.get("ID") %>" class="ainput"></td>

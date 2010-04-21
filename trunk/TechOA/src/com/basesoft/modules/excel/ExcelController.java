@@ -72,11 +72,24 @@ public class ExcelController extends CommonController {
 			}else if("GOODS".equals(table)){//物资资产
 				mv = new ModelAndView("modules/excel/preview_goods");
 			}else if("PLAN".equals(table)){//计划
+				String type = ServletRequestUtils.getStringParameter(request, "typecode3", "");
+				String type2 = ServletRequestUtils.getStringParameter(request, "typecode4", "");
+				
 				mv = new ModelAndView("modules/excel/preview_plan");
+				mv.addObject("f_level", f_level);
+				mv.addObject("f_type", f_type);
+				mv.addObject("f_empname", f_empname);
+				mv.addObject("type", type);
+				mv.addObject("type2", type2);
 			}else if("ASSETS".equals(table)){//固定资产
 				mv = new ModelAndView("modules/excel/preview_assets");
+				mv.addObject("status", status);
+				mv.addObject("depart", depart);
+				mv.addObject("emp", emp);
 			}else if("WORKCHECK".equals(table)){//考勤
 				mv = new ModelAndView("modules/excel/preview_workcheck");
+			}else if("PROJECT".equals(table)){//工作令
+				mv = new ModelAndView("modules/excel/preview_project");
 			}
 			
 			MultipartHttpServletRequest mpRequest = (MultipartHttpServletRequest)request;
@@ -108,13 +121,15 @@ public class ExcelController extends CommonController {
 			}else if("GOODS".equals(table)){//物资资产
 				errorMessage = excelDAO.insertGoods(data);
 			}else if("PLAN".equals(table)){//计划
-				String type = ServletRequestUtils.getStringParameter(request, "typecode3", "");
-				String type2 = ServletRequestUtils.getStringParameter(request, "typecode2", "");
+				String type = ServletRequestUtils.getStringParameter(request, "type", "");
+				String type2 = ServletRequestUtils.getStringParameter(request, "type2", "");
 				errorMessage = excelDAO.insertPlan(data, type, type2);
 			}else if("ASSETS".equals(table)){//固定资产
 				errorMessage = excelDAO.insertAssets(data);
 			}else if("WORKCHECK".equals(table)){//考勤
 				errorMessage = excelDAO.insertWorkcheck(data, date);
+			}else if("PROJECT".equals(table)){//工作令
+				errorMessage = excelDAO.insertProject(data);
 			}
 			
 			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp + "&f_level=" + f_level + "&f_type=" + f_type);

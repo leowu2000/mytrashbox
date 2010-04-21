@@ -86,7 +86,7 @@ Ext.onReady(function(){
         win2 = new Ext.Window({
         	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'预览',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
 	        {text:'关闭',handler: function(){win2.hide();}}
 	        ]
         });
@@ -118,11 +118,12 @@ Ext.onReady(function(){
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
        	Ext.get('pjcode').set({'disabled':''});
+       	AJAX_PJ(document.getElementById('pjcode').value);
        	Ext.get('pjcode_d').set({'disabled':''});
        	Ext.get('stagecode').set({'disabled':''});
        	Ext.get('typecode').set({'disabled':''});
+       	changeType();
 		Ext.get('typecode2').set({'disabled':''});
-       	AJAX_PJ(document.getElementById('pjcode').value);
        	comboBoxTree.setValue({id:'0',text:'请选择...'});
         win.show(btn.dom);
     }
@@ -249,7 +250,7 @@ Ext.onReady(function(){
 	});
 	
 	function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';
+		action = 'excel.do?action=preview&table=PLAN&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
@@ -320,7 +321,7 @@ function changeType(){
     }else if(window.ActiveXObject){
  	  var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
     }
-    xmlHttpReq.open("GET", "/plan.do?action=AJAX_TYPE&typecode=" + typecode, false);
+    xmlHttpReq.open("GET", "/plan.do?action=AJAX_TYPE&typecode=" + typecode + "&id=2", false);
     xmlHttpReq.send();
     if(xmlHttpReq.responseText!=''){
         document.getElementById('selType2td').innerHTML = xmlHttpReq.responseText;
@@ -335,7 +336,7 @@ function changeType2(){
     }else if(window.ActiveXObject){
  	  var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
     }
-    xmlHttpReq.open("GET", "/plan.do?action=AJAX_TYPE&typecode=" + typecode, false);
+    xmlHttpReq.open("GET", "/plan.do?action=AJAX_TYPE&typecode=" + typecode + "&id=4", false);
     xmlHttpReq.send();
     if(xmlHttpReq.responseText!=''){
         document.getElementById('selType2td2').innerHTML = xmlHttpReq.responseText;

@@ -75,11 +75,14 @@ public class PlanController extends CommonController {
 		}else if("AJAX_TYPE".equals(action)){//工作令号选择ajax
 			StringBuffer sb = new StringBuffer();
 			String typecode = ServletRequestUtils.getStringParameter(request, "typecode", "");
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
 			List listType2 = planDAO.getType2(typecode);
 			
-			sb.append("<select name='typecode2' style='width:200;'>")
-			  .append("<option value='0'>请选择...</option>");
+			String selectname = "typecode" + id;
+			sb.append("<select name='")
+			  .append(selectname)
+			  .append("' style='width:200;' >");
 			
 			for(int i=0;i<listType2.size();i++){
 				Map mapType2 = (Map)listType2.get(i);
@@ -104,8 +107,7 @@ public class PlanController extends CommonController {
 			
 			List listPj_d = planDAO.getProject_d(pjcode);
 			
-			sb.append("<select name='pjcode_d' style='width:200;'>")
-			  .append("<option value='0'>请选择...</option>");
+			sb.append("<select name='pjcode_d' style='width:200;'>");
 			
 			for(int i=0;i<listPj_d.size();i++){
 				Map mapPj_d = (Map)listPj_d.get(i);

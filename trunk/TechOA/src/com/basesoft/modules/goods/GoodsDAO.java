@@ -98,4 +98,22 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 		
 		return pageList;
 	}
+	
+	/**
+	 * 是否存在出库单号
+	 * @param ckdh
+	 * @return
+	 */
+	public boolean haveCkdh(String ckdh){
+		boolean haveCkdh = false;
+		
+		String sql = "select * from GOODS where CKDH='" + ckdh + "'";
+		List list = jdbcTemplate.queryForList(sql);
+		
+		if(list.size()>0){
+			haveCkdh = true;
+		}
+		
+		return haveCkdh;
+	}
 }

@@ -14,7 +14,7 @@
 		<relation>
 			<id>1</id>
 			<name>产品令号</name>
-			<column>PJCODE</column>
+			<column>PJNAME</column>
 			<format></format>
 		</relation>
 		<relation>

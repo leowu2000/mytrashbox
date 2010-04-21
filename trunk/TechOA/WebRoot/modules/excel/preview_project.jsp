@@ -3,20 +3,20 @@
 <%@ page import="com.basesoft.core.*" %>
 <%@ page import="com.basesoft.util.*" %>
 <%@ page import="org.json.*" %>
-<%@ page import="com.basesoft.modules.depart.*" %>
+<%@ page import="com.basesoft.modules.project.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-DepartmentDAO departDAO = (DepartmentDAO)ctx.getBean("departmentDAO");
+ProjectDAO projectDAO = (ProjectDAO)ctx.getBean("projectDAO");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<title>部门导入预览</title>
+		<title>工作令导入预览</title>
 		<style type="text/css">
 		<!--
 		input{
@@ -42,60 +42,55 @@ Ext.onReady(function(){
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=depart.do?action=list&table=DEPARTMENT';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=pj.do?action=list&table=PROJECT';
     	document.getElementById('listForm').submit();
     }
 });
 </script>
 	</head>
 	<body>
-	<h1>部门导入预览</h1>
+	<h1>工作令导入预览</h1>
 	<div id="toolbar"></div>
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
 <input type="hidden" name="data" id="data" value='<%=data %>'>
-<br>&nbsp;&nbsp;&nbsp;&nbsp;注：橙色行表示已存在此部门，将不予入库；黄色格子表示入库后将无法进行关联，无法参与统计，可返回修改excel表，或入库后在相应管理模块下编辑！
+<br>&nbsp;&nbsp;&nbsp;&nbsp;注：红色格子表示入库后将无法进行关联，无法参与统计汇总。可返回修改excel表，或者保存入库后在相应管理模块下编辑！
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
-                <td>部门编码</td>              
-                <td>部门名称</td>
-                <td>上级部门名称</td>
+  	  			<td>工作令号</td>              
+                <td>工作令负责人</td>
+                <td>计划工作量</td>
+                <td>开始时间</td>
+                <td>截止时间</td>
+                <td>描述</td>
             </tr>
 <%
 		for(int i=0;i<rows.length();i++){
 			JSONObject row = rows.optJSONObject(i);
-			
-			Map map = departDAO.findByCode("DEPARTMENT", row.optString("CODE"));
-			if(map.get("CODE")!=null){
 %>            
-			<tr align="center" bgcolor="orange" title="系统中已存在此部门！">
+            <tr align="center">
+            	<td>&nbsp;<%=row.optString("PJNAME") %></td>
 <%
-			}else {
-%>
-			<tr align="center">
-<%
-			}
-%>
-            	<td>&nbsp;<%=row.optString("CODE") %></td>
-            	<td>&nbsp;<%=row.optString("NAME") %></td>
-<%
-			String parentname = departDAO.findCodeByName("DEPARTMENT", row.optString("PARENTNAME"));
-			if("".equals(parentname)&&!"".equals(row.optString("PARENTNAME"))){
+			String managercode = projectDAO.findCodeByName("EMPLOYEE", row.optString("MANAGERNAME"));
+			if("".equals(managercode)){
 %>            	
-            	<td bgcolor="yellow" title="无法识别上级部门！">&nbsp;<%=row.optString("PARENTNAME") %></td>
-            	
+            	<td bgcolor="red" title="系统无法识别此负责人！">&nbsp;<%=row.optString("MANAGERNAME") %></td>
 <%
 			}else {
 %>            	
-				<td>&nbsp;<%=row.optString("PARENTNAME") %></td>
+				<td>&nbsp;<%=row.optString("MANAGERNAME") %></td>
 <%
 			}
-%>         	
+%>
+            	<td>&nbsp;<%=row.optString("PLANEDWORKLOAD") %></td>
+				<td>&nbsp;<%=row.optString("STARTDATE") %></td>
+				<td>&nbsp;<%=row.optString("ENDDATE") %></td>
+				<td>&nbsp;<%=row.optString("NOTE") %></td>
 			</tr>
 <%
 		}
-%>            
+%>				
 </table>
 </form>
 			</div>
