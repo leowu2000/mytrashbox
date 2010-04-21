@@ -409,9 +409,9 @@ public class DBTool {
                 if(i==0)
                     ((DefaultListModel) (logList.getModel())).addElement("正在生成数据索引 ......");
                 insertDataIndexTable(table, stscStr, stnameStr, logList, version, expType, saveDir,isTurnChar,dbtype);
-                i++;
-                 if (i == tables.length)
-                     ((DefaultListModel) (logList.getModel())).addElement("正在生成导出报告 ......");
+//                i++;
+//                 if (i == tables.length)
+//                     ((DefaultListModel) (logList.getModel())).addElement("正在生成导出报告 ......");
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {
@@ -536,96 +536,98 @@ public class DBTool {
                         ex.printStackTrace();
                         outputError("\r\n"+table, "===insertDataIndexTable=",ex.getMessage());
                     }
-                    /**
-                     * 将测站编码重新组织,防止SQL 的parameters过多
-                     */
-                     List stscList = new ArrayList();
-                     String stscSQL="";
-                     int stcdYear = 0;
-                    for(int i=0;i< rpareStsc.length;i++){
-                        String stscForSQL = rpareStsc[i];
-                        try {
-                            /**
-                             * 日期型索引
-                             */
-                            if (fltp.trim().equals("T")) {
-                                resultDesc= "SELECT SUM(A.INDEXY) AS RESU FROM (SELECT STCD,COUNT("
-                                        + "DISTINCT (DATEPART(yyyy,"+indexFiled.toUpperCase()+"))) "
-                                        +"AS INDEXY FROM "+table.toUpperCase()+" "+stscForSQL+" GROUP BY STCD) AS A";
-
-                                stscSQL =  "SELECT TAB.STCD,min(TAB.YEARS) as MINY,max(TAB.YEARS) AS MAXY,sum(TAB.TOTAL) AS ALLSUM FROM "
-                                            +"(SELECT STCD,DATEPART (yyyy,"+indexFiled.toUpperCase()+") as YEARS,"
-                                            +" COUNT(*) AS TOTAL FROM "+table.toUpperCase()+" "+stscForSQL
-                                            + " GROUP BY STCD,DATEPART "
-                                            +"(yyyy,"+indexFiled.toUpperCase()+") ) TAB GROUP BY TAB.STCD";
+                    if(expType != 2){//如果导出方式不是只生成索引，执行以下代码，生成为导出报告所用数据
+                        /**
+                         * 将测站编码重新组织,防止SQL 的parameters过多
+                         */
+                         List stscList = new ArrayList();
+                         String stscSQL="";
+                         int stcdYear = 0;
+                        for(int i=0;i< rpareStsc.length;i++){
+                            String stscForSQL = rpareStsc[i];
+                            try {
                                 /**
-                                 * 如果数据库类型为sybase
-                                 * 因为sybase不支持:as表的嵌套查询
+                                 * 日期型索引
                                  */
-                                if(dbtype==2){
-                                    resultDesc= "SELECT SUM(COUNT("
-                                            + "DISTINCT (DATEPART(yy,"+indexFiled.toUpperCase()+")))) "
-                                            +"AS RESU FROM "+table.toUpperCase()+" "+stscForSQL+" GROUP BY STCD";
-                                    stscSQL = "SELECT STCD,MIN(DATEPART (yy,"+indexFiled.toUpperCase()+")) AS MINY, MAX(DATEPART "
-                                                +"(yy,"+indexFiled.toUpperCase()+")) AS MAXY,"
-                                                +"COUNT(*) AS ALLSUM FROM "+table.toUpperCase()+" "+stscForSQL
-                                                + " GROUP BY STCD";
-                                }
-                            } else {//数值型索引
-                                //统计站年
-                                resultDesc= "SELECT SUM(A.INDEXY) AS RESU FROM (SELECT STCD,COUNT("
-                                        + "DISTINCT "+indexFiled.toUpperCase()+") "
-                                        +"AS INDEXY FROM "+table.toUpperCase()+" "+stscForSQL+" GROUP BY STCD) AS A";
-                                //统计每个站的具体情况,起始年-结束年=数据条数
-                               stscSQL =  "SELECT TAB.STCD,min(TAB.YEARS) as MINY,max(TAB.YEARS) AS MAXY,sum(TAB.TOTAL) AS ALLSUM FROM "
-                                            +"(SELECT STCD,"+indexFiled.toUpperCase()+" as YEARS,"
-                                            +" COUNT(*) AS TOTAL FROM "+table.toUpperCase()+" "+stscForSQL
-                                            + " GROUP BY STCD,"+indexFiled.toUpperCase()+" "
-                                            +" ) TAB GROUP BY TAB.STCD";
-                               /**
-                                 * 如果数据库类型为sybase
-                                 * 因为sybase不支持:as表的嵌套查询
-                                 */
-                                if(dbtype==2){
-                                    resultDesc= "SELECT SUM(COUNT("
-                                            + "DISTINCT "+indexFiled.toUpperCase()+")) "
-                                            +"AS RESU FROM "+table.toUpperCase()+" "+stscForSQL+" GROUP BY STCD";
-                                    stscSQL = "SELECT STCD,MIN("+indexFiled.toUpperCase()+") AS MINY, MAX("+indexFiled.toUpperCase()+") AS MAXY,"
-                                                +"COUNT(*) AS ALLSUM FROM "+table.toUpperCase()+" "+stscForSQL
-                                                + " GROUP BY STCD";
-                                }
-                            }
-                            
-                            outputError("\r\n"+table, "===insertDataIndexTable===resultDesc",resultDesc);
-                            outputError("\r\n"+table, "===insertDataIndexTable===stscSQL",stscSQL);
-                            List rowsStsc = jt1.queryForList(stscSQL);
-                           
-                            Iterator itStsc = rowsStsc.iterator();
-                            while (itStsc.hasNext()) {
-                                Map map = (Map) itStsc.next();
-                                Map stcdMap = new HashMap();
-                                stcdMap.put(map.get("STCD").toString().trim(), map.get("MINY")+","+map.get("MAXY")+","+map.get("ALLSUM"));
-                                stscList.add(stcdMap);
-                            }
-                           
-                            Map resuMap = jt1.queryForMap(resultDesc);
+                                if (fltp.trim().equals("T")) {
+                                    resultDesc= "SELECT SUM(A.INDEXY) AS RESU FROM (SELECT STCD,COUNT("
+                                            + "DISTINCT (DATEPART(yyyy,"+indexFiled.toUpperCase()+"))) "
+                                            +"AS INDEXY FROM "+table.toUpperCase()+" "+stscForSQL+" GROUP BY STCD) AS A";
 
-                            if(resuMap!=null)
-                                if(resuMap.get("RESU")!=null)
-                                stcdYear += (Integer)resuMap.get("RESU");
-                            if((i+1)==rpareStsc.length){
-                                resultStscMap.put(table, stscList);
-                                dataDescMap.put(table,stcdYear);
+                                    stscSQL =  "SELECT TAB.STCD,min(TAB.YEARS) as MINY,max(TAB.YEARS) AS MAXY,sum(TAB.TOTAL) AS ALLSUM FROM "
+                                                +"(SELECT STCD,DATEPART (yyyy,"+indexFiled.toUpperCase()+") as YEARS,"
+                                                +" COUNT(*) AS TOTAL FROM "+table.toUpperCase()+" "+stscForSQL
+                                                + " GROUP BY STCD,DATEPART "
+                                                +"(yyyy,"+indexFiled.toUpperCase()+") ) TAB GROUP BY TAB.STCD";
+                                    /**
+                                     * 如果数据库类型为sybase
+                                     * 因为sybase不支持:as表的嵌套查询
+                                     */
+                                    if(dbtype==2){
+                                        resultDesc= "SELECT SUM(COUNT("
+                                                + "DISTINCT (DATEPART(yy,"+indexFiled.toUpperCase()+")))) "
+                                                +"AS RESU FROM "+table.toUpperCase()+" "+stscForSQL+" GROUP BY STCD";
+                                        stscSQL = "SELECT STCD,MIN(DATEPART (yy,"+indexFiled.toUpperCase()+")) AS MINY, MAX(DATEPART "
+                                                    +"(yy,"+indexFiled.toUpperCase()+")) AS MAXY,"
+                                                    +"COUNT(*) AS ALLSUM FROM "+table.toUpperCase()+" "+stscForSQL
+                                                    + " GROUP BY STCD";
+                                    }
+                                } else {//数值型索引
+                                    //统计站年
+                                    resultDesc= "SELECT SUM(A.INDEXY) AS RESU FROM (SELECT STCD,COUNT("
+                                            + "DISTINCT "+indexFiled.toUpperCase()+") "
+                                            +"AS INDEXY FROM "+table.toUpperCase()+" "+stscForSQL+" GROUP BY STCD) AS A";
+                                    //统计每个站的具体情况,起始年-结束年=数据条数
+                                   stscSQL =  "SELECT TAB.STCD,min(TAB.YEARS) as MINY,max(TAB.YEARS) AS MAXY,sum(TAB.TOTAL) AS ALLSUM FROM "
+                                                +"(SELECT STCD,"+indexFiled.toUpperCase()+" as YEARS,"
+                                                +" COUNT(*) AS TOTAL FROM "+table.toUpperCase()+" "+stscForSQL
+                                                + " GROUP BY STCD,"+indexFiled.toUpperCase()+" "
+                                                +" ) TAB GROUP BY TAB.STCD";
+                                   /**
+                                     * 如果数据库类型为sybase
+                                     * 因为sybase不支持:as表的嵌套查询
+                                     */
+                                    if(dbtype==2){
+                                        resultDesc= "SELECT SUM(COUNT("
+                                                + "DISTINCT "+indexFiled.toUpperCase()+")) "
+                                                +"AS RESU FROM "+table.toUpperCase()+" "+stscForSQL+" GROUP BY STCD";
+                                        stscSQL = "SELECT STCD,MIN("+indexFiled.toUpperCase()+") AS MINY, MAX("+indexFiled.toUpperCase()+") AS MAXY,"
+                                                    +"COUNT(*) AS ALLSUM FROM "+table.toUpperCase()+" "+stscForSQL
+                                                    + " GROUP BY STCD";
+                                    }
+                                }
+
+                                outputError("\r\n"+table, "===insertDataIndexTable===resultDesc",resultDesc);
+                                outputError("\r\n"+table, "===insertDataIndexTable===stscSQL",stscSQL);
+                                List rowsStsc = jt1.queryForList(stscSQL);
+
+                                Iterator itStsc = rowsStsc.iterator();
+                                while (itStsc.hasNext()) {
+                                    Map map = (Map) itStsc.next();
+                                    Map stcdMap = new HashMap();
+                                    stcdMap.put(map.get("STCD").toString().trim(), map.get("MINY")+","+map.get("MAXY")+","+map.get("ALLSUM"));
+                                    stscList.add(stcdMap);
+                                }
+
+                                Map resuMap = jt1.queryForMap(resultDesc);
+
+                                if(resuMap!=null)
+                                    if(resuMap.get("RESU")!=null)
+                                    stcdYear += (Integer)resuMap.get("RESU");
+                                if((i+1)==rpareStsc.length){
+                                    resultStscMap.put(table, stscList);
+                                    dataDescMap.put(table,stcdYear);
+                                }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                outputError("\r\n"+table, "===insertDataIndexTable===",ex.getMessage());
+                                 dataDescMap.put(table,"");
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            outputError("\r\n"+table, "===insertDataIndexTable===",ex.getMessage());
-                             dataDescMap.put(table,"");
                         }
-                    }
-                     if(expType == 2)
+                    }else{
                        ((DefaultListModel) (logList.getModel())).addElement("         √ 表[ "+getTabCnnm(jt2,table)+" ]_ "+table+" 生成索引成功");
-                }else{
+                    }
+                }else{//如果数据为空
                     dataIndexMap.put(table, "");
                     if(expType == 2)
                        ((DefaultListModel) (logList.getModel())).addElement("         表[ "+getTabCnnm(jt2,table)+" ]_ "+table+" 数据为空");
