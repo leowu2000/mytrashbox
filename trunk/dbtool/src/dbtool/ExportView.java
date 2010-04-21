@@ -76,7 +76,7 @@ public class ExportView extends JFrame {
         tbMainSelect.remove(DataView);//数据查看的页面，在没有设置参数的时候不显示
         tbMainSelect.remove(dataIndexPanel);//数据索引页面，设置数据库初始参数后，一直显示
         jButton5.setVisible(false);//隐藏“重新读取”的按钮
-//        exportType.setSelectedIndex(0);
+        exportType.setSelectedIndex(0);
 //        exportType.setEnabled(false);
 //        exportType.removeItemAt(1);
         charBox.setEnabled(false);
@@ -174,11 +174,13 @@ public class ExportView extends JFrame {
         exportType = new javax.swing.JComboBox();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         Version = new javax.swing.JComboBox();
         TestConn = new javax.swing.JButton();
         charBox = new javax.swing.JCheckBox();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
         SelectTable = new javax.swing.JPanel();
         SelectTableLPanel = new javax.swing.JScrollPane();
         ListTables = new javax.swing.JList();
@@ -379,9 +381,6 @@ public class ExportView extends JFrame {
         jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
 
-        jLabel16.setText(resourceMap.getString("jLabel16.text")); // NOI18N
-        jLabel16.setName("jLabel16"); // NOI18N
-
         jLabel17.setText(resourceMap.getString("jLabel17.text")); // NOI18N
         jLabel17.setName("jLabel17"); // NOI18N
 
@@ -404,121 +403,118 @@ public class ExportView extends JFrame {
         charBox.setText(resourceMap.getString("charBox.text")); // NOI18N
         charBox.setName("charBox"); // NOI18N
 
+        jLabel18.setText(resourceMap.getString("jLabel18.text")); // NOI18N
+        jLabel18.setName("jLabel18"); // NOI18N
+
+        jLabel19.setText(resourceMap.getString("jLabel19.text")); // NOI18N
+        jLabel19.setName("jLabel19"); // NOI18N
+
+        jLabel16.setText(resourceMap.getString("jLabel16.text")); // NOI18N
+        jLabel16.setName("jLabel16"); // NOI18N
+
         javax.swing.GroupLayout ParametSetLayout = new javax.swing.GroupLayout(ParametSet);
         ParametSet.setLayout(ParametSetLayout);
         ParametSetLayout.setHorizontalGroup(
             ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ParametSetLayout.createSequentialGroup()
-                .addGap(74, 74, 74)
-                .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(TestConn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(NextBtnOne)
-                .addGap(51, 51, 51))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ParametSetLayout.createSequentialGroup()
-                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(ParametSetLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ParametSetLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(28, 28, 28)
-                                .addComponent(txtIP, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbDriver, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(32, 32, 32)
-                                .addComponent(jLabel10)
+                        .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel18)
+                            .addComponent(jLabel19))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15, 0, 0, Short.MAX_VALUE)
+                            .addComponent(jLabel16, 0, 0, Short.MAX_VALUE)
+                            .addGroup(ParametSetLayout.createSequentialGroup()
+                                .addComponent(txtDataDir, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29)
+                                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(exportType, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(charBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+                            .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+                            .addComponent(txtIP, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+                            .addGroup(ParametSetLayout.createSequentialGroup()
+                                .addComponent(cbDriver, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                                .addComponent(jLabel17)
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(Version, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jRadioButton1)
+                                .addGap(15, 15, 15)
+                                .addComponent(jRadioButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
-                                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel11))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(DataName, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
-                                    .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ParametSetLayout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)
-                            .addGroup(ParametSetLayout.createSequentialGroup()
-                                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ParametSetLayout.createSequentialGroup()
-                                        .addComponent(txtDataDir, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(exportType, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(33, 33, 33)
-                                        .addComponent(charBox)))))))
-                .addGap(67, 67, 67))
+                                .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
+                            .addComponent(DataName, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE))
+                        .addGap(60, 60, 60))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ParametSetLayout.createSequentialGroup()
+                        .addComponent(TestConn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(NextBtnOne)
+                        .addGap(48, 48, 48))))
         );
         ParametSetLayout.setVerticalGroup(
             ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ParametSetLayout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(18, 18, 18)
+                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbDriver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cbDriver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jRadioButton2)
-                        .addComponent(jRadioButton1)
-                        .addComponent(Version, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel17)
-                        .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel10)))
-                .addGap(19, 19, 19)
-                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtIP)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
-                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(DataName)
-                    .addComponent(jLabel11))
+                    .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10)
+                    .addComponent(jRadioButton2)
+                    .addComponent(jRadioButton1)
+                    .addComponent(Version, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtUser)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPass))
+                    .addComponent(jLabel2)
+                    .addComponent(txtIP))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtDataDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11)
+                    .addComponent(DataName))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtUser))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPass)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDataDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(charBox)
-                    .addComponent(jLabel14)
-                    .addComponent(exportType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel15)
+                    .addComponent(exportType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(ParametSetLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(TestConn)
-                            .addComponent(NextBtnOne)))
-                    .addGroup(ParametSetLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel16)))
-                .addGap(17, 17, 17))
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel19))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel18)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TestConn)
+                    .addComponent(NextBtnOne))
+                .addGap(26, 26, 26))
         );
 
         jLabel5.getAccessibleContext().setAccessibleName(resourceMap.getString("jLabel5.AccessibleContext.accessibleName")); // NOI18N
@@ -1527,10 +1523,15 @@ public class ExportView extends JFrame {
         if (selectedTablesModel.isEmpty()) {
             JOptionPane.showMessageDialog(null, "您没有选择任何数据表，请选择！", "错误", 0);
         } else {
-            exportTabList.setModel(selectedTablesModel);
-            tbMainSelect.remove(SelectTable);
+            if(exportType.getSelectedIndex() == 2){
+                tbMainSelect.remove(SelectTable);
+                tbMainSelect.add("数据导出", ExpData);
+            }else{
+                exportTabList.setModel(selectedTablesModel);
+                tbMainSelect.remove(SelectTable);
 
-            tbMainSelect.add("测站选择", SelectStsc);
+                tbMainSelect.add("测站选择", SelectStsc);
+            }
         }
     }//GEN-LAST:event_btnTableNextStepActionPerformed
 
@@ -1669,7 +1670,6 @@ public class ExportView extends JFrame {
      * 选择测站编码过滤条件
      * 鼠标点击的时候触发
      * 双击移动从右侧到左侧
-     *
      * @param evt
      */
     private void SelectedStscMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SelectedStscMouseClicked
@@ -2111,9 +2111,14 @@ public class ExportView extends JFrame {
         MessageLabel.setText("");
         MessageLabel1.setText("");
         MessageLabel2.setText("");
-        tbMainSelect.remove(ExpData);
-        tbMainSelect.remove(DataView);
-        tbMainSelect.add("测站选择", SelectStsc);
+        if(exportType.getSelectedIndex() == 2){
+            tbMainSelect.remove(ExpData);
+            tbMainSelect.add("数据选择", SelectTable);
+        }else{
+            tbMainSelect.remove(ExpData);
+            tbMainSelect.remove(DataView);
+            tbMainSelect.add("测站选择", SelectStsc);
+        }
     }//GEN-LAST:event_btnExportPerStepActionPerformed
 
     private void jRadioButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton1MouseClicked
@@ -2133,16 +2138,13 @@ public class ExportView extends JFrame {
     private void exportTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportTypeActionPerformed
         // TODO add your handling code here:
         if(exportType.getSelectedIndex() == 0){
-            jLabel15.setText("导出方式说明:导出本地数据库中符合导出条件的所有数据，并且写入文本文件。");
-            jLabel16.setText("              ");
+            jLabel16.setText("<html>导出本地数据库中符合导出条件的所有数据，并且写入文本文件。如果您本地数据库结构跟标准结构不完全一致，请选择本导出方式。</html>");
         }
         if(exportType.getSelectedIndex() == 1){
-            jLabel15.setText("导出方式说明：导出本地数据库中符合导出条件的所有数据，并且在写入文本文件的同时写入本导出工具的临时数据库。");
-            jLabel16.setText("    本导出方式要求您本地数据库结构和标准结构完全一致，否则无法执行导出。");
+            jLabel16.setText("<html>导出本地数据库中符合导出条件的所有数据，并且在写入文本文件的同时写入本导出工具的临时数据库。本导出方式要求您本地数据库结构和标准结构完全一致，否则无法执行导出。</html>");
         }
         if(exportType.getSelectedIndex() == 2){
-            jLabel15.setText("导出方式说明：不执行导出数据操作，将您本地数据库中的数据索引以文本文件形式输出，如果数据导出成功。需要重新生成");
-            jLabel16.setText("    数据索引可以通过此选项再次生成。运行此操作前请先备份导出的数据。");
+            jLabel16.setText("<html>不执行导出数据操作，将您本地数据库中的数据索引以文本文件形式输出。如果只生成数据索引可以通过此导出方式生成。运行此操作前如果有导出成功的数据，请先备份导出的数据。</html>");
         }
     }//GEN-LAST:event_exportTypeActionPerformed
 
@@ -2152,7 +2154,6 @@ public class ExportView extends JFrame {
 
     private void NextBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextBtn1ActionPerformed
         // TODO add your handling code here:
-
         tbMainSelect.remove(SelectStsc);
         tbMainSelect.add("数据选择", SelectTable);
     }//GEN-LAST:event_NextBtn1ActionPerformed
@@ -2351,6 +2352,8 @@ public class ExportView extends JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
