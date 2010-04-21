@@ -76,8 +76,9 @@ public class ExportView extends JFrame {
         tbMainSelect.remove(DataView);//数据查看的页面，在没有设置参数的时候不显示
         tbMainSelect.remove(dataIndexPanel);//数据索引页面，设置数据库初始参数后，一直显示
         jButton5.setVisible(false);//隐藏“重新读取”的按钮
-        exportType.setSelectedIndex(0);
-        exportType.setEnabled(false);
+//        exportType.setSelectedIndex(0);
+//        exportType.setEnabled(false);
+//        exportType.removeItemAt(1);
         charBox.setEnabled(false);
         ButtonGroup bgroup = new ButtonGroup();
         bgroup.add(jRadioButtonAll);
@@ -363,7 +364,7 @@ public class ExportView extends JFrame {
         });
 
         exportType.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
-            "只导出文本文件","只导出数据库文件","同时导出文本文件和数据库文件","只生成索引和导出报告"
+            "只导出文本文件","同时导出文本文件和数据库文件","只生成本地数据库索引"
         }));
         exportType.setName("exportType"); // NOI18N
         exportType.addActionListener(new java.awt.event.ActionListener() {
@@ -409,8 +410,8 @@ public class ExportView extends JFrame {
             ParametSetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ParametSetLayout.createSequentialGroup()
                 .addGap(74, 74, 74)
-                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 151, Short.MAX_VALUE)
+                .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(TestConn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(NextBtnOne)
@@ -517,7 +518,7 @@ public class ExportView extends JFrame {
                     .addGroup(ParametSetLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel16)))
-                .addGap(19, 19, 19))
+                .addGap(17, 17, 17))
         );
 
         jLabel5.getAccessibleContext().setAccessibleName(resourceMap.getString("jLabel5.AccessibleContext.accessibleName")); // NOI18N
@@ -1397,11 +1398,11 @@ public class ExportView extends JFrame {
                             DiverClass = "sun.jdbc.odbc.JdbcOdbcDriver";
                             JdbcUrl = "jdbc:odbc:"+DataName.getText();
                         }
-                        if (exportType.getSelectedIndex() == 0) {
-                            jComboBox1.setEnabled(false);
-                        } else {
-                            jComboBox1.setEnabled(true);
-                        }
+//                        if (exportType.getSelectedIndex() == 0) {
+//                            jComboBox1.setEnabled(false);
+//                        } else {
+//                            jComboBox1.setEnabled(true);
+//                        }
                         try {
                             boolean flg = FileAccess.deleteDirectory(txtDataDir.getText());
                             if (flg) {
@@ -2131,6 +2132,18 @@ public class ExportView extends JFrame {
 
     private void exportTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportTypeActionPerformed
         // TODO add your handling code here:
+        if(exportType.getSelectedIndex() == 0){
+            jLabel15.setText("只导出文本文件:导出本地数据库中符合导出条件的所有数据，并且写入文本文件。");
+            jLabel16.setText("              ");
+        }
+        if(exportType.getSelectedIndex() == 1){
+            jLabel15.setText("同时导出文本文件和数据库：导出本地数据库中符合导出条件的所有数据，并且在写入文本文件的同时写入本导出工具的临时数据库。");
+            jLabel16.setText("                 这个导出方式要求您本地数据库结构和标准结构完全一致，否则无法执行导出。");
+        }
+        if(exportType.getSelectedIndex() == 2){
+            jLabel15.setText("只生成本地数据库索引目录：不执行导出数据操作，将您本地数据库中的数据索引以文本文件形式输出，如果数据导出成功。需要重新");
+            jLabel16.setText("                生成数据索引可以通过此选项再次生成。运行此操作前请先备份导出的数据。");
+        }
     }//GEN-LAST:event_exportTypeActionPerformed
 
     private void VersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VersionActionPerformed
