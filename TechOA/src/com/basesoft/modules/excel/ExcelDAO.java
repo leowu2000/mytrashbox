@@ -10,8 +10,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.basesoft.core.CommonDAO;
+import com.basesoft.modules.employee.CardDAO;
 import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.employee.FinanceDAO;
+import com.basesoft.modules.goods.GoodsDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.project.ProjectDAO;
 import com.basesoft.util.StringUtil;
@@ -22,6 +24,8 @@ public class ExcelDAO extends CommonDAO {
 	PlanDAO planDAO;
 	FinanceDAO financeDAO;
 	EmployeeDAO emDAO;
+	CardDAO cardDAO;
+	GoodsDAO goodsDAO;
 	
 	/**
 	 * 获取要导出的工时统计汇总数据
@@ -142,41 +146,51 @@ public class ExcelDAO extends CommonDAO {
 		for(int i=0;i<rows.length();i++){
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
-			String name = row.optString("NAME");
-			String code = row.optString("CODE");
-			String departname = row.optString("DEPARTNAME");
-			String mainjob = row.optString("MAINJOB");
-			String secjob = row.optString("SECJOB");
-			String level = row.optString("LEVEL");
-			String email = row.optString("EMAIL");
-			String blog = row.optString("BLOG");
-			String selfweb = row.optString("SELFWEB");
-			String stcphone = row.optString("STCPHONE");
-			String mobphone = row.optString("MOBPHONE");
-			String address = row.optString("ADDRESS");
-			String post = row.optString("POST");
-			String major = row.optString("MAJOR");
-			String degree = row.optString("DEGREE");
 			
-			//根据名称找出编码
-			String departcode = findCodeByName("DEPARTMENT", departname);
-			String majorcode = findCodeByName("DICT", major);
-			String degreecode = findCodeByName("DICT", degree);
-			//生成32位uuid
-			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-			
-			String insertSql = "insert into EMPLOYEE (ID,LOGINID,PASSWORD,CODE,ROLECODE,NAME,DEPARTCODE,MAINJOB,SECJOB,LEVEL,EMAIL,BLOG,SELFWEB,STCPHONE,MOBPHONE,ADDRESS,POST,MAJORCODE,DEGREECODE) values('" + uuid + "','" + code + "','1','" + code + "','003','" + name + "','" + departcode + "','" + mainjob + "','" + secjob + "','" + level + "','" + email + "','" + blog + "','" + selfweb + "','" + stcphone + "','" + mobphone + "','" + address + "','" + post + "','" + majorcode + "','" + degreecode + "')";
-			
-			try{
-				insert(insertSql);
-			}catch(Exception e){
-				System.out.println(e);
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+			Map map = findByCode("EMPLOYEE", row.optString("CODE"));
+			if(map.get("CODE")==null){//没有此员工编码，则入库
+				String name = row.optString("NAME");
+				String code = row.optString("CODE");
+				String departname = row.optString("DEPARTNAME");
+				String mainjob = row.optString("MAINJOB");
+				String secjob = row.optString("SECJOB");
+				String level = row.optString("LEVEL");
+				String email = row.optString("EMAIL");
+				String blog = row.optString("BLOG");
+				String selfweb = row.optString("SELFWEB");
+				String stcphone = row.optString("STCPHONE");
+				String mobphone = row.optString("MOBPHONE");
+				String address = row.optString("ADDRESS");
+				String post = row.optString("POST");
+				String major = row.optString("MAJOR");
+				String degree = row.optString("DEGREE");
+				
+				//根据名称找出编码
+				String departcode = findCodeByName("DEPARTMENT", departname);
+				String majorcode = findCodeByName("DICT", major);
+				String degreecode = findCodeByName("DICT", degree);
+				//生成32位uuid
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				
+				String insertSql = "insert into EMPLOYEE (ID,LOGINID,PASSWORD,CODE,ROLECODE,NAME,DEPARTCODE,MAINJOB,SECJOB,LEVEL,EMAIL,BLOG,SELFWEB,STCPHONE,MOBPHONE,ADDRESS,POST,MAJORCODE,DEGREECODE) values('" + uuid + "','" + code + "','1','" + code + "','003','" + name + "','" + departcode + "','" + mainjob + "','" + secjob + "','" + level + "','" + email + "','" + blog + "','" + selfweb + "','" + stcphone + "','" + mobphone + "','" + address + "','" + post + "','" + majorcode + "','" + degreecode + "')";
+				
+				try{
+					insert(insertSql);
+				}catch(Exception e){
+					System.out.println(e);
+					if("".equals(errorMessage)){
+						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
+					}else {
+						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+					}
+					continue;
 				}
-				continue;
+			}else {
+				if("".equals(errorMessage)){
+					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
+				}
 			}
 		}
 		
@@ -256,38 +270,47 @@ public class ExcelDAO extends CommonDAO {
 		for(int i=0;i<rows.length();i++){
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
-			String empcode = row.optString("EMPCODE");
-			String empname = row.optString("EMPNAME");
-			String sex = row.optString("SEX");
-			String cardno = row.optString("CARDNO");
-			String phone1 = row.optString("PHONE1");
-			String phone2 = row.optString("PHONE2");
-			String address = row.optString("ADDRESS");
-			String departname = row.optString("DEPARTNAME");
-			
-			if("男".equals(sex)){
-				sex = "1";
-			}else if("女".equals(sex)){
-				sex = "2";
-			}
-			
-			//根据部门名称找出部门编码
-			String departcode = findCodeByName("DEPARTMENT", departname);
-			//生成32位uuid
-			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-			
-			String insertSql = "insert into EMP_CARD (EMPCODE,EMPNAME,SEX,CARDNO,PHONE1,PHONE2,ADDRESS,DEPARTCODE,DEPARTNAME) values('" + empcode + "','" + empname + "','" + sex + "','" + cardno + "','" + phone1 + "','" + phone2 + "','" + address + "','" + departcode + "','" + departname + "')";
-			
-			try{
-				insert(insertSql);
-			}catch(Exception e){
-				System.out.println(e);
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+			String haveCardno = cardDAO.haveCard(row.optString("CARDNO"), row.optString("EMPCODE"));
+			if("false".equals(haveCardno)){//没有此卡号，入库
+				String empcode = row.optString("EMPCODE");
+				String empname = row.optString("EMPNAME");
+				String sex = row.optString("SEX");
+				String cardno = row.optString("CARDNO");
+				String phone1 = row.optString("PHONE1");
+				String phone2 = row.optString("PHONE2");
+				String address = row.optString("ADDRESS");
+				String departname = row.optString("DEPARTNAME");
+				
+				if("男".equals(sex)){
+					sex = "1";
+				}else if("女".equals(sex)){
+					sex = "2";
 				}
-				continue;
+				
+				//根据部门名称找出部门编码
+				String departcode = findCodeByName("DEPARTMENT", departname);
+				//生成32位uuid
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				
+				String insertSql = "insert into EMP_CARD (EMPCODE,EMPNAME,SEX,CARDNO,PHONE1,PHONE2,ADDRESS,DEPARTCODE,DEPARTNAME) values('" + empcode + "','" + empname + "','" + sex + "','" + cardno + "','" + phone1 + "','" + phone2 + "','" + address + "','" + departcode + "','" + departname + "')";
+				
+				try{
+					insert(insertSql);
+				}catch(Exception e){
+					System.out.println(e);
+					if("".equals(errorMessage)){
+						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
+					}else {
+						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+					}
+					continue;
+				}
+			}else {
+				if("".equals(errorMessage)){
+					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
+				}
 			}
 		}
 		
@@ -361,36 +384,45 @@ public class ExcelDAO extends CommonDAO {
 		for(int i=0;i<rows.length();i++){
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
-			String name = row.optString("NAME");
-			String code = row.optString("CODE");
-			String parentname = row.optString("PARENTNAME");
-			
-			//根据部门名称找出部门编码
-			String parent = findCodeByName("DEPARTMENT", parentname);
-			Map mapParent = findByCode("DEPARTMENT", parent);
-			String allparents = mapParent.get("ALLPARENTS")==null?"":mapParent.get("ALLPARENTS").toString();
-			if("".equals(allparents)){
-				allparents = parent;
-			}else {
-				allparents  = allparents + "," + parent;
-			}
-			
-			int level = mapParent.get("LEVEL")==null?1:(Integer.parseInt(mapParent.get("LEVEL").toString()) + 1);
-			//生成32位uuid
-			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-			
-			String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,LEVEL) values('" + uuid + "','" + code + "','" + name + "','" + parent + "','" + allparents + "'," + level + ")";
-			
-			try{
-				insert(insertSql);
-			}catch(Exception e){
-				System.out.println(e);
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
+			Map map = findByCode("DEPARTMENT", row.optString("CODE"));
+			if(map.get("CODE")==null){//不存在则导入
+				String name = row.optString("NAME");
+				String code = row.optString("CODE");
+				String parentname = row.optString("PARENTNAME");
+				
+				//根据部门名称找出部门编码
+				String parent = findCodeByName("DEPARTMENT", parentname);
+				Map mapParent = findByCode("DEPARTMENT", parent);
+				String allparents = mapParent.get("ALLPARENTS")==null?"":mapParent.get("ALLPARENTS").toString();
+				if("".equals(allparents)){
+					allparents = parent;
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+					allparents  = allparents + "," + parent;
 				}
-				continue;
+				
+				int level = mapParent.get("LEVEL")==null?1:(Integer.parseInt(mapParent.get("LEVEL").toString()) + 1);
+				//生成32位uuid
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				
+				String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,LEVEL) values('" + uuid + "','" + code + "','" + name + "','" + parent + "','" + allparents + "'," + level + ")";
+				
+				try{
+					insert(insertSql);
+				}catch(Exception e){
+					System.out.println(e);
+					if("".equals(errorMessage)){
+						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
+					}else {
+						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+					}
+					continue;
+				}
+			}else {
+				if("".equals(errorMessage)){
+					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
+				}
 			}
 		}
 		
@@ -414,42 +446,50 @@ public class ExcelDAO extends CommonDAO {
 		for(int i=0;i<rows.length();i++){
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
-			int kjnd = row.optInt("KJND");
-			String kjh = row.optString("KJH");
-			String ckdh = row.optString("CKDH");
-			double je = row.optDouble("JE");
-			String llbmmc = row.optString("LLBMMC");
-			String llbmbm = row.optString("LLBMBM");
-			String jsbmbm = row.optString("JSBMBM");
-			String jsbmmc = row.optString("JSBMMC");
-			String llrbm = row.optString("LLRBM");
-			String llrmc = row.optString("LLRMC");
-			String zjh = row.optString("ZJH");
-			String chmc = row.optString("CHMC");
-			String gg = row.optString("GG");
-			String pjcode = row.optString("PJCODE");
-			String th = row.optString("TH");
-			String zjldw = row.optString("ZJLDW");
-			int sl = row.optInt("SL");
-			double dj = row.optDouble("DJ");
-			String xmyt = row.optString("XMYT");
-			String chbm = row.optString("CHBM");
-			
-			//生成32位uuid
-			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-			
-			String insertSql = "insert into GOODS values('" + uuid + "'," + kjnd + ",'" + kjh + "','" + ckdh + "'," + je + ",'" + llbmmc + "','" + llbmbm + "','" + jsbmmc + "','" + jsbmbm + "','" + llrmc + "','" + llrbm + "','" + zjh + "','" + chmc + "','" + gg + "','" + pjcode + "','" + th + "','" + zjldw + "'," + sl + "," + dj + ",'" + xmyt + "','" + chbm + "')";
-			
-			try{
-				insert(insertSql);
-			}catch(Exception e){
-				System.out.println(e);
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+			if(!goodsDAO.haveCkdh(row.optString("CKDH"))){
+				int kjnd = row.optInt("KJND");
+				String kjh = row.optString("KJH");
+				String ckdh = row.optString("CKDH");
+				double je = "".equals(row.optString("JE"))?0:row.optDouble("JE");
+				String llbmmc = row.optString("LLBMMC");
+				String llbmbm = row.optString("LLBMBM");
+				String jsbmbm = row.optString("JSBMBM");
+				String jsbmmc = row.optString("JSBMMC");
+				String llrbm = row.optString("LLRBM");
+				String llrmc = row.optString("LLRMC");
+				String zjh = row.optString("ZJH");
+				String chmc = row.optString("CHMC");
+				String gg = row.optString("GG");
+				String pjcode = row.optString("PJCODE");
+				String th = row.optString("TH");
+				String zjldw = row.optString("ZJLDW");
+				int sl = row.optInt("SL");
+				double dj = "".equals(row.optString("DJ"))?0:row.optDouble("DJ");
+				String xmyt = row.optString("XMYT");
+				String chbm = row.optString("CHBM");
+				
+				//生成32位uuid
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				
+				String insertSql = "insert into GOODS values('" + uuid + "'," + kjnd + ",'" + kjh + "','" + ckdh + "'," + je + ",'" + llbmmc + "','" + llbmbm + "','" + jsbmmc + "','" + jsbmbm + "','" + llrmc + "','" + llrbm + "','" + zjh + "','" + chmc + "','" + gg + "','" + pjcode + "','" + th + "','" + zjldw + "'," + sl + "," + dj + ",'" + xmyt + "','" + chbm + "')";
+				
+				try{
+					insert(insertSql);
+				}catch(Exception e){
+					System.out.println(e);
+					if("".equals(errorMessage)){
+						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
+					}else {
+						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+					}
+					continue;
 				}
-				continue;
+			}else {
+				if("".equals(errorMessage)){
+					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
+				}
 			}
 		}
 		
@@ -473,11 +513,11 @@ public class ExcelDAO extends CommonDAO {
 		for(int i=0;i<rows.length();i++){
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
-			String pjname = row.optString("PJCODE");
+			String pjname = row.optString("PJNAME");
 			int ordercode = row.optInt("ORDERCODE");
 			String note = row.optString("NOTE");
 			String symbol = row.optString("SYMBOL");
-			String enddate = row.optString("ENDDATE");
+			String enddate = "".equals(row.optString("ENDDATE"))?"2020-12-31":row.optString("ENDDATE");
 			String departname = row.optString("DEPARTNAME");
 			String empname = row.optString("EMPNAME");
 			String assess = row.optString("ASSESS");
@@ -533,65 +573,74 @@ public class ExcelDAO extends CommonDAO {
 		for(int i=0;i<rows.length();i++){
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
-			String code = row.optString("CODE");
-			String name = row.optString("NAME");
-			String model = row.optString("MODEL");
-			String buydate = row.optString("BUYDATE");
-			if("".equals(buydate)){
-				buydate = null;
-			}else {
-				buydate = "'" + buydate + "'";
-			}
-			String producedate = row.optString("PRODUCEDATE");
-			if("".equals(producedate)){
-				producedate = null;
-			}else {
-				producedate = "'" + producedate + "'";
-			}
-			int life = row.optInt("LIFE");
-			double buycost = row.optDouble("BUYCOST");
-			String status = row.optString("STATUS");
-			if("库中".equals(status)){
-				status = "1";
-			}else if("借出".equals(status)){
-				status = "2";
-			}else if("损坏".equals(status)){
-				status = "3";
-			}
-			String empname = row.optString("EMPNAME");
-			String lenddate = row.optString("LENDDATE");
-			if("".equals(lenddate)){
-				lenddate = null;
-			}else {
-				lenddate = "'" + lenddate + "'";
-			}
-			String checkdate = row.optString("CHECKDATE");
-			if("".equals(checkdate)){
-				checkdate = null;
-			}else {
-				checkdate = "'" + checkdate + "'";
-			}
-			int checkyear = row.optInt("CHECKYEAR");
-			
-			//根据领用人姓名找出责任人信息
-			String empcode = findCodeByName("EMPLOYEE", empname);
-			Map mapEmp = findByCode("EMPLOYEE", empcode);
-			String departcode = mapEmp.get("DEPARTCODE")==null?"":mapEmp.get("DEPARTCODE").toString();
-			//生成32位uuid
-			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-			
-			String insertSql = "insert into ASSETS values('" + uuid + "','" + code + "','" + name + "','" + model + "'," + buydate + "," + producedate + "," + buycost + ",0," + life + ",'" + status + "','" + departcode + "','" + empcode + "'," + lenddate + "," + checkdate + "," + checkyear + ")";
-			
-			try{
-				insert(insertSql);
-			}catch(Exception e){
-				System.out.println(e);
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
+			Map map = findByCode("ASSETS", row.optString("CODE"));
+			if(map.get("CODE")==null){
+				String code = row.optString("CODE");
+				String name = row.optString("NAME");
+				String model = row.optString("MODEL");
+				String buydate = row.optString("BUYDATE");
+				if("".equals(buydate)){
+					buydate = null;
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+					buydate = "'" + buydate + "'";
 				}
-				continue;
+				String producedate = row.optString("PRODUCEDATE");
+				if("".equals(producedate)){
+					producedate = null;
+				}else {
+					producedate = "'" + producedate + "'";
+				}
+				int life = row.optInt("LIFE");
+				double buycost = "".equals(row.optString("BUYCOST"))?0:row.optDouble("BUYCOST");
+				String status = row.optString("STATUS");
+				if("库中".equals(status)){
+					status = "1";
+				}else if("借出".equals(status)){
+					status = "2";
+				}else if("损坏".equals(status)){
+					status = "3";
+				}
+				String empname = row.optString("EMPNAME");
+				String lenddate = row.optString("LENDDATE");
+				if("".equals(lenddate)){
+					lenddate = null;
+				}else {
+					lenddate = "'" + lenddate + "'";
+				}
+				String checkdate = row.optString("CHECKDATE");
+				if("".equals(checkdate)){
+					checkdate = null;
+				}else {
+					checkdate = "'" + checkdate + "'";
+				}
+				int checkyear = row.optInt("CHECKYEAR");
+				
+				//根据领用人姓名找出责任人信息
+				String empcode = findCodeByName("EMPLOYEE", empname);
+				Map mapEmp = findByCode("EMPLOYEE", empcode);
+				String departcode = mapEmp.get("DEPARTCODE")==null?"":mapEmp.get("DEPARTCODE").toString();
+				//生成32位uuid
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				
+				String insertSql = "insert into ASSETS values('" + uuid + "','" + code + "','" + name + "','" + model + "'," + buydate + "," + producedate + "," + buycost + ",0," + life + ",'" + status + "','" + departcode + "','" + empcode + "'," + lenddate + "," + checkdate + "," + checkyear + ")";
+				
+				try{
+					insert(insertSql);
+				}catch(Exception e){
+					System.out.println(e);
+					if("".equals(errorMessage)){
+						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
+					}else {
+						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+					}
+					continue;
+				}
+			}else {
+				if("".equals(errorMessage)){
+					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
+				}
 			}
 		}
 		
@@ -658,6 +707,67 @@ public class ExcelDAO extends CommonDAO {
 		return errorMessage;
 	}
 	
+	/**
+	 * 工作令信息入库
+	 * @param date
+	 * @return
+	 */
+	public String insertProject(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			String checkdate = ""; 
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			String pjname = row.optString("PJNAME");
+			String managername = row.optString("MANAGERNAME");
+			int planedworkload = row.optInt("PLANEDWORKLOAD");
+			String startdate = row.optString("STARTDATE");
+			String enddate = row.optString("ENDDATE");
+			String note = row.optString("NOTE");
+			
+			//生成ID
+			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			//生成code
+			int pjcode = findTotalCount("PROJECT") + 1;
+			//找出managercode
+			String managercode = findCodeByName("EMPLOYEE", managername);
+			
+			if("".equals(startdate)){
+				startdate = null;
+			}else {
+				startdate = "'" + startdate + "'";
+			}
+			if("".equals(enddate)){
+				enddate = null;
+			}else {
+				enddate = "'" + enddate + "'";
+			}
+			
+			String insertSql = "insert into PROJECT values('" + uuid + "', '" + pjcode + "', '" + pjname + "', '1', '" + managercode + "', '', " + planedworkload + ", 0, " + startdate + ", " + enddate + ", '" + note + "')";
+			
+			try{
+				insert(insertSql);
+			}catch(Exception e){
+				System.out.println(e);
+				if("".equals(errorMessage)){
+					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+				}
+				continue;
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
 	public void setProjectDAO(ProjectDAO pjDAO){
 		this.pjDAO = pjDAO;
 	}
@@ -672,5 +782,13 @@ public class ExcelDAO extends CommonDAO {
 	
 	public void setEmployeeDAO(EmployeeDAO emDAO){
 		this.emDAO = emDAO;
+	}
+	
+	public void setCardDAO(CardDAO cardDAO){
+		this.cardDAO = cardDAO;
+	}
+	
+	public void setGoodsDAO(GoodsDAO goodsDAO){
+		this.goodsDAO = goodsDAO;
 	}
 }

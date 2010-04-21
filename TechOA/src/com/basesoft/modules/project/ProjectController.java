@@ -96,12 +96,14 @@ public class ProjectController extends CommonController {
 			mv.addObject("listCdrwqk", listCdrwqk);
 		}else if("list".equals(action)){//项目管理列表
 			mv = new ModelAndView("modules/pj/list_pj");
+			String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 			
 			PageList pageList = projectDAO.findAll(page);
 			List listEm = projectDAO.getAllEmployee();
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("listEm", listEm);
+			mv.addObject("errorMessage", errorMessage);
 		}else if("add".equals(action)){//项目添加
 			//接收页面参数
 			String  pjname = ServletRequestUtils.getStringParameter(request, "pjname", "");

@@ -165,7 +165,7 @@ Ext.onReady(function(){
         win2 = new Ext.Window({
         	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'预览',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
 	        {text:'关闭',handler: function(){win2.hide();}}
 	        ]
         });
@@ -230,7 +230,7 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=goods.do?action=list&table=GOODS';
+		action = 'excel.do?action=preview&table=GOODS';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
@@ -255,6 +255,8 @@ Ext.onReady(function(){
     		<td>出库单号</td>
     		<td>金额</td>
     		<td>领料部门</td>
+    		<td>领料部门编码</td>
+    		<td>结算部门编码</td>
     		<td>结算部门</td>
     		<td>领料人编码</td>
     		<td>领料人</td>
@@ -279,6 +281,8 @@ Ext.onReady(function(){
 			<td><%=mapGoods.get("CKDH") %></td>
 			<td><%=mapGoods.get("JE") %></td>
 			<td><%=mapGoods.get("LLBMMC") %></td>
+			<td><%=mapGoods.get("LLBMBM") %></td>
+			<td><%=mapGoods.get("JSBMBM") %></td>
 			<td><%=mapGoods.get("JSBMMC") %></td>
 			<td><%=mapGoods.get("LLRBM") %></td>
 			<td><%=mapGoods.get("LLRMC") %></td>

@@ -6,6 +6,10 @@
 <%@ page import="com.basesoft.modules.assets.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
+String status = request.getAttribute("status").toString();
+String depart = request.getAttribute("depart").toString();
+String emp = request.getAttribute("emp").toString();
+
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
 
@@ -55,9 +59,14 @@ Ext.onReady(function(){
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
 <input type="hidden" name="data" id="data" value='<%=data %>'>
-<br>&nbsp;&nbsp;&nbsp;&nbsp;注：红色格子表示入库后将无法进行关联，无法参与统计汇总。可返回修改excel表，或者保存入库后在相应管理模块下重新编辑选择！
+<input type="hidden" name="status" value="<%=status %>">
+<input type="hidden" name="depart" value="<%=depart %>">
+<input type="hidden" name="emp" value="<%=emp %>">
+<br>&nbsp;&nbsp;&nbsp;&nbsp;注：橙色行表示已存在此设备，将不予入库；黄色格子表示入库后将无法进行关联，无法参与统计，可返回修改excel表，或入库后在相应管理模块下编辑！
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
+  	  			<td>设备编号</td>
+  	  			<td>设备名称</td>
   	  			<td>设备型号</td>
   	  			<td>购买日期</td>
   	  			<td>出厂日期</td>
@@ -72,8 +81,17 @@ Ext.onReady(function(){
 <%
 		for(int i=0;i<rows.length();i++){
 			JSONObject row = rows.optJSONObject(i);
+			Map map = assetsDAO.findByCode("ASSETS", row.optString("CODE"));
+			if(map.get("CODE")!=null){
 %>            
-            <tr align="center">
+			<tr align="center" bgcolor="orange" title="系统中已存在此设备！">
+<%
+			}else {
+%>
+			<tr align="center">
+<%
+			}
+%>
             	<td>&nbsp;<%=row.optString("CODE") %></td>
             	<td>&nbsp;<%=row.optString("NAME") %></td>
             	<td>&nbsp;<%=row.optString("MODEL") %></td>
@@ -82,7 +100,19 @@ Ext.onReady(function(){
 				<td>&nbsp;<%=row.optString("LIFE") %></td>
 				<td>&nbsp;<%=row.optString("BUYCOST") %></td>
 				<td>&nbsp;<%=row.optString("STATUS") %></td>
+<%
+			String empcode = assetsDAO.findCodeByName("EMPLOYEE", row.optString("EMPNAME"));
+			if("".equals(empcode)){
+%>            	
+            	<td bgcolor="yellow" title="系统无法识别此员工！">&nbsp;<%=row.optString("EMPNAME") %></td>
+            	
+<%
+			}else {
+%>            	
 				<td>&nbsp;<%=row.optString("EMPNAME") %></td>
+<%
+			}
+%>
 				<td>&nbsp;<%=row.optString("LENDDATE") %></td>
 				<td>&nbsp;<%=row.optString("CHECKDATE") %></td>
 				<td>&nbsp;<%=row.optString("CHECKYEAR") %></td>
