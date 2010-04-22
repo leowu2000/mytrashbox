@@ -44,7 +44,7 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	history.back(-1);
+    	window.location.href = 'plan.do?action=list&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>&type=<%=type %>&type2=<%=type2 %>';
     }
     
     function onImportClick(){

@@ -42,11 +42,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	history.back(-1);
+    	window.location.href = 'assets.do?action=list_manage&status=<%=status %>&depart=<%=depart %>&emp=<%=emp %>';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=assets.do?action=list_manage&table=ASSETS';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=assets.do?action=list_manage&table=ASSETS&status=<%=status %>&depart=<%=depart %>&emp=<%=emp %>';
     	document.getElementById('listForm').submit();
     }
 });

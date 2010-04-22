@@ -25,7 +25,7 @@
   		tb.add('计划分类');
   		tb.add(document.getElementById('seltype'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('按名字模糊查询');
+  		tb.add('按责任人模糊查询');
   		tb.add(document.getElementById('empname'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));

@@ -38,7 +38,7 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	history.back(-1);
+    	window.location.href = 'pj.do?action=list';
     }
     
     function onImportClick(){
@@ -55,7 +55,7 @@ Ext.onReady(function(){
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
 <input type="hidden" name="data" id="data" value='<%=data %>'>
-<br>&nbsp;&nbsp;&nbsp;&nbsp;注：红色格子表示入库后将无法进行关联，无法参与统计汇总。可返回修改excel表，或者保存入库后在相应管理模块下编辑！
+<br>&nbsp;&nbsp;&nbsp;&nbsp;注：橙色行表示已存在此工作令号，将不予入库；黄色格子表示入库后将无法进行关联，无法参与统计，可返回修改excel表，或入库后在相应管理模块下编辑！
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
   	  			<td>工作令号</td>              
@@ -68,14 +68,23 @@ Ext.onReady(function(){
 <%
 		for(int i=0;i<rows.length();i++){
 			JSONObject row = rows.optJSONObject(i);
+			String pjcode = projectDAO.findCodeByName("PROJECT", row.optString("PJNAME"));
+			if(!"".equals(pjcode)){
 %>            
-            <tr align="center">
+			<tr align="center" bgcolor="orange" title="系统中已存在此工作令号！">
+<%
+			}else {
+%>
+			<tr align="center">
+<%
+			}
+%>            
             	<td>&nbsp;<%=row.optString("PJNAME") %></td>
 <%
 			String managercode = projectDAO.findCodeByName("EMPLOYEE", row.optString("MANAGERNAME"));
 			if("".equals(managercode)){
 %>            	
-            	<td bgcolor="red" title="系统无法识别此负责人！">&nbsp;<%=row.optString("MANAGERNAME") %></td>
+            	<td bgcolor="yellow" title="系统无法识别此负责人！">&nbsp;<%=row.optString("MANAGERNAME") %></td>
 <%
 			}else {
 %>            	

@@ -718,46 +718,55 @@ public class ExcelDAO extends CommonDAO {
 		//循环数据行
 		JSONArray rows = data.optJSONArray("row");
 		for(int i=0;i<rows.length();i++){
-			String checkdate = ""; 
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
-			String pjname = row.optString("PJNAME");
-			String managername = row.optString("MANAGERNAME");
-			int planedworkload = row.optInt("PLANEDWORKLOAD");
-			String startdate = row.optString("STARTDATE");
-			String enddate = row.optString("ENDDATE");
-			String note = row.optString("NOTE");
 			
-			//生成ID
-			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-			//生成code
-			int pjcode = findTotalCount("PROJECT") + 1;
-			//找出managercode
-			String managercode = findCodeByName("EMPLOYEE", managername);
-			
-			if("".equals(startdate)){
-				startdate = null;
-			}else {
-				startdate = "'" + startdate + "'";
-			}
-			if("".equals(enddate)){
-				enddate = null;
-			}else {
-				enddate = "'" + enddate + "'";
-			}
-			
-			String insertSql = "insert into PROJECT values('" + uuid + "', '" + pjcode + "', '" + pjname + "', '1', '" + managercode + "', '', " + planedworkload + ", 0, " + startdate + ", " + enddate + ", '" + note + "')";
-			
-			try{
-				insert(insertSql);
-			}catch(Exception e){
-				System.out.println(e);
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
+			String sys_pjcode = findCodeByName("PROJECT", row.optString("PJNAME"));
+			if("".equals(sys_pjcode)){//不存在工作令号则入库
+				String pjname = row.optString("PJNAME");
+				String managername = row.optString("MANAGERNAME");
+				int planedworkload = row.optInt("PLANEDWORKLOAD");
+				String startdate = row.optString("STARTDATE");
+				String enddate = row.optString("ENDDATE");
+				String note = row.optString("NOTE");
+				
+				//生成ID
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				//生成code
+				int pjcode = findTotalCount("PROJECT") + 1;
+				//找出managercode
+				String managercode = findCodeByName("EMPLOYEE", managername);
+				
+				if("".equals(startdate)){
+					startdate = null;
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+					startdate = "'" + startdate + "'";
 				}
-				continue;
+				if("".equals(enddate)){
+					enddate = null;
+				}else {
+					enddate = "'" + enddate + "'";
+				}
+				
+				String insertSql = "insert into PROJECT values('" + uuid + "', '" + pjcode + "', '" + pjname + "', '1', '" + managercode + "', '', " + planedworkload + ", 0, " + startdate + ", " + enddate + ", '" + note + "')";
+				
+				try{
+					insert(insertSql);
+				}catch(Exception e){
+					System.out.println(e);
+					if("".equals(errorMessage)){
+						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
+					}else {
+						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+					}
+					continue;
+				}
+			}else {
+				if("".equals(errorMessage)){
+					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
+				}
 			}
 		}
 		
