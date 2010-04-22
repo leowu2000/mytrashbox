@@ -40,7 +40,7 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	history.back(-1);
+    	window.location.href = 'em.do?action=infolist&seldepart=<%=seldepart %>';
     }
     
     function onImportClick(){

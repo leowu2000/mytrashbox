@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<title></title>
+<title>科研项目管理系统</title>
 <%@ include file="common/meta.jsp" %>
 <%
 String emid = session.getAttribute("EMID").toString();

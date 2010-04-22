@@ -61,8 +61,9 @@ public class HolidayController extends CommonController {
 			String holiday = ServletRequestUtils.getStringParameter(request, "holiday", "");
 			String name = ServletRequestUtils.getStringParameter(request, "name", "");
 			String valid = ServletRequestUtils.getStringParameter(request, "valid", "");
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
-			String updateSql = "update HOLIDAY set HOLIDAY='" + holiday + "', NAME='" + name + "', VALID='" + valid + "'";
+			String updateSql = "update HOLIDAY set HOLIDAY='" + holiday + "', NAME='" + name + "', VALID='" + valid + "' where HOLIDAY='" + id + "'";
 			
 			holidayDAO.update(updateSql);
 			
