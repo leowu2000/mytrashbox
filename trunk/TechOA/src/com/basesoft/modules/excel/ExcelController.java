@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
+import com.basesoft.modules.employee.Car;
+import com.basesoft.modules.employee.CarDAO;
 import com.basesoft.modules.excel.config.Config;
 import com.basesoft.modules.plan.PlanDAO;
 
@@ -25,6 +27,7 @@ public class ExcelController extends CommonController {
 
 	ExcelDAO excelDAO;
 	PlanDAO planDAO;
+	CarDAO carDAO;
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
@@ -47,6 +50,7 @@ public class ExcelController extends CommonController {
 		String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 		String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
 		String errorMessage = "";
+		String carid = ServletRequestUtils.getStringParameter(request, "carid", "");
 		
 		if("preview".equals(action)){//导入预览
 			if("DEPARTMENT".equals(table)){//导入部门
@@ -90,6 +94,8 @@ public class ExcelController extends CommonController {
 				mv = new ModelAndView("modules/excel/preview_workcheck");
 			}else if("PROJECT".equals(table)){//工作令
 				mv = new ModelAndView("modules/excel/preview_project");
+			}else if("CAR".equals(table)){//班车
+				mv = new ModelAndView("modules/excel/preview_car");
 			}
 			
 			MultipartHttpServletRequest mpRequest = (MultipartHttpServletRequest)request;
@@ -130,6 +136,8 @@ public class ExcelController extends CommonController {
 				errorMessage = excelDAO.insertWorkcheck(data, date);
 			}else if("PROJECT".equals(table)){//工作令
 				errorMessage = excelDAO.insertProject(data);
+			}else if("CAR".equals(table)){//班车信息
+				errorMessage = excelDAO.insertCar(data);
 			}
 			
 			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp + "&f_level=" + f_level + "&f_type=" + f_type);
@@ -163,6 +171,9 @@ public class ExcelController extends CommonController {
 			}else if("KQJL".equals(model)){//考勤记录
 				list = excelDAO.getExportData_KQJL(depart, datepick);
 				path = exportExcel.exportExcel_KQJL(list, datepick);
+			}else if("BCYY".equals(model)){//班车预约统计
+				list = excelDAO.getExportData_BCYY(carid, datepick);
+				path = exportExcel.exportExcel_BCYY(list, carid, datepick, carDAO);
 			}
 			
 			
@@ -194,5 +205,9 @@ public class ExcelController extends CommonController {
 	
 	public void setPlanDAO(PlanDAO planDAO){
 		this.planDAO = planDAO;
+	}
+	
+	public void setCarDAO(CarDAO carDAO){
+		this.carDAO = carDAO;
 	}
 }

@@ -57,16 +57,19 @@ public class CarDAO extends CommonDAO {
 	 * @return
 	 */
 	public Car findById(String id){
-		Map map = jdbcTemplate.queryForMap("select * from CAR where ID='" + id + "'");
 		Car car = new Car();
 		
-		car.setId(id);
-		car.setCarcode(map.get("CARCODE")==null?"":map.get("CARCODE").toString());
-		car.setCarno(map.get("CARNO")==null?"":map.get("CARNO").toString());
-		car.setWay(map.get("WAY")==null?"":map.get("WAY").toString());
-		car.setDrivername(map.get("DRIVERNAME")==null?"":map.get("DRIVERNAME").toString());
-		car.setPhone(map.get("PHONE")==null?"":map.get("PHONE").toString());
-		car.setSendlocate(map.get("SENDLOCATE")==null?"":map.get("SENDLOCATE").toString());
+		List list = jdbcTemplate.queryForList("select * from CAR where ID='" + id + "'");
+		if(list.size()>0){
+			Map map = (Map)list.get(0);
+			car.setId(id);
+			car.setCarcode(map.get("CARCODE")==null?"":map.get("CARCODE").toString());
+			car.setCarno(map.get("CARNO")==null?"":map.get("CARNO").toString());
+			car.setWay(map.get("WAY")==null?"":map.get("WAY").toString());
+			car.setDrivername(map.get("DRIVERNAME")==null?"":map.get("DRIVERNAME").toString());
+			car.setPhone(map.get("PHONE")==null?"":map.get("PHONE").toString());
+			car.setSendlocate(map.get("SENDLOCATE")==null?"":map.get("SENDLOCATE").toString());
+		}
 		
 		return car;
 	}
@@ -164,5 +167,23 @@ public class CarDAO extends CommonDAO {
 		pageList.setPageInfo(pageInfo);
 		
 		return pageList;
+	}
+	
+	/**
+	 * 判断是否存在此班车
+	 * @param cardno 一卡通号
+	 * @param empcode 人员编码
+	 * @return
+	 */
+	public boolean haveCar(String carcode){
+		boolean haveCar= false;
+		
+		List list = jdbcTemplate.queryForList("select * from CAR where CARCODE='" + carcode + "'");
+		
+		if(list.size()>0){
+			haveCar = true;
+		}
+		
+		return haveCar;
 	}
 }

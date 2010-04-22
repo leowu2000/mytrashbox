@@ -2,10 +2,15 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%@ page import="com.basesoft.util.*" %>
+<%@ page import="com.basesoft.modules.plan.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listAssess = (List)pageList.getList();
 int pagenum = pageList.getPageInfo().getCurPage();
+
+ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -98,6 +103,8 @@ for(int i=0;i<listAssess.size();i++){
 	}else if("4".equals(status)){
 		status = "已完成";
 	}
+	
+	String pjname = planDAO.findNameByCode("PROJECT", mapAssess.get("PJCODE").toString());
 %>
             <tr align="center">
 				<td>&nbsp;
@@ -109,7 +116,7 @@ for(int i=0;i<listAssess.size();i++){
 				}
 %>				
 				</td>
-                <td>&nbsp;<%=mapAssess.get("PJNAME")==null?"":mapAssess.get("PJNAME") %></td>
+                <td>&nbsp;<%=pjname %></td>
                 <td>&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
                 <td>&nbsp;<%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
                 <td>&nbsp;<%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>

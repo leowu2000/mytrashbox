@@ -59,7 +59,7 @@ Ext.onReady(function(){
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
 <input type="hidden" name="data" id="data" value='<%=data %>'>
-<br>&nbsp;&nbsp;&nbsp;&nbsp;注：黄色格子表示入库后将无法进行关联，无法参与统计，可返回修改excel表，或入库后在相应管理模块下编辑！
+<br>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#FF0088">注：黄色格子表示入库后将无法进行关联，无法参与统计，可返回修改excel表，或入库后在相应管理模块下编辑！</font>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>刷卡时间</td>
@@ -81,8 +81,8 @@ Ext.onReady(function(){
 			String empname = cardDAO.findNameByCode("EMPLOYEE", row.optString("EMPCODE"));
 			if("".equals(empname)){
 %>            	
-            	<td bgcolor="yellow" title="系统无法识别此员工！">&nbsp;<%=row.optString("EMPCODE") %></td>
-            	<td bgcolor="yellow" title="系统无法识别此员工！">&nbsp;<%=row.optString("EMPNAME") %></td>
+            	<td bgcolor="#FF0088" title="系统无法识别此员工！">&nbsp;<%=row.optString("EMPCODE") %></td>
+            	<td bgcolor="#FF0088" title="系统无法识别此员工！">&nbsp;<%=row.optString("EMPNAME") %></td>
             	
 <%
 			}else {
@@ -91,7 +91,7 @@ Ext.onReady(function(){
 <%
 				if(!empname.equals(row.optString("EMPNAME"))){//姓名跟系统中姓名不对应
 %>				
-				<td bgcolor="yellow" title="姓名跟系统中姓名不对应！">&nbsp;<%=row.optString("EMPNAME") %></td>
+				<td bgcolor="#FF0088" title="姓名跟系统中姓名不对应！">&nbsp;<%=row.optString("EMPNAME") %></td>
 				
 <%
 				}else {
@@ -103,7 +103,7 @@ Ext.onReady(function(){
 			String departcode = cardDAO.findCodeByName("DEPARTMENT", row.optString("DEPARTNAME"));
 			if("".equals(departcode)){
 %>            	
-				<td bgcolor="yellow" title="系统无法识别此部门！">&nbsp;<%=row.optString("DEPARTNAME") %></td>
+				<td bgcolor="#FF0088" title="系统无法识别此部门！">&nbsp;<%=row.optString("DEPARTNAME") %></td>
 	
 <%
 			}else {
@@ -119,7 +119,7 @@ Ext.onReady(function(){
 			String cardno = cardDAO.getCardnoByEmpcode(row.optString("EMPCODE"));
 			if(!cardno.equals(row.optString("CARDNO"))){
 %>            	
-				<td bgcolor="yellow" title="卡号和系统中此人的卡号不一致！">&nbsp;<%=row.optString("CARDNO") %></td>
+				<td bgcolor="#FF0088" title="卡号和系统中此人的卡号不一致！">&nbsp;<%=row.optString("CARDNO") %></td>
 	
 <%
 			}else {

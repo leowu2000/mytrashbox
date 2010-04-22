@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.basesoft.core.CommonDAO;
+import com.basesoft.modules.employee.CarDAO;
 import com.basesoft.modules.employee.CardDAO;
 import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.employee.FinanceDAO;
@@ -26,6 +27,7 @@ public class ExcelDAO extends CommonDAO {
 	EmployeeDAO emDAO;
 	CardDAO cardDAO;
 	GoodsDAO goodsDAO;
+	CarDAO carDAO;
 	
 	/**
 	 * 获取要导出的工时统计汇总数据
@@ -131,6 +133,28 @@ public class ExcelDAO extends CommonDAO {
 		list = emDAO.findWorkCheck(start, end, depart, "", "");
 		
 		return list;
+	}
+	
+	/**
+	 * 获取班车预约统计数据
+	 * @param carid 班车
+	 * @param datepick 日期
+	 * @return
+	 */
+	public List getExportData_BCYY(String carid, String datepick){
+		String sql = "select * from CAR_ORDER where ";
+		
+		if("0".equals(carid)){//全部班车
+			sql = sql + "ORDERDATE='" + datepick + "'";
+		}else {
+			sql = sql + "CARID='" + carid + "' and ORDERDATE='" + datepick + "'";
+		}
+		
+		sql = sql + "  order by ORDERDATE desc, ORDERSENDTIME desc";
+		
+		List listBCYY = jdbcTemplate.queryForList(sql);
+		
+		return listBCYY;
 	}
 	
 	/**
@@ -653,7 +677,8 @@ public class ExcelDAO extends CommonDAO {
 	
 	/**
 	 * 考勤入库
-	 * @param data 
+	 * @param data
+	 * @param date
 	 * @return
 	 */
 	public String insertWorkcheck(JSONObject data, String date) throws Exception{
@@ -709,7 +734,7 @@ public class ExcelDAO extends CommonDAO {
 	
 	/**
 	 * 工作令信息入库
-	 * @param date
+	 * @param data
 	 * @return
 	 */
 	public String insertProject(JSONObject data) throws Exception{
@@ -777,6 +802,61 @@ public class ExcelDAO extends CommonDAO {
 		return errorMessage;
 	}
 	
+	/**
+	 * 班车信息入库
+	 * @param data
+	 * @return
+	 */
+	public String insertCar(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			
+			boolean haveCar = carDAO.haveCar(row.optString("CARCODE"));
+			if(!haveCar){//不存在工作令号则入库
+				String carcode = row.optString("CARCODE");
+				String carno = row.optString("CARNO");
+				String way = row.optString("WAY");
+				String drivername = row.optString("DRIVERNAME");
+				String driverphone = row.optString("DRIVERPHONE");
+				String sendlocate = row.optString("SENDLOCATE");
+				
+				//生成ID
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				
+				String insertSql = "insert into CAR values('" + uuid + "', '" + carcode + "', '" + carno + "', '" + way + "', '" + drivername + "', '" + driverphone + "', '" + sendlocate + "')";
+				
+				try{
+					insert(insertSql);
+				}catch(Exception e){
+					System.out.println(e);
+					if("".equals(errorMessage)){
+						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
+					}else {
+						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+					}
+					continue;
+				}
+			}else {
+				if("".equals(errorMessage)){
+					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
+				}else {
+					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
+				}
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
 	public void setProjectDAO(ProjectDAO pjDAO){
 		this.pjDAO = pjDAO;
 	}
@@ -799,5 +879,9 @@ public class ExcelDAO extends CommonDAO {
 	
 	public void setGoodsDAO(GoodsDAO goodsDAO){
 		this.goodsDAO = goodsDAO;
+	}
+	
+	public void setCarDAO(CarDAO carDAO){
+		this.carDAO = carDAO;
 	}
 }

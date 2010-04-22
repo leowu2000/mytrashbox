@@ -20,6 +20,8 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 
+import com.basesoft.modules.employee.Car;
+import com.basesoft.modules.employee.CarDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.util.StringUtil;
 
@@ -462,6 +464,72 @@ public class ExportExcel {
 			}
             
             insertRowData(sheet, i + 3, str3);
+		}
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
+	 * 班车预约信息写成一个excel文件，返回这个文件的路径
+	 * @param list 数据列表
+	 * @param car 班车
+	 * @param datepick 日期
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_BCYY(List<Map<String, String>> list, String carid, String datepick, CarDAO carDAO) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		Car car = carDAO.findById(carid);
+		String carcode = car.getCarcode()==null?"":car.getCarcode();
+		
+		String[] str = new String[1];
+		str[0] = datepick + "   " + carcode + "班车预约记录";
+		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, 5, 0);
+		
+		//插入表头
+		String str1[] = new String[6];
+		str1[0] = "员工姓名";
+		str1[1] = "预约日期";
+		str1[2] = "发车时间";
+		str1[3] = "班车编号";
+		str1[4] = "班车车牌号";
+		str1[5] = "状态";
+		
+		insertRowData(sheet, 1, str1);
+		
+		for (int i = 0; i < list.size(); i++) {
+			String[] str2 = new String[6];
+			Map<String, String> map = (Map<String, String>) list.get(i);
+		
+			String empcode = map.get("EMPCODE")==null?"":map.get("EMPCODE");
+			String ordercarid = map.get("CARID")==null?"":map.get("CARID");
+			Car orderCar = carDAO.findById(ordercarid);
+			String status = map.get("STATUS")==null?"":map.get("STATUS");
+			if("0".equals(status)){
+				status = "新增加";
+			}else if("1".equals(status)){
+				status = "已确认";
+			}
+			
+			str2[0] = carDAO.findNameByCode("EMPLOYEE", empcode);
+			str2[1] = map.get("ORDERDATE")==null?"":String.valueOf(map.get("ORDERDATE"));
+			str2[2] = map.get("ORDERSENDTIME")==null?"":String.valueOf(map.get("ORDERSENDTIME"));
+			str2[3] = orderCar.getCarcode();
+			str2[4] = orderCar.getCarno();
+			str2[5] = status;
+            
+            insertRowData(sheet, i + 2, str2);
 		}
 		
 		wb.write();

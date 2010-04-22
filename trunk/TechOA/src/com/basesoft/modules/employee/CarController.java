@@ -33,11 +33,13 @@ public class CarController extends CommonController {
 		
 		if("list_manage".equals(action)){//班车管理列表
 			mv = new ModelAndView("modules/employee/car/list_manage");
+			String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 			
 			//管理列表
 			PageList pageList =carDAO.findAllCar(page);
 			
 			mv.addObject("pageList", pageList);
+			mv.addObject("errorMessage", errorMessage);
 			return mv;
 		}else if("add".equals(action)){//添加班车
 			String carcode = ServletRequestUtils.getStringParameter(request, "carcode", "");
