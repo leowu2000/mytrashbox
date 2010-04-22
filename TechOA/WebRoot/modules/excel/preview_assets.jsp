@@ -62,7 +62,7 @@ Ext.onReady(function(){
 <input type="hidden" name="status" value="<%=status %>">
 <input type="hidden" name="depart" value="<%=depart %>">
 <input type="hidden" name="emp" value="<%=emp %>">
-<br>&nbsp;&nbsp;&nbsp;&nbsp;注：橙色行表示已存在此设备，将不予入库；黄色格子表示入库后将无法进行关联，无法参与统计，可返回修改excel表，或入库后在相应管理模块下编辑！
+<br>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#FF0088">注：橙色行表示已存在此设备，将不予入库；黄色格子表示入库后将无法进行关联，无法参与统计，可返回修改excel表，或入库后在相应管理模块下编辑！</font>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
   	  			<td>设备编号</td>
@@ -104,7 +104,7 @@ Ext.onReady(function(){
 			String empcode = assetsDAO.findCodeByName("EMPLOYEE", row.optString("EMPNAME"));
 			if("".equals(empcode)){
 %>            	
-            	<td bgcolor="yellow" title="系统无法识别此员工！">&nbsp;<%=row.optString("EMPNAME") %></td>
+            	<td bgcolor="#FF0088" title="系统无法识别此员工！">&nbsp;<%=row.optString("EMPNAME") %></td>
             	
 <%
 			}else {

@@ -47,17 +47,17 @@ public class ChartUtil {
 	        //步骤2：根据Dataset 生成JFreeChart对象，以及做相应的设置   
 	        JFreeChart freeChart = createChart(dataset, title);   
 	        //步骤3：将JFreeChart对象输出到文件，Servlet输出流等   
-	        saveAsFile(freeChart, path, 800, 330);   
+	        saveAsFile(freeChart, path, 800, 350);   
 		}else if("kygstj".equals(method)){
 			title = "科研工时统计";
 			CategoryDataset dataset = createDatasetKygstj(pjDAO, list);   
 	        JFreeChart freeChart = createChart(dataset, title);   
-	        saveAsFile(freeChart, path, 800, 330);   
+	        saveAsFile(freeChart, path, 800, 350);   
 		}else if("cdrwqk".equals(method)){
 			title = "承担任务情况";
 			CategoryDataset dataset = createDatasetCdrwqk(pjDAO, list);   
 	        JFreeChart freeChart = createChart(dataset, title);   
-	        saveAsFile(freeChart, path, 800, 330);   
+	        saveAsFile(freeChart, path, 800, 350);   
 		}
 		
 		return path;
@@ -190,22 +190,22 @@ public class ChartUtil {
         //以下的设置可以由用户定制，也可以省略   
         CategoryPlot plot = (CategoryPlot) jfreechart.getPlot();   
         //背景色　透明度   
-        plot.setBackgroundAlpha(0.5f);   
+        //plot.setBackgroundAlpha(0.5f);   
         //前景色　透明度   
-        plot.setForegroundAlpha(0.5f);   
+        //plot.setForegroundAlpha(0.5f);   
         //水平标题
         CategoryAxis domainAxis = plot.getDomainAxis();
-        domainAxis.setLabelFont(new Font("黑体",Font.BOLD,18));
-        domainAxis.setTickLabelFont(new Font("黑体",Font.BOLD,12));
+        domainAxis.setLabelFont(new Font("黑体",Font.BOLD,12));
+        domainAxis.setTickLabelFont(new Font("黑体",Font.BOLD,10));
         //垂直标题
         ValueAxis rangeAxis=plot.getRangeAxis();
-        rangeAxis.setLabelFont(new Font("黑体",Font.BOLD,18));
-        rangeAxis.setTickLabelFont(new Font("黑体",Font.BOLD,12));
+        rangeAxis.setLabelFont(new Font("黑体",Font.BOLD,12));
+        rangeAxis.setTickLabelFont(new Font("黑体",Font.BOLD,10));
         //标题
         TextTitle textTitle = jfreechart.getTitle();
         textTitle.setFont(new Font("宋体", Font.BOLD,20));
         //图例
-        jfreechart.getLegend().setItemFont(new Font("宋体",Font.BOLD,12));  
+        jfreechart.getLegend().setItemFont(new Font("宋体",Font.BOLD,10));  
         
         //柱子显示
         BarRenderer3D renderer = (BarRenderer3D) plot.getRenderer();
@@ -235,7 +235,7 @@ public class ChartUtil {
             }   
             out = new FileOutputStream(outputPath);   
             //保存为PNG文件   
-            ChartUtilities.writeChartAsPNG(out, chart, 800, 330);   
+            ChartUtilities.writeChartAsPNG(out, chart, 800, 350);   
             //保存为JPEG文件   
             //ChartUtilities.writeChartAsJPEG(out, chart, 800, 330);   
             out.flush();   

@@ -36,6 +36,7 @@ Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
 	tb.add({text: '确认',cls: 'x-btn-text-icon xiugai',handler: onAffirmClick});
+	tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
 	
 	function onAffirmClick(btn){
 		var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
@@ -51,6 +52,10 @@ Ext.onReady(function(){
     	    }
     	});
 	}
+	
+	function onExportClick(){
+    	window.location.href = "/excel.do?action=export&model=BCYY&page=<%=pagenum %>&carid=<%=carid %>&datepick=<%=datepick %>";
+  	}
 });
 
 function checkAll(){
@@ -79,10 +84,10 @@ function checkAll(){
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
     		<td><input type="checkbox" name="checkall" onclick="checkAll();" >选择</td>
     		<td>员工姓名</td>
+    		<td>预约日期</td>
+    		<td>发车时间</td>
     		<td>班车编号</td>
     		<td>班车车牌号</td>
-    		<td>发车时间</td>
-    		<td>预约日期</td>
     		<td>状态</td>
     	</tr>
 <%
@@ -103,10 +108,10 @@ function checkAll(){
 		<tr>
 			<td><input type="checkbox" name="check" value="<%=mapOrder.get("ID") %>" class="ainput"></td>
 			<td>&nbsp;<%=empname %></td>
+			<td>&nbsp;<%=mapOrder.get("ORDERDATE")==null?"":mapOrder.get("ORDERDATE") %></td>
+			<td>&nbsp;<%=mapOrder.get("ORDERSENDTIME")==null?"":mapOrder.get("ORDERSENDTIME") %></td>
 			<td>&nbsp;<%=car.getCarcode()==null?"":car.getCarcode() %></td>
 			<td>&nbsp;<%=car.getCarno()==null?"":car.getCarno() %></td>
-			<td>&nbsp;<%=mapOrder.get("ORDERSENDTIME")==null?"":mapOrder.get("ORDERSENDTIME") %></td>
-			<td>&nbsp;<%=mapOrder.get("ORDERDATE")==null?"":mapOrder.get("ORDERDATE") %></td>
 <%
 		if("0".equals(status)){
 %>			

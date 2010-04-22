@@ -47,7 +47,7 @@ Ext.onReady(function(){
 		tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 		tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
 		tb.add({text: '配置发车时间',cls: 'x-btn-text-icon xiugai',handler: onSetClick});
-		//tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
+		tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 	}
 
     if(!win){
@@ -123,7 +123,7 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=import&redirect=card.do?action=list_manage&table=EMP_CARD';
+		action = 'excel.do?action=preview&redirect=car.do?action=list_manage&table=CAR';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
