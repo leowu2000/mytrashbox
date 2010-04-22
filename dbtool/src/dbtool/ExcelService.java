@@ -224,104 +224,104 @@ public class ExcelService {
 
     }
 
-    public static void createReportHtml_Old(String savePath,
-            DefaultListModel expSuccessModel,
-            String errorTab,
-            DBTool dbTool,
-            DefaultListModel selectedStscModel,
-            DefaultListModel selectedSnameModel,
-            DefaultListModel listTabModel,int type,
-            String stscstr,Map dataIndexMap,
-            Map dataDescMap,Map resultStscMap) {
-        JdbcTemplate jt1 = dbTool.getJt1();
-        JdbcTemplate jt2 = dbTool.getJt2();
-        String[] tables = null;
-        if (!expSuccessModel.isEmpty()) {
-            tables = new String[expSuccessModel.size()];
-            for (int i = 0; i < expSuccessModel.size(); i++) {
-                tables[i] = HY_DBTP_JDao.getTabid(expSuccessModel.get(i).toString(), dbTool);
-            }
-        }
-        listTabModel.removeElement("数据索引表");
-        String desFile = savePath + "\\excel\\Report.html";
-        StringBuffer strContent_head = new StringBuffer("<html><head><title>REPORT</title><meta http-equiv='Content-Type' content='text/html; charset=gbk'></head>");
-        strContent_head.append("<style type='text/css'>");
-        strContent_head.append(".title {font-size: 10pt;padding-top: 2px;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:center;}"
-                              +".title2 {font-size: 10pt;padding-top: 2px;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;}</style><body>");
-        StringBuffer strContent_table = new StringBuffer("<table width='85%' align='center' border='0' 'cellspacing='1' bgcolor='#CCCCCC'>");
-        strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 14pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:center;' colspan='6'>数据导出报告</td></tr>");
-        if (!listTabModel.isEmpty()) {
-            strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 10pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;' colspan='6'>以下为未选择报表</td></tr>");
-            for (int i = 0; i < listTabModel.size(); i++) {
-                strContent_table.append("<tr bgcolor='#FFFFFF'><td >" + HY_DBTP_JDao.getTabid(listTabModel.get(i).toString(), dbTool) + "</td><td colspan='5'>" + listTabModel.get(i) + "</td></tr>");
-            }
-        }
-        if (errorTab != null && errorTab.length() > 0) {
-            strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 10pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;' colspan='6'>以下报表和导出结构标准不一致未能成功导出</td></tr>");
-            for (int i = 0; i < errorTab.split(",").length; i++) {
-                strContent_table.append("<tr bgcolor='#FFFFFF'><td colspan='3'>" + HY_DBTP_JDao.getTabid(errorTab.split(",")[i],dbTool) + "</td><td colspan='3'>" + errorTab.split(",")[i] + "</td></tr>");
-            }
-        }
-        strContent_table.append("<tr bgcolor='#E8EFFF' height='30'>");
-        strContent_table.append("<td class='title'>表编号</td>");
-        strContent_table.append("<td class='title'>表名称</td>");
-//        strContent_table.append("<td class='title'>测站名称</td>");
-        strContent_table.append("<td class='title'>源数据条数</td>");
-        strContent_table.append("<td class='title'>导出数据条数</td>");
-        strContent_table.append("<td class='title'>导出站年</td>");
-        strContent_table.append("<td class='title'>生成数据索引</td>");
-        strContent_table.append("</tr>");
-        if (tables != null && tables.length > 0) {
-            for (String table : tables) {
-                strContent_table.append("<tr bgcolor='#FFFFFF' height='20'>");
-                strContent_table.append("<td>" + table + "</td>");
-                strContent_table.append("<td>" + dbTool.getTabCnnm(jt2, table) + "</td>");
-                strContent_table.append("<td>" + dbTool.getCount(jt1, table) + "</td>");
-                if(type==0)
-                    strContent_table.append("<td>" + dbTool.getCountToExcel(jt1, table,stscstr,dbTool.isHaveStcdCol(table)) + "</td>");
-                else
-                    strContent_table.append("<td>" + dbTool.getCount(jt2, table) + "</td>");
-                Object resultdesc = dataDescMap.get(table);
-                if (resultdesc==null) resultdesc="";
-                strContent_table.append("<td>"+resultdesc+"</td>");
-                Object result=dataIndexMap.get(table);
-                if (result==null) result="";
-                strContent_table.append("<td>" + result+ "</td></tr>");
-                List resultList = (List)resultStscMap.get(table);
-                if(resultList!=null && resultList.size()>0){
-                    strContent_table.append("<tr class='title2'><td colspan='6'>["+dbTool.getTabCnnm(jt2, table)+"]_导出数据详细列表:</tr>");
-                    for(int m=0;m<resultList.size();m++){
-                        String tempValue[] = resultList.get(m).toString().split(",");
-                        strContent_table.append("<tr  bgcolor='#FFFFFF' height='20'><td>&nbsp;</td><td>"
-                                            +tempValue[0]+"</td><td>"
-                                            +dbTool.getStscName(jt2, tempValue[0])+"</td><td>"
-                                            +tempValue[3]+"</td><td colspan=2>"
-                                            +tempValue[1]+"-"+tempValue[2]+"</td></tr>");
-
-                    }
-                }
-            }
-        }
-        StringBuffer strContent_detail = new StringBuffer("<tr bgcolor='#E8EFFF' height='30'><td colspan=6 aling='center'>如果生成数据索引失败，请对照c盘下的tables.xls文件，确认数据表存在，并且索引字段名称跟您的数据库对应。</td></tr></table></body></html>");
-        StringBuffer strContent = new StringBuffer("");
-        strContent.append(strContent_head);
-        strContent.append(strContent_table);
-        strContent.append(strContent_detail);
-        File file = new File(desFile);
-        if (file.exists()) {
-            file.delete();
-        }
-
-        try {
-            FileWriter resultFile = new FileWriter(file);
-            PrintWriter printFile = new PrintWriter(resultFile);
-
-            printFile.println(strContent);
-            resultFile.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void createReportHtml_Old(String savePath,
+//            DefaultListModel expSuccessModel,
+//            String errorTab,
+//            DBTool dbTool,
+//            DefaultListModel selectedStscModel,
+//            DefaultListModel selectedSnameModel,
+//            DefaultListModel listTabModel,int type,
+//            String stscstr,Map dataIndexMap,
+//            Map dataDescMap,Map resultStscMap) {
+//        JdbcTemplate jt1 = dbTool.getJt1();
+//        JdbcTemplate jt2 = dbTool.getJt2();
+//        String[] tables = null;
+//        if (!expSuccessModel.isEmpty()) {
+//            tables = new String[expSuccessModel.size()];
+//            for (int i = 0; i < expSuccessModel.size(); i++) {
+//                tables[i] = HY_DBTP_JDao.getTabid(expSuccessModel.get(i).toString(), dbTool);
+//            }
+//        }
+//        listTabModel.removeElement("数据索引表");
+//        String desFile = savePath + "\\excel\\Report.html";
+//        StringBuffer strContent_head = new StringBuffer("<html><head><title>REPORT</title><meta http-equiv='Content-Type' content='text/html; charset=gbk'></head>");
+//        strContent_head.append("<style type='text/css'>");
+//        strContent_head.append(".title {font-size: 10pt;padding-top: 2px;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:center;}"
+//                              +".title2 {font-size: 10pt;padding-top: 2px;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;}</style><body>");
+//        StringBuffer strContent_table = new StringBuffer("<table width='85%' align='center' border='0' 'cellspacing='1' bgcolor='#CCCCCC'>");
+//        strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 14pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:center;' colspan='6'>数据导出报告</td></tr>");
+//        if (!listTabModel.isEmpty()) {
+//            strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 10pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;' colspan='6'>以下为未选择报表</td></tr>");
+//            for (int i = 0; i < listTabModel.size(); i++) {
+//                strContent_table.append("<tr bgcolor='#FFFFFF'><td >" + HY_DBTP_JDao.getTabid(listTabModel.get(i).toString(), dbTool) + "</td><td colspan='5'>" + listTabModel.get(i) + "</td></tr>");
+//            }
+//        }
+//        if (errorTab != null && errorTab.length() > 0) {
+//            strContent_table.append("<tr bgcolor='#E8EFFF' height='30'><td align='center'style='font-size: 10pt;font-weight: bolder;color: #000000;background-color: #E8EFFF;text-align:left;' colspan='6'>以下报表和导出结构标准不一致未能成功导出</td></tr>");
+//            for (int i = 0; i < errorTab.split(",").length; i++) {
+//                strContent_table.append("<tr bgcolor='#FFFFFF'><td colspan='3'>" + HY_DBTP_JDao.getTabid(errorTab.split(",")[i],dbTool) + "</td><td colspan='3'>" + errorTab.split(",")[i] + "</td></tr>");
+//            }
+//        }
+//        strContent_table.append("<tr bgcolor='#E8EFFF' height='30'>");
+//        strContent_table.append("<td class='title'>表编号</td>");
+//        strContent_table.append("<td class='title'>表名称</td>");
+////        strContent_table.append("<td class='title'>测站名称</td>");
+//        strContent_table.append("<td class='title'>源数据条数</td>");
+//        strContent_table.append("<td class='title'>导出数据条数</td>");
+//        strContent_table.append("<td class='title'>导出站年</td>");
+//        strContent_table.append("<td class='title'>生成数据索引</td>");
+//        strContent_table.append("</tr>");
+//        if (tables != null && tables.length > 0) {
+//            for (String table : tables) {
+//                strContent_table.append("<tr bgcolor='#FFFFFF' height='20'>");
+//                strContent_table.append("<td>" + table + "</td>");
+//                strContent_table.append("<td>" + dbTool.getTabCnnm(jt2, table) + "</td>");
+//                strContent_table.append("<td>" + dbTool.getCount(jt1, table,"",false) + "</td>");
+//                if(type==0)
+//                    strContent_table.append("<td>" + dbTool.getCount(jt1, table,stscstr,dbTool.isHaveStcdCol(table)) + "</td>");
+//                else
+//                    strContent_table.append("<td>" + dbTool.getCount(jt2, table,"",false) + "</td>");
+//                Object resultdesc = dataDescMap.get(table);
+//                if (resultdesc==null) resultdesc="";
+//                strContent_table.append("<td>"+resultdesc+"</td>");
+//                Object result=dataIndexMap.get(table);
+//                if (result==null) result="";
+//                strContent_table.append("<td>" + result+ "</td></tr>");
+//                List resultList = (List)resultStscMap.get(table);
+//                if(resultList!=null && resultList.size()>0){
+//                    strContent_table.append("<tr class='title2'><td colspan='6'>["+dbTool.getTabCnnm(jt2, table)+"]_导出数据详细列表:</tr>");
+//                    for(int m=0;m<resultList.size();m++){
+//                        String tempValue[] = resultList.get(m).toString().split(",");
+//                        strContent_table.append("<tr  bgcolor='#FFFFFF' height='20'><td>&nbsp;</td><td>"
+//                                            +tempValue[0]+"</td><td>"
+//                                            +dbTool.getStscName(jt2, tempValue[0])+"</td><td>"
+//                                            +tempValue[3]+"</td><td colspan=2>"
+//                                            +tempValue[1]+"-"+tempValue[2]+"</td></tr>");
+//
+//                    }
+//                }
+//            }
+//        }
+//        StringBuffer strContent_detail = new StringBuffer("<tr bgcolor='#E8EFFF' height='30'><td colspan=6 aling='center'>如果生成数据索引失败，请对照c盘下的tables.xls文件，确认数据表存在，并且索引字段名称跟您的数据库对应。</td></tr></table></body></html>");
+//        StringBuffer strContent = new StringBuffer("");
+//        strContent.append(strContent_head);
+//        strContent.append(strContent_table);
+//        strContent.append(strContent_detail);
+//        File file = new File(desFile);
+//        if (file.exists()) {
+//            file.delete();
+//        }
+//
+//        try {
+//            FileWriter resultFile = new FileWriter(file);
+//            PrintWriter printFile = new PrintWriter(resultFile);
+//
+//            printFile.println(strContent);
+//            resultFile.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public static void createXlsOnly(String reportName, String savePath, List valueDate) {
         Object[] codeArr = null;
@@ -690,7 +690,7 @@ public class ExcelService {
         strContent_table.append("<td rowspan='2' class='title' nowrap>导出条数</td>");
         strContent_table.append("<td rowspan='2' class='title' nowrap> 索  引 </td>");
         for(String stcd:stsc){
-            String stnm = dbTool.getStscName(jt2, stcd.replaceAll("'",""));
+            String stnm = dbTool.transformValue(jt2,"TABLE_STCD","STNM","STCD='"+stcd.replaceAll("'","")+"'");
             if("".trim().equals(stnm)){
                         Object obj = dbTool.getStscName2(jt1, stcd.replaceAll("'",""),version);
                         if(obj==null)
@@ -722,13 +722,13 @@ public class ExcelService {
         if (tables != null && tables.length > 0) {
             for (String table : tables) {
                 strContent_table.append("<tr bgcolor='#FFFFFF' height='20'>");
-                strContent_table.append("<td nowrap><a href='#' onclick='return false;' title='"+table+"'>"+ dbTool.getTabCnnm(jt2, table) +"</a></td>");
-                strContent_table.append("<td>" + dbTool.getCount(jt1, table) + "</td>");
-                strContent_table.append("<td>" + dbTool.getCountToExcel(jt1, table,stscstr,dbTool.isHaveStcdCol(table)) + "</td>");
+                strContent_table.append("<td nowrap><a href='#' onclick='return false;' title='"+table+"'>"+ dbTool.transformValue(jt2,"HY_DBTP_J","TBCNNM","TBENNM='"+table+"'") +"</a></td>");
+                strContent_table.append("<td>" + dbTool.getCount(jt1, table,"",false) + "</td>");
+                strContent_table.append("<td>" + dbTool.getCount(jt1, table,stscstr,dbTool.isHaveStcdCol(table)) + "</td>");
                 Object result=dataIndexMap.get(table);
                 if (result==null) result="";
                 if("失败".trim().equals(result))//getIndexFiled(table)
-                    strContent_table.append("<td><a href='#' onclick='return false;' title='请确认表－"+table+"－中存在索引字段:"+dbTool.getIndexFiled(table)+"'>" + result+ "</td>");
+                    strContent_table.append("<td><a href='#' onclick='return false;' title='请确认表－"+table+"－中存在索引字段:"+dbTool.transformValue(jt2,"INDEX_DESC","FILDID","upper(TBENNM)='" + table.toUpperCase() + "'")+"'>" + result+ "</td>");
                 else
                     strContent_table.append("<td>" + result+ "</td>");
                 List resultList = (List)resultStscMap.get(table);
@@ -837,17 +837,17 @@ public class ExcelService {
                             String stsc[] = realStcdToHtml.split(",");
                                 if(kk==0){
                                     strContent_table.append("<tr bgcolor='#FFFFFF' height='20'>");
-                                    strContent_table.append("<td rowspan='"+tabNameRowspan+"'><a href='#' onclick='return false;' title='"+table+"'>"+ dbTool.getTabCnnm(jt2, table) +"</a></td>");
-                                    strContent_table.append("<td rowspan='"+tabNameRowspan+"'>" + dbTool.getCount(jt1, table) + "</td>");
-                                    strContent_table.append("<td rowspan='"+tabNameRowspan+"'>" + dbTool.getCountToExcel(jt1, table,stscstr,dbTool.isHaveStcdCol(table)) + "</td>");
+                                    strContent_table.append("<td rowspan='"+tabNameRowspan+"'><a href='#' onclick='return false;' title='"+table+"'>"+ dbTool.transformValue(jt2,"HY_DBTP_J","TBCNNM","TBENNM='"+table+"'") +"</a></td>");
+                                    strContent_table.append("<td rowspan='"+tabNameRowspan+"'>" + dbTool.getCount(jt1, table,"",false) + "</td>");
+                                    strContent_table.append("<td rowspan='"+tabNameRowspan+"'>" + dbTool.getCount(jt1, table,stscstr,dbTool.isHaveStcdCol(table)) + "</td>");
                                     Object result=dataIndexMap.get(table);
                                     if (result==null) result="";
                                     if("失败".trim().equals(result))//getIndexFiled(table)
-                                        strContent_table.append("<td rowspan='"+tabNameRowspan+"'><a href='#' onclick='return false;' title='请确认表－"+table+"－中存在索引字段:"+dbTool.getIndexFiled(table)+"'>" + result+ "</td>");
+                                        strContent_table.append("<td rowspan='"+tabNameRowspan+"'><a href='#' onclick='return false;' title='请确认表－"+table+"－中存在索引字段:"+dbTool.transformValue(jt2,"INDEX_DESC","FILDID","upper(TBENNM)='" + table.toUpperCase() + "'")+"'>" + result+ "</td>");
                                     else
                                         strContent_table.append("<td rowspan='"+tabNameRowspan+"'>" + result+ "</td>");
                                     for(String stcd:stsc){
-                                        String stnm = dbTool.getStscName(jt2, stcd.replaceAll("'",""));
+                                        String stnm = dbTool.transformValue(jt2,"TABLE_STCD","STNM","STCD='"+stcd.replaceAll("'","")+"'");
                                         if("".trim().equals(stnm)){
                                                     Object obj = dbTool.getStscName2(jt1, stcd.replaceAll("'",""),version);
                                                     if(obj==null)
@@ -930,7 +930,7 @@ public class ExcelService {
                                
                                 //再次输出测站编码名称
                                 for(String stcd:stsc){
-                                    String stnm = dbTool.getStscName(jt2, stcd.replaceAll("'",""));
+                                    String stnm = dbTool.transformValue(jt2,"TABLE_STCD","STNM","STCD='"+stcd.replaceAll("'","")+"'");
                                     if("".trim().equals(stnm)){
                                                 Object obj = dbTool.getStscName2(jt1, stcd.replaceAll("'",""),version);
                                                 if(obj==null)

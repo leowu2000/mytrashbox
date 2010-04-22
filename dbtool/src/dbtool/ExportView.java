@@ -1487,8 +1487,8 @@ public class ExportView extends JFrame {
                                 for (int k = 0; k < liststscModel_source.size(); k++) {
                                     int count = jt_target.queryForInt("select count(*) from TABLE_STCD where STCD='" + liststscModel_source.getElementAt(k).toString() + "'");
                                     if (count > 0) {
-                                        if ("".trim().equals(stscNameModel_source.getElementAt(k).toString())) {
-                                            selectedSnameModel.addElement("[" + liststscModel_source.getElementAt(k).toString().trim() + "]~" + dbTool.getStscName(jt_Target, liststscModel_source.getElementAt(k).toString()));
+                                        if ("".trim().equals(stscNameModel_source.getElementAt(k).toString())) {//
+                                            selectedSnameModel.addElement("[" + liststscModel_source.getElementAt(k).toString().trim() + "]~" + dbTool.transformValue(jt_Target,"TABLE_STCD","STNM","STCD='"+liststscModel_source.getElementAt(k).toString()+"'"));
                                         } else {
                                             selectedSnameModel.addElement(listParamModel_source.getElementAt(k));
                                         }
@@ -1886,6 +1886,7 @@ public class ExportView extends JFrame {
      * 数据导出后的数据查看
      * @param evt
      */
+    @SuppressWarnings("empty-statement")
     private void exportTabListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exportTabListMouseClicked
         // TODO add your handling code here:
         int type = jComboBox1.getSelectedIndex();
@@ -1924,7 +1925,7 @@ public class ExportView extends JFrame {
                 String title[] = new String[colcode.length];
                 int K=0;
                 for(String col:colcode){
-                    String name = dbTool.getFiledsCNNM(tabid, col);
+                    String name = dbTool.transformValue(dbTool.getJt2(),"HY_DBFP_J","FLDCNNM"," upper(TBID)='" + tabid.toUpperCase() + "' and upper(FLID)='"+col.toUpperCase() +"'");;
                     title[K]=name;
                     K++;
                 }
