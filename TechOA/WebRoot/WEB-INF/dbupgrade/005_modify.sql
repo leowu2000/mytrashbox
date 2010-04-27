@@ -1,3 +1,4 @@
+DROP VIEW VIEW_PLAN;
 DROP TABLE PLAN;
 /*==============================================================*/
 /* Table: PLAN                                                  */
