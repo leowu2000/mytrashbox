@@ -163,6 +163,30 @@ public class DepartmentController extends CommonController {
 			response.setContentType("text/html; charset=GBK");
 			response.getWriter().write(sb.toString());
 			response.getWriter().close();
+		}else if("multiemp_inti".equals(action)){
+			mv = new ModelAndView("/modules/depart/checkedtree");
+			String checkedEmp = ServletRequestUtils.getStringParameter(request, "checkedEmp", "");
+			mv.addObject("checkedEmp", checkedEmp);
+		}else if("multiemp".equals(action)){
+			//封装成checkboxtree
+			List<CheckBoxTree> checkBoxTreeList = departDAO.getDepartEmpTree("1");
+			//循环转换为json格式
+			StringBuffer sb = new StringBuffer();
+			sb.append("[");
+			for (int i = 0; i < checkBoxTreeList.size(); i++) {
+				if (i != 0) {
+					sb.append(",");
+				}
+				sb.append(checkBoxTreeList.get(i).toJSONString());
+			}
+			sb.append("]");
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=GBK");
+			response.getWriter().write(sb.toString());
+			response.getWriter().close();
 		}
 		
 		return mv;

@@ -324,4 +324,46 @@ public class EmployeeDAO extends CommonDAO{
 			return false;
 		}
 	}
+	
+	/**
+	 * 获取员工投入分析结果列表
+	 * @param empcodes 选择的员工
+	 * @param startdate 起始日期
+	 * @param enddate 截止日期
+	 * @param selproject 工作令号
+	 * @return
+	 */
+	public List getYgtrfx(String empcodes, String startdate, String enddate, String selproject){
+		List listYgtrfx = new ArrayList();
+		String sql = "";
+		
+		String[] empcode = empcodes.split(",");
+		for(int i=0;i<empcode.length;i++){
+			Map mapYgtrfx = findByCode("EMPLOYEE", empcode[i]);
+			String degreename = findNameByCode("DICT", mapYgtrfx.get("DEGREECODE")==null?"":mapYgtrfx.get("DEGREECODE").toString());
+			String proname = findNameByCode("DICT", mapYgtrfx.get("PROCODE")==null?"":mapYgtrfx.get("PROCODE").toString());
+			String majorname = findNameByCode("DICT", mapYgtrfx.get("MAJORCODE")==null?"":mapYgtrfx.get("MAJORCODE").toString());
+			String departname = findNameByCode("DEPARTMENT", mapYgtrfx.get("DEPARTCODE")==null?"":mapYgtrfx.get("DEPARTCODE").toString());
+			
+			sql = "select sum(AMOUNT) from WORKREPORT where EMPCODE='" + empcode[i] + "'";
+			if(!"0".equals(selproject)){
+				sql = sql + " and PJCODE='" + selproject + "'";
+			}
+			if(!"".equals(startdate)){
+				sql = sql + " and STARTDATE>='" + startdate + "'";
+			}
+			if(!"".equals(enddate)){
+				sql = sql + " and STARTDATE<='" + enddate + "'";
+			}
+			
+			int amount = jdbcTemplate.queryForInt(sql);
+			mapYgtrfx.put("AMOUNT", amount);
+			mapYgtrfx.put("MAJORNAME", majorname);
+			mapYgtrfx.put("DEGREENAME", degreename);
+			mapYgtrfx.put("PRONAME", proname);
+			mapYgtrfx.put("DEPARTNAME", departname);
+			listYgtrfx.add(mapYgtrfx);
+		}
+		return listYgtrfx;
+	}
 }

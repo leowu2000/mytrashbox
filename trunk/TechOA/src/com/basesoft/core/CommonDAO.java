@@ -150,7 +150,7 @@ public class CommonDAO {
 	 * @return
 	 */
 	public List<?> getProject(){
-		return jdbcTemplate.queryForList("select * from PROJECT");
+		return jdbcTemplate.queryForList("select * from PROJECT where STATUS='1' order by ENDDATE desc,STARTDATE desc");
 	}
 	
 	/**
