@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.ui.TextAnchor;
 
-import com.basesoft.util.StringUtil;
+import com.basesoft.modules.employee.EmployeeDAO;
 
 public class ChartUtil {
 
@@ -60,6 +59,23 @@ public class ChartUtil {
 	        saveAsFile(freeChart, path, 800, 350);   
 		}
 		
+		return path;
+	}
+	
+	/**
+	 * 生成员工投入分析统计图
+	 * @param listData
+	 * @param selpjname
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
+	public static String createChartYgtrfx(List listData, String selpjname, String path) throws Exception{
+		path = path + "\\ygtrfx.png";
+		String title = "员工投入分析";
+		CategoryDataset dataset = createDatasetYgtrfx(listData, selpjname);  
+		JFreeChart freeChart = createChart(dataset, title);   
+		saveAsFile(freeChart, path, 800, 350);   
 		return path;
 	}
 	
@@ -171,6 +187,30 @@ public class ChartUtil {
            
         return DatasetUtilities.createCategoryDataset(rowKeys, colKeys, data);           
     } 
+    
+    /** 
+     * 员工投入分析
+	 * @param listData
+	 * @param selpjname
+     */ 
+    public static CategoryDataset createDatasetYgtrfx(List listData, String selpjname) {   
+    	//柱子
+        String[] rowKeys = {selpjname};
+        
+        //横坐标
+        String[] colKeys = new String[listData.size()];
+        
+        double [][] data = new double[1][listData.size()]; 
+        
+        for(int i=0;i<listData.size();i++){
+        	Map mapData = (Map)listData.get(i);
+        	
+        	colKeys[i] = mapData.get("NAME").toString();
+        	data[0][i] = Double.parseDouble(mapData.get("AMOUNT").toString());
+        }
+           
+        return DatasetUtilities.createCategoryDataset(rowKeys, colKeys, data);           
+    }
 	
 	/**
 	 * 根据CategoryDataset生成JFreeChart对象  

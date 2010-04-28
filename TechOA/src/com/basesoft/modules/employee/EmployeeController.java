@@ -1,7 +1,6 @@
 package com.basesoft.modules.employee;
 
-import java.io.BufferedOutputStream;
-import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
+import com.basesoft.modules.project.ChartUtil;
 import com.basesoft.util.StringUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
@@ -29,6 +29,7 @@ public class EmployeeController extends CommonController {
 			HttpServletResponse response, ModelAndView mv) throws Exception {
 		
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
+		String path = request.getRealPath("\\chart\\");
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
@@ -390,6 +391,31 @@ public class EmployeeController extends CommonController {
 			response.getWriter().write(sb.toString());
 			response.getWriter().close();
 			return null;
+		}else if("frame_ygtrfx".equals(action)){//员工投入分析frame
+			mv = new ModelAndView("modules/employee/frame_ygtrfx");
+			
+			List listProject = emDAO.getProject();
+			
+			mv.addObject("listProject", listProject);
+		}else if("list_ygtrfx".equals(action)){//员工投入分析结果
+			mv = new ModelAndView("modules/employee/list_ygtrfx");
+			
+			String empcodes = ServletRequestUtils.getStringParameter(request, "empcodes", "");
+			String startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
+			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
+			String selproject = ServletRequestUtils.getStringParameter(request, "selproject", "");
+			
+			List listYgtrfx = emDAO.getYgtrfx(empcodes, startdate, enddate, selproject);
+			String selpjname = "合计";
+			if(!"0".equals(selproject)){
+				Map mapProject = emDAO.findByCode("PROJECT", selproject);
+				selpjname = mapProject.get("NAME").toString();
+			}
+			
+			ChartUtil.createChartYgtrfx(listYgtrfx, selpjname, path);
+			
+			mv.addObject("listYgtrfx", listYgtrfx);
+			mv.addObject("selpjname", selpjname);
 		}
 		
 		return mv;
