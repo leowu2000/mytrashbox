@@ -125,7 +125,7 @@ public class DepartmentController extends CommonController {
 			return null;
 		}else if("departempTree".equals(action)){//部门_人员下拉树
 			//封装成checkboxtree
-			List<CheckBoxTree> checkBoxTreeList = departDAO.getDepartEmpTree("1");
+			List<CheckBoxTree> checkBoxTreeList = departDAO.getDepartEmpTree("1", "");
 			//循环转换为json格式
 			StringBuffer sb = new StringBuffer();
 			sb.append("[");
@@ -145,7 +145,7 @@ public class DepartmentController extends CommonController {
 			response.getWriter().close();
 		}else if("departTree".equals(action)){//部门下拉树
 			//封装成checkboxtree
-			List<CheckBoxTree> checkBoxTreeList = departDAO.getDepartEmpTree("2");
+			List<CheckBoxTree> checkBoxTreeList = departDAO.getDepartEmpTree("2", "");
 			//循环转换为json格式
 			StringBuffer sb = new StringBuffer();
 			sb.append("[");
@@ -168,8 +168,9 @@ public class DepartmentController extends CommonController {
 			String checkedEmp = ServletRequestUtils.getStringParameter(request, "checkedEmp", "");
 			mv.addObject("checkedEmp", checkedEmp);
 		}else if("multiemp".equals(action)){
+			String checkedEmp = ServletRequestUtils.getStringParameter(request, "checkedEmp", "");
 			//封装成checkboxtree
-			List<CheckBoxTree> checkBoxTreeList = departDAO.getDepartEmpTree("1");
+			List<CheckBoxTree> checkBoxTreeList = departDAO.getDepartEmpTree("1", checkedEmp);
 			//循环转换为json格式
 			StringBuffer sb = new StringBuffer();
 			sb.append("[");
