@@ -52,6 +52,7 @@
 	            }
 	        }
 		});
+		tree.expandAll();
 		//tree.getRootNode().expand(true);
 	    
 	}

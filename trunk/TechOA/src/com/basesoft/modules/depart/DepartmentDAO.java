@@ -75,7 +75,7 @@ public class DepartmentDAO extends CommonDAO{
 	 * @param state 1:只有部门;2:部门加人员
 	 * @return
 	 */
-	public List<CheckBoxTree> getDepartEmpTree(String state) {
+	public List<CheckBoxTree> getDepartEmpTree(String state, String checkedEmp) {
 		List<CheckBoxTree> treeList = new ArrayList<CheckBoxTree>();
 		
 		List<?> listDepart = getChild("0");
@@ -91,7 +91,7 @@ public class DepartmentDAO extends CommonDAO{
 			List<CheckBoxTree> leafList = new ArrayList<CheckBoxTree>();
 			
 			//设置本部门人员
-			List<CheckBoxTree> leafListEMP = getLeafEMP(mapDepart.get("CODE").toString());
+			List<CheckBoxTree> leafListEMP = getLeafEMP(mapDepart.get("CODE").toString(), checkedEmp);
 			//下级部门
 			List<CheckBoxTree> leafListDepart = new ArrayList<CheckBoxTree>();
 			
@@ -111,7 +111,7 @@ public class DepartmentDAO extends CommonDAO{
 				List<CheckBoxTree> leafList2 = new ArrayList<CheckBoxTree>();
 					
 				//本部门人员
-				List<CheckBoxTree> leafListEMP2 = getLeafEMP(mapChild.get("CODE").toString());
+				List<CheckBoxTree> leafListEMP2 = getLeafEMP(mapChild.get("CODE").toString(), checkedEmp);
 				//下级部门
 				List<CheckBoxTree> leafListDepart2 = new ArrayList<CheckBoxTree>();
 				
@@ -125,11 +125,16 @@ public class DepartmentDAO extends CommonDAO{
 					if("1".equals(state)){
 						leaf2.setLeaf(false);
 					}else if("2".equals(state)){
+						if (!"".equals(checkedEmp) && checkedEmp.indexOf(leaf2.getId()) != -1) {
+							leaf2.setChecked(true);
+						} else {
+							leaf2.setChecked(false);
+						}
 						leaf2.setLeaf(true);
 					}
 					
 					//设置部门下人员
-					List<CheckBoxTree> leafListEMP3 = getLeafEMP(mapChild2.get("CODE").toString());
+					List<CheckBoxTree> leafListEMP3 = getLeafEMP(mapChild2.get("CODE").toString(), checkedEmp);
 					leaf2.setChildren(leafListEMP3);
 					
 					leafListDepart2.add(leaf2);
@@ -163,7 +168,7 @@ public class DepartmentDAO extends CommonDAO{
 	 * @param departcode 部门编码
 	 * @return
 	 */
-	public List<CheckBoxTree> getLeafEMP(String departcode){
+	public List<CheckBoxTree> getLeafEMP(String departcode, String checkedEmp){
 		//设置节点下人员
 		List listEmp = this.findEmpsByDepart(departcode);
 		List<CheckBoxTree> leafList = new ArrayList<CheckBoxTree>();
@@ -172,6 +177,11 @@ public class DepartmentDAO extends CommonDAO{
 			CheckBoxTree leaf = new CheckBoxTree();
 			leaf.setId(mapEmp.get("CODE").toString());
 			leaf.setText(mapEmp.get("NAME").toString());
+			if (!"".equals(checkedEmp) && checkedEmp.indexOf(leaf.getId()) != -1) {
+				leaf.setChecked(true);
+			} else {
+				leaf.setChecked(false);
+			}
 			leaf.setLeaf(true);
 			
 			leafList.add(leaf);
