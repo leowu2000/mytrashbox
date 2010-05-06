@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.basesoft.core.CommonController;
 import com.basesoft.modules.employee.Car;
 import com.basesoft.modules.employee.CarDAO;
+import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.excel.config.Config;
 import com.basesoft.modules.plan.PlanDAO;
 
@@ -28,6 +30,7 @@ public class ExcelController extends CommonController {
 	ExcelDAO excelDAO;
 	PlanDAO planDAO;
 	CarDAO carDAO;
+	EmployeeDAO emDAO;
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
@@ -162,6 +165,19 @@ public class ExcelController extends CommonController {
 				imagepath = imagepath + "\\cdrwqk.png";
 				list = excelDAO.getExportData_CDRWQK(depart, datepick);
 				path = exportExcel.exportExcel_CDRWQK(list, imagepath);
+			}else if("YGTRFX".equals(model)){//员工投入分析
+				imagepath = imagepath + "\\ygtrfx.png";
+				String empcodes = ServletRequestUtils.getStringParameter(request, "empcodes", "");
+				String startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
+				String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
+				String selproject = ServletRequestUtils.getStringParameter(request, "selproject", "");
+				String selpjname = "合计";
+				if(!"0".equals(selproject)){
+					Map mapProject = emDAO.findByCode("PROJECT", selproject);
+					selpjname = mapProject.get("NAME").toString();
+				}
+				list = emDAO.getYgtrfx(empcodes, startdate, enddate, selproject);
+				path = exportExcel.exportExcel_YGTRFX(list, imagepath, selpjname);
 			}else if("PLAN".equals(model)){//计划
 				list = excelDAO.getExportData_PLAN(f_level, f_type, datepick, f_empname);
 				path = exportExcel.exportExcel_PLAN(list, planDAO, datepick);
@@ -209,5 +225,9 @@ public class ExcelController extends CommonController {
 	
 	public void setCarDAO(CarDAO carDAO){
 		this.carDAO = carDAO;
+	}
+	
+	public void setEmployeeDAO(EmployeeDAO emDAO){
+		this.emDAO = emDAO;
 	}
 }
