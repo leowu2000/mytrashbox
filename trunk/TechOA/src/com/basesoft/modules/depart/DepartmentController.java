@@ -163,7 +163,7 @@ public class DepartmentController extends CommonController {
 			response.setContentType("text/html; charset=GBK");
 			response.getWriter().write(sb.toString());
 			response.getWriter().close();
-		}else if("multiemp_inti".equals(action)){
+		}else if("multiemp_init".equals(action)){
 			mv = new ModelAndView("/modules/depart/checkedtree");
 			String checkedEmp = ServletRequestUtils.getStringParameter(request, "checkedEmp", "");
 			mv.addObject("checkedEmp", checkedEmp);

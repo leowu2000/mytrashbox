@@ -22,6 +22,7 @@ import jxl.write.WriteException;
 
 import com.basesoft.modules.employee.Car;
 import com.basesoft.modules.employee.CarDAO;
+import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.util.StringUtil;
 
@@ -220,6 +221,60 @@ public class ExportExcel {
 			str4[10] = String.valueOf(map.get("C8"));
 			
 			insertRowData(sheet, i + 4, str4);
+		}
+		//导出图片
+		WritableImage ri=new WritableImage(0, list.size() + 5, 13, list.size() + 8,new File(imagepath));   
+		sheet.addImage(ri); 
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
+	 * 员工投入分析excel文件，返回这个文件的路径
+	 * @param list 数据列表
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_YGTRFX(List<Map<String, String>> list, String imagepath, String selpjname) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		String[] str = new String[1];
+		str[0] = "员工投入分析";
+		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";;
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, 6, 0);
+		
+		//插入第一行表头
+		String[] str1 = new String[7];
+		str1[0] = "姓名";
+		str1[1] = "部门";
+		str1[2] = "职位";
+		str1[3] = "学历";
+		str1[4] = "职称";
+		str1[5] = "工作令号";
+		str1[6] = "投入工时";
+		insertRowData(sheet, 1, str1);
+		
+		for (int i = 0; i < list.size(); i++) {
+			String[] str2 = new String[7];
+			Map<String, String> map = (Map<String, String>) list.get(i);
+			str2[0] = map.get("NAME");
+			str2[1] = map.get("DEPARTNAME");
+			str2[2] = map.get("LEVEL");
+			str2[3] = map.get("DEGREENAME");
+			str2[4] = map.get("PRONAME");
+			str2[5] = selpjname;
+			str2[6] = String.valueOf(map.get("AMOUNT"));
+			
+			insertRowData(sheet, i + 1, str2);
 		}
 		//导出图片
 		WritableImage ri=new WritableImage(0, list.size() + 5, 13, list.size() + 8,new File(imagepath));   

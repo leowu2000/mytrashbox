@@ -34,6 +34,21 @@
   		tb.add(document.getElementById('selproject'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
+  		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
+  		
+  		function onExportClick(){
+  			var empcodes = document.getElementById('empcodes').value;
+	  		if(empcodes == ''){
+	  			alert('请选择员工！');
+	  			return false;
+	  		}
+	  		commit();
+	  		var startdate = document.getElementById('startdate').value;
+	  		var enddate = document.getElementById('enddate').value;
+	  		var selproject = document.getElementById('selproject').value;
+    		window.location.href = "/excel.do?action=export&model=YGTRFX&empcodes=" + empcodes + "&startdate=" + startdate + "&enddate=" + enddate + "&selproject=" + selproject;
+  		}
 	});
 	
 	function IFrameResize(){
@@ -42,7 +57,7 @@
 	
 	function changeEmp(){
     	document.getElementById('checkedEmp').value = document.getElementById('empcodes').value;
-    	document.getElementById('treeForm').action = "depart.do?action=multiemp_inti";
+    	document.getElementById('treeForm').action = "depart.do?action=multiemp_init";
     	document.getElementById('treeForm').submit();
     
     	document.getElementById("empsel").style.top=(event.clientY+30)+"px";
