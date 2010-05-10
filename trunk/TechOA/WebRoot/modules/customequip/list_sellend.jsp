@@ -1,39 +1,56 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.util.*" %>
 <%@ page import="com.basesoft.modules.infoequip.*" %>
-<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
-String status = request.getAttribute("status").toString();
-String depart = request.getAttribute("depart").toString();
-String emp = request.getAttribute("emp").toString();
-
+String empcode = request.getAttribute("empcode").toString();
+String empname = request.getAttribute("empname").toString();
+String departname = request.getAttribute("departname").toString();
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listAssets = pageList.getList();
 
-ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-InfoEquipDAO infoEquipDAO = (InfoEquipDAO)ctx.getBean("infoEquipDAO");
+int pagenum = pageList.getPageInfo().getCurPage();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>固定资产查询结果</title>
+    <title>固定资产维护</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	<link href="css/bs_base.css" type="text/css" rel="stylesheet">
-	<link href="css/bs_button.css" type="text/css" rel="stylesheet">
-	<link href="css/bs_custom.css" type="text/css" rel="stylesheet">
 	<%@ include file="../../common/meta.jsp" %>
+	<script src="../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+	<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
+<script type="text/javascript">
+<!--
+var win;
+var win1;
+var win2;
+var action;
+var url='/infoequip.do';
+var vali = "";
+Ext.onReady(function(){
+	var tb = new Ext.Toolbar({renderTo:'toolbar'});
+	tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
+	
+	function onBackClick(btn){
+    	history.back(-1);
+    }
+});
+
+//-->
+</script>
   </head>
   
-  <body>
-  	<div id="toolbar1"></div>
+  <body >
+  	<h1>固定资产领用信息</h1>
+  	<div id="toolbar"></div>
 	<form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("infoequip.do?action=list_info&status="+status+"&depart="+depart+"&emp="+emp) %>
+<%=pageList.getPageInfo().getHtml("infoequip.do?action=sellend&empcode=" + empcode) %>
 	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
@@ -54,23 +71,15 @@ InfoEquipDAO infoEquipDAO = (InfoEquipDAO)ctx.getBean("infoEquipDAO");
     	Map mapAssets = (Map)listAssets.get(i);
     	
     	String statusname = "";
-    	if("1".equals(mapAssets.get("STATUS").toString())){
+    	String statuscode = mapAssets.get("STATUS")==null?"":mapAssets.get("STATUS").toString();
+    	if("1".equals(statuscode)){
     		statusname = "库中";
-    	}else if("2".equals(mapAssets.get("STATUS").toString())){
+    	}else if("2".equals(statuscode)){
     		statusname = "借出";
-    	}else if("3".equals(mapAssets.get("STATUS").toString())){
+    	}else if("3".equals(statuscode)){
     		statusname = "损坏";
     	}
     	
-    	String departname = "";
-    	if(mapAssets.get("DEPARTCODE")!=null){
-    		departname = infoEquipDAO.findNameByCode("DEPARTMENT", mapAssets.get("DEPARTCODE").toString());
-    	}
-    	
-    	String empname = "";
-    	if(mapAssets.get("EMPCODE")!=null){
-    		empname = infoEquipDAO.findNameByCode("EMPLOYEE", mapAssets.get("EMPCODE").toString());
-    	}
 %>    	
 		<tr align="center">
 			<td>&nbsp;<%=mapAssets.get("CODE")==null?"":mapAssets.get("CODE") %></td>

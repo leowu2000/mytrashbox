@@ -29,8 +29,8 @@ public class CustomEquipController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		
-		if("manage".equals(action)){//固定资产查询frame
-			mv = new ModelAndView("modules/infoequip/frame_info");
+		if("manage".equals(action)){//定制器材管理frame
+			mv = new ModelAndView("modules/customequip/frame_info");
 			
 			String manage = ServletRequestUtils.getStringParameter(request, "manage", "1");
 			
@@ -38,35 +38,35 @@ public class CustomEquipController extends CommonController {
 			String status = ServletRequestUtils.getStringParameter(request, "status", "0");
 			
 			//获得部门列表和人员列表
-			List listAssetsDepart = customEquipDAO.getAssetDepart(status);
-			List listAssetsEmp = customEquipDAO.getAssetEmpByDepart(depart, status);
+			List listCustomEquipsDepart = customEquipDAO.getCustomEquipDepart(status);
+			List listCustomEquipsEmp = customEquipDAO.getCustomEquipEmpByDepart(depart, status);
 			
-			mv.addObject("listAssetsEmp", listAssetsEmp);
-			mv.addObject("listAssetsDepart", listAssetsDepart);
+			mv.addObject("listCustomEquipsEmp", listCustomEquipsEmp);
+			mv.addObject("listCustomEquipsDepart", listCustomEquipsDepart);
 			mv.addObject("depart", depart);
 			mv.addObject("status", status);
 			mv.addObject("manage", manage);
 		}else if("list_info".equals(action)){//固定资产查询list
-			mv = new ModelAndView("modules/infoequip/list_info");
+			mv = new ModelAndView("modules/customequip/list_info");
 			
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
 			
-			PageList pageList = customEquipDAO.getInfoEquips(status, depart, emp, page);
+			PageList pageList = customEquipDAO.getCustomEquips(status, depart, emp, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("status", status);
 			mv.addObject("depart", depart);
 			mv.addObject("emp", emp);
-		}else if("list_manage".equals(action)){//固定资产管理list
-			mv = new ModelAndView("modules/infoequip/list_manage");
+		}else if("list_manage".equals(action)){//定制器材管理list
+			mv = new ModelAndView("modules/customequip/list_manage");
 			
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
 			
-			PageList pageList = customEquipDAO.getInfoEquips(status, depart, emp, page);
+			PageList pageList = customEquipDAO.getCustomEquips(status, depart, emp, page);
 			
 			List listDepart = customEquipDAO.getDepartment();
 			
@@ -75,6 +75,13 @@ public class CustomEquipController extends CommonController {
 			mv.addObject("depart", depart);
 			mv.addObject("emp", emp);
 			mv.addObject("listDepart", listDepart);
+			mv.addObject("errorMessage", errorMessage);
+		}else if("list".equals(action)){//个人定制器材list
+			mv = new ModelAndView("modules/customequip/list_self");
+			
+			PageList pageList = customEquipDAO.getCustomEquips("0", "0", "0", page);
+			
+			mv.addObject("pageList", pageList);
 			mv.addObject("errorMessage", errorMessage);
 		}else if("add".equals(action)){
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
@@ -126,7 +133,7 @@ public class CustomEquipController extends CommonController {
 			String insertSql = "insert into ASSETS values('" + id + "', '" + code + "', '" + name + "', '" + model + "', " + buydate + ", " + producdate + ", " + buycost + ", " + nowcost + ", " + life + ", '1', null, null, null," + checkdate + ", " + checkyear + ")";
 			customEquipDAO.insert(insertSql);
 			
-			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
+			response.sendRedirect("customequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
 		}else if("delete".equals(action)){//删除
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
@@ -140,7 +147,7 @@ public class CustomEquipController extends CommonController {
 				customEquipDAO.delete(deleteSql);
 			}
 			
-			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
+			response.sendRedirect("customequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
 		}else if("lend".equals(action)){//领用
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
@@ -156,7 +163,7 @@ public class CustomEquipController extends CommonController {
 			String updateSql = "update ASSETS set STATUS='2', DEPARTCODE='" + mapEmp.get("DEPARTCODE") + "', EMPCODE='" + empcode + "', LENDDATE='" + StringUtil.DateToString(new Date(), "yyyy-MM-dd") + "' where ID='" + id + "'";
 			customEquipDAO.update(updateSql);
 			
-			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
+			response.sendRedirect("customequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
 		}else if("return".equals(action)){//归还
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
@@ -168,7 +175,7 @@ public class CustomEquipController extends CommonController {
 			String updateSql = "update ASSETS set STATUS='1', DEPARTCODE=null, EMPCODE=null, LENDDATE=null where ID='" + id + "'";
 			customEquipDAO.update(updateSql);
 			
-			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
+			response.sendRedirect("customequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
 		}else if("damage".equals(action)){//报修
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
@@ -180,7 +187,7 @@ public class CustomEquipController extends CommonController {
 			String updateSql = "update ASSETS set STATUS='3', DEPARTCODE=null, EMPCODE=null, LENDDATE=null where ID='" + id + "'";
 			customEquipDAO.update(updateSql);
 			
-			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
+			response.sendRedirect("customequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
 		}else if("check".equals(action)){//年检
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
@@ -193,10 +200,10 @@ public class CustomEquipController extends CommonController {
 			String updateSql = "update ASSETS set CHECKDATE='" + checkdate + "' where ID='" + id + "'";
 			customEquipDAO.update(updateSql);
 			
-			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
+			response.sendRedirect("customequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
-		}else if("sellend".equals(action)){//个人领用固定资产查询
-			mv = new ModelAndView("modules/infoequip/list_sellend");
+		}else if("sellend".equals(action)){//个人定制器材查询
+			mv = new ModelAndView("modules/customequip/list_sellend");
 			
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
 			Map mapEmp = customEquipDAO.findByCode("EMPLOYEE", empcode);

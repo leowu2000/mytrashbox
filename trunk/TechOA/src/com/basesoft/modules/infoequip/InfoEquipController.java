@@ -29,37 +29,21 @@ public class InfoEquipController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		
-		if("manage".equals(action)){//固定资产查询frame
+		if("manage".equals(action)){//信息设备管理frame
 			mv = new ModelAndView("modules/infoequip/frame_info");
-			
-			String manage = ServletRequestUtils.getStringParameter(request, "manage", "1");
 			
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "0");
 			String status = ServletRequestUtils.getStringParameter(request, "status", "0");
 			
 			//获得部门列表和人员列表
-			List listAssetsDepart = infoEquipDAO.getAssetDepart(status);
-			List listAssetsEmp = infoEquipDAO.getAssetEmpByDepart(depart, status);
+			List listInfoEquipsDepart = infoEquipDAO.getInfoEquipDepart(status);
+			List listInfoEquipsEmp = infoEquipDAO.getInfoEquipEmpByDepart(depart, status);
 			
-			mv.addObject("listAssetsEmp", listAssetsEmp);
-			mv.addObject("listAssetsDepart", listAssetsDepart);
+			mv.addObject("listInfoEquipsEmp", listInfoEquipsEmp);
+			mv.addObject("listInfoEquipsDepart", listInfoEquipsDepart);
 			mv.addObject("depart", depart);
 			mv.addObject("status", status);
-			mv.addObject("manage", manage);
-		}else if("list_info".equals(action)){//固定资产查询list
-			mv = new ModelAndView("modules/infoequip/list_info");
-			
-			String status = ServletRequestUtils.getStringParameter(request, "status", "");
-			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
-			String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
-			
-			PageList pageList = infoEquipDAO.getInfoEquips(status, depart, emp, page);
-			
-			mv.addObject("pageList", pageList);
-			mv.addObject("status", status);
-			mv.addObject("depart", depart);
-			mv.addObject("emp", emp);
-		}else if("list_manage".equals(action)){//固定资产管理list
+		}else if("list_manage".equals(action)){//信息设备管理list
 			mv = new ModelAndView("modules/infoequip/list_manage");
 			
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
@@ -182,20 +166,7 @@ public class InfoEquipController extends CommonController {
 			
 			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
 			return null;
-		}else if("check".equals(action)){//年检
-			String status = ServletRequestUtils.getStringParameter(request, "status", "");
-			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
-			String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
-			String checkdate = ServletRequestUtils.getStringParameter(request, "checkdate", "1");
-			
-			String id = ServletRequestUtils.getStringParameter(request, "id", "");
-			
-			String updateSql = "update ASSETS set CHECKDATE='" + checkdate + "' where ID='" + id + "'";
-			infoEquipDAO.update(updateSql);
-			
-			response.sendRedirect("infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp + "&page=" + page);
-			return null;
-		}else if("sellend".equals(action)){//个人领用固定资产查询
+		}else if("sellend".equals(action)){//个人领用信息设备查询
 			mv = new ModelAndView("modules/infoequip/list_sellend");
 			
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");

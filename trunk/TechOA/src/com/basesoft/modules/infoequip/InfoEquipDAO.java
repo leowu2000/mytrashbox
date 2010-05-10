@@ -9,11 +9,11 @@ import com.basesoft.core.PageList;
 public class InfoEquipDAO extends CommonDAO {
 
 	/**
-	 * 获取有固定资产领用的部门
+	 * 获取有信息设备领用的部门
 	 * @param status 状态
 	 * @return
 	 */
-	public List<?> getAssetDepart(String status){
+	public List<?> getInfoEquipDepart(String status){
 		String sql = "";
 		
 		if("0".equals(status)){//全部状态
@@ -26,12 +26,12 @@ public class InfoEquipDAO extends CommonDAO {
 	}
 	
 	/**
-	 * 获取有固定资产领用的人员
+	 * 获取有信息设备领用的人员
 	 * @param depart 部门编码
 	 * @param status 状态
 	 * @return
 	 */
-	public List<?> getAssetEmpByDepart(String depart, String status){
+	public List<?> getInfoEquipEmpByDepart(String depart, String status){
 		String sql = "";
 		
 		if("0".equals(status)){//全部状态
@@ -95,7 +95,7 @@ public class InfoEquipDAO extends CommonDAO {
 	}
 	
 	/**
-	 * 找出个人借出的所有固定资产的信息
+	 * 找出个人借出的所有信息设备的信息
 	 * @param empcode 人员编码
 	 * @param page 页码
 	 * @return
