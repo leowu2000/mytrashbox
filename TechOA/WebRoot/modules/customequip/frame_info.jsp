@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
-	List listInfoEquipsDepart = (List)request.getAttribute("listInfoEquipsDepart");
-	List listInfoEquipsEmp = (List)request.getAttribute("listInfoEquipsEmp");
+	List listCustomEquipsDepart = (List)request.getAttribute("listCustomEquipsDepart");
+	List listCustomEquipsEmp = (List)request.getAttribute("listCustomEquipsEmp");
 	
 	String status = request.getAttribute("status").toString();
 	String depart = request.getAttribute("depart").toString();
@@ -10,7 +10,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>信息设备管理</title>
+    <title>器材定制管理</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -51,7 +51,7 @@
 	  	document.getElementById('renyuan').style.display = 'none';
 	  }
 	  
-	  document.getElementById('list_info').src = "/infoequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp;
+	  document.getElementById('list_info').src = "/customequip.do?action=list_manage&status=" + status + "&depart=" + depart + "&emp=" + emp;
 	}
 	
 	function changeStatus(){
@@ -68,7 +68,7 @@
 	  var status = document.getElementById('selstatus').value;
 	  var depart = document.getElementById('seldepart').value;
 	  
-	  window.location.href('infoequip.do?action=manage&status='+status+'&depart='+depart);
+	  window.location.href('customequip.do?action=manage&status='+status+'&depart='+depart);
 	  commit();
 	}
 	
@@ -107,8 +107,8 @@
 	<select name="seldepart" onchange="changeDepart();">
 		<option value="0">全部</option>
 <%
-	for(int i=0;i<listInfoEquipsDepart.size();i++){
-		Map mapDepart = (Map)listInfoEquipsDepart.get(i);
+	for(int i=0;i<listCustomEquipsDepart.size();i++){
+		Map mapDepart = (Map)listCustomEquipsDepart.get(i);
 %>				
 		<option value="<%=mapDepart.get("CODE") %>"><%=mapDepart.get("NAME") %></option>
 <%} %>					
@@ -117,8 +117,8 @@
 	<select name="selemp" onchange="commit();">
 		<option value="0">全部</option>
 <%
-	for(int i=0;i<listInfoEquipsEmp.size();i++){
-		Map mapEmp = (Map)listInfoEquipsEmp.get(i);
+	for(int i=0;i<listCustomEquipsEmp.size();i++){
+		Map mapEmp = (Map)listCustomEquipsEmp.get(i);
 %>				
 		<option value="<%=mapEmp.get("CODE") %>"><%=mapEmp.get("NAME") %></option>
 <%} %>					

@@ -9,11 +9,11 @@ import com.basesoft.core.PageList;
 public class CustomEquipDAO extends CommonDAO {
 
 	/**
-	 * 获取有固定资产领用的部门
+	 * 获取有定制器材的部门
 	 * @param status 状态
 	 * @return
 	 */
-	public List<?> getAssetDepart(String status){
+	public List<?> getCustomEquipDepart(String status){
 		String sql = "";
 		
 		if("0".equals(status)){//全部状态
@@ -26,12 +26,12 @@ public class CustomEquipDAO extends CommonDAO {
 	}
 	
 	/**
-	 * 获取有固定资产领用的人员
+	 * 获取有定制器材的人员
 	 * @param depart 部门编码
 	 * @param status 状态
 	 * @return
 	 */
-	public List<?> getAssetEmpByDepart(String depart, String status){
+	public List<?> getCustomEquipEmpByDepart(String depart, String status){
 		String sql = "";
 		
 		if("0".equals(status)){//全部状态
@@ -52,14 +52,14 @@ public class CustomEquipDAO extends CommonDAO {
 	}
 	
 	/**
-	 * 获取设备信息
+	 * 获取定制器材信息
 	 * @param status 设备状态
 	 * @param depart 领用部门
 	 * @param emp 领用员工
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList getInfoEquips(String status, String depart, String emp, int page){
+	public PageList getCustomEquips(String status, String depart, String emp, int page){
 		PageList pageList = new PageList();
 		String sql = "select * from ASSETS";
 		int pagesize = 20;
@@ -95,7 +95,7 @@ public class CustomEquipDAO extends CommonDAO {
 	}
 	
 	/**
-	 * 找出个人借出的所有固定资产的信息
+	 * 找出个人借出的所有定制器材的信息
 	 * @param empcode 人员编码
 	 * @param page 页码
 	 * @return

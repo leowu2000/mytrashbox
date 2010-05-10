@@ -46,6 +46,8 @@ INSERT INTO MENU VALUES('112','器材定制管理','1','customequip.do?action=ma
 INSERT INTO MENU VALUES('009','收藏管理','2','',43,'1','0','9.png');
 INSERT INTO MENU VALUES('091','收藏菜单','1','menu.do?action=manage_favor',44,'1','009','9.png');
 
+UPDATE MENU SET STATUS='0' WHERE MENUCODE IN ('110','111','112','051');
+
 DELETE FROM USER_MENU;
 
 /** 用户-菜单表 **/
