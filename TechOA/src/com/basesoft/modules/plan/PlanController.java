@@ -27,12 +27,8 @@ public class PlanController extends CommonController {
 			HttpServletResponse response, ModelAndView mv) throws Exception {
 		// TODO Auto-generated method stub
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
-		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
-		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
-		String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
-		String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
 		String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
 		f_empname = new String(f_empname.getBytes("ISO8859-1"),"UTF-8");
@@ -188,8 +184,9 @@ public class PlanController extends CommonController {
 			}else {
 				enddate  = "'" + enddate + "'";
 			}
+			String empname = planDAO.findNameByCode("EMPLOYEE", empcode);
 			
-			String updateSql = "update PLAN set EMPCODE='" + empcode + "', ENDDATE=" + enddate + ", PLANEDWORKLOAD=0, NOTE='" + note + "' where ID='" + id + "'";
+			String updateSql = "update PLAN set EMPCODE='" + empcode + "', EMPNAME='" + empname + "', ENDDATE=" + enddate + ", PLANEDWORKLOAD=0, NOTE='" + note + "' where ID='" + id + "'";
 			
 			planDAO.update(updateSql);
 			
@@ -250,18 +247,19 @@ public class PlanController extends CommonController {
 		}else if("remind_frame".equals(action)){//计划提醒frame
 			mv = new ModelAndView("modules/plan/frame_remind");
 			
-			List listLevel = planDAO.getLevel();
-			List listType = planDAO.getType();
 			
-			mv.addObject("listLevel", listLevel);
+			List listType = planDAO.getType();
+			List listLevel = planDAO.getLevel();
+			
 			mv.addObject("listType", listType);
+			mv.addObject("listLevel", listLevel);
 			
 			return mv;
 		}else if("remind_list".equals(action)){//计划提醒列表
 			mv = new ModelAndView("modules/plan/list_remind");
 			
 			PageList pageList = planDAO.findAllRemind(f_level, f_type, datepick, f_empname, page);
-			
+						
 			mv.addObject("pageList", pageList);
 			mv.addObject("f_level", f_level);
 			mv.addObject("f_type", f_type);

@@ -44,6 +44,7 @@ PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 <%=pageList.getPageInfo().getHtml("plan.do?action=list_remind&f_level=" + f_level + "&f_type=" + f_type + "&datepick=" + datepick + "&empname=" + f_empname) %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
+            	<td>计划分类</td>
                 <td>产品令号</td>              
                 <td>计划要求</td>
                 <td>计划完成情况</td>
@@ -78,8 +79,11 @@ for(int i=0;i<listAssess.size();i++){
 	state = "<font color='" + mapPersent.get("COLOR") + "'>" + mapPersent.get("NAME") + "</font>";
 	
 	String pjname = planDAO.findNameByCode("PROJECT", mapAssess.get("PJCODE").toString());
+	String plantype = planDAO.findNameByCode("PLAN_TYPE", mapAssess.get("TYPE").toString());
+	String plantype2 = planDAO.findNameByCode("PLAN_TYPE", mapAssess.get("TYPE2").toString());
 %>
             <tr align="center">
+            	<td>&nbsp;<%=plantype %>--<%=plantype2 %></td>
                 <td>&nbsp;<%=pjname %></td>
                 <td>&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
                 <td>&nbsp;<%=state %></td>
