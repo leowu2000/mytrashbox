@@ -344,7 +344,7 @@ public class ExportExcel {
 			Map mapPersent = planDAO.getPersent(daypersent);
 			String state = mapPersent.get("NAME")==null?"":mapPersent.get("NAME").toString();
 			
-			str2[0] = map.get("PJNAME")==null?"":map.get("PJNAME");
+			str2[0] = map.get("PJCODE")==null?"":planDAO.findNameByCode("PROJECT", map.get("PJCODE"));
             str2[1] = map.get("NOTE")==null?"":map.get("NOTE");
             str2[2] = state;
             str2[3] = map.get("ASSESS")==null?"":map.get("ASSESS");

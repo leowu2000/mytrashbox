@@ -57,7 +57,7 @@ public class PlanDAO extends CommonDAO {
 			}
 		}
 		
-		sql = sql + " order by PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
+		sql = sql + " order by ENDDATE desc,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -85,7 +85,7 @@ public class PlanDAO extends CommonDAO {
 		
 		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 		Date enddate = StringUtil.getEndOfMonth(startdate);
-		String sql = "select * from PLAN where ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' and STATUS='3'";
+		String sql = "select * from PLAN where ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' and (STATUS='3' or STATUS='4')";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
@@ -120,7 +120,7 @@ public class PlanDAO extends CommonDAO {
 			}
 		}
 		
-		sql = sql + " order by PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
+		sql = sql + " order by ENDDATE ,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -178,7 +178,7 @@ public class PlanDAO extends CommonDAO {
 			}
 		}
 		
-		sql = sql + " order by PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
+		sql = sql + " order by ENDDATE,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
 		
 		List list = jdbcTemplate.queryForList(sql);
 		

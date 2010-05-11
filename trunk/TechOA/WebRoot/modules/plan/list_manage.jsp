@@ -354,6 +354,7 @@ function changeType2(){
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>选　择</td>
+                <td>计划分类</td>
                 <td>产品令号</td>              
                 <td>序号</td>
                 <td>计划内容</td>
@@ -385,6 +386,8 @@ for(int i=0;i<listPlan.size();i++){
 	}
 	
 	String pjname = planDAO.findNameByCode("PROJECT", mapPlan.get("PJCODE").toString());
+	String plantype = planDAO.findNameByCode("PLAN_TYPE", mapPlan.get("TYPE").toString());
+	String plantype2 = planDAO.findNameByCode("PLAN_TYPE", mapPlan.get("TYPE2").toString());
 %>
             <tr align="center">
                 <td>
@@ -396,6 +399,7 @@ for(int i=0;i<listPlan.size();i++){
 				}
 %>                	                
                 </td>
+                <td>&nbsp;<%=plantype %>--<%=plantype2 %></td>
                 <td>&nbsp;<%=pjname %></td>
                 <td>&nbsp;<%=mapPlan.get("ORDERCODE")==null?"":mapPlan.get("ORDERCODE") %></td>
                 <td>&nbsp;<%=mapPlan.get("NOTE")==null?"":mapPlan.get("NOTE") %></td>
@@ -519,6 +523,7 @@ for(int i=0;i<listPlan.size();i++){
 %>
 				    </select></td>
 				  </tr>	
+				  <tr>
 				  <tr>
 				    <td>备注</td>
 				    <td><input type="text" name="remark" style="width:200"></td>
