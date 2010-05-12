@@ -72,27 +72,27 @@ public class TrainDAO extends EmployeeDAO {
 		
 		if("1".equals(type)){//人员
 			if("0".equals(empcode)){//全部人员
-				sql = "select * from TRAIN order by EMPCODE";
+				sql = "select * from TRAIN a,TRAIN_D b where a.TRAINID=b.ID order by EMPCODE";
 			}else {
-				sql = "select * from TRAIN where EMPCODE='" + empcode + "' order by EMPCODE";
+				sql = "select * from TRAIN a,TRAIN_D b where a.TRAINID=b.ID and EMPCODE='" + empcode + "' order by EMPCODE";
 			}
 		}else if("2".equals(type)){//课程
 			if("".equals(seltrain)){//全部课程
-				sql = "select * from TRAIN order by NAME";
+				sql = "select * from TRAIN a,TRAIN_D b where a.TRAINID=b.ID order by TRAINNAME";
 			}else {
-				sql = "select * from TRAIN where NAME='" + seltrain + "' order by EMPCODE";
+				sql = "select * from TRAIN a,TRAIN_D b where a.TRAINID=b.ID and TRAINNAME='" + seltrain + "' order by EMPCODE";
 			}
 		}else if("3".equals(type)){//考核
 			if("".equals(selassess)){//全部考核
-				sql = "select * from TRAIN order by ASSESS";
+				sql = "select * from TRAIN a,TRAIN_D b where a.TRAINID=b.ID order by ASSESS";
 			}else {
-				sql = "select * from TRAIN where ASSESS='" + selassess + "' order by ASSESS";
+				sql = "select * from TRAIN a,TRAIN_D b where a.TRAINID=b.ID and ASSESS='" + selassess + "' order by ASSESS";
 			}
 		}else if("4".equals(type)){//成本
 			if(cost==0){//全部成本
-				sql = "select * from TRAIN order by COST desc";
+				sql = "select * from TRAIN a,TRAIN_D b where a.TRAINID=b.ID order by b.COST desc";
 			}else {//成本小于所填写的
-				sql = "select * from TRAIN where COST<=" + cost + " order by COST desc";
+				sql = "select * from TRAIN a,TRAIN_D b where a.TRAINID=b.ID and b.COST<=" + cost + " order by COST desc";
 			}
 		}
 		

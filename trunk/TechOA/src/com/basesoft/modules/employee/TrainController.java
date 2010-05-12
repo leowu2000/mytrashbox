@@ -123,8 +123,10 @@ public class TrainController extends CommonController {
 			}
 			
 			String updateSql = "update TRAIN_D set NAME='" + name + "', STARTDATE=" + startdate + ", ENDDATE=" + enddate + ", TARGET='" + target + "', PLAN='" + plan + "', RECORD='" + record + "', RESULT='" + result + "', COST=" + cost_d + " where ID='" + id + "'";
+			String updateSql2 = "update TRAIN set TRAINNAME='" + name + "' where TRAINID='" + id + "'";
 			
 			trainDAO.update(updateSql);
+			trainDAO.update(updateSql2);
 			
 			response.sendRedirect("train.do?action=list_manage&page=" + page);
 		}else if("delete".equals(action)){

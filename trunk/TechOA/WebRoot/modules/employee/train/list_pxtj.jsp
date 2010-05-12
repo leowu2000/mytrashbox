@@ -55,6 +55,7 @@
     		<td>姓名</td>
     		<td>培训名称</td>
     		<td>考核结果</td>
+    		<td>培训成本</td>
 <%
 	for(int i=0;i<listTrain.size();i++){
 		Map mapTrain = (Map)listTrain.get(i);
@@ -68,10 +69,11 @@
 	<%
     	}
 	%>
-			<td><%=mapTrain.get("EMPCODE")==null?"":mapTrain.get("EMPCODE") %></td>
-			<td><%=mapTrain.get("EMPNAME")==null?"":mapTrain.get("EMPNAME") %></td>
-			<td><a href="train.do?action=detail&trainid=<%=mapTrain.get("TRAINID") %>"><%=train.getName() %></a></td>
-			<td><%=mapTrain.get("ASSESS")==null?"":mapTrain.get("ASSESS") %></td>
+			<td>&nbsp;<%=mapTrain.get("EMPCODE")==null?"":mapTrain.get("EMPCODE") %></td>
+			<td>&nbsp;<%=mapTrain.get("EMPNAME")==null?"":mapTrain.get("EMPNAME") %></td>
+			<td>&nbsp;<a href="train.do?action=detail&trainid=<%=mapTrain.get("TRAINID") %>"><%=train.getName() %></a></td>
+			<td>&nbsp;<%=mapTrain.get("ASSESS")==null?"":mapTrain.get("ASSESS") %></td>
+			<td>&nbsp;<%=mapTrain.get("COST")==null?"":mapTrain.get("COST") %></td>
 		</tr>
 <%
 	} 
