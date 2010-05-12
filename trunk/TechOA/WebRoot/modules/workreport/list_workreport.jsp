@@ -206,14 +206,14 @@ for(int i=0;i<list.size();i++){
 <%
 	}
 %>                
-                <td>&nbsp;<%=map.get("STARTDATE")==null?"":map.get("STARTDATE") %></td>
-                <td>&nbsp;<%=map.get("NAME") %></td>
-                <td>&nbsp;<%=pjname %></td>
-                <td>&nbsp;<%=pjname_d %></td>
-                <td>&nbsp;<%=stagename %></td>   
-                <td>&nbsp;<%=map.get("AMOUNT") %></td>
+                <td nowrap="nowrap">&nbsp;<%=map.get("STARTDATE")==null?"":map.get("STARTDATE") %></td>
+                <td nowrap="nowrap">&nbsp;<%=map.get("NAME") %></td>
+                <td nowrap="nowrap">&nbsp;<%=pjname %></td>
+                <td nowrap="nowrap">&nbsp;<%=pjname_d %></td>
+                <td nowrap="nowrap">&nbsp;<%=stagename %></td>   
+                <td nowrap="nowrap">&nbsp;<%=map.get("AMOUNT") %></td>
                 <td>&nbsp;<%=map.get("BZ") %></td>
-                <td>&nbsp;<%=flag %></td>
+                <td nowrap="nowrap">&nbsp;<%=flag %></td>
             </tr>
 <%} %>            
 </table>

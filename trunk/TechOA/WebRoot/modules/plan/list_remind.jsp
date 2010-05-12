@@ -84,17 +84,17 @@ for(int i=0;i<listAssess.size();i++){
 %>
             <tr align="center">
             	<td>&nbsp;<%=plantype %>--<%=plantype2 %></td>
-                <td>&nbsp;<%=pjname %></td>
-                <td>&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
-                <td>&nbsp;<%=state %></td>
-                <td>&nbsp;<%=mapAssess.get("ASSESS")==null?"":mapAssess.get("ASSESS") %></td>
-                <td>&nbsp;<%="" %></td>
-                <td>&nbsp;<%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
-                <td>&nbsp;<%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>
-                <td>&nbsp;<%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
-                <td>&nbsp;<%=mapAssess.get("PLANNERNAME")==null?"":mapAssess.get("PLANNERNAME") %></td>
-                <td>&nbsp;<%=mapAssess.get("LEADER_ROOM")==null?"":mapAssess.get("LEADER_ROOM") %></td>
-                <td>&nbsp;<%=daypersent %></td>
+                <td nowrap="nowrap">&nbsp;<%=pjname %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
+                <td nowrap="nowrap">&nbsp;<%=state %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("ASSESS")==null?"":mapAssess.get("ASSESS") %></td>
+                <td nowrap="nowrap">&nbsp;<%="" %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("PLANNERNAME")==null?"":mapAssess.get("PLANNERNAME") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("LEADER_ROOM")==null?"":mapAssess.get("LEADER_ROOM") %></td>
+                <td nowrap="nowrap">&nbsp;<%=daypersent %></td>
                 <td>&nbsp;<%=mapAssess.get("REMARK")==null?"":mapAssess.get("REMARK") %></td>
             </tr>
 <%} %>            
