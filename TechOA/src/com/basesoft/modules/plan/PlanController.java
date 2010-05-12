@@ -147,7 +147,10 @@ public class PlanController extends CommonController {
 			String plannercode = request.getSession().getAttribute("EMCODE").toString();
 			String plannername = request.getSession().getAttribute("EMNAME").toString();
 			
-			int betweendays = StringUtil.getBetweenDays(new Date(), StringUtil.StringToDate(enddate, "yyyy-MM-dd"));
+			int betweendays = 0;
+			if(!"".equals(enddate)){
+				betweendays = StringUtil.getBetweenDays(new Date(), StringUtil.StringToDate(enddate, "yyyy-MM-dd"));
+			}
 			int planedworkload = betweendays * 8;
 			
 			//将空的日期值设为null
@@ -178,6 +181,12 @@ public class PlanController extends CommonController {
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
 			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
 			String note = ServletRequestUtils.getStringParameter(request, "note", "");
+			String symbol = ServletRequestUtils.getStringParameter(request, "symbol", "");
+			String assess = ServletRequestUtils.getStringParameter(request, "assess", "");
+			String remark = ServletRequestUtils.getStringParameter(request, "remark", "");
+			String leader_station = ServletRequestUtils.getStringParameter(request, "leader_station", "");
+			String leader_section = ServletRequestUtils.getStringParameter(request, "leader_section", "");
+			String leader_room = ServletRequestUtils.getStringParameter(request, "leader_room", "");
 		
 			if("".equals(enddate)){
 				enddate = null;
@@ -186,7 +195,7 @@ public class PlanController extends CommonController {
 			}
 			String empname = planDAO.findNameByCode("EMPLOYEE", empcode);
 			
-			String updateSql = "update PLAN set EMPCODE='" + empcode + "', EMPNAME='" + empname + "', ENDDATE=" + enddate + ", PLANEDWORKLOAD=0, NOTE='" + note + "' where ID='" + id + "'";
+			String updateSql = "update PLAN set EMPCODE='" + empcode + "', EMPNAME='" + empname + "', ENDDATE=" + enddate + ", NOTE='" + note + "', SYMBOL='" + symbol + "', ASSESS='" + assess + "', REMARK='" + remark + "', LEADER_STATION='" + leader_station + "', LEADER_SECTION='" + leader_section + "',LEADER_ROOM='" + leader_room + "' where ID='" + id + "'";
 			
 			planDAO.update(updateSql);
 			

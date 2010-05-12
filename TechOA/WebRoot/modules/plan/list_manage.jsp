@@ -400,14 +400,14 @@ for(int i=0;i<listPlan.size();i++){
 %>                	                
                 </td>
                 <td>&nbsp;<%=plantype %>--<%=plantype2 %></td>
-                <td>&nbsp;<%=pjname %></td>
-                <td>&nbsp;<%=mapPlan.get("ORDERCODE")==null?"":mapPlan.get("ORDERCODE") %></td>
-                <td>&nbsp;<%=mapPlan.get("NOTE")==null?"":mapPlan.get("NOTE") %></td>
-                <td>&nbsp;<%=mapPlan.get("SYMBOL")==null?"":mapPlan.get("SYMBOL") %></td>
-                <td>&nbsp;<%=mapPlan.get("ENDDATE")==null?"":mapPlan.get("ENDDATE") %></td>
-                <td>&nbsp;<%=mapPlan.get("DEPARTNAME")==null?"":mapPlan.get("DEPARTNAME") %></td>
-                <td>&nbsp;<%=mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME") %></td>
-                <td>&nbsp;<%=mapPlan.get("ASSESS")==null?"":mapPlan.get("ASSESS") %></td>
+                <td nowrap="nowrap">&nbsp;<%=pjname %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("ORDERCODE")==null?"":mapPlan.get("ORDERCODE") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("NOTE")==null?"":mapPlan.get("NOTE") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("SYMBOL")==null?"":mapPlan.get("SYMBOL") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("ENDDATE")==null?"":mapPlan.get("ENDDATE") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("DEPARTNAME")==null?"":mapPlan.get("DEPARTNAME") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("ASSESS")==null?"":mapPlan.get("ASSESS") %></td>
                 <td>&nbsp;
 <%
 				if("已反馈".equals(status)){
@@ -421,11 +421,11 @@ for(int i=0;i<listPlan.size();i++){
 				}
 %>                	
                 </td>
-                <td>&nbsp;<%=mapPlan.get("LEADER_STATION")==null?"":mapPlan.get("LEADER_STATION") %></td>
-                <td>&nbsp;<%=mapPlan.get("PLANNERNAME")==null?"":mapPlan.get("PLANNERNAME") %></td>
-                <td>&nbsp;<%=mapPlan.get("LEADER_ROOM")==null?"":mapPlan.get("LEADER_ROOM") %></td>
-                <td>&nbsp;<%=mapPlan.get("LEADER_SECTION")==null?"":mapPlan.get("LEADER_SECTION") %></td>
-                <td>&nbsp;<%=status %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("LEADER_STATION")==null?"":mapPlan.get("LEADER_STATION") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("PLANNERNAME")==null?"":mapPlan.get("PLANNERNAME") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("LEADER_ROOM")==null?"":mapPlan.get("LEADER_ROOM") %></td>
+                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("LEADER_SECTION")==null?"":mapPlan.get("LEADER_SECTION") %></td>
+                <td nowrap="nowrap">&nbsp;<%=status %></td>
             </tr>
 <%} %>            
 </table>
