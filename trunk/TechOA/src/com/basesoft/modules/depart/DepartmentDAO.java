@@ -58,7 +58,7 @@ public class DepartmentDAO extends CommonDAO{
 	 * @return
 	 */
 	public List<?> getChild(String departcode){
-		return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "'");
+		return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by NAME ");
 	}
 	
 	/**
@@ -67,7 +67,7 @@ public class DepartmentDAO extends CommonDAO{
 	 * @return
 	 */
 	public List<?> findEmpsByDepart(String departcode){
-		return jdbcTemplate.queryForList("select * from EMPLOYEE where DEPARTCODE='" + departcode + "'");
+		return jdbcTemplate.queryForList("select * from EMPLOYEE where DEPARTCODE='" + departcode + "' order by NAME");
 	}
 	
 	/**

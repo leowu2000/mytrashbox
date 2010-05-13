@@ -96,7 +96,13 @@ public class DepartmentController extends CommonController {
 			}else{
 				Map mapParent = departDAO.findByCode("DEPARTMENT", parent);
 				int level = Integer.parseInt(mapParent.get("LEVEL").toString()) + 1;
-				String allParents = mapParent.get("ALLPARENTS").toString() + "," + parent;
+				String oldparents = mapParent.get("ALLPARENTS")==null?"":mapParent.get("ALLPARENTS").toString();
+				String allParents = "";
+				if(!"".equals(oldparents)){
+					allParents = mapParent.get("ALLPARENTS").toString() + "," + parent;
+				}else {
+					allParents = parent;
+				}
 				
 				departDAO.update("update DEPARTMENT set NAME='" + name + "',PARENT='" + parent + "',level=" + level + ",ALLPARENTS='" + allParents + "' where ID='" + id + "'");
 				

@@ -1,6 +1,7 @@
 package com.basesoft.modules.project;
 
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -41,10 +42,13 @@ public class ProjectController extends CommonController {
 			
 			Date end = StringUtil.getEndOfMonth(start);
 			
-			List listDepart = projectDAO.getDepartment();
-			List listGstjhz = projectDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"));
+			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			
-			ChartUtil.createChart("gstjhz", listGstjhz, path, projectDAO);
+			List listDepart = projectDAO.getDeparts(depart, new ArrayList());
+			List listGstjhz = projectDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"));
+			List listGstjhznoCount = projectDAO.getGstjhznoCount(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"));
+			
+			ChartUtil.createChart("gstjhz", listGstjhznoCount, path, projectDAO);
 			
 			mv.addObject("listDepart", listDepart);
 			mv.addObject("listGstjhz", listGstjhz);
@@ -65,8 +69,9 @@ public class ProjectController extends CommonController {
 			}
 			List listPeriod = projectDAO.getDICTByType("5");
 			List listKygstj = projectDAO.getKygstj(start, end, listPeriod, depart);
+			List listKygstjnoCount = projectDAO.getKygstjnoCount(start, end, listPeriod, depart);
 			
-			ChartUtil.createChart("kygstj", listKygstj, path, projectDAO);
+			ChartUtil.createChart("kygstj", listKygstjnoCount, path, projectDAO);
 			
 			mv.addObject("listKygstj", listKygstj);
 			mv.addObject("listPeriod", listPeriod);
@@ -89,8 +94,9 @@ public class ProjectController extends CommonController {
 			}
 			
 			List listCdrwqk = projectDAO.getCdrwqk(start, end, depart);
+			List listCdrwqknoCount = projectDAO.getCdrwqknoCount(start, end, depart);
 			
-			ChartUtil.createChart("cdrwqk", listCdrwqk, path, projectDAO);
+			ChartUtil.createChart("cdrwqk", listCdrwqknoCount, path, projectDAO);
 			
 			mv.addObject("datepick", datepick);
 			mv.addObject("listCdrwqk", listCdrwqk);
