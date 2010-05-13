@@ -77,6 +77,28 @@ public class EmployeeController extends CommonController {
 			
 			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&page=" + page);
 			return null;
+		}else if("roleajax".equals(action)){
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			
+			Employee em = emDAO.findById(id);
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=UTF-8");
+			response.getWriter().write(em.getRolecode());
+			response.getWriter().close();
+			return null;
+		}else if("changerole".equals(action)){
+			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
+			
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			String rolecode = ServletRequestUtils.getStringParameter(request, "oldrolecode", "");
+			
+			emDAO.update("update EMPLOYEE set ROLECODE='" + rolecode + "' where ID='" + id + "'");
+			
+			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&page=" + page);
+			return null;
 		}else if("delete".equals(action)){//用户删除操作
 			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 			

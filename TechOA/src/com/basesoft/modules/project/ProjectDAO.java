@@ -39,6 +39,23 @@ public class ProjectDAO extends CommonDAO{
 		return listProject;
 	}
 	
+	public List<?> getGstjhznoCount(String start, String end){
+		List<?> listProject = getProject();
+		List<?> listDepart = getDepartment();
+		
+		for(int i=0;i<listProject.size();i++){//循环项目
+			Map mapProject = (Map)listProject.get(i);
+			for(int j=0;j<listDepart.size();j++){//循环部门
+				Map mapDepart = (Map)listDepart.get(j);
+				int departCount = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE='" + mapDepart.get("CODE") + "') and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'");
+				
+				mapProject.put("departCount" + j, departCount);
+			}
+		}
+		
+		return listProject;
+	}
+	
 	/**
 	 * 得到科研工时统计
 	 * @param start 起始时间
@@ -108,6 +125,58 @@ public class ProjectDAO extends CommonDAO{
 	}
 	
 	/**
+	 * 得到科研工时统计
+	 * @param start 起始时间
+	 * @param end 截止时间
+	 * @param listPeriod 科研阶段列表
+	 * @param depart 部门编码
+	 * @return
+	 */
+	public List<?> getKygstjnoCount(String start, String end, List listPeriod, String depart){
+		List returnList = new ArrayList();
+		
+		List listProject = getProject();
+		
+		//合计
+		int[] hj = new int[listPeriod.size()];
+		
+		for(int i=0;i<listProject.size();i++){//循环所有的项目
+			Map returnMap = new HashMap();
+			
+			Map mapProject = (Map)listProject.get(i);
+			
+			returnMap.put("PJCODE", mapProject.get("NAME"));
+			
+			int countCol = 0;
+			
+			for(int j=0;j<listPeriod.size();j++){//循环项目阶段，取工时
+				Map mapPeriod = (Map)listPeriod.get(j);
+				
+				int count = 0;
+				
+				if("0".equals(depart)){//所有部门
+					count = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'");;
+				}else {
+					count = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'");
+				}
+				
+				
+				
+				returnMap.put(mapPeriod.get("CODE"), count);
+				countCol = countCol + count;
+				hj[j] = hj[j] + count;
+			}
+			
+			returnMap.put("TOTALCOUNT", countCol);
+			
+			returnList.add(returnMap);
+			
+		}
+		
+		return returnList;
+	}
+	
+	/**
 	 * 得到任务承担情况列表
 	 * @param start 起始时间
 	 * @param end 截止时间
@@ -167,6 +236,65 @@ public class ProjectDAO extends CommonDAO{
 			returnMap.put("C7", C7);
 			returnMap.put("C8", C8);
 			returnMap.put("TOTALCOUNT", totalCount);
+			
+			returnList.add(returnMap);
+		}
+		
+		return returnList;
+	}
+	
+	public List<?> getCdrwqknoCount(String start, String end, String depart){
+		List returnList = new ArrayList();
+		
+		List listProject = getProject();
+		
+		for(int i=0;i<listProject.size();i++){//循环项目
+			Map returnMap = new HashMap();
+			
+			Map mapProject = (Map)listProject.get(i);
+			
+			returnMap.put("PJCODE", mapProject.get("NAME"));
+			
+			int totalCount = 0;
+			int C1 = 0;
+			int C2 = 0;
+			int C3 = 0;
+			int C4 = 0;
+			int C5 = 0;
+			int C6 = 0;
+			int C7 = 0;
+			int C8 = 0;
+			
+			if("0".equals(depart)){
+				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C2 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200001','200002') and CODE in (select DISTINCT EMPCODE from WORKREPORT where PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C3 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100001' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C4 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100002' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C5 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100003' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C6 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100004' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100005' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100006' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+			}else {
+				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and DEGREECODE in ('200003','200004','200005','200006') and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C2 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and DEGREECODE in ('200001','200002') and CODE in (select DISTINCT EMPCODE from WORKREPORT where PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C3 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100001' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C4 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100002' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C5 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100003' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C6 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100004' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100005' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+				C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where CODE in (select CODE from EMPLOYEE where DEPARTCODE='" + depart + "') and MAJORCODE='100006' and CODE in (select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
+			}
+			
+			totalCount = C1 + C2;
+			
+			returnMap.put("C1", C1);
+			returnMap.put("C2", C2);
+			returnMap.put("C3", C3);
+			returnMap.put("C4", C4);
+			returnMap.put("C5", C5);
+			returnMap.put("C6", C6);
+			returnMap.put("C7", C7);
+			returnMap.put("C8", C8);
 			
 			returnList.add(returnMap);
 		}

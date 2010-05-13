@@ -6,6 +6,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,9 +131,46 @@ public class CommonDAO {
 		if("001".equals(mapEm.get("ROLECODE").toString())||"000".equals(mapEm.get("ROLECODE").toString())){//管理员
 			return jdbcTemplate.queryForList("select * from DEPARTMENT order by LEVEL");
 		}else if("002".equals(mapEm.get("ROLECODE").toString())){//领导
-			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + mapEm.get("DEPARTCODE") + "' or ALLPARENTS like '%" + mapEm.get("DEPARTCODE") + "%' order by LEVEL");
+			return getDeparts(mapEm.get("DEPARTCODE").toString(), new ArrayList());
 		}else {//普通员工
 			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + mapEm.get("DEPARTCODE") + "' order by LEVEL");
+		}
+	}
+	
+	/**
+	 * 得到所有下级部门
+	 * @param departcode
+	 * @return
+	 */
+	public List getDeparts(String departcode, List list){
+		List listself = jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "'");
+		if(listself.size()>0){
+			list.add((Map)listself.get(0));
+		}
+		List listChild = jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "'");
+		
+		if(listChild.size()>0){
+			//list.add(listChild);
+			for(int i=0;i<listChild.size();i++){
+				Map mapChild = (Map)listChild.get(i);
+				List listChilds = getDeparts(mapChild.get("CODE").toString(), list);
+			}
+		}
+		
+		return list;
+	}
+	
+	/**
+	 * 得到下级部门
+	 * @param departcode
+	 * @return
+	 */
+	public Map getDepart(String departcode){
+		List list = jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "'");
+		if(list.size()>0){
+			return (Map)list.get(0);
+		}else {
+			return null;
 		}
 	}
 	

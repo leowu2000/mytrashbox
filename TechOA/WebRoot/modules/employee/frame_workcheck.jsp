@@ -3,6 +3,11 @@
 <%
 	String method = request.getAttribute("method").toString();
 	String empcode = request.getAttribute("empcode").toString();
+	String departcode = session.getAttribute("DEPARTCODE").toString();
+	String departname = session.getAttribute("DEPARTNAME").toString();
+	if("".equals(departname)){
+		departname = "请选择...";
+	}
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -22,7 +27,7 @@
 		var method = '<%=method %>';
 		var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'departspan',
-			width : 120,
+			width : 200,
 			hiddenName : 'depart',
 			hiddenId : 'depart',
 			tree : {
@@ -55,6 +60,8 @@
       		}
 			
 		});
+		
+		comboBoxTree.setValue({id:'<%=departcode %>',text:'<%=departname %>'});
 	
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
 		if(method==''){
@@ -70,7 +77,7 @@
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('datepick'));
   		
-  		comboBoxTree.setValue({id:'0',text:'请选择...'});
+  		//comboBoxTree.setValue({id:'0',text:'请选择...'});
   		
   		var datepick = document.getElementById('datepick').value;
   		if(datepick == ''){

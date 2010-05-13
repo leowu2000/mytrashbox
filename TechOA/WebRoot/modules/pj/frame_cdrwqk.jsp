@@ -21,7 +21,7 @@ List listDepart = (List)request.getAttribute("listDepart");
 	Ext.onReady(function(){
 		var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'departspan',
-			width : 120,
+			width : 200,
 			hiddenName : 'depart',
 			hiddenId : 'depart',
 			tree : {

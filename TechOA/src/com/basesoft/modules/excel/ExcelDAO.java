@@ -415,20 +415,20 @@ public class ExcelDAO extends CommonDAO {
 				String parentname = row.optString("PARENTNAME");
 				
 				//根据部门名称找出部门编码
-				String parent = findCodeByName("DEPARTMENT", parentname);
-				Map mapParent = findByCode("DEPARTMENT", parent);
+				String parentcode = findCodeByName("DEPARTMENT", parentname);
+				Map mapParent = findByCode("DEPARTMENT", parentcode);
 				String allparents = mapParent.get("ALLPARENTS")==null?"":mapParent.get("ALLPARENTS").toString();
 				if("".equals(allparents)){
-					allparents = parent;
+					allparents = parentcode;
 				}else {
-					allparents  = allparents + "," + parent;
+					allparents  = allparents + "," + parentcode;
 				}
 				
 				int level = mapParent.get("LEVEL")==null?1:(Integer.parseInt(mapParent.get("LEVEL").toString()) + 1);
 				//生成32位uuid
 				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 				
-				String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,LEVEL) values('" + uuid + "','" + code + "','" + name + "','" + parent + "','" + allparents + "'," + level + ")";
+				String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,LEVEL) values('" + uuid + "','" + code + "','" + name + "','" + parentcode + "','" + allparents + "'," + level + ")";
 				
 				try{
 					insert(insertSql);

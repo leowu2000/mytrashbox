@@ -36,6 +36,7 @@ if(errorMessage!=''){
 var win;
 var win1;
 var win2;
+var win3;
 var action;
 var url='/em.do';
 Ext.onReady(function(){
@@ -77,6 +78,7 @@ Ext.onReady(function(){
 	var tb1 = new Ext.Toolbar({renderTo:'toolbar1'});
 	tb1.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb1.add({text: '修改密码',cls: 'x-btn-text-icon update',handler: onChangepassClick});
+	tb1.add({text: '修改角色',cls: 'x-btn-text-icon xiugai',handler: onChangeroleClick});
 	tb1.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
 	tb1.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
@@ -116,6 +118,16 @@ Ext.onReady(function(){
 	        	}
 	        },
 	        {text:'关闭',handler: function(){win2.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win3){
+        win3 = new Ext.Window({
+        	el:'dlg3',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm3').action=action; Ext.getDom('dataForm3').submit();}},
+	        {text:'关闭',handler: function(){win3.hide();}}
 	        ]
         });
     }
@@ -173,6 +185,24 @@ Ext.onReady(function(){
         win2.show(btn.dom);
     }
     
+    function onChangeroleClick(btn){
+		var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+		
+		Ext.Ajax.request({
+			url: url+'?action=roleajax&id='+selValue,
+			method: 'GET',
+			success: function(transport) {
+			    Ext.get('oldrolecode').set({'value':transport.responseText});
+			    action = url+'?action=changerole&page=<%=pagenum %>&seldepart=<%=seldepart %>&id=' + selValue;
+	    		win3.setTitle('修改角色');
+		        win3.show(btn.dom);
+		  	}
+		});
+    }
 });
 
 </script>
@@ -189,6 +219,7 @@ Ext.onReady(function(){
 			<td>工号</td>
     		<td>姓名</td>
     		<td>部门</td>
+    		<td>角色</td>
     	</tr>
 <%
     for(int i=0;i<listEm.size();i++){
@@ -197,12 +228,31 @@ Ext.onReady(function(){
     	if(mapEm.get("DEPARTCODE")!=null){
     		departname = employeeDAO.findNameByCode("DEPARTMENT",mapEm.get("DEPARTCODE").toString());
     	}
+    	String rolecode = mapEm.get("ROLECODE")==null?"":mapEm.get("ROLECODE").toString();
+    	String rolename = "";
+    	if("001".equals(rolecode)){
+    		rolename = "系统管理员";
+    	}else if("002".equals(rolecode)){
+    		rolename = "部领导";
+    	}else if("005".equals(rolecode)){
+    		rolename = "组长";
+    	}else if("004".equals(rolecode)){
+    		rolename = "计划员";
+    	}else if("006".equals(rolecode)){
+    		rolename = "固定资产管理员";
+    	}else if("007".equals(rolecode)){
+    		rolename = "人事管理员";
+    	}else if("003".equals(rolecode)){
+    		rolename = "普通员工";
+    	}
+
 %>    	
 		<tr align="center">
 			<td><input type="checkbox" name="check" value="<%=mapEm.get("ID") %>" class="ainput"></td>
 			<td>&nbsp;<%=mapEm.get("CODE")==null?"":mapEm.get("CODE") %></td>
 			<td>&nbsp;<%=mapEm.get("NAME")==null?"":mapEm.get("NAME") %></td>
 			<td>&nbsp;<%=departname %></td>
+			<td>&nbsp;<%=rolename %></td>
 		</tr>
 <%  } %>
     </table>
@@ -273,6 +323,29 @@ Ext.onReady(function(){
 				</table>
 			</form>
 	</div>
-</div>  	  	
+</div>  
+
+<div id="dlg3" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm3" name="dataForm3" action="" method="post">
+	        	<input type="hidden" name="page" value="<%=pagenum %>">
+                <table>
+				  <tr>
+				    <td>角色</td>
+				    <td><select name="oldrolecode" style="width:200">
+				    	<option value="001">系统管理员</option>
+				    	<option value="002">部领导</option>
+				    	<option value="005">组长</option>
+				    	<option value="003">普通员工</option>
+				    	<option value="004">计划员</option>
+				    	<option value="006">固定资产管理员</option>
+				    	<option value="007">人事管理员</option>
+				    </select></td>
+				  </tr>	
+				</table>
+			</form>
+	</div>
+</div>	  	
   </body>
 </html>

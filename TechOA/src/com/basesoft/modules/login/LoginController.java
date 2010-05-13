@@ -53,10 +53,13 @@ public class LoginController extends CommonController {
 				if (password.equals(dbPassword)) {
 					
 					request.getSession().setMaxInactiveInterval(Integer.parseInt(Constants.get("SessionOutTime")));
-					request.getSession().setAttribute("EMID", mapEm.get("ID").toString());
-					request.getSession().setAttribute("EMROLE", mapEm.get("ROLECODE").toString());
-					request.getSession().setAttribute("EMNAME", mapEm.get("NAME").toString());
-					request.getSession().setAttribute("EMCODE", mapEm.get("CODE").toString());
+					request.getSession().setAttribute("EMID", mapEm.get("ID")==null?"":mapEm.get("ID").toString());
+					request.getSession().setAttribute("EMROLE", mapEm.get("ROLECODE")==null?"":mapEm.get("ROLECODE").toString());
+					request.getSession().setAttribute("EMNAME", mapEm.get("NAME")==null?"":mapEm.get("NAME").toString());
+					request.getSession().setAttribute("EMCODE", mapEm.get("CODE")==null?"":mapEm.get("CODE").toString());
+					request.getSession().setAttribute("DEPARTCODE", mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString());
+					String departname = emDAO.findNameByCode("DEPARTMENT", mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString());
+					request.getSession().setAttribute("DEPARTNAME", departname);
 					
 					mv = new ModelAndView("index");
 					

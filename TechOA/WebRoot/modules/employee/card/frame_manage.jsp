@@ -15,7 +15,7 @@
 	Ext.onReady(function(){
 		var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'departspan',
-			width : 120,
+			width : 200,
 			hiddenName : 'seldepart',
 			hiddenId : 'seldepart',
 			tree : {

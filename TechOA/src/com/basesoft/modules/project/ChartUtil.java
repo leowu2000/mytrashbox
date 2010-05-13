@@ -89,10 +89,9 @@ public class ChartUtil {
     	List listDepart = pjDAO.getDepartment();
     	
     	//每根柱子
-        String[] rowKeys = new String[listDepart.size() + 1];
-        rowKeys[0] = "本月合计";
-        for(int i=1;i<=listDepart.size();i++){
-        	Map mapDepart = (Map)listDepart.get(i-1);
+        String[] rowKeys = new String[listDepart.size()];
+        for(int i=0;i<listDepart.size();i++){
+        	Map mapDepart = (Map)listDepart.get(i);
         	rowKeys[i] = mapDepart.get("NAME").toString();
         }
         //横坐标
@@ -102,14 +101,13 @@ public class ChartUtil {
         	colKeys[i] = mapPj.get("NAME").toString();
         }
         
-        double [][] data = new double[listDepart.size() + 1][listData.size()]; 
+        double [][] data = new double[listDepart.size()][listData.size()]; 
         
         for(int i=0;i<listData.size();i++){
         	Map mapData = (Map)listData.get(i);
-        	data[0][i] = Double.parseDouble(mapData.get("totalCount").toString());
         	
-        	for(int j=1;j<=listDepart.size();j++){
-        		data[j][i] = Double.parseDouble(mapData.get("departCount" + (j -1)).toString());
+        	for(int j=0;j<listDepart.size();j++){
+        		data[j][i] = Double.parseDouble(mapData.get("departCount" + (j)).toString());
         	}
         }
            
@@ -126,28 +124,25 @@ public class ChartUtil {
     	List listPeriod = pjDAO.getDICTByType("5");
     	
     	//每根柱子
-        String[] rowKeys = new String[listPeriod.size() + 1];
-        rowKeys[0] = "合计";
-        for(int i=1;i<=listPeriod.size();i++){
-        	Map mapPeriod = (Map)listPeriod.get(i-1);
+        String[] rowKeys = new String[listPeriod.size()];
+        for(int i=0;i<listPeriod.size();i++){
+        	Map mapPeriod = (Map)listPeriod.get(i);
         	rowKeys[i] = mapPeriod.get("NAME").toString();
         }
         //横坐标
-        String[] colKeys = new String[listPj.size() + 1];
-        colKeys[listPj.size()] = "合计";
+        String[] colKeys = new String[listPj.size()];
         for(int i=0;i<listPj.size();i++){
         	Map mapPj = (Map)listPj.get(i);
         	colKeys[i] = mapPj.get("NAME").toString();
         }
         
-        double [][] data = new double[listPeriod.size() + 1][listData.size()]; 
+        double [][] data = new double[listPeriod.size()][listData.size()]; 
         
         for(int i=0;i<listData.size();i++){
         	Map mapData = (Map)listData.get(i);
-        	data[0][i] = Double.parseDouble(mapData.get("TOTALCOUNT").toString());
         	
-        	for(int j=1;j<=listPeriod.size();j++){
-        		Map mapPeriod = (Map)listPeriod.get(j-1);
+        	for(int j=0;j<listPeriod.size();j++){
+        		Map mapPeriod = (Map)listPeriod.get(j);
         		data[j][i] = Double.parseDouble(mapData.get(mapPeriod.get("CODE")).toString());
         	}
         }
@@ -165,7 +160,7 @@ public class ChartUtil {
     	List listDepart = pjDAO.getDepartment();
     	
     	//每根柱子
-        String[] rowKeys = {"合计", "本科及以上学历或中高级职称人员", "大、中专学历或初级职称人员", "电讯", "计算机硬件", "结构", "工艺", "软件开发", "其他"};
+        String[] rowKeys = {"本科及以上学历或中高级职称人员", "大、中专学历或初级职称人员", "电讯", "计算机硬件", "结构", "工艺", "软件开发", "其他"};
         
         //横坐标
         String[] colKeys = new String[listPj.size()];
@@ -174,14 +169,12 @@ public class ChartUtil {
         	colKeys[i] = mapPj.get("NAME").toString();
         }
         
-        double [][] data = new double[9][listData.size()]; 
+        double [][] data = new double[8][listData.size()]; 
         
         for(int i=0;i<listData.size();i++){
         	Map mapData = (Map)listData.get(i);
-        	data[0][i] = Double.parseDouble(mapData.get("TOTALCOUNT").toString());
-        	
         	for(int j=1;j<9;j++){
-        		data[j][i] = Double.parseDouble(mapData.get("C" + j).toString());
+        		data[j-1][i] = Double.parseDouble(mapData.get("C" + j).toString());
         	}
         }
            
