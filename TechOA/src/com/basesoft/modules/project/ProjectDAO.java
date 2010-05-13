@@ -39,9 +39,8 @@ public class ProjectDAO extends CommonDAO{
 		return listProject;
 	}
 	
-	public List<?> getGstjhznoCount(String start, String end){
+	public List<?> getGstjhznoCount(String start, String end, List listDepart){
 		List<?> listProject = getProject();
-		List<?> listDepart = getDepartment();
 		
 		for(int i=0;i<listProject.size();i++){//循环项目
 			Map mapProject = (Map)listProject.get(i);
