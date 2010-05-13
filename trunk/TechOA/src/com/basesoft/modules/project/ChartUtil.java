@@ -37,12 +37,12 @@ public class ChartUtil {
 	 * @param datepick
 	 * @return
 	 */
-	public static String createChart(String method, List<?> list, String path, ProjectDAO pjDAO) throws Exception{
+	public static String createChart(String method, List<?> list, String path, ProjectDAO pjDAO, List listDepart) throws Exception{
 		path = path + "\\" + method + ".png";
 		String title = "";
 		if("gstjhz".equals(method)){//工时统计汇总
 			title = "工时统计汇总";
-			CategoryDataset dataset = createDatasetGstjhz(pjDAO, list);   
+			CategoryDataset dataset = createDatasetGstjhz(pjDAO, list, listDepart);   
 	        //步骤2：根据Dataset 生成JFreeChart对象，以及做相应的设置   
 	        JFreeChart freeChart = createChart(dataset, title);   
 	        //步骤3：将JFreeChart对象输出到文件，Servlet输出流等   
@@ -84,9 +84,8 @@ public class ChartUtil {
 	 * @param pjDAO
 	 * @param datepick
      */ 
-    public static CategoryDataset createDatasetGstjhz(ProjectDAO pjDAO, List listData) {   
+    public static CategoryDataset createDatasetGstjhz(ProjectDAO pjDAO, List listData, List listDepart) {   
     	List listPj = pjDAO.getProject();
-    	List listDepart = pjDAO.getDepartment();
     	
     	//每根柱子
         String[] rowKeys = new String[listDepart.size()];

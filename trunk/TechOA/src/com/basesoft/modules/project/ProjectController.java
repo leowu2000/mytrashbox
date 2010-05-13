@@ -46,9 +46,9 @@ public class ProjectController extends CommonController {
 			
 			List listDepart = projectDAO.getDeparts(depart, new ArrayList());
 			List listGstjhz = projectDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"));
-			List listGstjhznoCount = projectDAO.getGstjhznoCount(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"));
+			List listGstjhznoCount = projectDAO.getGstjhznoCount(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"), listDepart);
 			
-			ChartUtil.createChart("gstjhz", listGstjhznoCount, path, projectDAO);
+			ChartUtil.createChart("gstjhz", listGstjhznoCount, path, projectDAO, listDepart);
 			
 			mv.addObject("listDepart", listDepart);
 			mv.addObject("listGstjhz", listGstjhz);
@@ -71,7 +71,7 @@ public class ProjectController extends CommonController {
 			List listKygstj = projectDAO.getKygstj(start, end, listPeriod, depart);
 			List listKygstjnoCount = projectDAO.getKygstjnoCount(start, end, listPeriod, depart);
 			
-			ChartUtil.createChart("kygstj", listKygstjnoCount, path, projectDAO);
+			ChartUtil.createChart("kygstj", listKygstjnoCount, path, projectDAO, null);
 			
 			mv.addObject("listKygstj", listKygstj);
 			mv.addObject("listPeriod", listPeriod);
@@ -96,7 +96,7 @@ public class ProjectController extends CommonController {
 			List listCdrwqk = projectDAO.getCdrwqk(start, end, depart);
 			List listCdrwqknoCount = projectDAO.getCdrwqknoCount(start, end, depart);
 			
-			ChartUtil.createChart("cdrwqk", listCdrwqknoCount, path, projectDAO);
+			ChartUtil.createChart("cdrwqk", listCdrwqknoCount, path, projectDAO, null);
 			
 			mv.addObject("datepick", datepick);
 			mv.addObject("listCdrwqk", listCdrwqk);
