@@ -38,7 +38,8 @@
 	                   return;  
 	            },   
 	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
-	                  document.getElementById('list_info').src = "/em.do?action=infolist&seldepart=" + newNode.id;
+	            	  var emname = document.getElementById('emname').value;
+	                  document.getElementById('list_info').src = "/em.do?action=infolist&seldepart=" + newNode.id + "&emname=" + emname;
 	            },   
 	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
 	                  //...   
@@ -51,17 +52,22 @@
 	
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
   		tb.add('选择部门：');
-  		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('departspan'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
+  		tb.add('按名字模糊查询');
+  		tb.add(document.getElementById('emname'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
+  		tb.add(document.getElementById('search'));
   		
   		comboBoxTree.setValue({id:'0',text:'请选择...'});
-  		
-	    document.getElementById('list_info').src = "/em.do?action=infolist&seldepart=" + comboBoxTree.getValue();
+  		var emname = document.getElementById('emname').value;
+	    document.getElementById('list_info').src = "/em.do?action=infolist&seldepart=" + comboBoxTree.getValue() + "&emname=" + emname;
 	});
 	
 	function commit(){
 	  var seldepart = document.getElementById('seldepart').value;
-	  document.getElementById('list_info').src = "/em.do?action=infolist&seldepart=" + seldepart;
+	  var emname = document.getElementById('emname').value;
+	  document.getElementById('list_info').src = "/em.do?action=infolist&seldepart=" + seldepart + "&emname=" + emname;
 	}
 	
 	function IFrameResize(){
@@ -74,6 +80,8 @@
   	<h1>用户管理</h1>
   	<div id="toolbar"></div>
   	<span id="departspan" name="departspan"></span>
+  	<input type="text" name="emname" style="width:60;">
+  	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
     <iframe name="list_info" width="100%" frameborder="0" height="500"></iframe>
   </body>
 </html>

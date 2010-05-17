@@ -202,19 +202,11 @@ public class ExcelDAO extends CommonDAO {
 					insert(insertSql);
 				}catch(Exception e){
 					System.out.println(e);
-					if("".equals(errorMessage)){
-						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-					}else {
-						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
-					}
+					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
 			}else {
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
-				}
+				errorMessage = getErrorMessage2(errorMessage, i);
 			}
 		}
 		
@@ -265,11 +257,7 @@ public class ExcelDAO extends CommonDAO {
 				insert(insertSql);
 			}catch(Exception e){
 				System.out.println(e);
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
-				}
+				errorMessage = getErrorMessage(errorMessage, i);
 				continue;
 			}
 		}
@@ -322,19 +310,11 @@ public class ExcelDAO extends CommonDAO {
 					insert(insertSql);
 				}catch(Exception e){
 					System.out.println(e);
-					if("".equals(errorMessage)){
-						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-					}else {
-						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
-					}
+					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
 			}else {
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
-				}
+				errorMessage = getErrorMessage2(errorMessage, i);
 			}
 		}
 		
@@ -378,11 +358,7 @@ public class ExcelDAO extends CommonDAO {
 				insert(insertSql);
 			}catch(Exception e){
 				System.out.println(e);
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
-				}
+				errorMessage = getErrorMessage(errorMessage, i);
 				continue;
 			}
 		}
@@ -405,47 +381,63 @@ public class ExcelDAO extends CommonDAO {
 		
 		//循环数据行
 		JSONArray rows = data.optJSONArray("row");
-		for(int i=0;i<rows.length();i++){
+		for(int i=0;i<rows.length();i++){//第一遍入一级部门
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
 			Map map = findByCode("DEPARTMENT", row.optString("CODE"));
-			if(map.get("CODE")==null){//不存在则导入
-				String name = row.optString("NAME");
-				String code = row.optString("CODE");
-				String parentname = row.optString("PARENTNAME");
-				
-				//根据部门名称找出部门编码
-				String parentcode = findCodeByName("DEPARTMENT", parentname);
-				Map mapParent = findByCode("DEPARTMENT", parentcode);
-				String allparents = mapParent.get("ALLPARENTS")==null?"":mapParent.get("ALLPARENTS").toString();
-				if("".equals(allparents)){
-					allparents = parentcode;
-				}else {
-					allparents  = allparents + "," + parentcode;
-				}
-				
-				int level = mapParent.get("LEVEL")==null?1:(Integer.parseInt(mapParent.get("LEVEL").toString()) + 1);
-				//生成32位uuid
-				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-				
-				String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,LEVEL) values('" + uuid + "','" + code + "','" + name + "','" + parentcode + "','" + allparents + "'," + level + ")";
-				
-				try{
-					insert(insertSql);
-				}catch(Exception e){
-					System.out.println(e);
-					if("".equals(errorMessage)){
-						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-					}else {
-						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+			String name = row.optString("NAME").trim();
+			String code = row.optString("CODE").trim();
+			String parentname = row.optString("PARENTNAME").trim();
+			if("".equals(parentname)){//一级部门
+				if(map.get("CODE")==null){//不存在则导入
+					String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+					String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,LEVEL) values('" + uuid + "','" + code + "','" + name + "','','',1)";
+					try{
+						insert(insertSql);
+					}catch(Exception e){
+						System.out.println(e);
+						errorMessage = getErrorMessage(errorMessage, i);
+						continue;
 					}
-					continue;
-				}
-			}else {
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
 				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
+					errorMessage = getErrorMessage2(errorMessage, i);
+				}
+			}
+		}
+		for(int j=0;j<rows.length();j++){//第二遍入二级以上部门
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(j);
+			Map map = findByCode("DEPARTMENT", row.optString("CODE"));
+			String name = row.optString("NAME").trim();
+			String code = row.optString("CODE").trim();
+			String parentname = row.optString("PARENTNAME").trim();
+			if(!"".equals(parentname)){//二级以上部门
+				if(map.get("CODE")==null){
+					//根据部门名称找出部门编码
+					String parentcode = findCodeByName("DEPARTMENT", parentname);
+					Map mapParent = findByCode("DEPARTMENT", parentcode);
+					String allparents = mapParent.get("ALLPARENTS")==null?"":mapParent.get("ALLPARENTS").toString();
+					if("".equals(allparents)){
+						allparents = parentcode;
+					}else {
+						allparents  = allparents + "," + parentcode;
+					}
+					
+					int level = mapParent.get("LEVEL")==null?1:(Integer.parseInt(mapParent.get("LEVEL").toString()) + 1);
+					//生成32位uuid
+					String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+					
+					String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,LEVEL) values('" + uuid + "','" + code + "','" + name + "','" + parentcode + "','" + allparents + "'," + level + ")";
+					
+					try{
+						insert(insertSql);
+					}catch(Exception e){
+						System.out.println(e);
+						errorMessage = getErrorMessage(errorMessage, j);
+						continue;
+					}
+				}else {
+					errorMessage = getErrorMessage2(errorMessage, j);
 				}
 			}
 		}
@@ -501,19 +493,11 @@ public class ExcelDAO extends CommonDAO {
 					insert(insertSql);
 				}catch(Exception e){
 					System.out.println(e);
-					if("".equals(errorMessage)){
-						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-					}else {
-						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
-					}
+					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
 			}else {
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
-				}
+				errorMessage = getErrorMessage2(errorMessage, i);
 			}
 		}
 		
@@ -568,11 +552,7 @@ public class ExcelDAO extends CommonDAO {
 				insert(insertSql);
 			}catch(Exception e){
 				System.out.println(e);
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
-				}
+				errorMessage = getErrorMessage(errorMessage, i);
 				continue;
 			}
 		}
@@ -652,19 +632,11 @@ public class ExcelDAO extends CommonDAO {
 					insert(insertSql);
 				}catch(Exception e){
 					System.out.println(e);
-					if("".equals(errorMessage)){
-						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-					}else {
-						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
-					}
+					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
 			}else {
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
-				}
+				errorMessage = getErrorMessage2(errorMessage, i);
 			}
 		}
 		
@@ -716,11 +688,7 @@ public class ExcelDAO extends CommonDAO {
 				insert(insertSql);
 			}catch(Exception e){
 				System.out.println(e);
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
-				}
+				errorMessage = getErrorMessage(errorMessage, i);
 				continue;
 			}
 		}
@@ -779,19 +747,11 @@ public class ExcelDAO extends CommonDAO {
 					insert(insertSql);
 				}catch(Exception e){
 					System.out.println(e);
-					if("".equals(errorMessage)){
-						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-					}else {
-						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
-					}
+					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
 			}else {
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
-				}
+				errorMessage = getErrorMessage2(errorMessage, i);
 			}
 		}
 		
@@ -834,24 +794,48 @@ public class ExcelDAO extends CommonDAO {
 					insert(insertSql);
 				}catch(Exception e){
 					System.out.println(e);
-					if("".equals(errorMessage)){
-						errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
-					}else {
-						errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
-					}
+					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
 			}else {
-				if("".equals(errorMessage)){
-					errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
-				}else {
-					errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
-				}
+				errorMessage = getErrorMessage2(errorMessage, i);
 			}
 		}
 		
 		if("".equals(errorMessage)){
 			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 获取错误信息
+	 * @param errorMessage
+	 * @param i
+	 * @return
+	 */
+	public String getErrorMessage(String errorMessage, int i){
+		if("".equals(errorMessage)){
+			errorMessage = "第" + (i + 1) + "行数据有错误，请检查！";
+		}else {
+			errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据有错误，请检查！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 获取错误信息2
+	 * @param errorMessage
+	 * @param i
+	 * @return
+	 */
+	public String getErrorMessage2(String errorMessage, int i){
+		if("".equals(errorMessage)){
+			errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
+		}else {
+			errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
 		}
 		
 		return errorMessage;

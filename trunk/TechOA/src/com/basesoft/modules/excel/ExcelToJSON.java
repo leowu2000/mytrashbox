@@ -77,7 +77,14 @@ public class ExcelToJSON {
 				
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("ID", i + 1);    //加上序号
-				for (int j = 0; j < sheet.getColumns() - col + 1; j ++) {
+				
+				int size = 0;
+				if(sheet.getColumns() - col + 1>relation.length()){//当excel文件中列数多余配置的列数时，按配置文件中的列数取
+					size = relation.length();
+				}else {//当excel文件中列数少于配置的列数时，按excel文件中的列数取
+					size = sheet.getColumns() - col + 1;
+				}
+				for (int j = 0; j < size; j ++) {
 					int id = relation.optJSONObject(j).optInt("id");
 					String column = relation.optJSONObject(j).optString("column");
 					jsonObject.put(column, getCellContents(sheet.getCell(col - 1 + id - 1, i + row - 1), relation.optJSONObject(j).optString("format")));  //所有数据以字符串的形式存放

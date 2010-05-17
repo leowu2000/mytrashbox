@@ -1,8 +1,10 @@
 package com.basesoft.modules.excel;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -103,19 +105,30 @@ public class ExcelController extends CommonController {
 			
 			MultipartHttpServletRequest mpRequest = (MultipartHttpServletRequest)request;
 			JSONObject data = new JSONObject();
+			String path = "";
 			if (((MultipartFile) mpRequest.getFileMap().get("file")).getSize() != 0) {//有选择文件
 				//以输入流来读取文件
-				InputStream file = ((MultipartFile) mpRequest.getFileMap().get("file")).getInputStream();
+				InputStream ins = ((MultipartFile) mpRequest.getFileMap().get("file")).getInputStream();
+				InputStream ins1 = ((MultipartFile) mpRequest.getFileMap().get("file")).getInputStream();
+				path = request.getRealPath("\\excel") + "\\" + table + ".xls";
+				excelDAO.saveAsFile(path, ins);
 				
 				//Excel转换为JSON数据
 				JSONObject config_Conversion = Config.getJSONObjectByName(table + "_Conversion");
-				data = ExcelToJSON.parse(file, config_Conversion);
+				data = ExcelToJSON.parse(ins1, config_Conversion);
 			}
 			
 			mv.addObject("data", data);
+			mv.addObject("path", path);
 			return mv;
 		}else if("import".equals(action)){//excel导入
-			JSONObject data = new JSONObject(request.getParameter("data"));
+			String path = ServletRequestUtils.getStringParameter(request, "path", "");
+			JSONObject data = new JSONObject();
+			if(!"".equals(path)){
+				InputStream ins = new FileInputStream(path); 
+				JSONObject config_Conversion = Config.getJSONObjectByName(table + "_Conversion");
+				data = ExcelToJSON.parse(ins, config_Conversion);
+			}
 			
 			if("DEPARTMENT".equals(table)){//导入部门
 				errorMessage = excelDAO.insertDepart(data);

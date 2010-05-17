@@ -8,6 +8,7 @@
 <%
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
+String path = request.getAttribute("path").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 DepartmentDAO departDAO = (DepartmentDAO)ctx.getBean("departmentDAO");
@@ -54,7 +55,7 @@ Ext.onReady(function(){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<input type="hidden" name="data" id="data" value='<%=data %>'>
+<input type="hidden" name="path" id="path" value='<%=path %>'>
 <br>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#FF0088">注：橙色行表示已存在此部门，将不予入库；黄色格子表示入库后将无法进行关联，无法参与统计，可返回修改excel表，或入库后在相应管理模块下编辑！</font>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
@@ -69,12 +70,27 @@ Ext.onReady(function(){
 			Map map = departDAO.findByCode("DEPARTMENT", row.optString("CODE"));
 			if(map.get("CODE")!=null){
 %>            
-			<tr align="center" bgcolor="orange" title="系统中已存在此部门！">
+			<tr align="center" bgcolor="orange" title="已存在此部门！">
 <%
 			}else {
+				boolean exist = false;
+				for(int j=0;j<rows.length();j++){
+					JSONObject row_check = rows.optJSONObject(j);
+					if(row.optString("CODE").trim().equals(row_check.optString("CODE").trim())&&i > j){
+						exist = true;
+						break;
+					}
+				}
+				
+				if(exist){
+%>
+			<tr align="center" bgcolor="orange" title="已重复！">
+<%
+				}else {
 %>
 			<tr align="center">
 <%
+				}
 			}
 %>
             	<td>&nbsp;<%=row.optString("CODE") %></td>
@@ -82,10 +98,26 @@ Ext.onReady(function(){
 <%
 			String parentname = departDAO.findCodeByName("DEPARTMENT", row.optString("PARENTNAME"));
 			if("".equals(parentname)&&!"".equals(row.optString("PARENTNAME"))){
+				boolean exist = false;
+				for(int j=0;j<rows.length();j++){
+					JSONObject row_check = rows.optJSONObject(j);
+					if(row.optString("PARENTNAME").trim().equals(row_check.optString("NAME").trim())&&j != i){
+						exist = true;
+						break;
+					}
+				}
+				
+				if(!exist){
+					
 %>            	
             	<td bgcolor="#FF0088" title="无法识别上级部门！">&nbsp;<%=row.optString("PARENTNAME") %></td>
             	
 <%
+				}else {
+%>
+				<td>&nbsp;<%=row.optString("PARENTNAME") %></td>
+<%				
+				}
 			}else {
 %>            	
 				<td>&nbsp;<%=row.optString("PARENTNAME") %></td>
