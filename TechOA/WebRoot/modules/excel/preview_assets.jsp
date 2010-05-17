@@ -12,6 +12,7 @@ String emp = request.getAttribute("emp").toString();
 
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
+String path = request.getAttribute("path").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 AssetsDAO assetsDAO = (AssetsDAO)ctx.getBean("assetsDAO");
@@ -58,7 +59,7 @@ Ext.onReady(function(){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<input type="hidden" name="data" id="data" value='<%=data %>'>
+<input type="hidden" name="path" id="path" value="<%=path %>">
 <input type="hidden" name="status" value="<%=status %>">
 <input type="hidden" name="depart" value="<%=depart %>">
 <input type="hidden" name="emp" value="<%=emp %>">

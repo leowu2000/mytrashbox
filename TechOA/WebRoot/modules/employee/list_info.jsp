@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@	page import="java.net.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%@ page import="com.basesoft.modules.employee.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
@@ -7,6 +8,8 @@ PageList pageList = (PageList)request.getAttribute("pageList");
 List listEm = pageList.getList();
 List listChildDepart = (List)request.getAttribute("listChildDepart");
 String seldepart = request.getAttribute("seldepart").toString();
+String emname = request.getAttribute("emname").toString();
+emname = URLEncoder.encode(emname,"UTF-8");
 
 int pagenum = pageList.getPageInfo().getCurPage();
 
@@ -157,7 +160,7 @@ Ext.onReady(function(){
 			alert('请选择数据项！');
 			return false;
 		}
-		action = url+'?action=changepass&page=<%=pagenum %>&seldepart=<%=seldepart %>&id=' + selValue;
+		action = url+'?action=changepass&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&id=' + selValue;
     	win1.setTitle('修改密码');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
@@ -172,14 +175,14 @@ Ext.onReady(function(){
     	Ext.Msg.confirm('确认','确实要删除记录么？',function(btn){
     		if(btn=='yes'){
     		   
-            	Ext.getDom('listForm').action=url+'?action=delete&seldepart=<%=seldepart %>&page=<%=pagenum %>';       
+            	Ext.getDom('listForm').action=url+'?action=delete&seldepart=<%=seldepart %>&emname=<%=emname %>&page=<%=pagenum %>';       
             	Ext.getDom('listForm').submit();
     		}
     	});
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=preview&table=EMPLOYEE&seldepart=<%=seldepart %>';
+		action = 'excel.do?action=preview&table=EMPLOYEE&seldepart=<%=seldepart %>&emname=<%=emname %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
@@ -197,7 +200,7 @@ Ext.onReady(function(){
 			method: 'GET',
 			success: function(transport) {
 			    Ext.get('oldrolecode').set({'value':transport.responseText});
-			    action = url+'?action=changerole&page=<%=pagenum %>&seldepart=<%=seldepart %>&id=' + selValue;
+			    action = url+'?action=changerole&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&id=' + selValue;
 	    		win3.setTitle('修改角色');
 		        win3.show(btn.dom);
 		  	}

@@ -8,6 +8,7 @@
 <%
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
+String path = request.getAttribute("path").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 CarDAO carDAO = (CarDAO)ctx.getBean("carDAO");
@@ -54,7 +55,7 @@ Ext.onReady(function(){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<input type="hidden" name="data" id="data" value='<%=data %>'>
+<input type="hidden" name="path" id="path" value='<%=path %>'>
 <br>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#FF0088">注：橙色行表示已存在此班车，将不予入库！</font>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">

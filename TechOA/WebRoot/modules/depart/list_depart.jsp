@@ -161,7 +161,7 @@ Ext.onReady(function(){
 			method: 'GET',
 			success: function(transport) {
 			    result = transport.responseText;
-			    Ext.Msg.confirm('确认','删除部门将删除部门下所有员工!确定删除?',function(btn){
+			    Ext.Msg.confirm('确认','确定要删除？',function(btn){
     				if(btn=='yes'){
     					if(result=='true'){
 	            			Ext.getDom('listForm').action=url+'?action=delete';       

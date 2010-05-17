@@ -1,5 +1,8 @@
 package com.basesoft.core;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.CallableStatement;
@@ -325,6 +328,27 @@ public class CommonDAO {
 				  
 		});   
 		return map; 
+	}
+	
+	/**
+	 * 输入流存为文件
+	 * @param path 路径
+	 * @param ins 输入流
+	 * @throws Exception
+	 */
+	public void saveAsFile(String path, InputStream ins) throws Exception{
+		File file = new File(path);
+		if(!file.exists()){
+			file.createNewFile();
+		}
+		FileOutputStream fos = new FileOutputStream(file);
+    	BufferedOutputStream buffOut = new BufferedOutputStream(fos);
+    	byte buf[]=new byte[2048];
+        for(int i=0;(i=ins.read(buf))>0;){
+        	buffOut.write(buf,0,i);
+        }
+        buffOut.close();
+        fos.close();
 	}
 	
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate){

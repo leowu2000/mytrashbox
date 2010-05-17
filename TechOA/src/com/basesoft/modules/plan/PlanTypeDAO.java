@@ -47,7 +47,7 @@ public class PlanTypeDAO extends CommonDAO {
 	 * @return
 	 */
 	public String getCode(){
-		int codenum = Integer.parseInt(jdbcTemplate.queryForMap("select MAX(CODE) as CODE from PLAN_TYPE").get("CODE").toString());
+		int codenum = Integer.parseInt(jdbcTemplate.queryForMap("select MAX(CAST(CODE AS INT)) as CODE from PLAN_TYPE").get("CODE").toString());
 		String code = String.valueOf(codenum + 1);
 		
 		return code;

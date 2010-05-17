@@ -1,5 +1,6 @@
 package com.basesoft.modules.employee;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,27 +37,27 @@ public class EmployeeController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		errorMessage = new String(errorMessage.getBytes("ISO8859-1"),"UTF-8");
+		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
+		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
+		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		if("frame_infolist".equals(action)){//人员frame
 			mv = new ModelAndView("modules/employee/frame_info");
 		}else if("infolist".equals(action)){//人员基本信息
 			mv = new ModelAndView("modules/employee/list_info");
 			
-			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 			List listChildDepart = emDAO.getChildDepart(emid);
 
 			mv.addObject("listChildDepart", listChildDepart);
 			//获取部门下员工列表
-			PageList pageList = emDAO.findAll(seldepart, "", page);
+			PageList pageList = emDAO.findAll(seldepart, emname, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
+			mv.addObject("emname", emname);
 			mv.addObject("errorMessage", errorMessage);
 		}else if("add".equals(action)){//新用户添加操作
-			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 			//接收页面参数
 			String loginid = ServletRequestUtils.getStringParameter(request, "loginid", "");
-			String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
-			emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 			String rolecode = ServletRequestUtils.getStringParameter(request, "rolecode", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 
@@ -65,17 +66,15 @@ public class EmployeeController extends CommonController {
 			
 			emDAO.insert("insert into EMPLOYEE values('" + id + "','" + loginid + "','1','" + loginid + "','" + rolecode + "','" + emname + "','" + depart + "','','','','','','','','','','','','','')");
 			
-			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&page=" + page);
+			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&page=" + page);
 			return null;
 		}else if("changepass".equals(action)){
-			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
-			
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			String newpassword = ServletRequestUtils.getStringParameter(request, "newpassword", "");
 			
 			emDAO.update("update EMPLOYEE set PASSWORD='" + newpassword + "' where ID='" + id + "'");
 			
-			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&page=" + page);
+			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&page=" + page);
 			return null;
 		}else if("roleajax".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
@@ -90,34 +89,26 @@ public class EmployeeController extends CommonController {
 			response.getWriter().close();
 			return null;
 		}else if("changerole".equals(action)){
-			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
-			
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			String rolecode = ServletRequestUtils.getStringParameter(request, "oldrolecode", "");
 			
 			emDAO.update("update EMPLOYEE set ROLECODE='" + rolecode + "' where ID='" + id + "'");
 			
-			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&page=" + page);
+			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&page=" + page);
 			return null;
 		}else if("delete".equals(action)){//用户删除操作
-			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
-			
 			String[] check=request.getParameterValues("check");
 			//循环按id删除
 			for(int i=0;i<check.length;i++){
 				String deleteSql = "delete from EMPLOYEE where ID='" + check[i] + "'";
 				emDAO.delete(deleteSql);
 			}
-			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&page=" + page);
+			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&page=" + page);
 			return null;
 		}else if("frame_manage".equals(action)){//人事管理frame
 			mv = new ModelAndView("modules/employee/frame_manage");
 		}else if("list_manage".equals(action)){//人事管理列表
 			mv = new ModelAndView("modules/employee/list_manage");
-			
-			String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
-			String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
-			emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 			
 			PageList pageList = emDAO.findAll(seldepart, emname, page);
 			
@@ -230,7 +221,6 @@ public class EmployeeController extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
 			String loginid = ServletRequestUtils.getStringParameter(request, "loginid", "");
-			String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			String rolecode = ServletRequestUtils.getStringParameter(request, "rolecode", "");
 			String mainjob = ServletRequestUtils.getStringParameter(request, "mainjob", "");
@@ -256,7 +246,6 @@ public class EmployeeController extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
 			String loginid = ServletRequestUtils.getStringParameter(request, "loginid", "");
-			String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
 			String email = ServletRequestUtils.getStringParameter(request, "email", "");
 			String blog = ServletRequestUtils.getStringParameter(request, "blog", "");
 			String selfweb = ServletRequestUtils.getStringParameter(request, "selfweb", "");
