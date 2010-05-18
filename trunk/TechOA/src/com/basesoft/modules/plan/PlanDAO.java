@@ -57,7 +57,7 @@ public class PlanDAO extends CommonDAO {
 			}
 		}
 		
-		sql = sql + " order by ENDDATE desc,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
+		sql = sql + " order by ENDDATE desc,STATUS,ORDERCODE";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -192,7 +192,7 @@ public class PlanDAO extends CommonDAO {
 	 */
 	public PageList findAllResult(String empcode, int page){
 		PageList pageList = new PageList();
-		String sql = "select * from PLAN a where EMPCODE='" + empcode + "'";
+		String sql = "select * from PLAN a where EMPCODE like '%" + empcode + "%'";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;

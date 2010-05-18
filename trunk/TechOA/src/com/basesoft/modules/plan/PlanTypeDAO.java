@@ -47,10 +47,30 @@ public class PlanTypeDAO extends CommonDAO {
 	 * @return
 	 */
 	public String getCode(){
-		int codenum = Integer.parseInt(jdbcTemplate.queryForMap("select MAX(CAST(CODE AS INT)) as CODE from PLAN_TYPE").get("CODE").toString());
+		int codenum = 0;
+		List list = jdbcTemplate.queryForList("select MAX(CAST(CODE AS INT)) as CODE from PLAN_TYPE");
+		if(list.size()>0){
+			Map map = (Map)list.get(0);
+			codenum = Integer.parseInt(map.get("CODE")==null?"0":map.get("CODE").toString());
+		}
 		String code = String.valueOf(codenum + 1);
 		
 		return code;
+	}
+	
+	/**
+	 * 获取排序号
+	 * @return
+	 */
+	public int getOrdercode(String level, String parent){
+		int ordercode = 0;
+		List list = jdbcTemplate.queryForList("select MAX(ORDERCODE) as ORDERCODE from PLAN_TYPE where TYPE='" + level + "' and PARENT='" + parent + "'");
+		if(list.size()>0){
+			Map map = (Map)list.get(0);
+			ordercode = Integer.parseInt(map.get("ORDERCODE")==null?"0":map.get("ORDERCODE").toString()) + 1;
+		}
+		
+		return ordercode;
 	}
 	
 	/**
@@ -69,5 +89,44 @@ public class PlanTypeDAO extends CommonDAO {
 		entity.setType(map.get("TYPE")==null?"1":map.get("TYPE").toString());
 		
 		return entity;
+	}
+	
+	/**
+	 * 保存一级分类
+	 * @param note
+	 */
+	public String saveType(String note){
+		String code = "";
+		String querySql = "select * from PLAN_TYPE where NAME='" + note + "'";
+		List list = jdbcTemplate.queryForList(querySql);
+		if(list.size() > 0){
+			Map map = (Map)list.get(0);
+			code = map.get("CODE")==null?"":map.get("CODE").toString();
+		}else {
+			code = getCode();
+			int ordercode = getOrdercode("1", "0");
+			String insertSql = "insert into PLAN_TYPE values('" + code + "', '" + note + "', " + ordercode + ", '1', '0')";
+		}
+		return code;
+	}
+	
+	/**
+	 * 保存二级分类
+	 * @param note
+	 * @param type
+	 */
+	public String saveType2(String note, String parent){
+		String code = "";
+		String querySql = "select * from PLAN_TYPE where NAME='" + note + "'";
+		List list = jdbcTemplate.queryForList(querySql);
+		if(list.size() > 0){
+			Map map = (Map)list.get(0);
+			code = map.get("CODE")==null?"":map.get("CODE").toString();
+		}else {
+			code = getCode();
+			int ordercode = getOrdercode("2", parent);
+			String insertSql = "insert into PLAN_TYPE values('" + code + "', '" + note + "', " + ordercode + ", '2', '" + parent + "')";
+		}
+		return code;
 	}
 }

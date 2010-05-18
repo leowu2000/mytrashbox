@@ -109,7 +109,7 @@ if("".equals(departname)){
 	  	alert('请选择工作令！');
 	  	return false;
 	  }
-	  if(depart == ''){
+	  if(depart == '0'){
 	  	alert('请选择部门！');
 	  	return false;
 	  }

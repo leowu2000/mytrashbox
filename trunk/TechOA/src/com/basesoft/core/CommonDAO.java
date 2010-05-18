@@ -87,11 +87,14 @@ public class CommonDAO {
 	 * @return
 	 */
 	public String findCodeByName(String tablename, String name){
-		try{
-			Map map = jdbcTemplate.queryForMap("select CODE from " + tablename + " where NAME='" + name + "'");
+		List list = jdbcTemplate.queryForList("select CODE from " + tablename + " where NAME='" + name + "'");
+		if(list.size() == 1){
+			Map map = (Map)list.get(0);
 			String s = map.get("CODE").toString();
 			return s;
-		}catch(Exception e){
+		}else if(list.size()>1){
+			return "-1";
+		}else {
 			return "";
 		}
 	}

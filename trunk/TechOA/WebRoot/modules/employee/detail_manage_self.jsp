@@ -75,7 +75,7 @@ Ext.onReady(function(){
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
 				Ext.get('loginid').set({'value':data.item.loginid});
-				Ext.get('emname').set({'value':data.item.name});
+				Ext.get('empname').set({'value':data.item.name});
 				Ext.get('email').set({'value':data.item.email});
 				Ext.get('stcphone').set({'value':data.item.stcphone});
 				Ext.get('mobphone').set({'value':data.item.mobphone});
@@ -189,7 +189,7 @@ Ext.onReady(function(){
 				  </tr>	
 				  <tr>
 				    <td>姓名</td>
-				    <td><input type="text" name="emname" style="width:200"></td>
+				    <td><input type="text" name="empname" style="width:200"></td>
 				  </tr>	
 				  <tr>
 				    <td>电子邮件</td>
