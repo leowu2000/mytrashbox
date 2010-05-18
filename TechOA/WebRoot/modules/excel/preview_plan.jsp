@@ -9,8 +9,6 @@
 String f_level = request.getAttribute("f_level").toString();
 String f_type = request.getAttribute("f_type").toString();
 String f_empname = request.getAttribute("f_empname").toString();
-String type = request.getAttribute("type").toString();
-String type2 = request.getAttribute("type2").toString();
 String path = request.getAttribute("path").toString();
 
 JSONObject data = (JSONObject)request.getAttribute("data");
@@ -45,11 +43,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'plan.do?action=list&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>&type=<%=type %>&type2=<%=type2 %>';
+    	window.location.href = 'plan.do?action=list&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>&type=<%=type %>&type2=<%=type2 %>';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>';
     	document.getElementById('listForm').submit();
     }
 });
@@ -78,11 +76,11 @@ Ext.onReady(function(){
                 <td>计划员</td>
                 <td>室领导</td>
                 <td>部领导</td>
-                <td>状态</td>
             </tr>
 <%
 		for(int i=0;i<rows.length();i++){
 			JSONObject row = rows.optJSONObject(i);
+			
 %>            
             <tr align="center">
 <%
@@ -114,18 +112,45 @@ Ext.onReady(function(){
 %>
 				<td>&nbsp;<%=row.optString("DEPARTNAME") %></td>
 <%
-			String empcode = planDAO.findCodeByName("EMPLOYEE", row.optString("EMPNAME"));
-			if("".equals(empcode)){
-%>            	
-            	<td bgcolor="#FF0088" title="系统无法识别此员工！">&nbsp;<%=row.optString("EMPNAME") %></td>
-            	
-<%
+			String empname = row.optString("EMPNAME")==null?"":row.optString("EMPNAME").trim();
+			empname.replaceAll("等", "");
+			String[] empnames = {""};
+			if(empname.indexOf(" ")>0){//以空格分隔的责任人
+				empnames = empname.split(" ");
+			}else if(empname.indexOf(",")>0){
+				empnames = empname.split(",");
+			}else if(empname.indexOf("、")>0){
+				empnames = empname.split("、");
+			}else if(empname.indexOf("，")>0){
+				empnames = empname.split("，");
 			}else {
-%>            	
-				<td>&nbsp;<%=row.optString("EMPNAME") %></td>
-<%
+				empnames[0] = empname;
 			}
-%>				
+%>            	
+            	<td>
+            		<table border="0" style="font-size:13px;color:#696969;border:0px;width:100%;height:100%">
+            			<tr>
+            			<%
+            				for(int j=0;j<empnames.length;j++){
+            					String empcode = planDAO.findCodeByName("EMPLOYEE", empnames[j]);
+            					if("".equals(empcode)){//无法识别
+            			%>
+            				<td bgcolor="#FF0088" title="系统无法识别此员工！">&nbsp;<%=empnames[j] %></td>
+            			<%
+            					}else if("-1".equals(empcode)){
+            			%>
+            				<td bgcolor="#FF0088" title="系统中此员工有重名！">&nbsp;<%=empnames[j] %></td>
+            			<%
+            					}else {
+            			%>
+            				<td>&nbsp;<%=empnames[j] %></td>
+            			<%
+            					}
+            				}
+            			%>
+            			</tr>
+            		</table>
+            	</td>
 				<td>&nbsp;<%=row.optString("ASSESS") %></td>
 				<td>&nbsp;<%=row.optString("REMARK") %></td>
 				<td>&nbsp;<%=row.optString("LEADER_STATION") %></td>

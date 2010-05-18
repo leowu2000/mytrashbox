@@ -222,6 +222,7 @@ public class EmployeeController extends CommonController {
 			
 			String loginid = ServletRequestUtils.getStringParameter(request, "loginid", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
+			String empname = ServletRequestUtils.getStringParameter(request, "empname", "");
 			String rolecode = ServletRequestUtils.getStringParameter(request, "rolecode", "");
 			String mainjob = ServletRequestUtils.getStringParameter(request, "mainjob", "");
 			String secjob = ServletRequestUtils.getStringParameter(request, "secjob", "");
@@ -237,7 +238,7 @@ public class EmployeeController extends CommonController {
 			String degree = ServletRequestUtils.getStringParameter(request, "degree", "");
 			String pro = ServletRequestUtils.getStringParameter(request, "pro", "");
 			
-			emDAO.update("update EMPLOYEE set LOGINID='" + loginid + "',ROLECODE='" + rolecode + "',NAME='" + emname + "',DEPARTCODE='" + depart + "',MAINJOB='" + mainjob + "',SECJOB='" + secjob + "',LEVEL='" + level + "',EMAIL='" + email + "',BLOG='" + blog + "',SELFWEB='" + selfweb + "',STCPHONE='" + stcphone + "',MOBPHONE='" + mobphone + "',ADDRESS='" + address + "',POST='" + post + "',MAJORCODE='" + major + "',DEGREECODE='" + degree + "',PROCODE='" + pro + "' where ID='" + id + "'");
+			emDAO.update("update EMPLOYEE set LOGINID='" + loginid + "',ROLECODE='" + rolecode + "',NAME='" + empname + "',DEPARTCODE='" + depart + "',MAINJOB='" + mainjob + "',SECJOB='" + secjob + "',LEVEL='" + level + "',EMAIL='" + email + "',BLOG='" + blog + "',SELFWEB='" + selfweb + "',STCPHONE='" + stcphone + "',MOBPHONE='" + mobphone + "',ADDRESS='" + address + "',POST='" + post + "',MAJORCODE='" + major + "',DEGREECODE='" + degree + "',PROCODE='" + pro + "' where ID='" + id + "'");
 			
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", ""); 
 			response.sendRedirect("em.do?action=manage&empcode="+empcode);

@@ -22,7 +22,6 @@ import jxl.write.WriteException;
 
 import com.basesoft.modules.employee.Car;
 import com.basesoft.modules.employee.CarDAO;
-import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.util.StringUtil;
 
@@ -40,7 +39,7 @@ public class ExportExcel {
 	public String exportExcel_GSTJHZ(List<Map<String, String>> list, ExcelDAO excelDAO, String imagepath, List listDepart) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
 		String[] str = new String[1];
 		str[0] = "工时统计汇总";
-		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
 		
 		WritableWorkbook wb = readExcel(path);
 		WritableSheet sheet = wb.getSheet(0);
@@ -97,7 +96,7 @@ public class ExportExcel {
 	public String exportExcel_KYGSTJ(List<Map<String, String>> list , ExcelDAO excelDAO, String imagepath) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
 		String[] str = new String[1];
 		str[0] = "科研工时统计";
-		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
 		
 		WritableWorkbook wb = readExcel(path);
 		WritableSheet sheet = wb.getSheet(0);
@@ -156,7 +155,7 @@ public class ExportExcel {
 	public String exportExcel_CDRWQK(List<Map<String, String>> list, String imagepath) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
 		String[] str = new String[1];
 		str[0] = "承担任务情况";
-		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";;
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";;
 		
 		WritableWorkbook wb = readExcel(path);
 		WritableSheet sheet = wb.getSheet(0);
@@ -242,7 +241,7 @@ public class ExportExcel {
 	public String exportExcel_YGTRFX(List<Map<String, String>> list, String imagepath, String selpjname) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
 		String[] str = new String[1];
 		str[0] = "员工投入分析";
-		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";;
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";;
 		
 		WritableWorkbook wb = readExcel(path);
 		WritableSheet sheet = wb.getSheet(0);
@@ -273,10 +272,10 @@ public class ExportExcel {
 			str2[5] = selpjname;
 			str2[6] = String.valueOf(map.get("AMOUNT"));
 			
-			insertRowData(sheet, i + 1, str2);
+			insertRowData(sheet, i + 2, str2);
 		}
 		//导出图片
-		WritableImage ri=new WritableImage(0, list.size() + 5, 13, list.size() + 8,new File(imagepath));   
+		WritableImage ri=new WritableImage(0, list.size() + 5, 10, list.size() + 8,new File(imagepath));   
 		sheet.addImage(ri); 
 		
 		wb.write();
@@ -297,7 +296,7 @@ public class ExportExcel {
 	public String exportExcel_PLAN(List<Map<String, String>> list, PlanDAO planDAO, String datepick) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
 		String[] str = new String[1];
 		str[0] = datepick + "综合考核及产品计划完成率考核统计结果";
-		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
 		
 		WritableWorkbook wb = readExcel(path);
 		WritableSheet sheet = wb.getSheet(0);
@@ -377,7 +376,7 @@ public class ExportExcel {
 	public String exportExcel_JBF(List<Map<String, String>> list, String datepick) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
 		String[] str = new String[1];
 		str[0] = datepick + "加班费统计结果";
-		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
 		
 		WritableWorkbook wb = readExcel(path);
 		WritableSheet sheet = wb.getSheet(0);
@@ -447,7 +446,7 @@ public class ExportExcel {
 		
 		String[] str = new String[1];
 		str[0] = datepick + "职工考勤记录";
-		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
 		
 		WritableWorkbook wb = readExcel(path);
 		WritableSheet sheet = wb.getSheet(0);
@@ -542,7 +541,7 @@ public class ExportExcel {
 		
 		String[] str = new String[1];
 		str[0] = datepick + "   " + carcode + "班车预约记录";
-		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
 		
 		WritableWorkbook wb = readExcel(path);
 		WritableSheet sheet = wb.getSheet(0);
@@ -623,25 +622,6 @@ public class ExportExcel {
 		wb.createSheet("sheet", 0);
 		
 		return wb;
-	}
-	
-	/**
-	 * 获取地址
-	 * @param model
-	 * @return
-	 */
-	private String getPath(String model){
-		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1));
-		
-		if("GSTJHZ".equals(model)){//工时统计汇总
-			path = path + "工时统计汇总.xls";
-		}else if("KYGSTJ".equals(model)){//科研工时统计
-			path = path + "科研工时统计.xls";
-		}else if("CDRWQK".equals(model)){//承担任务情况
-			path = path + "承担任务情况.xls";
-		}
-		
-		return path;
 	}
 	
 	private void insertRowData(WritableSheet sheet, int row, String[] dataArr) throws WriteException {

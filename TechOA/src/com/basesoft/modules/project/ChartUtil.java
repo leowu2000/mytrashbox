@@ -280,7 +280,7 @@ public class ChartUtil {
                 try {   
                     out.close();   
                 } catch (IOException e) {   
-                    //do nothing   
+                	e.printStackTrace();     
                 }   
             }   
         }

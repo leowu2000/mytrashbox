@@ -121,7 +121,7 @@ Ext.onReady(function(){
 				Ext.get('loginid').set({'value':data.item.loginid});
 				Ext.get('rolecode').set({'value':data.item.rolecode});
 				comboBoxTree.setValue({id:data.item.departcode,text:data.item.departname});
-				Ext.get('emname').set({'value':data.item.name});
+				Ext.get('empname').set({'value':data.item.name});
 				Ext.get('mainjob').set({'value':data.item.mainjob});
 				Ext.get('level').set({'value':data.item.level});
 				Ext.get('email').set({'value':data.item.email});
@@ -265,7 +265,7 @@ if("search".equals(method)){
 				  </tr>	
 				   <tr>
 				    <td>姓名</td>
-				    <td><input type="text" name="emname" style="width:200"></td>
+				    <td><input type="text" name="empname" style="width:200"></td>
 				  </tr>	
 				  <tr id="departtr" name="departtr">
 				    <td>部门</td>

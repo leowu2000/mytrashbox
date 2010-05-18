@@ -16,7 +16,7 @@
 	function buildTree(){
 	    	tree = new Ext.tree.TreePanel({
 	        renderTo:'checkboxtree',
-	        title: '请选择员工',
+	        title: '请选择令号',
 	        height: 270,
 	        width: 250,
 	        useArrows:true,

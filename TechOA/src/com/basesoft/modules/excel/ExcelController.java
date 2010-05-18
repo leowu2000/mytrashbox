@@ -79,15 +79,10 @@ public class ExcelController extends CommonController {
 			}else if("GOODS".equals(table)){//物资资产
 				mv = new ModelAndView("modules/excel/preview_goods");
 			}else if("PLAN".equals(table)){//计划
-				String type = ServletRequestUtils.getStringParameter(request, "typecode3", "");
-				String type2 = ServletRequestUtils.getStringParameter(request, "typecode4", "");
-				
 				mv = new ModelAndView("modules/excel/preview_plan");
 				mv.addObject("f_level", f_level);
 				mv.addObject("f_type", f_type);
 				mv.addObject("f_empname", f_empname);
-				mv.addObject("type", type);
-				mv.addObject("type2", type2);
 			}else if("ASSETS".equals(table)){//固定资产
 				mv = new ModelAndView("modules/excel/preview_assets");
 				mv.addObject("status", status);
@@ -141,9 +136,7 @@ public class ExcelController extends CommonController {
 			}else if("GOODS".equals(table)){//物资资产
 				errorMessage = excelDAO.insertGoods(data);
 			}else if("PLAN".equals(table)){//计划
-				String type = ServletRequestUtils.getStringParameter(request, "type", "");
-				String type2 = ServletRequestUtils.getStringParameter(request, "type2", "");
-				errorMessage = excelDAO.insertPlan(data, type, type2);
+				errorMessage = excelDAO.insertPlan(data);
 			}else if("ASSETS".equals(table)){//固定资产
 				errorMessage = excelDAO.insertAssets(data);
 			}else if("WORKCHECK".equals(table)){//考勤
