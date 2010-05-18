@@ -11,7 +11,7 @@
 %>
 <script type="text/javascript">
 
-	var url='depart.do';
+	var url='tree.do';
 	var tree;
 	function buildTree(){
 	    	tree = new Ext.tree.TreePanel({
@@ -52,9 +52,6 @@
 	            }
 	        }
 		});
-		tree.expandAll();
-		//tree.getRootNode().expand(true);
-	    
 	}
 	
 	function submitBut(){

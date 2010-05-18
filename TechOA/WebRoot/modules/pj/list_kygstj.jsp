@@ -43,29 +43,8 @@ body {
 			</h2>
 		</center>
 		<table width="98%" align="center" vlign="middle" border="0">
-			<tr align="right">
-				<td colspan="3">
-					<span style="font-size: 13px;margin-right:86;">表号:</span>
-				</td>
-			</tr>
-			<tr align="right">
-				<td colspan="3">
-					<span style="font-size: 13px;margin-right:60;">批准文号:</span>
-				</td>
-			</tr>
-			<tr align="right">
-				<td colspan="3">
-					<span style="font-size: 13px;margin-right:36;">计量单位:小时</span>
-				</td>
-			</tr>
-			<tr>
-				<td align="left" width="35%">
-					<span style="font-size: 13px;">填报单位:</span>
-				</td>
-				<td align="center"><span style="font-size: 13px;"><%=datepick%></span></td>
-				<td align="right">
-					<span style="font-size: 13px;">报出日期:月内&nbsp;&nbsp;&nbsp;日前</span>
-				</td>
+			<tr align="center">
+				<td colspan="<%=colcount %>"><image id="tjt" name="tjt"></td>
 			</tr>
 			<tr align="center">
 				<td colspan="3">
@@ -115,9 +94,6 @@ body {
 						%>
 					</table>
 				</td>
-			</tr>
-			<tr align="center">
-				<td colspan="<%=colcount %>"><image id="tjt" name="tjt"></td>
 			</tr>
 			<tr>
 				<td colspan="3">

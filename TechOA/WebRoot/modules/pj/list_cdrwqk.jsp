@@ -41,25 +41,9 @@ body {
 			</h2>
 		</center>
 		<table width="98%" align="center" vlign="middle" border="0">
-			<tr align="right">
-				<td colspan="3">
-					<span style="font-size: 13px;margin-right:82;">表号：所统&nbsp;&nbsp;&nbsp;号</span>
-				</td>
-			</tr>
-			<tr align="right">
-				<td colspan="3">
-					<span style="font-size: 13px;margin-right:26;">批准文号：所科[2&nbsp;&nbsp;&nbsp;&nbsp;]&nbsp;&nbsp;&nbsp;&nbsp;号</span>
-				</td>
-			</tr>
-			<tr>
-				<td align="left" width="35%">
-					<span style="font-size: 13px;">填报单位：</span>
-				</td>
-				<td align="center"><span style="font-size: 13px;"><%=datepick%></span></td>
-				<td align="right">
-					<span style="font-size: 13px;margin-right:40;" >报出日期：月内24日前</span>
-				</td>
-			</tr>
+			<tr align="center">
+							<td colspan="11"><image id="tjt" name="tjt"></td>
+						</tr>
 			<tr align="center">
 				<td colspan="3">
 					<table width="100%" align="center" vlign="middle" id="the-table">
@@ -148,9 +132,6 @@ body {
 						<%
 							}
 						%>
-						<tr align="center">
-							<td colspan="11"><image id="tjt" name="tjt"></td>
-						</tr>
 					</table>
 				</td>
 			</tr>

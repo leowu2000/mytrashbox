@@ -1,10 +1,8 @@
 package com.basesoft.modules.excel;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -21,11 +19,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
-import com.basesoft.modules.employee.Car;
 import com.basesoft.modules.employee.CarDAO;
 import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.excel.config.Config;
 import com.basesoft.modules.plan.PlanDAO;
+import com.basesoft.util.StringUtil;
 
 public class ExcelController extends CommonController {
 
@@ -160,6 +158,8 @@ public class ExcelController extends CommonController {
 		}else if("export".equals(action)){//excel导出
 			String model = ServletRequestUtils.getStringParameter(request, "model", "");
 			String imagepath = request.getRealPath("\\chart\\");
+			String pjcodes = ServletRequestUtils.getStringParameter(request, "pjcodes", "");
+			pjcodes = StringUtil.ListToStringAdd(pjcodes.split(","), ",");
 			
 			List list = new ArrayList();
 			
@@ -168,15 +168,17 @@ public class ExcelController extends CommonController {
 			
 			if("GSTJHZ".equals(model)){//工时统计汇总
 				imagepath = imagepath + "\\gstjhz.png";
-				list = excelDAO.getExportData_GSTJHZ(datepick);
-				path = exportExcel.exportExcel_GSTJHZ(list, excelDAO, imagepath);
+				List listDepart = excelDAO.getDeparts(depart, new ArrayList());
+				list = excelDAO.getExportData_GSTJHZ(datepick, listDepart, pjcodes);
+				path = exportExcel.exportExcel_GSTJHZ(list, excelDAO, imagepath, listDepart);
 			}else if("KYGSTJ".equals(model)){//科研工时统计
 				imagepath = imagepath + "\\kygstj.png";
-				list = excelDAO.getExportData_KYGSTJ(depart, datepick);
+				list = excelDAO.getExportData_KYGSTJ(depart, datepick, pjcodes);
 				path = exportExcel.exportExcel_KYGSTJ(list, excelDAO, imagepath);
 			}else if("CDRWQK".equals(model)){//承担任务情况
 				imagepath = imagepath + "\\cdrwqk.png";
-				list = excelDAO.getExportData_CDRWQK(depart, datepick);
+				
+				list = excelDAO.getExportData_CDRWQK(depart, datepick, pjcodes);
 				path = exportExcel.exportExcel_CDRWQK(list, imagepath);
 			}else if("YGTRFX".equals(model)){//员工投入分析
 				imagepath = imagepath + "\\ygtrfx.png";

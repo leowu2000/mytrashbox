@@ -24,7 +24,7 @@
 				id:'tree1',
 				xtype:'treepanel',
 				rootVisible:false,
-				loader: new Ext.tree.TreeLoader({dataUrl:'/depart.do?action=departTree'}),
+				loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departTree'}),
 		   	 	root : new Ext.tree.AsyncTreeNode({})
 			},
 			    	

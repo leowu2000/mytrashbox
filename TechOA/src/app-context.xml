@@ -69,4 +69,5 @@
 	<bean id="carDAO" class="com.basesoft.modules.employee.CarDAO"></bean>
 	<bean id="infoEquipDAO" class="com.basesoft.modules.infoequip.InfoEquipDAO"></bean>
 	<bean id="customEquipDAO" class="com.basesoft.modules.customequip.CustomEquipDAO"></bean>
+	<bean id="treeDAO" class="com.basesoft.util.TreeDAO"></bean>
 </beans>

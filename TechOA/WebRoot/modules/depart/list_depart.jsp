@@ -43,7 +43,7 @@ if(errorMessage!=''){
 var win;
 var win2;
 var action;
-var url='/depart.do';
+var url='/tree.do';
 var vali = "";
 Ext.onReady(function(){
 	var comboBoxTree = new Ext.ux.ComboBoxTree({
@@ -55,7 +55,7 @@ Ext.onReady(function(){
 				id:'tree1',
 				xtype:'treepanel',
 				rootVisible:false,
-				loader: new Ext.tree.TreeLoader({dataUrl:'/depart.do?action=departTree'}),
+				loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departTree'}),
 		   	 	root : new Ext.tree.AsyncTreeNode({})
 			},
 			    	
