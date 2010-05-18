@@ -37,18 +37,17 @@ public class ProjectController extends CommonController {
 			mv = new ModelAndView("modules/pj/list_gstjhz");
 			
 			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
-			
 			Date start = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
-			
 			Date end = StringUtil.getEndOfMonth(start);
-			
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
+			String pjcodes = ServletRequestUtils.getStringParameter(request, "pjcodes", "");
+			pjcodes = StringUtil.ListToStringAdd(pjcodes.split(","), ",");
 			
 			List listDepart = projectDAO.getDeparts(depart, new ArrayList());
-			List listGstjhz = projectDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"));
-			List listGstjhznoCount = projectDAO.getGstjhznoCount(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"), listDepart);
+			List listGstjhz = projectDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"), listDepart, pjcodes);
+			List listGstjhznoCount = projectDAO.getGstjhznoCount(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"), listDepart, pjcodes);
 			
-			ChartUtil.createChart("gstjhz", listGstjhznoCount, path, projectDAO, listDepart);
+			ChartUtil.createChart("gstjhz", listGstjhz, path, projectDAO, listDepart, pjcodes);
 			
 			mv.addObject("listDepart", listDepart);
 			mv.addObject("listGstjhz", listGstjhz);
@@ -59,6 +58,8 @@ public class ProjectController extends CommonController {
 			
 			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
+			String pjcodes = ServletRequestUtils.getStringParameter(request, "pjcodes", "");
+			pjcodes = StringUtil.ListToStringAdd(pjcodes.split(","), ",");
 			String start = "";
 			String end = datepick + "-25";
 			
@@ -67,11 +68,12 @@ public class ProjectController extends CommonController {
 			}else {
 				start = datepick.split("-")[0] + "-" + (Integer.parseInt(datepick.split("-")[1])-1) + "-25";
 			}
-			List listPeriod = projectDAO.getDICTByType("5");
-			List listKygstj = projectDAO.getKygstj(start, end, listPeriod, depart);
-			List listKygstjnoCount = projectDAO.getKygstjnoCount(start, end, listPeriod, depart);
 			
-			ChartUtil.createChart("kygstj", listKygstjnoCount, path, projectDAO, null);
+			List listPeriod = projectDAO.getDICTByType("5");
+			List listKygstj = projectDAO.getKygstj(start, end, listPeriod, depart, pjcodes);
+			List listKygstjnoCount = projectDAO.getKygstjnoCount(start, end, listPeriod, depart, pjcodes);
+			
+			ChartUtil.createChart("kygstj", listKygstjnoCount, path, projectDAO, null, pjcodes);
 			
 			mv.addObject("listKygstj", listKygstj);
 			mv.addObject("listPeriod", listPeriod);
@@ -84,6 +86,8 @@ public class ProjectController extends CommonController {
 			
 			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
+			String pjcodes = ServletRequestUtils.getStringParameter(request, "pjcodes", "");
+			pjcodes = StringUtil.ListToStringAdd(pjcodes.split(","), ",");
 			String start = "";
 			String end = datepick + "-25";
 			
@@ -93,10 +97,10 @@ public class ProjectController extends CommonController {
 				start = datepick.split("-")[0] + "-" + (Integer.parseInt(datepick.split("-")[1])-1) + "-25";
 			}
 			
-			List listCdrwqk = projectDAO.getCdrwqk(start, end, depart);
-			List listCdrwqknoCount = projectDAO.getCdrwqknoCount(start, end, depart);
+			List listCdrwqk = projectDAO.getCdrwqk(start, end, depart, pjcodes);
+			List listCdrwqknoCount = projectDAO.getCdrwqknoCount(start, end, depart, pjcodes);
 			
-			ChartUtil.createChart("cdrwqk", listCdrwqknoCount, path, projectDAO, null);
+			ChartUtil.createChart("cdrwqk", listCdrwqknoCount, path, projectDAO, null, pjcodes);
 			
 			mv.addObject("datepick", datepick);
 			mv.addObject("listCdrwqk", listCdrwqk);

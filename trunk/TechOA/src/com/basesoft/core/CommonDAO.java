@@ -24,6 +24,8 @@ import org.springframework.jdbc.support.lob.LobCreator;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.basesoft.util.StringUtil;
+
 
 public class CommonDAO {
 	public JdbcTemplate jdbcTemplate;
@@ -153,7 +155,6 @@ public class CommonDAO {
 		List listChild = jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "'");
 		
 		if(listChild.size()>0){
-			//list.add(listChild);
 			for(int i=0;i<listChild.size();i++){
 				Map mapChild = (Map)listChild.get(i);
 				List listChilds = getDeparts(mapChild.get("CODE").toString(), list);
@@ -178,6 +179,26 @@ public class CommonDAO {
 	}
 	
 	/**
+	 * 获取departcode字符串，用于sql中
+	 * @param listDepart 部门list
+	 * @return
+	 */
+	public String getDepartCodes(List listDepart){
+		String departCodes = "";
+		
+		for(int i=0;i<listDepart.size();i++){
+			Map mapDepart = (Map)listDepart.get(i);
+			if("".equals(departCodes)){
+				departCodes = "'" + mapDepart.get("CODE") + "'";
+			}else {
+				departCodes = departCodes + ",'" + mapDepart.get("CODE") + "'";
+			}
+		}
+		
+		return departCodes;
+	}
+	
+	/**
 	 * 根据字典类别获取字典数据列表
 	 * @param type 类别
 	 * @return
@@ -192,6 +213,14 @@ public class CommonDAO {
 	 */
 	public List<?> getProject(){
 		return jdbcTemplate.queryForList("select * from PROJECT where STATUS='1' order by ENDDATE desc,STARTDATE desc");
+	}
+	
+	/**
+	 * 获取工作令号列表
+	 * @return
+	 */
+	public List<?> getProject(String pjcodes){
+		return jdbcTemplate.queryForList("select * from PROJECT where STATUS='1' and CODE in (" + pjcodes + ") order by ENDDATE desc,STARTDATE desc");
 	}
 	
 	/**

@@ -37,6 +37,9 @@ body {
   <body onload="setTjt();">
   	<center><h2>工时统计汇总表</h2></center>
     <table width="98%" align="center" vlign="middle" id="the-table">
+    	<tr align="center">
+			<td colspan="<%=colcount %>"><image id="tjt" name="tjt"></td>
+		</tr>
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
     		<td>序号</td>
     		<td>工作令号</td>
@@ -63,9 +66,6 @@ body {
 <%} %>
 		</tr>
 <%} %>
-		<tr align="center">
-			<td colspan="<%=colcount %>"><image id="tjt" name="tjt"></td>
-		</tr>
 	</table>
   </body>
 </html>

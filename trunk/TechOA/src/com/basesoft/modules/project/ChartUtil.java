@@ -37,24 +37,24 @@ public class ChartUtil {
 	 * @param datepick
 	 * @return
 	 */
-	public static String createChart(String method, List<?> list, String path, ProjectDAO pjDAO, List listDepart) throws Exception{
+	public static String createChart(String method, List<?> list, String path, ProjectDAO pjDAO, List listDepart, String pjcodes) throws Exception{
 		path = path + "\\" + method + ".png";
 		String title = "";
 		if("gstjhz".equals(method)){//工时统计汇总
 			title = "工时统计汇总";
-			CategoryDataset dataset = createDatasetGstjhz(pjDAO, list, listDepart);   
+			CategoryDataset dataset = createDatasetGstjhz(pjDAO, list, listDepart, pjcodes);   
 	        //步骤2：根据Dataset 生成JFreeChart对象，以及做相应的设置   
 	        JFreeChart freeChart = createChart(dataset, title);   
 	        //步骤3：将JFreeChart对象输出到文件，Servlet输出流等   
 	        saveAsFile(freeChart, path, 800, 350);   
 		}else if("kygstj".equals(method)){
 			title = "科研工时统计";
-			CategoryDataset dataset = createDatasetKygstj(pjDAO, list);   
+			CategoryDataset dataset = createDatasetKygstj(pjDAO, list, pjcodes);   
 	        JFreeChart freeChart = createChart(dataset, title);   
 	        saveAsFile(freeChart, path, 800, 350);   
 		}else if("cdrwqk".equals(method)){
 			title = "承担任务情况";
-			CategoryDataset dataset = createDatasetCdrwqk(pjDAO, list);   
+			CategoryDataset dataset = createDatasetCdrwqk(pjDAO, list, pjcodes);   
 	        JFreeChart freeChart = createChart(dataset, title);   
 	        saveAsFile(freeChart, path, 800, 350);   
 		}
@@ -84,8 +84,8 @@ public class ChartUtil {
 	 * @param pjDAO
 	 * @param datepick
      */ 
-    public static CategoryDataset createDatasetGstjhz(ProjectDAO pjDAO, List listData, List listDepart) {   
-    	List listPj = pjDAO.getProject();
+    public static CategoryDataset createDatasetGstjhz(ProjectDAO pjDAO, List listData, List listDepart, String pjcodes) {   
+    	List listPj = pjDAO.getProject(pjcodes);
     	
     	//每根柱子
         String[] rowKeys = new String[listDepart.size()];
@@ -118,8 +118,8 @@ public class ChartUtil {
 	 * @param pjDAO
 	 * @param datepick
      */ 
-    public static CategoryDataset createDatasetKygstj(ProjectDAO pjDAO, List listData) {   
-    	List listPj = pjDAO.getProject();
+    public static CategoryDataset createDatasetKygstj(ProjectDAO pjDAO, List listData, String pjcodes) {   
+    	List listPj = pjDAO.getProject(pjcodes);
     	List listPeriod = pjDAO.getDICTByType("5");
     	
     	//每根柱子
@@ -154,8 +154,8 @@ public class ChartUtil {
 	 * @param pjDAO
 	 * @param datepick
      */ 
-    public static CategoryDataset createDatasetCdrwqk(ProjectDAO pjDAO, List listData) {   
-    	List listPj = pjDAO.getProject();
+    public static CategoryDataset createDatasetCdrwqk(ProjectDAO pjDAO, List listData, String pjcodes) {   
+    	List listPj = pjDAO.getProject(pjcodes);
     	List listDepart = pjDAO.getDepartment();
     	
     	//每根柱子

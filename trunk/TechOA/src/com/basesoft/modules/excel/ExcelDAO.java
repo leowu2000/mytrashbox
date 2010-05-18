@@ -34,13 +34,13 @@ public class ExcelDAO extends CommonDAO {
 	 * @param datepick 日期
 	 * @return
 	 */
-	public List getExportData_GSTJHZ(String datepick){
+	public List getExportData_GSTJHZ(String datepick, List listDepart, String pjcodes){
 		List list = new ArrayList();
 		
 		Date start = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 		Date end = StringUtil.getEndOfMonth(start);
 			
-		list = pjDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"));
+		list = pjDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"), listDepart, pjcodes);
 		
 		return list;
 	}
@@ -51,7 +51,7 @@ public class ExcelDAO extends CommonDAO {
 	 * @param depart 部门
 	 * @return
 	 */
-	public List getExportData_KYGSTJ(String depart, String datepick){
+	public List getExportData_KYGSTJ(String depart, String datepick, String pjcodes){
 		List list = new ArrayList();
 		String start = "";
 		String end = datepick + "-25";
@@ -63,7 +63,7 @@ public class ExcelDAO extends CommonDAO {
 		}
 		
 		List listPeriod = getDICTByType("5");
-		list = pjDAO.getKygstj(start, end, listPeriod, depart);
+		list = pjDAO.getKygstj(start, end, listPeriod, depart, pjcodes);
 		
 		return list;
 	}
@@ -74,7 +74,7 @@ public class ExcelDAO extends CommonDAO {
 	 * @param depart 部门
 	 * @return
 	 */
-	public List getExportData_CDRWQK(String depart, String datepick){
+	public List getExportData_CDRWQK(String depart, String datepick, String pjcodes){
 		List list = new ArrayList();
 		String start = "";
 		String end = datepick + "-25";
@@ -85,7 +85,7 @@ public class ExcelDAO extends CommonDAO {
 			start = datepick.split("-")[0] + "-" + (Integer.parseInt(datepick.split("-")[1])-1) + "-25";
 		}
 		
-		list = pjDAO.getCdrwqk(start, end, depart);
+		list = pjDAO.getCdrwqk(start, end, depart, pjcodes);
 		
 		return list;
 	}

@@ -20,13 +20,11 @@
 		
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
 		tb.add('选择人员');
-		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('empnames'));
   		tb.add(document.getElementById('selemp'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('选择日期 从');
   		tb.add(document.getElementById('startdate'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('到');
   		tb.add(document.getElementById('enddate'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
@@ -57,7 +55,7 @@
 	
 	function changeEmp(){
     	document.getElementById('checkedEmp').value = document.getElementById('empcodes').value;
-    	document.getElementById('treeForm').action = "depart.do?action=multiemp_init";
+    	document.getElementById('treeForm').action = "tree.do?action=multiemp_init";
     	document.getElementById('treeForm').submit();
     
     	document.getElementById("empsel").style.top=(event.clientY+30)+"px";
@@ -101,7 +99,7 @@
 	<input type="button" class="btn" value="分析" name="search" onclick="commit();">
     <iframe name="list_ygtrfx" width="100%" frameborder="0" height="500"></iframe>
     
-    <form id="treeForm" name="treeForm" method="POST" action="depart.do?action=checkedtree" target="checkedtree">
+    <form id="treeForm" name="treeForm" method="POST" target="checkedtree">
 		<input type="hidden" id="checkedEmp" name="checkedEmp">
 	</form>
 	<div style="position:absolute; top:110px; left:100px;display: none;" id="empsel" name="empsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree" name="checkedtree"></iframe></div>

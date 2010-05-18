@@ -44,7 +44,7 @@ Ext.onReady(function(){
 				id:'tree1',
 				xtype:'treepanel',
 				rootVisible:false,
-				loader: new Ext.tree.TreeLoader({dataUrl:'/depart.do?action=departempTree'}),
+				loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departempTree'}),
 		   	 	root : new Ext.tree.AsyncTreeNode({})
 			},
 			    	

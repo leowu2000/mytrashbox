@@ -37,7 +37,7 @@ public class ExportExcel {
 	 * @throws WriteException
 	 * @throws IndexOutOfBoundsException
 	 */
-	public String exportExcel_GSTJHZ(List<Map<String, String>> list, ExcelDAO excelDAO, String imagepath) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+	public String exportExcel_GSTJHZ(List<Map<String, String>> list, ExcelDAO excelDAO, String imagepath, List listDepart) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
 		String[] str = new String[1];
 		str[0] = "工时统计汇总";
 		String path = "/" + java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
@@ -45,7 +45,6 @@ public class ExportExcel {
 		WritableWorkbook wb = readExcel(path);
 		WritableSheet sheet = wb.getSheet(0);
 		
-		List listDepart = excelDAO.getDepartment();
 		int size = 3 + listDepart.size();
 		
 		//插入标题

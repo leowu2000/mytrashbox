@@ -61,7 +61,7 @@ Ext.onReady(function(){
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
 <input type="hidden" name="path" id="path" value='<%=path %>'>
-<br>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#FF0088">注：黄色格子表示入库后将无法进行关联，无法参与统计，可返回修改excel表，或入库后在相应管理模块下编辑！</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#FF0088">注：红色格子表示入库后将无法进行关联，无法参与统计，可返回修改excel表，或入库后在相应管理模块下编辑！</font>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td>人员编号</td>
