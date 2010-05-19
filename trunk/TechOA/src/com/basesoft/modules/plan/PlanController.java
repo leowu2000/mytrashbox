@@ -48,7 +48,7 @@ public class PlanController extends CommonController {
 		}else if("list".equals(action)){//计划管理
 			mv = new ModelAndView("modules/plan/list_manage");
 			
-			PageList pageList = planDAO.findAll(f_level, f_type, f_empname, page);
+			PageList pageList = planDAO.findAll(f_level, f_type, f_empname, datepick, page);
 			List listPersent = planDAO.getListPersent();
 			
 			List listLevel = planDAO.getLevel();
@@ -65,6 +65,7 @@ public class PlanController extends CommonController {
 			mv.addObject("f_level", f_level);
 			mv.addObject("f_type", f_type);
 			mv.addObject("f_empname", f_empname);
+			mv.addObject("datepick", datepick);
 			mv.addObject("errorMessage", errorMessage);
 			mv.addObject("listPersent", listPersent);
 			return mv;
@@ -78,7 +79,7 @@ public class PlanController extends CommonController {
 			String selectname = "typecode" + id;
 			sb.append("<select name='")
 			  .append(selectname)
-			  .append("' style='width:200;' >");
+			  .append("' style='width:200;' disabled='disabled'>");
 			
 			for(int i=0;i<listType2.size();i++){
 				Map mapType2 = (Map)listType2.get(i);
@@ -103,7 +104,7 @@ public class PlanController extends CommonController {
 			
 			List listPj_d = planDAO.getProject_d(pjcode);
 			
-			sb.append("<select name='pjcode_d' style='width:200;'>");
+			sb.append("<select name='pjcode_d' style='width:200;' disabled='disabled'>");
 			
 			for(int i=0;i<listPj_d.size();i++){
 				Map mapPj_d = (Map)listPj_d.get(i);
@@ -130,7 +131,8 @@ public class PlanController extends CommonController {
 			String note = ServletRequestUtils.getStringParameter(request, "note", "");
 			String symbol = ServletRequestUtils.getStringParameter(request, "symbol", "");
 			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
-			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
+			String empnames = ServletRequestUtils.getStringParameter(request, "empnames", "");
+			String empcodes = ServletRequestUtils.getStringParameter(request, "empcodes", "");
 			String assess = ServletRequestUtils.getStringParameter(request, "assess", "");
 			String remark = ServletRequestUtils.getStringParameter(request, "remark", "");
 			String leader_station = ServletRequestUtils.getStringParameter(request, "leader_station", "");
@@ -142,7 +144,7 @@ public class PlanController extends CommonController {
 			
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			Map mapEmp = planDAO.findByCode("EMPLOYEE", empcode);
+			Map mapEmp = planDAO.findByCode("EMPLOYEE", empcodes.split(",")[0]);
 			String departname = planDAO.findNameByCode("DEPARTMENT", mapEmp.get("DEPARTCODE").toString());
 			String plannercode = request.getSession().getAttribute("EMCODE").toString();
 			String plannername = request.getSession().getAttribute("EMNAME").toString();
@@ -160,9 +162,9 @@ public class PlanController extends CommonController {
 				enddate  = "'" + enddate + "'";
 			}
 			
-			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcode + "', '" + mapEmp.get("NAME") + "', '" + mapEmp.get("DEPARTCODE") + "', '" + departname + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', '" + new Date() + "', " + enddate + ", " + planedworkload + ", '" + note + "', '" + symbol + "', '" + assess + "', '" + remark + "', '" + leader_station + "', '" + leader_section + "', '" + leader_room + "', '" + plannercode + "', '" + plannername + "', " + ordercode + ", '" + typecode + "', '" + typecode2 + "', '1')");
+			planDAO.insert("insert into PLAN values('" + uuid + "', '" + empcodes + "', '" + empnames + "', '" + mapEmp.get("DEPARTCODE") + "', '" + departname + "', '" + pjcode + "', '" + pjcode_d + "', '" + stagecode + "', '" + new Date() + "', " + enddate + ", " + planedworkload + ", '" + note + "', '" + symbol + "', '" + assess + "', '" + remark + "', '" + leader_station + "', '" + leader_section + "', '" + leader_room + "', '" + plannercode + "', '" + plannername + "', " + ordercode + ", '" + typecode + "', '" + typecode2 + "', '1')");
 			
-			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
+			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page + "&datepick=" + datepick);
 		}else if("query".equals(action)){//查找
 			String planid = ServletRequestUtils.getStringParameter(request, "planid", "");
 			Plan plan = planDAO.findById(planid);
@@ -178,7 +180,8 @@ public class PlanController extends CommonController {
 			
 		}else if("update".equals(action)){//更新
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
-			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
+			String empcodes = ServletRequestUtils.getStringParameter(request, "empcodes", "");
+			String empnames = ServletRequestUtils.getStringParameter(request, "empnames", "");
 			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
 			String note = ServletRequestUtils.getStringParameter(request, "note", "");
 			String symbol = ServletRequestUtils.getStringParameter(request, "symbol", "");
@@ -193,13 +196,12 @@ public class PlanController extends CommonController {
 			}else {
 				enddate  = "'" + enddate + "'";
 			}
-			String empname = planDAO.findNameByCode("EMPLOYEE", empcode);
 			
-			String updateSql = "update PLAN set EMPCODE='" + empcode + "', EMPNAME='" + empname + "', ENDDATE=" + enddate + ", NOTE='" + note + "', SYMBOL='" + symbol + "', ASSESS='" + assess + "', REMARK='" + remark + "', LEADER_STATION='" + leader_station + "', LEADER_SECTION='" + leader_section + "',LEADER_ROOM='" + leader_room + "' where ID='" + id + "'";
+			String updateSql = "update PLAN set EMPCODE='" + empcodes + "', EMPNAME='" + empnames + "', ENDDATE=" + enddate + ", NOTE='" + note + "', SYMBOL='" + symbol + "', ASSESS='" + assess + "', REMARK='" + remark + "', LEADER_STATION='" + leader_station + "', LEADER_SECTION='" + leader_section + "',LEADER_ROOM='" + leader_room + "' where ID='" + id + "'";
 			
 			planDAO.update(updateSql);
 			
-			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
+			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page + "&datepick=" + datepick);
 		}else if("delete".equals(action)){//删除
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
@@ -207,7 +209,7 @@ public class PlanController extends CommonController {
 				planDAO.delete(deleteSql);
 			}
 			
-			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
+			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page + "&datepick=" + datepick);
 		}else if("confirm".equals(action)){//确认
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
@@ -215,7 +217,7 @@ public class PlanController extends CommonController {
 				planDAO.delete(updateSql);
 			}
 			
-			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
+			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page + "&datepick=" + datepick);
 		}else if("complete".equals(action)){//完成
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
@@ -223,7 +225,7 @@ public class PlanController extends CommonController {
 				planDAO.delete(updateSql);
 			}
 			
-			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
+			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page + "&datepick=" + datepick);
 		}else if("setpersent".equals(action)){//设置完成情况百分率
 			String name1 = ServletRequestUtils.getStringParameter(request, "name1", "");
 			String name2 = ServletRequestUtils.getStringParameter(request, "name2", "");
@@ -252,7 +254,7 @@ public class PlanController extends CommonController {
 			planDAO.update(updateSql3);
 			planDAO.update(updateSql4);
 			
-			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page);
+			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page + "&datepick=" + datepick);
 		}else if("remind_frame".equals(action)){//计划提醒frame
 			mv = new ModelAndView("modules/plan/frame_remind");
 			

@@ -83,6 +83,7 @@ public class ExcelController extends CommonController {
 				mv.addObject("f_level", f_level);
 				mv.addObject("f_type", f_type);
 				mv.addObject("f_empname", f_empname);
+				mv.addObject("datepick", datepick);
 			}else if("ASSETS".equals(table)){//固定资产
 				mv = new ModelAndView("modules/excel/preview_assets");
 				mv.addObject("status", status);
@@ -136,7 +137,7 @@ public class ExcelController extends CommonController {
 			}else if("GOODS".equals(table)){//物资资产
 				errorMessage = excelDAO.insertGoods(data);
 			}else if("PLAN".equals(table)){//计划
-				errorMessage = excelDAO.insertPlan(data);
+				errorMessage = excelDAO.insertPlan(data, datepick);
 			}else if("ASSETS".equals(table)){//固定资产
 				errorMessage = excelDAO.insertAssets(data);
 			}else if("WORKCHECK".equals(table)){//考勤

@@ -20,7 +20,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String level, String type, String empname, int page){
+	public PageList findAll(String level, String type, String empname, String datepick, int page){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
@@ -56,8 +56,10 @@ public class PlanDAO extends CommonDAO {
 				}
 			}
 		}
+		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+		Date enddate = StringUtil.getEndOfMonth(startdate);
 		
-		sql = sql + " order by ENDDATE desc,STATUS,ORDERCODE";
+		sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' order by ENDDATE desc,STATUS,ORDERCODE";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -263,7 +265,7 @@ public class PlanDAO extends CommonDAO {
 		plan.setLeader_room(map.get("LEADER_ROOM")==null?"":map.get("LEADER_ROOM").toString());
 		plan.setPlannercode(map.get("PLANNERCODE")==null?"":map.get("PLANNERCODE").toString());
 		plan.setPlannername(map.get("PLANNERNAME")==null?"":map.get("PLANNERNAME").toString());
-		plan.setOrdercode(map.get("ORDERCODE")==null?0:Integer.parseInt(map.get("ORDERCODE").toString()));
+		plan.setOrdercode(map.get("ORDERCODE")==null?"":map.get("ORDERCODE").toString());
 		plan.setType(map.get("TYPE")==null?"":map.get("TYPE").toString());
 		plan.setType2(map.get("TYPE2")==null?"":map.get("TYPE2").toString());
 		

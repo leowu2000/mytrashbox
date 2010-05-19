@@ -170,6 +170,20 @@ Ext.onReady(function(){
     }
 });
 
+function checkAll(){
+	var checkall = document.getElementById('checkall');
+	var checks = document.getElementsByName('check');
+	if(checkall.checked == 'true'){
+	alert(checkall.checked);
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = 'true';
+		}
+	}else {
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = !checks[i].checked;
+		}
+	}
+}
 //-->
 </script>
 	</head>
@@ -182,7 +196,7 @@ Ext.onReady(function(){
 <%=pageList.getPageInfo().getHtml("pj.do?action=list") %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
-                <td>选　择</td>
+                <td><input type="checkbox" name="checkall" onclick="checkAll();">选　择</td>
                 <td>工作令号</td>              
                 <td>工作令状态</td>
                 <td>工作令负责人</td>

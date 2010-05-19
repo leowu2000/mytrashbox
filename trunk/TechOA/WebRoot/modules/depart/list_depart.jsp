@@ -184,6 +184,20 @@ Ext.onReady(function(){
     }
 });
 
+function checkAll(){
+	var checkall = document.getElementById('checkall');
+	var checks = document.getElementsByName('check');
+	if(checkall.checked == 'true'){
+	alert(checkall.checked);
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = 'true';
+		}
+	}else {
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = !checks[i].checked;
+		}
+	}
+}
 //-->
 </script>
 	</head>
@@ -195,7 +209,7 @@ Ext.onReady(function(){
 <form id="listForm" name="listForm" action="" method="post">
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
-                <td>选　择</td>
+                <td><input type="checkbox" name="checkall" onclick="checkAll();">选　择</td>
                 <td>部门名称</td>              
                 <td>部门级别</td>
                 <td>上级部门</td>
