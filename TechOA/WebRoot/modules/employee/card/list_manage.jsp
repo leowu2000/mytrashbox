@@ -206,7 +206,20 @@ function havaCardno(){
 	}
 }
 
-
+function checkAll(){
+	var checkall = document.getElementById('checkall');
+	var checks = document.getElementsByName('check');
+	if(checkall.checked == 'true'){
+	alert(checkall.checked);
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = 'true';
+		}
+	}else {
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = !checks[i].checked;
+		}
+	}
+}
 //-->
 </script>
   </head>
@@ -228,7 +241,7 @@ if("search".equals(method)){
     	<%
     		if(!"search".equals(method)){
     	%>
-    		<td>选择</td>
+    		<td><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
     	<%
     		}
     	%>

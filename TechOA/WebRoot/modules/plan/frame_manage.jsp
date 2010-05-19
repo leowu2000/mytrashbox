@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page import="com.basesoft.util.*" %>
 <%
 	List listLevel = (List)request.getAttribute("listLevel");
 	List listType = (List)request.getAttribute("listType");
@@ -25,6 +26,9 @@
   		tb.add('计划分类');
   		tb.add(document.getElementById('seltype'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
+  		tb.add('选择年月');
+  		tb.add(document.getElementById('datepick'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('按责任人模糊查询');
   		tb.add(document.getElementById('empname'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
@@ -39,8 +43,13 @@
 	  var level = document.getElementById('sellevel').value;
 	  var type = document.getElementById('seltype').value;
 	  var empname = document.getElementById('empname').value;
+	  var datepick = document.getElementById('datepick').value;
+	  if(datepick == ''){
+	  	document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
+	  	datepick = document.getElementById('datepick').value;
+	  }
 	  
-	  document.getElementById('list_manage').src = "/plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + empname;
+	  document.getElementById('list_manage').src = "/plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + empname + "&datepick=" + datepick;
 	}
 	</script>
   </head>
@@ -67,6 +76,7 @@
 <%	} %>					
 	</select>
 	<input type="text" name="empname" style="width:60;">
+	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" style="width: 50">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
     <iframe name="list_manage" width="100%" frameborder="0" height="500"></iframe>
   </body>

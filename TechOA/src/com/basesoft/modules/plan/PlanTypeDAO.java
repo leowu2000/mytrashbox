@@ -106,6 +106,7 @@ public class PlanTypeDAO extends CommonDAO {
 			code = getCode();
 			int ordercode = getOrdercode("1", "0");
 			String insertSql = "insert into PLAN_TYPE values('" + code + "', '" + note + "', " + ordercode + ", '1', '0')";
+			insert(insertSql);
 		}
 		return code;
 	}
@@ -126,6 +127,7 @@ public class PlanTypeDAO extends CommonDAO {
 			code = getCode();
 			int ordercode = getOrdercode("2", parent);
 			String insertSql = "insert into PLAN_TYPE values('" + code + "', '" + note + "', " + ordercode + ", '2', '" + parent + "')";
+			insert(insertSql);
 		}
 		return code;
 	}

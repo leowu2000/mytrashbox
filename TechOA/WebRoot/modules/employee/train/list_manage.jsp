@@ -135,6 +135,20 @@ Ext.onReady(function(){
     }
 });
 
+function checkAll(){
+	var checkall = document.getElementById('checkall');
+	var checks = document.getElementsByName('check');
+	if(checkall.checked == 'true'){
+	alert(checkall.checked);
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = 'true';
+		}
+	}else {
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = !checks[i].checked;
+		}
+	}
+}
 //-->
 </script>
   </head>
@@ -147,7 +161,7 @@ Ext.onReady(function(){
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
-    		<td>选择</td>
+    		<td><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
     		<td>培训名称</td>
     		<td>培训成本</td>
     		<td>培训目标</td>

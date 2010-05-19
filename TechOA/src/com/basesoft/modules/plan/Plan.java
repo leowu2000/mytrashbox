@@ -22,7 +22,7 @@ public class Plan {
 	public String leader_room;
 	public String plannercode;
 	public String plannername;
-	public int ordercode;
+	public String ordercode;
 	public String type;
 	public String type2;
 	
@@ -186,11 +186,11 @@ public class Plan {
 		this.plannername = plannername;
 	}
 
-	public int getOrdercode() {
+	public String getOrdercode() {
 		return ordercode;
 	}
 
-	public void setOrdercode(int ordercode) {
+	public void setOrdercode(String ordercode) {
 		this.ordercode = ordercode;
 	}
 

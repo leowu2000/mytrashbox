@@ -515,104 +515,117 @@ public class ExcelDAO extends CommonDAO {
 	 * @param data 
 	 * @return
 	 */
-	public String insertPlan(JSONObject data) throws Exception{
+	public String insertPlan(JSONObject data, String datepick) throws Exception{
 		String errorMessage = "";
 		
 		//循环数据行
 		JSONArray rows = data.optJSONArray("row");
 		String type = "";
+		String type2 = "";
+		int typecount = 0;
 		for(int i=0;i<rows.length();i++){
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
 			String pjname = row.optString("PJNAME");
-			int ordercode = row.optInt("ORDERCODE");
+			String ordercode = row.optString("ORDERCODE");
 			String note = row.optString("NOTE");
-			String type2 = "";
 			
-			if("".equals(pjname)){//令号为空，则此行为计划分类
-				if(ordercode == 0){//没有序号的为一级分类
-					type = planTypeDAO.saveType(note);
-					continue;
-				}else {//二级分类
-					type2 = planTypeDAO.saveType2(note, type);
-					continue;
-				}
-			}
-			
-			String symbol = row.optString("SYMBOL");
-			String enddate = "".equals(row.optString("ENDDATE"))?"2020-12-31":row.optString("ENDDATE");
-			String departname = row.optString("DEPARTNAME");
-			String assess = row.optString("ASSESS");
-			String remark = row.optString("REMARK");
-			String leader_station = row.optString("LEADER_STATION");
-			String plannername = row.optString("PLANNERNAME");
-			String leader_room = row.optString("LEADER_ROOM");
-			String leader_section = row.optString("LEADER_SECTION");
-			//根据工作令名称找出工作令编码
-			String pjcode  = findCodeByName("PROJECT", pjname);
-			//根据部门名称找出部门编码
-			String departcode = findCodeByName("DEPARTMENT", departname);
-			//根据计划员姓名找出计划员编码
-			String plannercode = findCodeByName("EMPLOYEE", plannername);
-			//生成32位uuid
-			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-			
-			//处理责任人
-			String empcodeSql = "";
-			String empnameSql = "";
-			
-			String empname = row.optString("EMPNAME")==null?"":row.optString("EMPNAME").trim();
-			empname.replaceAll("等", "");
-			String[] empnames = {""};
-			if(empname.indexOf(" ")>0){//以各种符号分隔的责任人
-				empnames = empname.split(" ");
-			}else if(empname.indexOf(",")>0){
-				empnames = empname.split(",");
-			}else if(empname.indexOf("、")>0){
-				empnames = empname.split("、");
-			}else if(empname.indexOf("，")>0){
-				empnames = empname.split("，");
-			}else {
-				empnames[0] = empname;
-			}
-			boolean flag = false;
-			for(int j=0;j<empnames.length;j++){
-				String empcode = planDAO.findCodeByName("EMPLOYEE", empnames[j]);
-				//enpname入库字段
-				if("".equals(empnameSql)){
-					empnameSql = empnames[j];
-				}else {
-					empnameSql = empnameSql + "," + empnames[j];
-				}
-				//empcode入库字段
-				if(!"-1".equals(empcode)&&!"".equals(empcode)){
-					if("".equals(empcodeSql)){
-						empcodeSql = empcode;
-					}else {
-						empcodeSql = empcodeSql + "," + empcode;
+			if("".equals(row.optString("PJNAME"))){//令号为空，则此行为计划分类
+				typecount = typecount + 1;
+				if(i + 1 < rows.length()){
+					JSONObject nextrow = rows.optJSONObject(i + 1);
+					if("".equals(nextrow.optString("PJNAME"))){//下一条的令号也为空，则此行为一级分类
+						type = planTypeDAO.saveType(note);
+						continue;
+					}else {//二级分类
+						type2 = planTypeDAO.saveType2(row.optString("NOTE"), type);
+						continue;
 					}
-				}else {
-					flag = true;
 				}
-			}
-			
-			if(flag){//如果出现不匹配，empcode入库为空字段
-				empcodeSql = "";
-			}
-			String insertSql = "insert into PLAN values('" + uuid + "','" + empcodeSql + "','" + empnameSql + "','" + departcode + "','" + departname + "','" + pjcode + "','0','','" + new Date() + "','" + enddate + "',0,'" + note + "','" + symbol + "','" + assess + "','" + remark + "','" + leader_station + "','" + leader_section + "','" + leader_room + "','" + plannercode + "','" + plannername + "'," + ordercode + ", '" + type + "', '" + type2 + "', '1')";
-			
-			try{
-				insert(insertSql);
-			}catch(Exception e){
-				e.printStackTrace();
-				errorMessage = getErrorMessage(errorMessage, i);
-				continue;
+			}else {
+				String symbol = row.optString("SYMBOL");
+				Date startdate_default = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+				Date enddate_default = StringUtil.getEndOfMonth(startdate_default);
+				String enddate = "";
+				if("".equals(row.optString("ENDDATE"))){
+					enddate = StringUtil.DateToString(enddate_default, "yyyy-MM-dd");
+				}else {
+					enddate = row.optString("ENDDATE");
+				}
+				String departname = row.optString("DEPARTNAME");
+				String assess = row.optString("ASSESS");
+				String remark = row.optString("REMARK");
+				String leader_station = row.optString("LEADER_STATION");
+				String plannername = row.optString("PLANNERNAME");
+				String leader_room = row.optString("LEADER_ROOM");
+				String leader_section = row.optString("LEADER_SECTION");
+				//根据工作令名称找出工作令编码
+				String pjcode  = findCodeByName("PROJECT", pjname);
+				//根据部门名称找出部门编码
+				String departcode = findCodeByName("DEPARTMENT", departname);
+				//根据计划员姓名找出计划员编码
+				String plannercode = findCodeByName("EMPLOYEE", plannername);
+				//生成32位uuid
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				
+				//处理责任人
+				String empcodeSql = "";
+				String empnameSql = "";
+				
+				String empname = row.optString("EMPNAME")==null?"":row.optString("EMPNAME").trim();
+				empname = empname.replaceAll("等", "");
+				String[] empnames = {""};
+				if(empname.indexOf(" ")>0){//以各种符号分隔的责任人
+					empnames = empname.split(" ");
+				}else if(empname.indexOf(",")>0){
+					empnames = empname.split(",");
+				}else if(empname.indexOf("、")>0){
+					empnames = empname.split("、");
+				}else if(empname.indexOf("，")>0){
+					empnames = empname.split("，");
+				}else {
+					empnames[0] = empname;
+				}
+				boolean flag = false;
+				for(int j=0;j<empnames.length;j++){
+					String empcode = planDAO.findCodeByName("EMPLOYEE", empnames[j]);
+					//enpname入库字段
+					if("".equals(empnameSql)){
+						empnameSql = empnames[j];
+					}else {
+						empnameSql = empnameSql + "," + empnames[j];
+					}
+					//empcode入库字段
+					if(!"-1".equals(empcode)&&!"".equals(empcode)){
+						if("".equals(empcodeSql)){
+							empcodeSql = empcode;
+						}else {
+							empcodeSql = empcodeSql + "," + empcode;
+						}
+					}else {
+						flag = true;
+					}
+				}
+				
+				if(flag){//如果出现不匹配，empcode入库为空字段
+					empcodeSql = "";
+				}
+				String insertSql = "insert into PLAN values('" + uuid + "','" + empcodeSql + "','" + empnameSql + "','" + departcode + "','" + departname + "','" + pjcode + "','0','','" + new Date() + "','" + enddate + "',0,'" + note + "','" + symbol + "','" + assess + "','" + remark + "','" + leader_station + "','" + leader_section + "','" + leader_room + "','" + plannercode + "','" + plannername + "','" + ordercode + "', '" + type + "', '" + type2 + "', '1')";
+				
+				try{
+					insert(insertSql);
+				}catch(Exception e){
+					e.printStackTrace();
+					errorMessage = getErrorMessage(errorMessage, i);
+					continue;
+				}
 			}
 		}
 		
 		if("".equals(errorMessage)){
-			errorMessage = "成功导入" + rows.length() + "条数据！";
+			errorMessage = "成功导入" + (rows.length() - typecount) + "条数据！";
 		}
+		
 		
 		return errorMessage;
 	}

@@ -147,6 +147,21 @@ function AJAX_PJ(pjcode){
         document.getElementById('selpj_d').innerHTML = xmlHttpReq.responseText;
     }
 }
+
+function checkAll(){
+	var checkall = document.getElementById('checkall');
+	var checks = document.getElementsByName('check');
+	if(checkall.checked == 'true'){
+	alert(checkall.checked);
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = 'true';
+		}
+	}else {
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = !checks[i].checked;
+		}
+	}
+}
 //-->
 </script>
 	</head>
@@ -162,7 +177,7 @@ function AJAX_PJ(pjcode){
 <%
 	if(!"search".equals(method)){
 %>            
-                <td>选　择</td>
+                <td><input type="checkbox" name="checkall" onclick="checkAll();">选　择</td>
 <%
 	}
 %>                

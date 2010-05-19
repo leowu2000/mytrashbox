@@ -10,6 +10,7 @@ String f_level = request.getAttribute("f_level").toString();
 String f_type = request.getAttribute("f_type").toString();
 String f_empname = request.getAttribute("f_empname").toString();
 String path = request.getAttribute("path").toString();
+String datepick = request.getAttribute("datepick").toString();
 
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
@@ -43,11 +44,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'plan.do?action=list&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>';
+    	window.location.href = 'plan.do?action=list&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
     	document.getElementById('listForm').submit();
     }
 });
@@ -63,7 +64,8 @@ Ext.onReady(function(){
 <br>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#FF0088">注：红色格子表示入库后将无法进行关联，无法参与统计，可返回修改excel表，或入库后在相应管理模块下编辑！</font>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
-  	  			<td>产品令号</td>              
+            	<td>计划分类</td>
+  	  			<td>产品令号</td>  
                 <td>序号</td>
                 <td>计划内容</td>
                 <td>标志</td>
@@ -78,11 +80,26 @@ Ext.onReady(function(){
                 <td>部领导</td>
             </tr>
 <%
+		String type = "";
+		String type2 = "";
 		for(int i=0;i<rows.length();i++){
 			JSONObject row = rows.optJSONObject(i);
+			if("".equals(row.optString("PJNAME"))){//令号为空，则此行为计划分类
+				if(i + 1 < rows.length()){
+					JSONObject nextrow = rows.optJSONObject(i + 1);
+					if("".equals(nextrow.optString("PJNAME"))){//下一条的令号也为空，则此行为一级分类
+						type = row.optString("NOTE");
+						continue;
+					}else {//二级分类
+						type2 = row.optString("NOTE");
+						continue;
+					}
+				}
+			}else {
 			
 %>            
             <tr align="center">
+            	<td>&nbsp;<%=type %>--<%=type2 %></td>
 <%
 			String pjcode = planDAO.findCodeByName("PROJECT", row.optString("PJNAME"));
 			if("".equals(pjcode)){
@@ -113,7 +130,7 @@ Ext.onReady(function(){
 				<td>&nbsp;<%=row.optString("DEPARTNAME") %></td>
 <%
 			String empname = row.optString("EMPNAME")==null?"":row.optString("EMPNAME").trim();
-			empname.replaceAll("等", "");
+			empname = empname.replaceAll("等", "");
 			String[] empnames = {""};
 			if(empname.indexOf(" ")>0){//以空格分隔的责任人
 				empnames = empname.split(" ");
@@ -158,6 +175,7 @@ Ext.onReady(function(){
 				<td>&nbsp;<%=row.optString("LEADER_ROOM") %></td>
 				<td>&nbsp;<%=row.optString("LEADER_SECTION") %></td>
 <%
+			}
 		}
 %>				
 </table>

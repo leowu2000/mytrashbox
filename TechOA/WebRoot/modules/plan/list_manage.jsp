@@ -17,6 +17,7 @@ String level = request.getAttribute("f_level").toString();
 String type = request.getAttribute("f_type").toString();
 String f_empname = request.getAttribute("f_empname").toString();
 f_empname = URLEncoder.encode(f_empname,"UTF-8");
+String datepick = request.getAttribute("datepick").toString();
 
 String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 errorMessage = new String(errorMessage.getBytes("ISO8859-1"), "UTF-8");
@@ -28,19 +29,6 @@ PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 <html>
 	<head>
 		<title>计划管理</title>
-		<style type="text/css">
-		<!--
-		input{
-			width:80px;
-		}
-		.ainput{
-			width:20px;
-		}		
-		th {
-			white-space: nowrap;
-		}
-		-->
-		</style>		
 		<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -77,7 +65,7 @@ Ext.onReady(function(){
         	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
 	        {text:'提交',handler: function(){if(validate()){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}}},
-	        {text:'关闭',handler: function(){win.hide();}}
+	        {text:'关闭',handler: function(){win.hide();document.getElementById("empsel").style.display="none";}}
 	        ]
         });
     }
@@ -103,10 +91,10 @@ Ext.onReady(function(){
     }
     
     function validate(){
-    	var empcode = document.getElementById('empcode').value;
+    	var empcodes = document.getElementById('empcodes').value;
     	
-    	if(empcode=='0'){
-    		alert('请选择负责人!');
+    	if(empcodes==''){
+    		alert('请选择责任人!');
     		return false;
     	}else {
     		return true;
@@ -114,7 +102,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';
+    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
        	Ext.get('pjcode').set({'disabled':''});
@@ -124,7 +112,7 @@ Ext.onReady(function(){
        	Ext.get('typecode').set({'disabled':''});
        	changeType();
 		Ext.get('typecode2').set({'disabled':''});
-       	comboBoxTree.setValue({id:'0',text:'请选择...'});
+       	//comboBoxTree.setValue({id:'0',text:'请选择...'});
         win.show(btn.dom);
     }
     
@@ -149,7 +137,9 @@ Ext.onReady(function(){
 				Ext.get('note').set({'value':data.item.note});
 				Ext.get('symbol').set({'value':data.item.symbol});
 				Ext.get('enddate').set({'value':data.item.enddate});
-				comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
+				//comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
+				Ext.get('empnames').set({'value':data.item.empname});
+				Ext.get('empcodes').set({'value':data.item.empcode});
 				Ext.get('assess').set({'value':data.item.assess});
 				Ext.get('remark').set({'value':data.item.remark});
 				Ext.get('typecode').set({'value':data.item.type});
@@ -161,7 +151,7 @@ Ext.onReady(function(){
 				Ext.get('leader_section').set({'value':data.item.leader__section});
 				Ext.get('leader_room').set({'value':data.item.leader__room});
 				
-		    	action = url+'?action=update&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';
+		    	action = url+'?action=update&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -177,7 +167,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';       
+      			Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -192,7 +182,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','注意，标记确认后不可进行反馈',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=confirm&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';       
+      			Ext.getDom('listForm').action=url+'?action=confirm&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -207,57 +197,21 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','注意，标记完成后不可进行修改',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=complete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';       
+      			Ext.getDom('listForm').action=url+'?action=complete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
     }
     
-    var comboBoxTree = new Ext.ux.ComboBoxTree({
-			renderTo : 'selemp',
-			width : 203,
-			hiddenName : 'empcode',
-			hiddenId : 'empcode',
-			tree : {
-				id:'tree1',
-				xtype:'treepanel',
-				rootVisible:false,
-				loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departempTree'}),
-		   	 	root : new Ext.tree.AsyncTreeNode({})
-			},
-			    	
-			//all:所有结点都可选中
-			//exceptRoot：除根结点，其它结点都可选(默认)
-			//folder:只有目录（非叶子和非根结点）可选
-			//leaf：只有叶子结点可选
-			selectNodeModel:'leaf',
-			listeners:{
-	            beforeselect: function(comboxtree,newNode,oldNode){//选择树结点设值之前的事件   
-	                   //... 
-	                   return;  
-	            },   
-	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
-	                  //...   
-	                   return; 
-	            },   
-	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
-	                  //...   
-	                  //alert("显示值="+comboBoxTree.getRawValue()+"  真实值="+comboBoxTree.getValue());
-	                  return; 
-	            }   
-      		}
-			
-	});
-	
 	function onImportClick(btn){
-		action = 'excel.do?action=preview&table=PLAN&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>';
+		action = 'excel.do?action=preview&table=PLAN&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
     }
     
     function onSetClick(btn){
-		action = url + '?action=setpersent&f_level=<%=level %>&f_type=<%=type %>&page=<%=pagenum %>&f_empname=<%=f_empname %>';
+		action = url + '?action=setpersent&f_level=<%=level %>&f_type=<%=type %>&page=<%=pagenum %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
     	win3.setTitle('设置完成情况百分比');
         win3.show(btn.dom);
     }
@@ -342,18 +296,43 @@ function changeType2(){
         document.getElementById('selType2td2').innerHTML = xmlHttpReq.responseText;
     }
 }
+
+function changeEmp(){
+    	document.getElementById('checkedEmp').value = document.getElementById('empcodes').value;
+    	document.getElementById('treeForm').action = "tree.do?action=multiemp_init";
+    	document.getElementById('treeForm').submit();
+    
+    	document.getElementById("empsel").style.top=(event.clientY-200)+"px";
+    	document.getElementById("empsel").style.left=(event.clientX+50)+"px";
+    	document.getElementById("empsel").style.display="";
+}
+
+function checkAll(){
+	var checkall = document.getElementById('checkall');
+	var checks = document.getElementsByName('check');
+	if(checkall.checked == 'true'){
+	alert(checkall.checked);
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = 'true';
+		}
+	}else {
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = !checks[i].checked;
+		}
+	}
+}
 //-->
 </script>
 	</head>
-	<body onload="changeType();changeType2();">
+	<body>
 	<div id="toolbar"></div>
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + f_empname) %>
-<table cellspacing="0" id="the-table" width="98%" align="center">
-            <tr align="center" bgcolor="#E0F1F8" class="b_tr">
-                <td>选　择</td>
+<%=pageList.getPageInfo().getHtml("plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + f_empname + "&datepick=" + datepick) %>
+	<table width="98%" align="center" vlign="middle" id="the-table">
+    	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
+                <td><input type="checkbox" name="checkall" onclick="checkAll();">选　择</td>
                 <td>计划分类</td>
                 <td>产品令号</td>              
                 <td>序号</td>
@@ -406,7 +385,18 @@ for(int i=0;i<listPlan.size();i++){
                 <td nowrap="nowrap">&nbsp;<%=mapPlan.get("SYMBOL")==null?"":mapPlan.get("SYMBOL") %></td>
                 <td nowrap="nowrap">&nbsp;<%=mapPlan.get("ENDDATE")==null?"":mapPlan.get("ENDDATE") %></td>
                 <td nowrap="nowrap">&nbsp;<%=mapPlan.get("DEPARTNAME")==null?"":mapPlan.get("DEPARTNAME") %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME") %></td>
+<%
+			String empcode = mapPlan.get("EMPCODE")==null?"":mapPlan.get("EMPCODE").toString();
+			if("".equals(empcode)){
+%>                
+                <td nowrap="nowrap" bgcolor="#FF0088" title="责任人未正确关联，请修改">&nbsp;<%=mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME") %></td>
+<%
+			}else {
+%>                
+				<td nowrap="nowrap">&nbsp;<%=mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME") %></td>
+<%
+			}
+%>
                 <td nowrap="nowrap">&nbsp;<%=mapPlan.get("ASSESS")==null?"":mapPlan.get("ASSESS") %></td>
                 <td>&nbsp;
 <%
@@ -508,7 +498,11 @@ for(int i=0;i<listPlan.size();i++){
 				  </tr>	
 				  <tr>
 				    <td>责任人</td>
-				    <td><span id="selemp" name="selemp"></span></td>
+				    <td>
+				      <input type="text" id="empnames" name="empnames" style="width:155;" value="请选择...">
+				      <input class="btn" name="selemp" type="button" onclick="changeEmp();" value="选择" style="width:40;">
+					  <input type="hidden" id="empcodes" name="empcodes">
+					</td>
 				  </tr>	
 				  <tr>
 				    <td>考核</td>
@@ -552,27 +546,6 @@ for(int i=0;i<listPlan.size();i++){
 	        	<input type="hidden" name="page" value="<%=pagenum %>">
                 <table>
 				  <tr>
-				    <td>计划类别</td>
-				    <td><select name="typecode3" style="width:200;" onchange="changeType2();">
-<%
-					for(int i=0;i<listType.size();i++){
-						Map mapType = (Map)listType.get(i);
-%>				    	
-						<option value='<%=mapType.get("CODE") %>'><%=mapType.get("NAME") %></option>
-<%
-					}
-%>
-				    </select></td>
-				  </tr>	
-				  <tr>
-				    <td>计划类别2</td>
-				    <td name="selType2td2" id="selType2td2">
-				    	<select>
-				    		<option>请选择...</option>
-				    	</select>
-				    </td>
-				  </tr>		
-				  <tr>
 				    <td>选择文件</td>
 				    <td><input type="file" name="file" style="width:200"></td>
 				  </tr>	
@@ -611,5 +584,9 @@ for(int i=0;i<listPlan.size();i++){
 			</form>
 	</div>
 </div> 
+<form id="treeForm" name="treeForm" method="POST" target="checkedtree">
+		<input type="hidden" id="checkedEmp" name="checkedEmp">
+	</form>
+	<div style="position:absolute; top:110px; left:100px;display: none;" id="empsel" name="empsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree" name="checkedtree"></iframe></div>
 	</body>
 </html>
