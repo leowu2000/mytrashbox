@@ -1,14 +1,36 @@
 package com.basesoft.modules.depart;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.basesoft.core.CommonDAO;
-import com.basesoft.util.CheckBoxTree;
+import com.basesoft.core.PageInfo;
+import com.basesoft.core.PageList;
 
 public class DepartmentDAO extends CommonDAO{
 
+	public PageList findAll(int page){
+		PageList pageList = new PageList();
+		String sql = "";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		sql = "select * from DEPARTMENT order by PARENT";
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
+	
 	/**
 	 * 根据id查找实例
 	 * @param id
