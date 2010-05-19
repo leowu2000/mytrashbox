@@ -11,7 +11,7 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
-import com.basesoft.util.CheckBoxTree;
+import com.basesoft.core.PageList;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
@@ -28,13 +28,15 @@ public class DepartmentController extends CommonController {
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		errorMessage = new String(errorMessage.getBytes("ISO8859-1"),"UTF-8");
+		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		
 		if("list".equals(action)){//列表页面
 			mv = new ModelAndView("modules/depart/list_depart");
 			//获取用户所能得到的菜单列表
 			List listDepart = departDAO.getChildDepart(emid);
+			PageList pageList = departDAO.findAll(page);
 			
-			mv.addObject("listDepart", listDepart);
+			mv.addObject("pageList", pageList);
 			mv.addObject("errorMessage", errorMessage);
 		}else if("add".equals(action)){//新增
 			String name = ServletRequestUtils.getStringParameter(request, "departname", "");

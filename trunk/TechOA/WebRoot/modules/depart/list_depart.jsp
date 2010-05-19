@@ -4,7 +4,8 @@
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%@ page import="com.basesoft.modules.depart.*" %>
 <%
-List listDepart = (List)request.getAttribute("listDepart");
+PageList pageList = (PageList)request.getAttribute("pageList");
+List listDepart = pageList.getList();
 String emrole = session.getAttribute("EMROLE").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
@@ -17,19 +18,6 @@ String errorMessage = request.getAttribute("errorMessage")==null?"":request.getA
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<title>部门管理</title>
-		<style type="text/css">
-		<!--
-		input{
-			width:80px;
-		}
-		.ainput{
-			width:20px;
-		}		
-		th {
-			white-space: nowrap;
-		}
-		-->
-		</style>		
 <%@ include file="../../common/meta.jsp" %>
 <script src="../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
@@ -43,7 +31,7 @@ if(errorMessage!=''){
 var win;
 var win2;
 var action;
-var url='/tree.do';
+var url='/depart.do';
 var vali = "";
 Ext.onReady(function(){
 	var comboBoxTree = new Ext.ux.ComboBoxTree({
@@ -156,24 +144,25 @@ Ext.onReady(function(){
     		}
     	}
     	
-    	Ext.Ajax.request({
-			url: url+'?action=validate&ids='+selValue,
-			method: 'GET',
-			success: function(transport) {
-			    result = transport.responseText;
-			    Ext.Msg.confirm('确认','确定要删除？',function(btn){
-    				if(btn=='yes'){
-    					if(result=='true'){
-	            			Ext.getDom('listForm').action=url+'?action=delete';       
-    	        			Ext.getDom('listForm').submit();
-    	        		}else {
-    	        			alert('所选部门还有下属部门，请先删除下属部门！');
+    	Ext.Msg.confirm('确认','确定要删除？',function(btn){
+    		if(btn=='yes'){
+    			Ext.Ajax.request({
+					url: url+'?action=validate&ids='+selValue,
+					method: 'GET',
+					success: function(transport) {
+			    		result = transport.responseText;
+			    		if(result=='true'){
+	       					Ext.getDom('listForm').action=url+'?action=delete';       
+    	   					Ext.getDom('listForm').submit();
+    	   				}else {
+    	   					alert('所选部门还有下属部门，请先删除下属部门！');
     						return false;
-    	       		    }
-    	    		}
-    			});
-		  	}
-		});
+    		   		 	}
+				  	}
+				});
+    	   	}
+    	});
+    	
     }
     
     function onImportClick(btn){
@@ -207,6 +196,7 @@ function checkAll(){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
+<%=pageList.getPageInfo().getHtml("depart.do?action=list") %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td><input type="checkbox" name="checkall" onclick="checkAll();">选　择</td>

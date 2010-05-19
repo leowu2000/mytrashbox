@@ -134,14 +134,19 @@ public class CommonDAO {
 	 * @return
 	 */
 	public List getChildDepart(String emid){
-		Map mapEm = jdbcTemplate.queryForMap("select * from EMPLOYEE where ID='" + emid + "'");
-		
-		if("001".equals(mapEm.get("ROLECODE").toString())||"000".equals(mapEm.get("ROLECODE").toString())){//管理员
+		List listEm = jdbcTemplate.queryForList("select * from EMPLOYEE where ID='" + emid + "'");
+		Map mapEm = new HashMap();
+		if(listEm.size()>0){
+			mapEm = (Map)listEm.get(0);
+		}
+		String rolecode = mapEm.get("ROLECODE")==null?"":mapEm.get("ROLECODE").toString();
+		String departcode = mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString();
+		if("001".equals(rolecode)||"000".equals(rolecode)){//管理员
 			return jdbcTemplate.queryForList("select * from DEPARTMENT order by LEVEL");
-		}else if("002".equals(mapEm.get("ROLECODE").toString())){//领导
-			return getDeparts(mapEm.get("DEPARTCODE").toString(), new ArrayList());
+		}else if("002".equals(rolecode)){//领导
+			return getDeparts(departcode, new ArrayList());
 		}else {//普通员工
-			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + mapEm.get("DEPARTCODE") + "' order by LEVEL");
+			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "' order by LEVEL");
 		}
 	}
 	
