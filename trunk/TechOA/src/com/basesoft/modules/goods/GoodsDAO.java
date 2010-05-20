@@ -37,6 +37,34 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 	}
 	
 	/**
+	 * 获取物资列表
+	 * @param page 页码
+	 * @return
+	 */
+	public PageList findAll_price(int page){
+		PageList pageList = new PageList();
+		String sql = "";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		sql = "select * from GOODS_PRICE order by PRICE";
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+		
+	}
+	
+	/**
 	 * 根据id获取实例
 	 * @param id
 	 * @return
@@ -69,6 +97,25 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 		goods.setXmyt(map.get("XMYT")==null?"":map.get("XMYT").toString());
 		goods.setChbm(map.get("CHBM")==null?"":map.get("CHBM").toString());
 		
+		return goods;
+	}
+	
+	/**
+	 * 根据id获取实例
+	 * @param id
+	 * @return
+	 */
+	public Goods_price findById_p(String id){
+		Goods_price goods = new Goods_price();
+		
+		String sql = "select * from GOODS_PRICE where ID='" + id + "'";
+		Map map = jdbcTemplate.queryForMap(sql);
+		
+		goods.setId(map.get("ID").toString());
+		goods.setCode(map.get("CODE")==null?"":map.get("CODE").toString());
+		goods.setName(map.get("NAME")==null?"":map.get("NAME").toString());
+		goods.setType(map.get("TYPE")==null?"":map.get("TYPE").toString());
+		goods.setPrice(map.get("PRICE")==null?0:Float.parseFloat(map.get("PRICE").toString()));
 		return goods;
 	}
 	
@@ -115,5 +162,23 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 		}
 		
 		return haveCkdh;
+	}
+	
+	/**
+	 * 是否存在编码
+	 * @param code
+	 * @return
+	 */
+	public boolean haveCode(String code){
+		boolean haveCode = false;
+		
+		String sql = "select * from GOODS_PRICE where CODE='" + code + "'";
+		List list = jdbcTemplate.queryForList(sql);
+		
+		if(list.size()>0){
+			haveCode = true;
+		}
+		
+		return haveCode;
 	}
 }
