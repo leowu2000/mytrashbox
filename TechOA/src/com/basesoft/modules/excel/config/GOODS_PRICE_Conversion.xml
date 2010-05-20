@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<head>
+		<table>GOODS_PRICE</table>
+		<code>GOODS_PRICE</code>
+		<name>物资表</name>
+		<row>2</row>
+		<col>1</col>
+		<type>1</type>
+		<count></count>
+		<split></split>
+	</head>
+	<body>
+		<relation>
+			<id>1</id>
+			<name>编码</name>
+			<column>CODE</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>2</id>
+			<name>名称</name>
+			<column>NAME</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>3</id>
+			<name>型号规格</name>
+			<column>TYPE</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>4</id>
+			<name>单价</name>
+			<column>PRICE</column>
+			<format></format>
+		</relation>
+	</body>
+</config>

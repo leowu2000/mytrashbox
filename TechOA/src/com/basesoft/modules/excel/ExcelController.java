@@ -78,6 +78,8 @@ public class ExcelController extends CommonController {
 				mv.addObject("datepick", datepick);
 			}else if("GOODS".equals(table)){//物资资产
 				mv = new ModelAndView("modules/excel/preview_goods");
+			}else if("GOODS_PRICE".equals(table)){
+				mv = new ModelAndView("modules/excel/preview_goods_price");
 			}else if("PLAN".equals(table)){//计划
 				mv = new ModelAndView("modules/excel/preview_plan");
 				mv.addObject("f_level", f_level);
@@ -136,6 +138,8 @@ public class ExcelController extends CommonController {
 				errorMessage = excelDAO.insertPos(data);
 			}else if("GOODS".equals(table)){//物资资产
 				errorMessage = excelDAO.insertGoods(data);
+			}else if("GOODS_PRICE".equals(table)){
+				errorMessage = excelDAO.insertGoods_price(data);
 			}else if("PLAN".equals(table)){//计划
 				errorMessage = excelDAO.insertPlan(data, datepick);
 			}else if("ASSETS".equals(table)){//固定资产

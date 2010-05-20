@@ -452,7 +452,7 @@ public class ExcelDAO extends CommonDAO {
 	}
 	
 	/**
-	 * 物资资产入库
+	 * 领料表入库
 	 * @param data 
 	 * @return
 	 */
@@ -490,6 +490,49 @@ public class ExcelDAO extends CommonDAO {
 				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 				
 				String insertSql = "insert into GOODS values('" + uuid + "'," + kjnd + ",'" + kjh + "','" + ckdh + "'," + je + ",'" + llbmmc + "','" + llbmbm + "','" + jsbmmc + "','" + jsbmbm + "','" + llrmc + "','" + llrbm + "','" + zjh + "','" + chmc + "','" + gg + "','" + pjcode + "','" + th + "','" + zjldw + "'," + sl + "," + dj + ",'" + xmyt + "','" + chbm + "')";
+				
+				try{
+					insert(insertSql);
+				}catch(Exception e){
+					System.out.println(e);
+					errorMessage = getErrorMessage(errorMessage, i);
+					continue;
+				}
+			}else {
+				errorMessage = getErrorMessage2(errorMessage, i);
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 物资资产入库
+	 * @param data 
+	 * @return
+	 */
+	public String insertGoods_price(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			if(!goodsDAO.haveCode(row.optString("CODE"))){
+				String code = row.optString("CODE");
+				String name = row.optString("CODE");
+				String type = row.optString("CODE");
+				double price = row.optDouble("PRICE");
+				
+				//生成32位uuid
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				
+				String insertSql = "insert into GOODS_PRICE values('" + uuid + "','" + code + "','" + name + "','" + type + "'," + price + ")";
 				
 				try{
 					insert(insertSql);

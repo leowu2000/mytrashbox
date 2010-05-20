@@ -130,6 +130,58 @@ public class GoodsController extends CommonController {
 			mv.addObject("pageList", pageList);
 			mv.addObject("empcode", empcode);
 			return mv;
+		}else if("list_price".equals(action)){
+			mv = new ModelAndView("modules/goods/list_goods_price");
+			
+			PageList pageList = goodsDAO.findAll_price(page); 
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("errorMessage", errorMessage);
+			return mv;
+		}else if("add_price".equals(action)){
+			String code = ServletRequestUtils.getStringParameter(request, "code", "");
+			String name = ServletRequestUtils.getStringParameter(request, "name", "");
+			String type = ServletRequestUtils.getStringParameter(request, "type", "");
+			float price = ServletRequestUtils.getFloatParameter(request, "price", 0);
+			
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			
+			String insertSql = "INSERT INTO GOODS_PRICE VALUES('" + id + "', '" + code + "', '" + name + "', '" + type + "', " + price + ")";
+			
+			goodsDAO.insert(insertSql);
+			
+			response.sendRedirect("goods.do?action=list_price&page=" + page);
+		}else if("delete_price".equals(action)){
+			String[] check=request.getParameterValues("check");
+			for(int i=0;i<check.length;i++){
+				String deleteSql = "delete from GOODS_PRICE where ID='" + check[i] + "'";
+				goodsDAO.delete(deleteSql);
+			}
+			
+			response.sendRedirect("goods.do?action=list_price&page=" + page);
+		}else if("query_price".equals(action)){
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			Goods_price goods = goodsDAO.findById_p(id);
+			XStream xstream = new XStream(new JettisonMappedXmlDriver());
+			xstream.alias("item", Goods_price.class);
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=UTF-8");
+			response.getWriter().write(xstream.toXML(goods));
+			response.getWriter().close();
+		}else if("update_price".equals(action)){
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			String code = ServletRequestUtils.getStringParameter(request, "code", "");
+			String name = ServletRequestUtils.getStringParameter(request, "name", "");
+			String type = ServletRequestUtils.getStringParameter(request, "type", "");
+			float price = ServletRequestUtils.getFloatParameter(request, "price", 0);
+			
+			String updateSql = "update GOODS_PRICE set CODE='" + code + "', NAME='" + name + "', TYPE='" + type + "', PRICE=" + price;
+			
+			goodsDAO.update(updateSql);
+			
+			response.sendRedirect("goods.do?action=list_price&page=" + page);
 		}
 		
 		return null;
