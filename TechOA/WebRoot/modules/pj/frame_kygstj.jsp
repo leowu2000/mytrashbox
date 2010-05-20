@@ -1,5 +1,13 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.basesoft.util.*" %>
+<%
+String departcode = session.getAttribute("DEPARTCODE")==null?"":session.getAttribute("DEPARTCODE").toString();
+
+String departname = session.getAttribute("DEPARTNAME")==null?"":session.getAttribute("DEPARTNAME").toString();
+if("".equals(departname)){
+	departname = "请选择...";
+}
+%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -50,6 +58,8 @@
       		}
 			
 		});
+		
+		comboBoxTree.setValue({id:'<%=departcode %>',text:'<%=departname %>'});
 	
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
 		tb.add('选择工作令号');
@@ -81,7 +91,6 @@
     		window.location.href = "/excel.do?action=export&model=KYGSTJ&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + pjcodes;
   		}
   		
-  		comboBoxTree.setValue({id:'0',text:'请选择...'});
 	});
 	
 	function commit(){

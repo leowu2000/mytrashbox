@@ -92,7 +92,11 @@ public class EmployeeController extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			String rolecode = ServletRequestUtils.getStringParameter(request, "oldrolecode", "");
 			
-			emDAO.update("update EMPLOYEE set ROLECODE='" + rolecode + "' where ID='" + id + "'");
+			if("004".equals(rolecode)||"001".equals(rolecode)||"006".equals(rolecode)||"007".equals(rolecode)){
+				emDAO.update("update EMPLOYEE set ROLECODE='" + rolecode + "', DEPARTCODE='0' where ID='" + id + "'");
+			}else {
+				emDAO.update("update EMPLOYEE set ROLECODE='" + rolecode + "' where ID='" + id + "'");
+			}
 			
 			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&page=" + page);
 			return null;

@@ -5,6 +5,8 @@
 <%@ page import="com.basesoft.modules.plan.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
+String rolecode = session.getAttribute("EMROLE")==null?"":session.getAttribute("EMROLE").toString();
+
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listPersent = (List)request.getAttribute("listPersent");
 List listPj = (List)request.getAttribute("listPj");
@@ -47,6 +49,7 @@ if(errorMessage!=''){
 var win;
 var win2;
 var win3;
+var win4;
 var action;
 var url='/plan.do';
 var vali = "";
@@ -58,6 +61,7 @@ Ext.onReady(function(){
 	tb.add({text: '标志完成',cls: 'x-btn-text-icon save',handler: onCompleteClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
 	tb.add({text: '设置完成情况百分比',cls: 'x-btn-text-icon xiugai',handler: onSetClick});
+	tb.add({text: '任务分解',cls: 'x-btn-text-icon add',handler: onApartClick});
 	tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
     if(!win){
@@ -86,6 +90,16 @@ Ext.onReady(function(){
 	        buttons: [
 	        {text:'提交',handler: function(){Ext.getDom('dataForm3').action=action; Ext.getDom('dataForm3').submit();}},
 	        {text:'关闭',handler: function(){win3.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win4){
+        win4 = new Ext.Window({
+        	el:'dlg4',width:450,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm4').action=action; Ext.getDom('dataForm4').submit();}},
+	        {text:'关闭',handler: function(){win4.hide();}}
 	        ]
         });
     }
@@ -214,6 +228,47 @@ Ext.onReady(function(){
 		action = url + '?action=setpersent&f_level=<%=level %>&f_type=<%=type %>&page=<%=pagenum %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
     	win3.setTitle('设置完成情况百分比');
         win3.show(btn.dom);
+    }
+    
+    function onApartClick(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+		Ext.Ajax.request({
+			url: url+'?action=query&planid='+selValue,
+			method: 'GET',
+			success: function(transport) {
+			    var data = eval('('+transport.responseText+')');
+			    Ext.get('pjcode').set({'value':data.item.pjcode});
+			    Ext.get('pjcode').set({'disabled':''});
+			    AJAX_PJ(document.getElementById('pjcode').value);
+				Ext.get('pjcode_d').set({'value':data.item.pjcode__d});
+				Ext.get('pjcode_d').set({'disabled':''});
+				Ext.get('stagecode').set({'value':data.item.stagecode});
+				Ext.get('ordercode').set({'value':data.item.ordercode});
+				Ext.get('note').set({'value':data.item.note});
+				Ext.get('symbol').set({'value':data.item.symbol});
+				Ext.get('enddate').set({'value':data.item.enddate});
+				Ext.get('empnames').set({'value':data.item.empname});
+				Ext.get('empcodes').set({'value':data.item.empcode});
+				Ext.get('assess').set({'value':data.item.assess});
+				Ext.get('remark').set({'value':data.item.remark});
+				Ext.get('typecode').set({'value':data.item.type});
+				Ext.get('typecode').set({'disabled':''});
+				changeType();
+				Ext.get('typecode2').set({'value':data.item.type2});
+				Ext.get('typecode2').set({'disabled':''});
+				Ext.get('leader_station').set({'value':data.item.leader__station});
+				Ext.get('leader_section').set({'value':data.item.leader__section});
+				Ext.get('leader_room').set({'value':data.item.leader__room});
+				
+		    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
+	    		win.setTitle('修改');
+		        win.show(btn.dom);
+		  	}
+		});
     }
     
     var colorMenu1 = new Ext.menu.ColorMenu({

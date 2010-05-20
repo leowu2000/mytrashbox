@@ -26,11 +26,11 @@ public class WorkReportController extends CommonController {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
+		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		
 		if("list".equals(action)){//列表
 			mv = new ModelAndView("modules/workreport/list_workreport");
-			
 			
 			String method = ServletRequestUtils.getStringParameter(request, "method", "");
 			
@@ -54,13 +54,7 @@ public class WorkReportController extends CommonController {
 			//工作报告列表
 			PageList listReport = workReportDAO.findAllAudit(emid, page);
 			
-			//项目列表和投入阶段列表
-			//List listProject = workReportDAO.getProject();
-			//List listStage = workReportDAO.getDICTByType("5");
-			
 			mv.addObject("listReport", listReport);
-			//mv.addObject("listProject", listProject);
-			//mv.addObject("listStage", listStage);
 		}else if("add".equals(action)){//新增操作
 			//获取登陆用户信息
 			Map mapEm = workReportDAO.findByEmId(emid);

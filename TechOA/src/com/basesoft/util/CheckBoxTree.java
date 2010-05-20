@@ -56,8 +56,13 @@ public class CheckBoxTree {
 		sb.append("leaf:" + this.leaf);
 		sb.append(",");
 		sb.append("checked:" + this.checked);
-		sb.append(",")
-	      .append("expanded:true");
+		if(this.checked){
+			sb.append(",")
+		      .append("expanded:true");
+		}else {
+			sb.append(",")
+		      .append("expanded:false");
+		}
 		if (this.children != null && !this.leaf) {
 			sb.append(",");
 			sb.append("children:" + ListToJSONString(this.children));
@@ -88,6 +93,9 @@ public class CheckBoxTree {
 			if(leaf.getChecked()){
 				sb.append(",")
 				  .append("expanded:true");
+			}else {
+				sb.append(",")
+				  .append("expanded:false");
 			}
 			if (leaf.getChildren() != null && !leaf.getLeaf()) {
 				sb.append(",");

@@ -100,18 +100,7 @@ Ext.onReady(function(){
 %>            
             <tr align="center">
             	<td>&nbsp;<%=type %>--<%=type2 %></td>
-<%
-			String pjcode = planDAO.findCodeByName("PROJECT", row.optString("PJNAME"));
-			if("".equals(pjcode)){
-%>
-				<td bgcolor="#FF0088" title="系统无法识别此工作令号！">&nbsp;<%=row.optString("PJNAME") %></td>
-<%
-			}else {
-%>
 				<td>&nbsp;<%=row.optString("PJNAME") %></td>
-<%
-			}
-%>
             	<td>&nbsp;<%=row.optString("ORDERCODE") %></td>
             	<td>&nbsp;<%=row.optString("NOTE") %></td>
             	<td>&nbsp;<%=row.optString("SYMBOL") %></td>

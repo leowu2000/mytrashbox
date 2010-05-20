@@ -59,17 +59,18 @@ public class EmployeeDAO extends CommonDAO{
 				}
 			}
 			if("".equals(emname)){//没有名字过滤
-				sql = "select * from EMPLOYEE where ROLECODE!='000' order by DEPARTCODE desc,LEVEL";
+				sql = "select * from EMPLOYEE where ROLECODE!='000'";
 			}else {
-				sql = "select * from EMPLOYEE where ROLECODE!='000' and NAME like '%" + emname + "%' order by DEPARTCODE desc,LEVEL ";
+				sql = "select * from EMPLOYEE where ROLECODE!='000' and NAME like '%" + emname + "%'";
 			}
 		}else {
 			if("".equals(emname)){
-				sql = "select * from EMPLOYEE where ROLECODE!='000' and DEPARTCODE = '" + departcode + "' order by DEPARTCODE desc,LEVEL";
+				sql = "select * from EMPLOYEE where ROLECODE!='000' and DEPARTCODE = '" + departcode + "'";
 			}else {
-				sql = "select * from EMPLOYEE where ROLECODE!='000' and DEPARTCODE = '" + departcode + "' and NAME like '%" + emname + "%' order by DEPARTCODE desc,LEVEL";
+				sql = "select * from EMPLOYEE where ROLECODE!='000' and DEPARTCODE = '" + departcode + "' and NAME like '%" + emname + "%'";
 			}
 		}
+		sql = sql + " order by cast(CODE as int)";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";

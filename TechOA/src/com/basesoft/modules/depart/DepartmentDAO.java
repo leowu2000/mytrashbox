@@ -16,7 +16,7 @@ public class DepartmentDAO extends CommonDAO{
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		sql = "select * from DEPARTMENT order by PARENT";
+		sql = "select * from DEPARTMENT order by PARENT,cast(CODE as int)";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -80,7 +80,20 @@ public class DepartmentDAO extends CommonDAO{
 	 * @return
 	 */
 	public List<?> getChild(String departcode){
-		return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by NAME ");
+		return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by cast(CODE as int)");
+	}
+	
+	/**
+	 * 获取本单位
+	 * @param departcode
+	 * @return
+	 */
+	public List<?> getSelf(String departcode){
+		if("0".equals(departcode)){//0代表所有一级单位
+			return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by cast(CODE as int)");
+		}else {
+			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "' order by cast(CODE as int)");
+		}
 	}
 	
 	/**
