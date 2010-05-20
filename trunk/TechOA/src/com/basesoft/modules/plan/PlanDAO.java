@@ -20,13 +20,12 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String level, String type, String empname, String datepick, int page){
+	public PageList findAll(String level, String type, String empname, String datepick, int page, String emdepart){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
-		
 		if("0".equals(level)){//全部级别
 			if("0".equals(type)){//全部类别
 				if("".equals(empname)){//全部人员
@@ -59,7 +58,11 @@ public class PlanDAO extends CommonDAO {
 		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 		Date enddate = StringUtil.getEndOfMonth(startdate);
 		
-		sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' order by ENDDATE desc,STATUS,ORDERCODE";
+		if(!"0".equals(emdepart)){
+			sql = sql + " and DEPARTCODE='" + emdepart + "'";
+		}
+		
+		sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' order by TYPE,TYPE2,cast(ordercode as int),ENDDATE desc";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";

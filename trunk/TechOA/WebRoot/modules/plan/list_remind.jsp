@@ -41,7 +41,7 @@ PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("plan.do?action=list_remind&f_level=" + f_level + "&f_type=" + f_type + "&datepick=" + datepick + "&empname=" + f_empname) %>
+<%=pageList.getPageInfo().getHtml("plan.do?action=remind_list&f_level=" + f_level + "&f_type=" + f_type + "&datepick=" + datepick + "&empname=" + f_empname) %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
             	<td>计划分类</td>

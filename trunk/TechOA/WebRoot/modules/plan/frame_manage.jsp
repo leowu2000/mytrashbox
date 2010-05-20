@@ -76,7 +76,7 @@
 <%	} %>					
 	</select>
 	<input type="text" name="empname" style="width:60;">
-	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" style="width: 50">
+	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" style="width: 50" onchange="commit();">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
     <iframe name="list_manage" width="100%" frameborder="0" height="500"></iframe>
   </body>

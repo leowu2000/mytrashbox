@@ -38,7 +38,7 @@ var win;
 var win2;
 var action;
 var url='/card.do';
-var c = '';
+var c = 'add';
 var method = '<%=method %>';
 Ext.onReady(function(){
 	var comboBoxTree = new Ext.ux.ComboBoxTree({
@@ -98,6 +98,9 @@ Ext.onReady(function(){
 		        			Ext.getDom('dataForm').action=action; 
 	    	    			Ext.getDom('dataForm').submit();
 	        			}
+	        		}else {
+	        			Ext.getDom('dataForm').action=action; 
+	    	    		Ext.getDom('dataForm').submit();
 	        		}
 	        	}
 	        },

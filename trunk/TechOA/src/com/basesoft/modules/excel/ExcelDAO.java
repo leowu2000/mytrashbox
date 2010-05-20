@@ -393,7 +393,7 @@ public class ExcelDAO extends CommonDAO {
 			if("".equals(parentname)){//一级部门
 				if(map.get("CODE")==null){//不存在则导入
 					String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-					String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,LEVEL) values('" + uuid + "','" + code + "','" + name + "','','',1)";
+					String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,LEVEL) values('" + uuid + "','" + code + "','" + name + "','0','',1)";
 					try{
 						insert(insertSql);
 					}catch(Exception e){
@@ -526,11 +526,11 @@ public class ExcelDAO extends CommonDAO {
 		for(int i=0;i<rows.length();i++){
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
-			String pjname = row.optString("PJNAME");
+			String pjcode = row.optString("PJNAME");
 			String ordercode = row.optString("ORDERCODE");
 			String note = row.optString("NOTE");
 			
-			if("".equals(row.optString("PJNAME"))){//令号为空，则此行为计划分类
+			if("".equals(pjcode)){//令号为空，则此行为计划分类
 				typecount = typecount + 1;
 				if(i + 1 < rows.length()){
 					JSONObject nextrow = rows.optJSONObject(i + 1);
@@ -543,9 +543,15 @@ public class ExcelDAO extends CommonDAO {
 					}
 				}
 			}else {
+				Map mapProject = findByCode("PROJECT", pjcode);
+				if(mapProject.get("ID") == null){//不存在此工作令号
+					String id = UUID.randomUUID().toString().replaceAll("-", "");
+					String insertSql = "insert into PROJECT values('" + id + "', '" + pjcode + "', '" + pjcode + "', '1', '', '', 0, 0, null, null, '')";
+					insert(insertSql);
+				}
+				
 				String symbol = row.optString("SYMBOL");
-				Date startdate_default = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
-				Date enddate_default = StringUtil.getEndOfMonth(startdate_default);
+				Date enddate_default = StringUtil.getEndOfMonth(new Date());
 				String enddate = "";
 				if("".equals(row.optString("ENDDATE"))){
 					enddate = StringUtil.DateToString(enddate_default, "yyyy-MM-dd");
@@ -559,8 +565,6 @@ public class ExcelDAO extends CommonDAO {
 				String plannername = row.optString("PLANNERNAME");
 				String leader_room = row.optString("LEADER_ROOM");
 				String leader_section = row.optString("LEADER_SECTION");
-				//根据工作令名称找出工作令编码
-				String pjcode  = findCodeByName("PROJECT", pjname);
 				//根据部门名称找出部门编码
 				String departcode = findCodeByName("DEPARTMENT", departname);
 				//根据计划员姓名找出计划员编码

@@ -20,10 +20,11 @@ public class TreeController extends CommonController {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
-
+		String departcode = request.getSession().getAttribute("DEPARTCODE")==null?"":request.getSession().getAttribute("DEPARTCODE").toString();
+		
 		if("departempTree".equals(action)){//部门_人员下拉树
 			//封装成checkboxtree
-			List<CheckBoxTree> checkBoxTreeList = treeDAO.getDepartEmpTree("1", "");
+			List<CheckBoxTree> checkBoxTreeList = treeDAO.getDepartEmpTree("1", "", departcode);
 			//循环转换为json格式
 			StringBuffer sb = new StringBuffer();
 			sb.append("[");
@@ -43,7 +44,7 @@ public class TreeController extends CommonController {
 			response.getWriter().close();
 		}else if("departTree".equals(action)){//部门下拉树
 			//封装成checkboxtree
-			List<CheckBoxTree> checkBoxTreeList = treeDAO.getDepartEmpTree("2", "");
+			List<CheckBoxTree> checkBoxTreeList = treeDAO.getDepartEmpTree("2", "", departcode);
 			//循环转换为json格式
 			StringBuffer sb = new StringBuffer();
 			sb.append("[");
@@ -69,7 +70,7 @@ public class TreeController extends CommonController {
 		}else if("multiemp".equals(action)){
 			String checkedEmp = ServletRequestUtils.getStringParameter(request, "checkedEmp", "");
 			//封装成checkboxtree
-			List<CheckBoxTree> checkBoxTreeList = treeDAO.getDepartEmpTree("1", checkedEmp);
+			List<CheckBoxTree> checkBoxTreeList = treeDAO.getDepartEmpTree("1", checkedEmp, departcode);
 			//循环转换为json格式
 			StringBuffer sb = new StringBuffer();
 			sb.append("[");

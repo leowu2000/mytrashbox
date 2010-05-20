@@ -1,4 +1,12 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%
+String departcode = session.getAttribute("DEPARTCODE")==null?"":session.getAttribute("DEPARTCODE").toString();
+
+String departname = session.getAttribute("DEPARTNAME")==null?"":session.getAttribute("DEPARTNAME").toString();
+if("".equals(departname)){
+	departname = "请选择...";
+}
+%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -50,6 +58,8 @@
 			
 		});
 		
+		comboBoxTree.setValue({id:'<%=departcode %>',text:'<%=departname %>'});
+		
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('选择部门');
@@ -59,8 +69,6 @@
   		tb.add(document.getElementById('emname'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
-  		
-  		comboBoxTree.setValue({id:'0',text:'请选择...'});
   		
   		var emname = document.getElementById('emname').value;
 	    document.getElementById('list_search').src = "/search.do?action=list_search&seldepart=" + comboBoxTree.getValue() + "&emname=" + emname;

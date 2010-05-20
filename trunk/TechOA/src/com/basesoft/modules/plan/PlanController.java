@@ -28,6 +28,7 @@ public class PlanController extends CommonController {
 		// TODO Auto-generated method stub
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
+		String emdepart = request.getSession().getAttribute("DEPARTCODE")==null?"":request.getSession().getAttribute("DEPARTCODE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
@@ -48,7 +49,7 @@ public class PlanController extends CommonController {
 		}else if("list".equals(action)){//计划管理
 			mv = new ModelAndView("modules/plan/list_manage");
 			
-			PageList pageList = planDAO.findAll(f_level, f_type, f_empname, datepick, page);
+			PageList pageList = planDAO.findAll(f_level, f_type, f_empname, datepick, page, emdepart);
 			List listPersent = planDAO.getListPersent();
 			
 			List listLevel = planDAO.getLevel();
