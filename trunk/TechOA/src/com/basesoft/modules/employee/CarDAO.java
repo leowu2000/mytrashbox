@@ -14,12 +14,18 @@ public class CarDAO extends CommonDAO {
 	 * @param page
 	 * @return
 	 */
-	public PageList findAllCar(int page){
+	public PageList findAllCar(String carcode, int page){
 		PageList pageList = new PageList();
-		String sql = "select * from CAR order by CARCODE";
+		String sql = "";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
+		
+		if(!"".equals(carcode)){
+			sql = "select * from CAR where CARCODE like '%" + carcode + "%' order by CARCODE";
+		}else {
+			sql = "select * from CAR order by CARCODE";
+		}
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";

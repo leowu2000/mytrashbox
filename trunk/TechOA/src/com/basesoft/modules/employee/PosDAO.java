@@ -8,7 +8,7 @@ import com.basesoft.core.PageList;
 
 public class PosDAO extends CardDAO {
 
-	public PageList findAll(String seldepart, String emname, String datepick, int page){
+	public PageList findAll(String seldepart, String emname, String datepick, String sel_empcode, int page){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
@@ -22,7 +22,7 @@ public class PosDAO extends CardDAO {
 		if("0".equals(seldepart)){
 			if("".equals(datepick)){
 				if("".equals(emname)){//所有记录
-					sql = "select * from EMP_POS";
+					sql = "select * from EMP_POS where 1=1";
 				}else {//按名字模糊查询
 					sql = "select * from EMP_POS where EMPNAME like '%" + emname + "%'";
 				}
@@ -47,6 +47,10 @@ public class PosDAO extends CardDAO {
 					sql = "select * from EMP_POS where DEPARTCODE='" + seldepart + "' and SWIPETIME like '%" + datepick + "%' and EMPNAME like '%" + emname + "%'";
 				}
 			}
+		}
+		
+		if(!"".equals(sel_empcode)){
+			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
 		}
 		
 		sql = sql + " order by SWIPETIME desc,POSCODE asc";

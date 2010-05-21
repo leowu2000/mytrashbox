@@ -65,13 +65,17 @@ if("".equals(departname)){
   		tb.add('选择部门');
   		tb.add(document.getElementById('departspan'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
+  		tb.add('按工号模糊查询');
+  		tb.add(document.getElementById('sel_empcode'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('按名字模糊查询');
   		tb.add(document.getElementById('emname'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
   		
   		var emname = document.getElementById('emname').value;
-	    document.getElementById('list_search').src = "/search.do?action=list_search&seldepart=" + comboBoxTree.getValue() + "&emname=" + emname;
+  		var sel_empcode = document.getElementById('sel_empcode').value;
+	    document.getElementById('list_search').src = "/search.do?action=list_search&seldepart=" + comboBoxTree.getValue() + "&emname=" + emname + "&sel_empcode=" + sel_empcode;
 	});
 	
 	function IFrameResize(){
@@ -81,8 +85,8 @@ if("".equals(departname)){
 	function commit(){
 	  var seldepart = document.getElementById('seldepart').value;
 	  var emname = document.getElementById('emname').value;
-	  
-	  document.getElementById('list_search').src = "/search.do?action=list_search&seldepart=" + seldepart + "&emname=" + emname;
+	  var sel_empcode = document.getElementById('sel_empcode').value;
+	  document.getElementById('list_search').src = "/search.do?action=list_search&seldepart=" + seldepart + "&emname=" + emname + "&sel_empcode=" + sel_empcode;
 	}
 	</script>
   </head>
@@ -92,6 +96,7 @@ if("".equals(departname)){
   	<div id="toolbar"></div>
 	<span id="departspan" name="departspan"></span>
 	<input type="text" name="emname" style="width:60;">
+	<input type="text" name="sel_empcode" id="sel_empcode" style="width:60;">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
     <iframe name="list_search" width="100%" frameborder="0" height="500"></iframe>
   </body>

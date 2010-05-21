@@ -39,7 +39,10 @@ public class EmployeeController extends CommonController {
 		errorMessage = new String(errorMessage.getBytes("ISO8859-1"),"UTF-8");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
+		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
+		
+		String returnUrl_infolist = "em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&page=" + page + "&sel_empcode=" + sel_empcode;
 		if("frame_infolist".equals(action)){//人员frame
 			mv = new ModelAndView("modules/employee/frame_info");
 		}else if("infolist".equals(action)){//人员基本信息
@@ -49,11 +52,12 @@ public class EmployeeController extends CommonController {
 
 			mv.addObject("listChildDepart", listChildDepart);
 			//获取部门下员工列表
-			PageList pageList = emDAO.findAll(seldepart, emname, page);
+			PageList pageList = emDAO.findAll(seldepart, emname, sel_empcode, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
+			mv.addObject("sel_empcode", sel_empcode);
 			mv.addObject("errorMessage", errorMessage);
 		}else if("add".equals(action)){//新用户添加操作
 			//接收页面参数
@@ -66,7 +70,7 @@ public class EmployeeController extends CommonController {
 			
 			emDAO.insert("insert into EMPLOYEE values('" + id + "','" + loginid + "','1','" + loginid + "','" + rolecode + "','" + emname + "','" + depart + "','','','','','','','','','','','','','')");
 			
-			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&page=" + page);
+			response.sendRedirect(returnUrl_infolist);
 			return null;
 		}else if("changepass".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
@@ -74,7 +78,7 @@ public class EmployeeController extends CommonController {
 			
 			emDAO.update("update EMPLOYEE set PASSWORD='" + newpassword + "' where ID='" + id + "'");
 			
-			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&page=" + page);
+			response.sendRedirect(returnUrl_infolist);
 			return null;
 		}else if("roleajax".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
@@ -98,7 +102,7 @@ public class EmployeeController extends CommonController {
 				emDAO.update("update EMPLOYEE set ROLECODE='" + rolecode + "' where ID='" + id + "'");
 			}
 			
-			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&page=" + page);
+			response.sendRedirect(returnUrl_infolist);
 			return null;
 		}else if("delete".equals(action)){//用户删除操作
 			String[] check=request.getParameterValues("check");
@@ -107,23 +111,24 @@ public class EmployeeController extends CommonController {
 				String deleteSql = "delete from EMPLOYEE where ID='" + check[i] + "'";
 				emDAO.delete(deleteSql);
 			}
-			response.sendRedirect("em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&page=" + page);
+			response.sendRedirect(returnUrl_infolist);
 			return null;
 		}else if("frame_manage".equals(action)){//人事管理frame
 			mv = new ModelAndView("modules/employee/frame_manage");
 		}else if("list_manage".equals(action)){//人事管理列表
 			mv = new ModelAndView("modules/employee/list_manage");
 			
-			PageList pageList = emDAO.findAll(seldepart, emname, page);
+			PageList pageList = emDAO.findAll(seldepart, emname, sel_empcode, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
+			mv.addObject("sel_empcode", sel_empcode);
+			mv.addObject("errorMessage", errorMessage);
 		}else if("manage".equals(action)){//人事管理详细信息
 			mv = new ModelAndView("modules/employee/detail_manage");
 			
 			String method = ServletRequestUtils.getStringParameter(request, "method", "");
-			
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
 			
 			//获取人员信息
@@ -251,6 +256,7 @@ public class EmployeeController extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
 			String loginid = ServletRequestUtils.getStringParameter(request, "loginid", "");
+			String empname = ServletRequestUtils.getStringParameter(request, "empname", "");
 			String email = ServletRequestUtils.getStringParameter(request, "email", "");
 			String blog = ServletRequestUtils.getStringParameter(request, "blog", "");
 			String selfweb = ServletRequestUtils.getStringParameter(request, "selfweb", "");
@@ -259,7 +265,7 @@ public class EmployeeController extends CommonController {
 			String address = ServletRequestUtils.getStringParameter(request, "address", "");
 			String post = ServletRequestUtils.getStringParameter(request, "post", "");
 			
-			emDAO.update("update EMPLOYEE set LOGINID='" + loginid + "',NAME='" + emname + "',EMAIL='" + email + "',BLOG='" + blog + "',SELFWEB='" + selfweb + "',STCPHONE='" + stcphone + "',MOBPHONE='" + mobphone + "',ADDRESS='" + address + "',POST='" + post + "' where ID='" + id + "'");
+			emDAO.update("update EMPLOYEE set LOGINID='" + loginid + "',NAME='" + empname + "',EMAIL='" + email + "',BLOG='" + blog + "',SELFWEB='" + selfweb + "',STCPHONE='" + stcphone + "',MOBPHONE='" + mobphone + "',ADDRESS='" + address + "',POST='" + post + "' where ID='" + id + "'");
 			
 			response.sendRedirect("em.do?action=manage_self");
 			return null;

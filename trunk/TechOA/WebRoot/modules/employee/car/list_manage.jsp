@@ -6,6 +6,7 @@
 	PageList pageList = (PageList)request.getAttribute("pageList");
 	List listCar = pageList.getList();
 	int pagenum = pageList.getPageInfo().getCurPage();
+	String sel_carcode = request.getAttribute("sel_carcode")==null?"":request.getAttribute("sel_carcode").toString();
 	
 	String method = request.getAttribute("method")==null?"":request.getAttribute("method").toString();
 	
@@ -100,7 +101,7 @@ Ext.onReady(function(){
 				Ext.get('phone').set({'value':data.item.phone});
 				Ext.get('sendlocate').set({'value':data.item.sendlocate});
 				
-		    	action = url+'?action=update&page=<%=pagenum %>';
+		    	action = url+'?action=update&page=<%=pagenum %>&sel_carcode=<%=sel_carcode %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -116,14 +117,14 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>';       
+	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&sel_carcode=<%=sel_carcode %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=preview&redirect=car.do?action=list_manage&table=CAR';
+		action = 'excel.do?action=preview&redirect=car.do?action=list_manage&table=CAR&sel_carcode=<%=sel_carcode %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
@@ -136,7 +137,7 @@ Ext.onReady(function(){
 			return false;
 		}
 		
-		window.location.href = url + '?action=list_manage_sendtime&page=<%=pagenum %>&carid=' + selValue;
+		window.location.href = url + '?action=list_manage_sendtime&page=<%=pagenum %>&sel_carcode=<%=sel_carcode %>&carid=' + selValue;
     }
     
     function onBackClick(){
@@ -163,10 +164,9 @@ function checkAll(){
   </head>
   
   <body>
-  <h1>班车管理</h1>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("car.do?action=list_manage") %>
+<%=pageList.getPageInfo().getHtml("car.do?action=list_manage&sel_carcode=" + sel_carcode) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<head>
+		<table>EMPLOYEE</table>
+		<code>EMPLOYEE_ADDRESS</code>
+		<name>人员基本信息表</name>
+		<row>2</row>
+		<col>1</col>
+		<type>1</type>
+		<count></count>
+		<split></split>
+	</head>
+	<body>
+		<relation>
+			<id>1</id>
+			<name>姓名</name>
+			<column>NAME</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>2</id>
+			<name>工号</name>
+			<column>CODE</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>3</id>
+			<name>所住家庭详细地址</name>
+			<column>ADDRESS</column>
+			<format></format>
+		</relation>
+	</body>
+</config>

@@ -41,11 +41,10 @@ public class DepartmentController extends CommonController {
 		}else if("add".equals(action)){//新增
 			String name = ServletRequestUtils.getStringParameter(request, "departname", "");
 			String parent = ServletRequestUtils.getStringParameter(request, "departparent", "");
+			String code = departDAO.getCode();
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			
 			if("0".equals(parent)){//根部门作为父部门
-				String id = UUID.randomUUID().toString().replaceAll("-", "");
-				int code = departDAO.findTotalCount("DEPARTMENT") + 1;
-				
 				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "','',1)");
 				
 				response.sendRedirect("depart.do?action=list");
@@ -55,8 +54,6 @@ public class DepartmentController extends CommonController {
 				
 				int level = Integer.parseInt(mapParent.get("LEVEL").toString()) + 1;
 				String allParents = mapParent.get("ALLPARENTS").toString() + "," + parent;
-				String id = UUID.randomUUID().toString().replaceAll("-", "");
-				int code = departDAO.findTotalCount("DEPARTMENT") + 1;
 				
 				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "','" + allParents + "'," + level + ")");
 				

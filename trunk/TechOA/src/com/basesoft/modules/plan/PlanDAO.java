@@ -20,7 +20,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String level, String type, String empname, String datepick, int page, String emdepart){
+	public PageList findAll(String level, String type, String empname, String datepick, int page, String emdepart, String sel_empcode){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
@@ -60,6 +60,10 @@ public class PlanDAO extends CommonDAO {
 		
 		if(!"0".equals(emdepart)){
 			sql = sql + " and DEPARTCODE='" + emdepart + "'";
+		}
+		
+		if(!"".equals(sel_empcode)){
+			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
 		}
 		
 		sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' order by TYPE,TYPE2,cast(ordercode as int),ENDDATE desc";

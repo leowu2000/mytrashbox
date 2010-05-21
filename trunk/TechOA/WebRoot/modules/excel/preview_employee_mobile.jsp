@@ -6,32 +6,22 @@
 <%@ page import="com.basesoft.modules.employee.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
+String seldepart = request.getAttribute("seldepart").toString();
+String emname = request.getAttribute("emname").toString();
+String sel_empcode = request.getAttribute("sel_empcode").toString();
+
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
 String path = request.getAttribute("path").toString();
-String sel_carcode = request.getAttribute("sel_carcode").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-CarDAO carDAO = (CarDAO)ctx.getBean("carDAO");
+EmployeeDAO emDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<title>班车信息导入预览</title>
-		<style type="text/css">
-		<!--
-		input{
-			width:80px;
-		}
-		.ainput{
-			width:20px;
-		}		
-		th {
-			white-space: nowrap;
-		}
-		-->
-		</style>		
+		<title>员工导入预览</title>
 <%@ include file="../../common/meta.jsp" %>
 <script type="text/javascript">
 Ext.onReady(function(){
@@ -40,54 +30,48 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'car.do?action=list_manage&sel_carcode=<%=sel_carcode %>';
+    	window.location.href = 'em.do?action=list_manage&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=car.do?action=list_manage&table=CAR&sel_carcode=<%=sel_carcode %>';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=em.do?action=list_manage&table=EMPLOYEE_MOBILE&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
     	document.getElementById('listForm').submit();
     }
 });
 </script>
 	</head>
 	<body>
-	<h1>班车信息导入预览</h1>
+	<h1>员工手机号导入预览</h1>
 	<div id="toolbar"></div>
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
 <input type="hidden" name="path" id="path" value='<%=path %>'>
-<br>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#FF0088">注：橙色行表示已存在此班车，将不予入库！</font>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#FF0088">注：橙色行表示无法关联用户，将不予入库。</font>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
-                <td>班车编号</td>
-    			<td>班车车牌号</td>
-    			<td>班车路线</td>
-    			<td>司机姓名</td>
-    			<td>司机电话</td>
-    			<td>发车地点</td>
-            	</tr>
+                <td>姓名</td>              
+                <td>人员编号</td>
+                <td>手机号码</td>
+            </tr>
 <%
 		for(int i=0;i<rows.length();i++){
 			JSONObject row = rows.optJSONObject(i);
-			boolean haveCar = carDAO.haveCar(row.optString("CARCODE"));
-			if(haveCar){
+			Map map = emDAO.findByCode("EMPLOYEE", row.optString("CODE"));
+			if(map.get("CODE")==null){
 %>            
-            <tr align="center" bgcolor="orange" title="系统中已存在此班车！">
+			<tr align="center" bgcolor="orange" title="无法关联用户！">
 <%
 			}else {
-%>
+%>			
 			<tr align="center">
 <%
 			}
-%>			
-            	<td>&nbsp;<%=row.optString("CARCODE") %></td>
-            	<td>&nbsp;<%=row.optString("CARNO") %></td>
-            	<td>&nbsp;<%=row.optString("WAY") %></td>
-            	<td>&nbsp;<%=row.optString("DRIVERNAME") %></td>
-            	<td>&nbsp;<%=row.optString("DRIVERPHONE") %></td>
-            	<td>&nbsp;<%=row.optString("SENDLOCATE") %></td>
-            </tr>
+%>           
+				<td>&nbsp;<%=row.optString("NAME") %></td>
+            	<td>&nbsp;<%=row.optString("CODE") %></td>
+            	<td>&nbsp;<%=row.optString("MOBILE") %></td>
+			</tr> 	
 <%
 		}
 %>            

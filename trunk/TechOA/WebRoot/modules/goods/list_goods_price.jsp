@@ -3,6 +3,7 @@
 <%
 	PageList pageList = (PageList)request.getAttribute("pageList");
 	List listGoods = pageList.getList();
+	String sel_empcode = request.getAttribute("sel_empcode").toString();
 	
 	int pagenum = pageList.getPageInfo().getCurPage();
 	
@@ -63,7 +64,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add_price';
+    	action = url+'?action=add_price&sel_empcode=<%=sel_empcode %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -87,7 +88,7 @@ Ext.onReady(function(){
 				Ext.get('price').set({'value':data.item.price});
 				
 				
-		    	action = url+'?action=update_price&page=<%=pagenum %>';
+		    	action = url+'?action=update_price&page=<%=pagenum %>&sel_empcode=<%=sel_empcode %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -103,14 +104,14 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=delete_price&page=<%=pagenum %>';       
+	    		Ext.getDom('listForm').action=url+'?action=delete_price&page=<%=pagenum %>&sel_empcode=<%=sel_empcode %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=preview&table=GOODS_PRICE';
+		action = 'excel.do?action=preview&table=GOODS_PRICE&sel_empcode=<%=sel_empcode %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
@@ -139,7 +140,7 @@ function checkAll(){
   <h1>物资管理</h1>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("goods.do?action=list_price") %>
+<%=pageList.getPageInfo().getHtml("goods.do?action=list_price&sel_empcode=" + sel_empcode) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

@@ -29,7 +29,10 @@
   		tb.add('选择年月');
   		tb.add(document.getElementById('datepick'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('按责任人模糊查询');
+  		tb.add('按责任人工号模糊查询');
+  		tb.add(document.getElementById('sel_empcode'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
+  		tb.add('按责任人姓名模糊查询');
   		tb.add(document.getElementById('empname'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
@@ -43,13 +46,14 @@
 	  var level = document.getElementById('sellevel').value;
 	  var type = document.getElementById('seltype').value;
 	  var empname = document.getElementById('empname').value;
+	  var sel_empcode = document.getElementById('sel_empcode').value;
 	  var datepick = document.getElementById('datepick').value;
 	  if(datepick == ''){
 	  	document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
 	  	datepick = document.getElementById('datepick').value;
 	  }
 	  
-	  document.getElementById('list_manage').src = "/plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + empname + "&datepick=" + datepick;
+	  document.getElementById('list_manage').src = "/plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + empname + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode;
 	}
 	</script>
   </head>
@@ -76,6 +80,7 @@
 <%	} %>					
 	</select>
 	<input type="text" name="empname" style="width:60;">
+	<input type="text" name="sel_empcode" id="sel_empcode" style="width:60;">
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" style="width: 50" onchange="commit();">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
     <iframe name="list_manage" width="100%" frameborder="0" height="500"></iframe>

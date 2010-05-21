@@ -11,6 +11,7 @@ String emname = request.getAttribute("emname").toString();
 String datepick = request.getAttribute("datepick").toString();
 String date = request.getAttribute("date").toString();
 String path = request.getAttribute("path").toString();
+String sel_empcode = request.getAttribute("sel_empcode").toString();
 
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
@@ -44,11 +45,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'finance.do?action=list_manage&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>&date=<%=date %>';
+    	window.location.href = 'finance.do?action=list_manage&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>&date=<%=date %>&sel_empcode=<%=sel_empcode %>';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=finance.do?action=list_manage&table=EMP_FINANCIAL&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>&date=<%=date %>';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=finance.do?action=list_manage&table=EMP_FINANCIAL&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>&date=<%=date %>&sel_empcode=<%=sel_empcode %>';
     	document.getElementById('listForm').submit();
     }
 });

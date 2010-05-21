@@ -9,6 +9,7 @@
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
 String path = request.getAttribute("path").toString();
+String sel_empcode = request.getAttribute("sel_empcode").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 GoodsDAO goodsDAO = (GoodsDAO)ctx.getBean("goodsDAO");
@@ -39,11 +40,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'goods.do?action=list';
+    	window.location.href = 'goods.do?action=list&sel_empcode=<%=sel_empcode %>';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=goods.do?action=list&table=GOODS';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=goods.do?action=list&table=GOODS&sel_empcode=<%=sel_empcode %>';
     	document.getElementById('listForm').submit();
     }
 });

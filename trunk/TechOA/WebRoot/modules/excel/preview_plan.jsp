@@ -11,6 +11,7 @@ String f_type = request.getAttribute("f_type").toString();
 String f_empname = request.getAttribute("f_empname").toString();
 String path = request.getAttribute("path").toString();
 String datepick = request.getAttribute("datepick").toString();
+String sel_empcode = request.getAttribute("sel_empcode").toString();
 
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
@@ -44,11 +45,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'plan.do?action=list&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
+    	window.location.href = 'plan.do?action=list&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN&f_level=<%=f_level %>&f_type=<%=f_type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
     	document.getElementById('listForm').submit();
     }
 });

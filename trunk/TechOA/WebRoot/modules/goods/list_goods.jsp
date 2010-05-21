@@ -4,6 +4,7 @@
 	List listPj = (List)request.getAttribute("listPj");
 	PageList pageList = (PageList)request.getAttribute("pageList");
 	List listGoods = pageList.getList();
+	String sel_empcode = request.getAttribute("sel_empcode").toString();
 	
 	int pagenum = pageList.getPageInfo().getCurPage();
 	
@@ -172,7 +173,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add';
+    	action = url+'?action=add&sel_empcode=<%=sel_empcode %>'; 
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -207,7 +208,7 @@ Ext.onReady(function(){
 				Ext.get('chbm').set({'value':data.item.chbm});
 				
 				
-		    	action = url+'?action=update&page=<%=pagenum %>';
+		    	action = url+'?action=update&page=<%=pagenum %>&sel_empcode=<%=sel_empcode %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -223,7 +224,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>';       
+	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&sel_empcode=<%=sel_empcode %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
@@ -259,7 +260,7 @@ function checkAll(){
   <h1>物资管理</h1>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("goods.do?action=list") %>
+<%=pageList.getPageInfo().getHtml("goods.do?action=list&sel_empcode=" + sel_empcode) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

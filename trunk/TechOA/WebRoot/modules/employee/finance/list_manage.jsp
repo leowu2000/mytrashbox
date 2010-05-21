@@ -10,6 +10,7 @@
 	String seldepart = request.getAttribute("seldepart").toString();
 	String emname = request.getAttribute("emname").toString();
 	emname = URLEncoder.encode(emname,"UTF-8");
+	String sel_empcode = request.getAttribute("sel_empcode").toString();
 	String datepick = request.getAttribute("datepick").toString();
 	
 	String method = request.getAttribute("method").toString();
@@ -109,7 +110,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';
+    	action = url+'?action=add&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -141,7 +142,7 @@ Ext.onReady(function(){
 				Ext.get('xmmc').set({'value':data.item.xmmc});
 				Ext.get('bz').set({'value':data.item.bz});
 				
-		    	action = url+'?action=update&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';
+		    	action = url+'?action=update&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -157,7 +158,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';       
+	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
@@ -168,14 +169,14 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=preview&table=EMP_FINANCIAL&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';
+		action = 'excel.do?action=preview&table=EMP_FINANCIAL&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
     }
     
     function onExportClick(){
-    	window.location.href = "/excel.do?action=export&model=JBF&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>";
+    	window.location.href = "/excel.do?action=export&model=JBF&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>";
   	}
 });
 
@@ -202,7 +203,7 @@ function checkAll(){
 <%
 if(!"search".equals(method)){
 %>
-<%=pageList.getPageInfo().getHtml("finance.do?action=list_manage&seldepart="+seldepart+"&empname="+emname+"&datepick="+datepick) %>
+<%=pageList.getPageInfo().getHtml("finance.do?action=list_manage&seldepart="+seldepart+"&empname="+emname+"&datepick="+datepick+"&sel_empcode="+sel_empcode) %>
 <%} %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">

@@ -104,4 +104,16 @@ public class DepartmentDAO extends CommonDAO{
 	public List<?> findEmpsByDepart(String departcode){
 		return jdbcTemplate.queryForList("select * from EMPLOYEE where DEPARTCODE='" + departcode + "' order by NAME");
 	}
+	
+	/**
+	 * 获取编码
+	 * @return
+	 */
+	public String getCode(){
+		int code = 0;
+		
+		code = jdbcTemplate.queryForInt("select Max(cast(CODE as int)) from DEPARTMENT");
+		
+		return String.valueOf(code + 1);
+	}
 }
