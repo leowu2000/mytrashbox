@@ -89,7 +89,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllRemind(String level, String type, String datepick, String empname, int page){
+	public PageList findAllRemind(String level, String type, String datepick, String empname, String empdepart, String empcode, int page){
 		PageList pageList = new PageList();
 		
 		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
@@ -127,6 +127,14 @@ public class PlanDAO extends CommonDAO {
 					sql = sql + " and ASSESS='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}
+		}
+		
+		if(!"0".equals(empdepart)){
+			sql = sql + " and DEPARTCODE='" + empdepart + "'";
+		}
+		
+		if(!"".equals(empcode)){
+			sql = sql + " and EMPCODE like '%" + empcode + "%'";
 		}
 		
 		sql = sql + " order by ENDDATE ,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";

@@ -272,13 +272,14 @@ public class PlanController extends CommonController {
 		}else if("remind_list".equals(action)){//计划提醒列表
 			mv = new ModelAndView("modules/plan/list_remind");
 			
-			PageList pageList = planDAO.findAllRemind(f_level, f_type, datepick, f_empname, page);
+			PageList pageList = planDAO.findAllRemind(f_level, f_type, datepick, f_empname,emdepart, sel_empcode, page);
 						
 			mv.addObject("pageList", pageList);
 			mv.addObject("f_level", f_level);
 			mv.addObject("f_type", f_type);
 			mv.addObject("datepick", datepick);
 			mv.addObject("f_empname", f_empname);
+			mv.addObject("sel_empcode", sel_empcode);
 			return mv;
 		}else if("result_list".equals(action)){//综合查询个人计划项
 			mv = new ModelAndView("modules/plan/list_result");
