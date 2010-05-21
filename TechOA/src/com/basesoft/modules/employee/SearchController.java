@@ -25,6 +25,7 @@ public class SearchController extends CommonController {
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
+		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
 		
 		if("frame_search".equals(action)){//综合查询frame
 			mv = new ModelAndView("modules/employee/search/frame_search");
@@ -33,18 +34,19 @@ public class SearchController extends CommonController {
 		}else if("list_search".equals(action)){//综合查询list
 			mv = new ModelAndView("modules/employee/search/list_search");
 			
-			PageList pageList = searchDAO.findAll(seldepart, emname, page);
+			PageList pageList = searchDAO.findAll(seldepart, emname, sel_empcode, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
+			mv.addObject("sel_empcode", sel_empcode);
 			return mv;
 		}else if("self_search".equals(action)){//个人信息综合查询
 			mv = new ModelAndView("modules/employee/search/self_search");
 			
 			Employee em = searchDAO.findById(emid);
 			
-			PageList pageList = searchDAO.findAll(em.getDepartcode(), em.getName(), 1);
+			PageList pageList = searchDAO.findAll(em.getDepartcode(), em.getName(), sel_empcode, 1);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("em", em);

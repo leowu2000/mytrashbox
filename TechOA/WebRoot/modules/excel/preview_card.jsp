@@ -8,6 +8,7 @@
 <%
 String seldepart = request.getAttribute("seldepart").toString();
 String emname = request.getAttribute("emname").toString();
+String sel_empcode = request.getAttribute("sel_empcode").toString();
 
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
@@ -42,11 +43,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'card.do?action=list_manage&seldepart=<%=seldepart %>&emname=<%=emname %>';
+    	window.location.href = 'card.do?action=list_manage&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=card.do?action=list_manage&table=EMP_CARD&seldepart=<%=seldepart %>&emname=<%=emname %>';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=card.do?action=list_manage&table=EMP_CARD&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
     	document.getElementById('listForm').submit();
     }
 });

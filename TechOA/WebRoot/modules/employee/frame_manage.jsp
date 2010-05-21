@@ -39,7 +39,8 @@
 	            },   
 	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
 	            	  var emname = document.getElementById('emname').value;
-	                  document.getElementById('list_manage').src = "/em.do?action=list_manage&seldepart=" + newNode.id + "&emname=" + emname;
+	            	  var sel_empcode = document.getElementById('sel_empcode').value;
+	                  document.getElementById('list_manage').src = "/em.do?action=list_manage&seldepart=" + newNode.id + "&emname=" + emname + "&sel_empcode=" + sel_empcode;
 	            },   
 	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
 	                  //...   
@@ -55,6 +56,9 @@
   		tb.add('选择部门');
   		tb.add(document.getElementById('departspan'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
+  		tb.add('按工号模糊查询');
+  		tb.add(document.getElementById('sel_empcode'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('按名字模糊查询');
   		tb.add(document.getElementById('emname'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
@@ -63,7 +67,8 @@
   		comboBoxTree.setValue({id:'0',text:'请选择...'});
   		
   		var emname = document.getElementById('emname').value;
-	    document.getElementById('list_manage').src = "/em.do?action=list_manage&seldepart=" + comboBoxTree.getValue() + "&emname=" + emname;
+  		var sel_empcode = document.getElementById('sel_empcode').value;
+	    document.getElementById('list_manage').src = "/em.do?action=list_manage&seldepart=" + comboBoxTree.getValue() + "&emname=" + emname + "&sel_empcode=" + sel_empcode;
 	});
 	
 	function IFrameResize(){
@@ -73,8 +78,8 @@
 	function commit(){
 	  var seldepart = document.getElementById('seldepart').value;
 	  var emname = document.getElementById('emname').value;
-	  
-	  document.getElementById('list_manage').src = "/em.do?action=list_manage&seldepart=" + seldepart + "&emname=" + emname;
+	  var sel_empcode = document.getElementById('sel_empcode').value;
+	  document.getElementById('list_manage').src = "/em.do?action=list_manage&seldepart=" + seldepart + "&emname=" + emname + "&sel_empcode=" + sel_empcode;
 	}
 	</script>
   </head>
@@ -84,6 +89,7 @@
   	<div id="toolbar"></div>
 	<span id="departspan" name="departspan"></span>
 	<input type="text" name="emname" style="width:60;">
+	<input type="text" name="sel_empcode" id="sel_empcode" style="width:60;">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
     <iframe name="list_manage" width="100%" frameborder="0" height="500"></iframe>
   </body>

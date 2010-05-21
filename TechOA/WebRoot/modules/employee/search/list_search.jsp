@@ -8,6 +8,7 @@ List listEm = pageList.getList();
 
 String seldepart = request.getAttribute("seldepart").toString();
 String emname = request.getAttribute("emname").toString();
+String sel_empcode = request.getAttribute("sel_empcode").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
@@ -28,7 +29,7 @@ EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
   
   <body>
 	<form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("search.do?action=list_search&seldepart="+seldepart+"&emname="+emname) %>
+<%=pageList.getPageInfo().getHtml("search.do?action=list_search&seldepart="+seldepart+"&emname="+emname+"&sel_empcode=" + sel_empcode) %>
 	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

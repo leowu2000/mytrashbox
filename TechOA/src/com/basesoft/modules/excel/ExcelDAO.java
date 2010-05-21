@@ -220,6 +220,84 @@ public class ExcelDAO extends CommonDAO {
 	}
 	
 	/**
+	 * 员工手机号码入库
+	 * @param data 员工信息
+	 * @return
+	 */
+	public String insertEmployee_Mobile(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			
+			Map map = findByCode("EMPLOYEE", row.optString("CODE"));
+			if(map.get("CODE")!=null){//关联的上员工信息，则存入手机号码
+				String mobile = row.optString("MOBILE");
+				
+				String updateSql = "update EMPLOYEE set MOBPHONE='" + mobile + "' where ID='" + map.get("ID") + "'";
+				
+				try{
+					update(updateSql);
+				}catch(Exception e){
+					System.out.println(e);
+					errorMessage = getErrorMessage(errorMessage, i);
+					continue;
+				}
+			}else {
+				errorMessage = getErrorMessage3(errorMessage, i);
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 员工手机号码入库
+	 * @param data 员工信息
+	 * @return
+	 */
+	public String insertEmployee_Address(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			
+			Map map = findByCode("EMPLOYEE", row.optString("CODE"));
+			if(map.get("CODE")!=null){//关联的上员工信息，则存入手机号码
+				String address = row.optString("ADDRESS");
+				
+				String updateSql = "update EMPLOYEE set ADDRESS='" + address + "' where ID='" + map.get("ID") + "'";
+				
+				try{
+					update(updateSql);
+				}catch(Exception e){
+					System.out.println(e);
+					errorMessage = getErrorMessage(errorMessage, i);
+					continue;
+				}
+			}else {
+				errorMessage = getErrorMessage3(errorMessage, i);
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
 	 * 员工财务信息入库
 	 * @param data 
 	 * @param date 日期
@@ -949,6 +1027,22 @@ public class ExcelDAO extends CommonDAO {
 			errorMessage = "第" + (i + 1) + "行数据已重复，未入库！";
 		}else {
 			errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行数据已重复，未入库！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 获取错误信息3
+	 * @param errorMessage
+	 * @param i
+	 * @return
+	 */
+	public String getErrorMessage3(String errorMessage, int i){
+		if("".equals(errorMessage)){
+			errorMessage = "第" + (i + 1) + "行无法匹配，未入库！";
+		}else {
+			errorMessage = errorMessage + "\\n" + "第" + (i + 1) + "行无法匹配，未入库！";
 		}
 		
 		return errorMessage;

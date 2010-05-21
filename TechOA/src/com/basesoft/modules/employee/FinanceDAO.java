@@ -17,7 +17,7 @@ public class FinanceDAO extends EmployeeDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String departcode, String emname, String datepick, int page){
+	public PageList findAll(String departcode, String emname, String datepick, String sel_empcode, int page){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
@@ -39,6 +39,10 @@ public class FinanceDAO extends EmployeeDAO {
 			}else {
 				sql = "select * from EMP_FINANCIAL where DEPARTCODE='" + departcode + "' and EMPNAME like '%" + emname + "%' and RQ>='" + startdate + "' and RQ<='" + enddate + "'";
 			}
+		}
+		
+		if(!"".equals(sel_empcode)){
+			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
 		}
 		
 		sql = sql + " order by DEPARTCODE,EMPCODE";

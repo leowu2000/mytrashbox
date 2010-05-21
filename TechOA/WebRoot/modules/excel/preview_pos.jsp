@@ -9,6 +9,7 @@
 String seldepart = request.getAttribute("seldepart").toString();
 String emname = request.getAttribute("emname").toString();
 String datepick = request.getAttribute("datepick").toString();
+String sel_empcode = request.getAttribute("sel_empcode").toString();
 
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
@@ -43,11 +44,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'pos.do?action=list_manage&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';
+    	window.location.href = 'pos.do?action=list_manage&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=pos.do?action=list_manage&table=EMP_POS&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=pos.do?action=list_manage&table=EMP_POS&seldepart=<%=seldepart %>&emname=<%=emname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
     	document.getElementById('listForm').submit();
     }
 });

@@ -15,7 +15,7 @@ public class CardDAO extends EmployeeDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String seldepart, String emname, int page){
+	public PageList findAll(String seldepart, String emname, String sel_empcode, int page){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
@@ -24,7 +24,7 @@ public class CardDAO extends EmployeeDAO {
 		
 		if("0".equals(seldepart)){//所有部门
 			if("".equals(emname)){//所有人员
-				sql = "select * from EMP_CARD";
+				sql = "select * from EMP_CARD where 1=1";
 			}else {//按名字模糊检索
 				sql = "select * from EMP_CARD where EMPNAME like '%" + emname + "%'";
 			}
@@ -34,6 +34,10 @@ public class CardDAO extends EmployeeDAO {
 			}else {//按名字模糊检索
 				sql = "select * from EMP_CARD where DEPARTCODE='" + seldepart + "' and EMPNAME like '%" + emname + "%'";
 			}
+		}
+		
+		if(!"".equals(sel_empcode)){
+			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
 		}
 		
 		sql = sql + " order by DEPARTCODE,EMPCODE";

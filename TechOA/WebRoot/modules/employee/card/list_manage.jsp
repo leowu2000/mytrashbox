@@ -10,6 +10,7 @@
 	String seldepart = request.getAttribute("seldepart").toString();
 	String emname = request.getAttribute("emname").toString();
 	emname = URLEncoder.encode(emname,"UTF-8");
+	String sel_empcode = request.getAttribute("sel_empcode").toString();
 	String method = request.getAttribute("method").toString();
 	
 	String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
@@ -121,7 +122,7 @@ Ext.onReady(function(){
     
     function onAddClick(btn){
     	c = 'add';
-    	action = url+'?action=add&seldepart=<%=seldepart %>&emname=<%=emname %>';
+    	action = url+'?action=add&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
        	Ext.get('cardno').set({'disabled':''});
@@ -149,7 +150,7 @@ Ext.onReady(function(){
 				Ext.get('phone2').set({'value':data.item.phone2});
 				Ext.get('address').set({'value':data.item.address});
 				
-		    	action = url+'?action=update&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>';
+		    	action = url+'?action=update&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -165,7 +166,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>';       
+	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
@@ -176,7 +177,7 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=preview&table=EMP_CARD&seldepart=<%=seldepart %>&emname=<%=emname %>';
+		action = 'excel.do?action=preview&table=EMP_CARD&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
@@ -237,7 +238,7 @@ if("search".equals(method)){
 %> 
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("card.do?action=list_manage&seldepart="+seldepart+"&empname="+emname) %>
+<%=pageList.getPageInfo().getHtml("card.do?action=list_manage&seldepart="+seldepart+"&empname="+emname+"&sel_empcode="+sel_empcode) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

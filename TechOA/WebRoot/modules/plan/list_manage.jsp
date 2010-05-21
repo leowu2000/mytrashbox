@@ -19,6 +19,7 @@ String level = request.getAttribute("f_level").toString();
 String type = request.getAttribute("f_type").toString();
 String f_empname = request.getAttribute("f_empname").toString();
 f_empname = URLEncoder.encode(f_empname,"UTF-8");
+String sel_empcode = request.getAttribute("sel_empcode").toString();
 String datepick = request.getAttribute("datepick").toString();
 
 String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
@@ -116,7 +117,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
+    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
        	Ext.get('pjcode').set({'disabled':''});
@@ -165,7 +166,7 @@ Ext.onReady(function(){
 				Ext.get('leader_section').set({'value':data.item.leader__section});
 				Ext.get('leader_room').set({'value':data.item.leader__room});
 				
-		    	action = url+'?action=update&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
+		    	action = url+'?action=update&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -181,7 +182,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';       
+      			Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -196,7 +197,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','注意，标记确认后不可进行反馈',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=confirm&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';       
+      			Ext.getDom('listForm').action=url+'?action=confirm&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -211,21 +212,21 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','注意，标记完成后不可进行修改',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=complete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';       
+      			Ext.getDom('listForm').action=url+'?action=complete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
     }
     
 	function onImportClick(btn){
-		action = 'excel.do?action=preview&table=PLAN&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
+		action = 'excel.do?action=preview&table=PLAN&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
     }
     
     function onSetClick(btn){
-		action = url + '?action=setpersent&f_level=<%=level %>&f_type=<%=type %>&page=<%=pagenum %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
+		action = url + '?action=setpersent&f_level=<%=level %>&f_type=<%=type %>&page=<%=pagenum %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
     	win3.setTitle('设置完成情况百分比');
         win3.show(btn.dom);
     }
@@ -264,7 +265,7 @@ Ext.onReady(function(){
 				Ext.get('leader_section').set({'value':data.item.leader__section});
 				Ext.get('leader_room').set({'value':data.item.leader__room});
 				
-		    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>';
+		    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -384,7 +385,7 @@ function checkAll(){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + f_empname + "&datepick=" + datepick) %>
+<%=pageList.getPageInfo().getHtml("plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + f_empname + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode) %>
 	<table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
                 <td><input type="checkbox" name="checkall" onclick="checkAll();">选　择</td>

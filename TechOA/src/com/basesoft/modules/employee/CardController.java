@@ -26,9 +26,11 @@ public class CardController extends CommonController {
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
+		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		errorMessage = new String(errorMessage.getBytes("ISO8859-1"),"UTF-8");
 		
+		String returnUrl = "card.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&sel_empcode=" + sel_empcode;
 		if("frame_manage".equals(action)){//一卡通管理frame
 			mv = new ModelAndView("modules/employee/card/frame_manage");
 			return mv;
@@ -37,12 +39,13 @@ public class CardController extends CommonController {
 			
 			String method = ServletRequestUtils.getStringParameter(request, "method", "");
 			
-			PageList pageList = cardDAO.findAll(seldepart, emname, page);
+			PageList pageList = cardDAO.findAll(seldepart, emname, sel_empcode, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
 			mv.addObject("method", method);
+			mv.addObject("sel_empcode", sel_empcode);
 			mv.addObject("errorMessage", errorMessage);
 			return mv;
 		}else if("add".equals(action)){
@@ -62,7 +65,7 @@ public class CardController extends CommonController {
 			String insertSql = "insert into EMP_CARD values('" + empcode + "', '" + empname + "', '" + sex + "', '" + cardno + "', '" + phone1 + "', '" + phone2 + "', '" + address + "', '" + departcode + "', '" + departname + "')";
 			cardDAO.insert(insertSql);
 			
-			response.sendRedirect("card.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8"));
+			response.sendRedirect(returnUrl);
 		}else if("query".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			Card card = cardDAO.findByCId(id); 
@@ -93,7 +96,7 @@ public class CardController extends CommonController {
 			String updateSql = "update EMP_CARD set EMPCODE='" + empcode + "', EMPNAME='" + empname + "', SEX='" + sex + "', PHONE1='" + phone1 + "', PHONE2='" + phone2 + "', ADDRESS='" + address + "', DEPARTCODE='" + departcode + "', DEPARTNAME='" + departname + "' where CARDNO='" + id + "'";
 			cardDAO.update(updateSql);
 			
-			response.sendRedirect("card.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8"));
+			response.sendRedirect(returnUrl);
 		}else if("delete".equals(action)){
 			String[] check=request.getParameterValues("check");
 			//循环按id删除
@@ -102,7 +105,7 @@ public class CardController extends CommonController {
 				cardDAO.delete(deleteSql);
 			}
 			
-			response.sendRedirect("card.do?action=list_manage&page=" + page + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8"));
+			response.sendRedirect(returnUrl);
 		}else if("haveCardno".equals(action)){
 			String cardno = ServletRequestUtils.getStringParameter(request, "cardno", "");
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");

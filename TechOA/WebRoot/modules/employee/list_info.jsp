@@ -10,6 +10,7 @@ List listChildDepart = (List)request.getAttribute("listChildDepart");
 String seldepart = request.getAttribute("seldepart").toString();
 String emname = request.getAttribute("emname").toString();
 emname = URLEncoder.encode(emname,"UTF-8");
+String sel_empcode = request.getAttribute("sel_empcode").toString();
 
 int pagenum = pageList.getPageInfo().getCurPage();
 
@@ -160,7 +161,7 @@ Ext.onReady(function(){
 			alert('请选择数据项！');
 			return false;
 		}
-		action = url+'?action=changepass&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&id=' + selValue;
+		action = url+'?action=changepass&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>&id=' + selValue;
     	win1.setTitle('修改密码');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
@@ -175,14 +176,14 @@ Ext.onReady(function(){
     	Ext.Msg.confirm('确认','确实要删除记录么？',function(btn){
     		if(btn=='yes'){
     		   
-            	Ext.getDom('listForm').action=url+'?action=delete&seldepart=<%=seldepart %>&emname=<%=emname %>&page=<%=pagenum %>';       
+            	Ext.getDom('listForm').action=url+'?action=delete&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>&page=<%=pagenum %>';       
             	Ext.getDom('listForm').submit();
     		}
     	});
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=preview&table=EMPLOYEE&seldepart=<%=seldepart %>&emname=<%=emname %>';
+		action = 'excel.do?action=preview&table=EMPLOYEE&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
@@ -200,7 +201,7 @@ Ext.onReady(function(){
 			method: 'GET',
 			success: function(transport) {
 			    Ext.get('oldrolecode').set({'value':transport.responseText});
-			    action = url+'?action=changerole&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&id=' + selValue;
+			    action = url+'?action=changerole&page=<%=pagenum %>&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>&id=' + selValue;
 	    		win3.setTitle('修改角色');
 		        win3.show(btn.dom);
 		  	}
@@ -228,7 +229,7 @@ function checkAll(){
   <body>
   	<div id="toolbar1"></div>
 	<form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("em.do?action=infolist&seldepart="+seldepart) %>
+<%=pageList.getPageInfo().getHtml("em.do?action=infolist&seldepart=" + seldepart + "&emname=" + emname + "&sel_empcode=" + sel_empcode) %>
 	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

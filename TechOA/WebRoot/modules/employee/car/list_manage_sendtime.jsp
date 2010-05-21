@@ -8,6 +8,7 @@
 	List listSendtime = (List)request.getAttribute("listSendtime");
 	String carid = request.getAttribute("carid").toString();
 	String pagenum = request.getAttribute("page").toString();
+	String sel_carcode = request.getAttribute("sel_carcode").toString();
 	
 	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 	CarDAO carDAO = (CarDAO)ctx.getBean("carDAO");
@@ -55,7 +56,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add_sendtime&page=<%=pagenum %>&carid=<%=carid %>';
+    	action = url+'?action=add_sendtime&page=<%=pagenum %>&carid=<%=carid %>&sel_carcode=<%=sel_carcode %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -75,7 +76,7 @@ Ext.onReady(function(){
 			    Ext.get('id').set({'value':data.item.id});
 				Ext.get('sendtime').set({'value':data.item.sendtime});
 				
-		    	action = url+'?action=update_sendtime&page=<%=pagenum %>&carid=<%=carid %>';
+		    	action = url+'?action=update_sendtime&page=<%=pagenum %>&carid=<%=carid %>&sel_carcode=<%=sel_carcode %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -91,14 +92,14 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=delete_sendtime&page=<%=pagenum %>&carid=<%=carid %>';       
+	    		Ext.getDom('listForm').action=url+'?action=delete_sendtime&page=<%=pagenum %>&carid=<%=carid %>&sel_carcode=<%=sel_carcode %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
     }
     
     function onBackClick(btn){
-    	window.location.href = url + '?action=list_manage&page=<%=pagenum %>';
+    	window.location.href = url + '?action=list_manage&page=<%=pagenum %>&sel_carcode=<%=sel_carcode %>';
     }
 });
 

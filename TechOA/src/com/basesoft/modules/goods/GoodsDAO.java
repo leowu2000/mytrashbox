@@ -13,14 +13,18 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(int page){
+	public PageList findAll(String empcode, int page){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		sql = "select * from GOODS order by KJND,KJH,PJCODE";
+		if("".equals(empcode)){
+			sql = "select * from GOODS order by KJND,KJH,PJCODE";
+		}else {
+			sql = sql = "select * from GOODS where LLRBM like '%" + empcode + "%' order by KJND,KJH,PJCODE";
+		}
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -41,14 +45,18 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll_price(int page){
+	public PageList findAll_price(String code, int page){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		sql = "select * from GOODS_PRICE order by PRICE";
+		if(!"".equals(code)){
+			sql = "select * from GOODS_PRICE where CODE like '%" + code + "%' order by PRICE";
+		}else {
+			sql = "select * from GOODS_PRICE order by PRICE";
+		}
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";

@@ -30,15 +30,20 @@ public class GoodsController extends CommonController {
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
+		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
 		
-		if("list".equals(action)){
+		if("frame_list".equals(action)){//领料frame
+			mv = new ModelAndView("modules/goods/frame_goods");
+			return mv;
+		}else if("list".equals(action)){
 			mv = new ModelAndView("modules/goods/list_goods");
 			
-			PageList pageList = goodsDAO.findAll(page); 
+			PageList pageList = goodsDAO.findAll(sel_empcode, page); 
 			List listPj = goodsDAO.getProject();
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("listPj", listPj);
+			mv.addObject("sel_empcode", sel_empcode);
 			mv.addObject("errorMessage", errorMessage);
 			return mv;
 		}else if("add".equals(action)){
@@ -72,7 +77,7 @@ public class GoodsController extends CommonController {
 			
 			goodsDAO.insert(insertSql);
 			
-			response.sendRedirect("goods.do?action=list&page=" + page);
+			response.sendRedirect("goods.do?action=list&page=" + page + "&sel_empcode=" + sel_empcode);
 		}else if("delete".equals(action)){
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
@@ -80,7 +85,7 @@ public class GoodsController extends CommonController {
 				goodsDAO.delete(deleteSql);
 			}
 			
-			response.sendRedirect("goods.do?action=list&page=" + page);
+			response.sendRedirect("goods.do?action=list&page=" + page + "&sel_empcode=" + sel_empcode);
 		}else if("query".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			Goods goods = goodsDAO.findById(id);
@@ -119,7 +124,7 @@ public class GoodsController extends CommonController {
 			
 			goodsDAO.update(updateSql);
 			
-			response.sendRedirect("goods.do?action=list&page=" + page);
+			response.sendRedirect("goods.do?action=list&page=" + page + "&sel_empcode=" + sel_empcode);
 		}else if("sellend".equals(action)){//个人领用固定资产查询
 			mv = new ModelAndView("modules/goods/list_sellend");
 			
@@ -130,13 +135,17 @@ public class GoodsController extends CommonController {
 			mv.addObject("pageList", pageList);
 			mv.addObject("empcode", empcode);
 			return mv;
+		}if("frame_list_price".equals(action)){//物资frame
+			mv = new ModelAndView("modules/goods/frame_goods_price");
+			return mv;
 		}else if("list_price".equals(action)){
 			mv = new ModelAndView("modules/goods/list_goods_price");
 			
-			PageList pageList = goodsDAO.findAll_price(page); 
+			PageList pageList = goodsDAO.findAll_price(sel_empcode, page); 
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("errorMessage", errorMessage);
+			mv.addObject("sel_empcode", sel_empcode);
 			return mv;
 		}else if("add_price".equals(action)){
 			String code = ServletRequestUtils.getStringParameter(request, "code", "");
@@ -150,7 +159,7 @@ public class GoodsController extends CommonController {
 			
 			goodsDAO.insert(insertSql);
 			
-			response.sendRedirect("goods.do?action=list_price&page=" + page);
+			response.sendRedirect("goods.do?action=list_price&page=" + page + "&sel_empcode=" + sel_empcode);
 		}else if("delete_price".equals(action)){
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
@@ -158,7 +167,7 @@ public class GoodsController extends CommonController {
 				goodsDAO.delete(deleteSql);
 			}
 			
-			response.sendRedirect("goods.do?action=list_price&page=" + page);
+			response.sendRedirect("goods.do?action=list_price&page=" + page + "&sel_empcode=" + sel_empcode);
 		}else if("query_price".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			Goods_price goods = goodsDAO.findById_p(id);
@@ -177,11 +186,11 @@ public class GoodsController extends CommonController {
 			String type = ServletRequestUtils.getStringParameter(request, "type", "");
 			float price = ServletRequestUtils.getFloatParameter(request, "price", 0);
 			
-			String updateSql = "update GOODS_PRICE set CODE='" + code + "', NAME='" + name + "', TYPE='" + type + "', PRICE=" + price;
+			String updateSql = "update GOODS_PRICE set CODE='" + code + "', NAME='" + name + "', TYPE='" + type + "', PRICE=" + price + " where ID='" + id + "'";
 			
 			goodsDAO.update(updateSql);
 			
-			response.sendRedirect("goods.do?action=list_price&page=" + page);
+			response.sendRedirect("goods.do?action=list_price&page=" + page + "&sel_empcode=" + sel_empcode);
 		}
 		
 		return null;

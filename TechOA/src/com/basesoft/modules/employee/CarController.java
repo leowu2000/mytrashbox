@@ -30,15 +30,22 @@ public class CarController extends CommonController {
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String sel_carcode = ServletRequestUtils.getStringParameter(request, "sel_carcode", "");
 		
-		if("list_manage".equals(action)){//班车管理列表
+		String returnUrl = "car.do?action=list_manage&sel_carcode=" + sel_carcode + "&page=" + page;
+		
+		if("frame_manage".equals(action)){//班车管理列表frame
+			mv = new ModelAndView("modules/employee/car/frame_manage");
+			return mv;
+		}else if("list_manage".equals(action)){//班车管理列表
 			mv = new ModelAndView("modules/employee/car/list_manage");
 			String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 			
 			//管理列表
-			PageList pageList =carDAO.findAllCar(page);
+			PageList pageList =carDAO.findAllCar(sel_carcode, page);
 			
 			mv.addObject("pageList", pageList);
+			mv.addObject("sel_carcode", sel_carcode);
 			mv.addObject("errorMessage", errorMessage);
 			return mv;
 		}else if("add".equals(action)){//添加班车
@@ -53,7 +60,7 @@ public class CarController extends CommonController {
 			String insertSql = "insert into CAR values('" + id + "', '" + carcode + "', '" + carno + "', '" + way + "', '" + drivername + "', '" + phone + "', '" + sendlocate + "')";
 			carDAO.insert(insertSql);
 			
-			response.sendRedirect("car.do?action=list_manage");
+			response.sendRedirect(returnUrl);
 			return null;
 		}else if("query".equals(action)){//查找班车
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
@@ -79,7 +86,7 @@ public class CarController extends CommonController {
 			String updateSql = "update CAR set CARCODE='" + carcode + "', CARNO='" + carno + "', WAY='" + way + "', DRIVERNAME='" + drivername + "', PHONE='" + phone + "', SENDLOCATE='" + sendlocate + "' where ID='" + id + "'";
 			carDAO.update(updateSql);
 			
-			response.sendRedirect("car.do?action=list_manage&page=" + page);
+			response.sendRedirect(returnUrl);
 			return null;
 		}else if("delete".equals(action)){//删除班车
 			String[] check=request.getParameterValues("check");
@@ -91,7 +98,7 @@ public class CarController extends CommonController {
 				carDAO.delete(deleteSql2);
 			}
 			
-			response.sendRedirect("car.do?action=list_manage&page=" + page);
+			response.sendRedirect(returnUrl);
 			return null;
 		}else if("list_manage_sendtime".equals(action)){//班车发车时间管理
 			mv = new ModelAndView("modules/employee/car/list_manage_sendtime");
@@ -101,6 +108,7 @@ public class CarController extends CommonController {
 			
 			mv.addObject("carid", carid);
 			mv.addObject("listSendtime", listSendtime);
+			mv.addObject("sel_carcode", sel_carcode);
 			mv.addObject("page", page);
 			
 			return mv;
@@ -112,7 +120,7 @@ public class CarController extends CommonController {
 			String insertSql = "insert into CAR_SENDTIME values('" + id + "', '" + carid + "', '" + sendtime + "')";
 			carDAO.insert(insertSql);
 			
-			response.sendRedirect("car.do?action=list_manage_sendtime&page=" + page + "&carid=" + carid);
+			response.sendRedirect("car.do?action=list_manage_sendtime&page=" + page + "&carid=" + carid + "&sel_carcode=" + sel_carcode);
 			return null;
 		}else if("query_sendtime".equals(action)){//查找班车发车时间
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
@@ -134,7 +142,7 @@ public class CarController extends CommonController {
 			String updateSql = "update CAR_SENDTIME set SENDTIME='" + sendtime + "' where ID='" + id + "'";
 			carDAO.update(updateSql);
 			
-			response.sendRedirect("car.do?action=list_manage_sendtime&page=" + page + "&carid=" + carid);
+			response.sendRedirect("car.do?action=list_manage_sendtime&page=" + page + "&carid=" + carid + "&sel_carcode=" + sel_carcode);
 			return null;
 		}else if("delete_sendtime".equals(action)){//删除班车发车时间
 			String carid = ServletRequestUtils.getStringParameter(request, "carid", "");
@@ -145,7 +153,7 @@ public class CarController extends CommonController {
 				carDAO.delete(deleteSql);
 			}
 			
-			response.sendRedirect("car.do?action=list_manage_sendtime&page=" + page + "&carid=" + carid);
+			response.sendRedirect("car.do?action=list_manage_sendtime&page=" + page + "&carid=" + carid + "&sel_carcode=" + sel_carcode);
 			return null;
 		}else if("list_order".equals(action)){//员工预约班车列表
 			mv = new ModelAndView("modules/employee/car/list_order");
