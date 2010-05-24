@@ -31,6 +31,7 @@ public class ExcelController extends CommonController {
 	PlanDAO planDAO;
 	CarDAO carDAO;
 	EmployeeDAO emDAO;
+	TableSelectDAO tableSelectDAO;
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
@@ -247,6 +248,12 @@ public class ExcelController extends CommonController {
 			response.getOutputStream().flush();
 			response.getOutputStream().close();
 			return null;
+		}else if("custom".equals(action)){//自定义导入
+			mv = new ModelAndView("modules/excel/custom");
+			List listTable = tableSelectDAO.getTables();
+			
+			mv.addObject("listTable", listTable);
+			return mv;
 		}
 		
 		return null;
@@ -266,5 +273,9 @@ public class ExcelController extends CommonController {
 	
 	public void setEmployeeDAO(EmployeeDAO emDAO){
 		this.emDAO = emDAO;
+	}
+	
+	public void setTableSelectDAO(TableSelectDAO tableSelectDAO){
+		this.tableSelectDAO = tableSelectDAO;
 	}
 }

@@ -156,4 +156,32 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 		}
 		return treeList;
 	}
+	
+	/**
+	 * 获取多选字段树
+	 * @param listCols
+	 * @param checkedEmp
+	 * @return
+	 */
+	public List<CheckBoxTree> getColumnTree(List listCols, String checkedCol) {
+		List<CheckBoxTree> treeList = new ArrayList<CheckBoxTree>();
+		
+		for (int i=0;i<listCols.size();i++) {//工作令号
+			Map mapCol = (Map)listCols.get(i);
+			
+			CheckBoxTree tree = new CheckBoxTree();
+			tree.setId(mapCol.get("COLUMN_NAME").toString());
+			tree.setText(mapCol.get("COL_DESCRIPTION").toString());
+			tree.setLeaf(true);
+			if (!"".equals(checkedCol) && checkedCol.indexOf(tree.getId()) != -1) {
+				tree.setChecked(true);
+			} else {
+				tree.setChecked(false);
+			}
+		
+			treeList.add(tree);
+			
+		}
+		return treeList;
+	}
 }
