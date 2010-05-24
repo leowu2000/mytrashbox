@@ -68,10 +68,12 @@
 			document.getElementById('departspan').style.display = 'none';
 			document.getElementById('emname').style.display = 'none';
 			document.getElementById('search').style.display = 'none';
+			document.getElementById('sel_empcode').style.display = 'none';
   			tb.add('选择年月：');
   			tb.add(document.getElementById('datepick'));
 		}else {
 			document.getElementById('departspan').style.display = '';
+			document.getElementById('sel_empcode').style.display = '';
 			document.getElementById('emname').style.display = '';
 			document.getElementById('search').style.display = '';
 		
