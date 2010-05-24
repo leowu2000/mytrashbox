@@ -37,7 +37,7 @@ errorMessage = new String(errorMessage.getBytes("ISO8859-1"), "UTF-8");
 		-->
 		</style>		
 <%@ include file="../../common/meta.jsp" %>
-<script src="../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<script src="/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
