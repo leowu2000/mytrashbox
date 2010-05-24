@@ -9,10 +9,12 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
+import com.basesoft.modules.excel.TableSelectDAO;
 
 public class TreeController extends CommonController {
 
 	TreeDAO treeDAO;
+	TableSelectDAO tableSelectDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -114,6 +116,37 @@ public class TreeController extends CommonController {
 			response.setContentType("text/html; charset=GBK");
 			response.getWriter().write(sb.toString());
 			response.getWriter().close();
+		}else if("col_init".equals(action)){
+			mv = new ModelAndView("/modules/tree/checkedtree_columns");
+			String sel_table = ServletRequestUtils.getStringParameter(request, "sel_table", "");
+			String checkedCol = ServletRequestUtils.getStringParameter(request, "checkedCol", "");
+			mv.addObject("checkedCol", checkedCol);
+			mv.addObject("sel_table", sel_table);
+			return mv;
+		}else if("multicol".equals(action)){
+			String sel_table = ServletRequestUtils.getStringParameter(request, "sel_table", "");
+			String checkedCol = ServletRequestUtils.getStringParameter(request, "checkedCol", "");
+			
+			List listCols = tableSelectDAO.getColumns(sel_table);
+			//封装成checkboxtree
+			List<CheckBoxTree> checkBoxTreeList = treeDAO.getColumnTree(listCols, checkedCol);
+			//循环转换为json格式
+			StringBuffer sb = new StringBuffer();
+			sb.append("[");
+			for (int i = 0; i < checkBoxTreeList.size(); i++) {
+				if (i != 0) {
+					sb.append(",");
+				}
+				sb.append(checkBoxTreeList.get(i).toJSONString());
+			}
+			sb.append("]");
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=GBK");
+			response.getWriter().write(sb.toString());
+			response.getWriter().close();
 		}
 		
 		return null;
@@ -121,5 +154,9 @@ public class TreeController extends CommonController {
 
 	public void setTreeDAO(TreeDAO treeDAO){
 		this.treeDAO = treeDAO;
+	}
+	
+	public void setTableSelectDAO(TableSelectDAO tableSelectDAO){
+		this.tableSelectDAO = tableSelectDAO;
 	}
 }

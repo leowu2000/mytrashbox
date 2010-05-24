@@ -64,6 +64,7 @@
 	<bean id="posDAO" class="com.basesoft.modules.employee.PosDAO"></bean>
 	<bean id="searchDAO" class="com.basesoft.modules.employee.SearchDAO"></bean>
 	<bean id="excelDAO" class="com.basesoft.modules.excel.ExcelDAO"></bean>
+	<bean id="tableSelectDAO" class="com.basesoft.modules.excel.TableSelectDAO"></bean>
 	<bean id="trainDAO" class="com.basesoft.modules.employee.TrainDAO"></bean>
 	<bean id="holidayDAO" class="com.basesoft.modules.employee.HolidayDAO"></bean>
 	<bean id="carDAO" class="com.basesoft.modules.employee.CarDAO"></bean>
