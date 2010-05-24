@@ -28,7 +28,7 @@
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<%@ include file="../../../common/meta.jsp" %>
-<script src="../../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<script src="/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script src="../../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
 var errorMessage = '<%=errorMessage %>';

@@ -19,7 +19,7 @@ if("".equals(departname)){
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	<script src="js/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+	<script src="/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 	<%@ include file="../../common/meta.jsp" %>
 	<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 	<script type="text/javascript">

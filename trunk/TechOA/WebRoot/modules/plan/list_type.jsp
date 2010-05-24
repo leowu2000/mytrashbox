@@ -31,7 +31,7 @@ PlanTypeDAO planTypeDAO = (PlanTypeDAO)ctx.getBean("planTypeDAO");
 		-->
 		</style>		
 <%@ include file="../../common/meta.jsp" %>
-<script src="../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<script src="/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--

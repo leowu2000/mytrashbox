@@ -19,7 +19,7 @@ String errorMessage = request.getAttribute("errorMessage")==null?"":request.getA
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<title>部门管理</title>
 <%@ include file="../../common/meta.jsp" %>
-<script src="../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<script src="/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--

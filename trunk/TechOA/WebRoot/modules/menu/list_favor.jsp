@@ -32,7 +32,7 @@ MenuDAO menuDAO = (MenuDAO)ctx.getBean("menuDAO");
 		-->
 		</style>		
 <%@ include file="../../common/meta.jsp" %>
-<script src="../../My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<script src="/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
 var win;
