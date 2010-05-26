@@ -6,6 +6,7 @@ import java.util.Map;
 import com.basesoft.core.CommonDAO;
 import com.basesoft.core.PageInfo;
 import com.basesoft.core.PageList;
+import com.basesoft.util.StringUtil;
 
 public class DepartmentDAO extends CommonDAO{
 
@@ -16,7 +17,7 @@ public class DepartmentDAO extends CommonDAO{
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		sql = "select * from DEPARTMENT order by PARENT,cast(CODE as int)";
+		sql = "select * from DEPARTMENT order by PARENT,NAME";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -80,7 +81,7 @@ public class DepartmentDAO extends CommonDAO{
 	 * @return
 	 */
 	public List<?> getChild(String departcode){
-		return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by cast(CODE as int)");
+		return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by PARENT,NAME");
 	}
 	
 	/**
@@ -90,9 +91,9 @@ public class DepartmentDAO extends CommonDAO{
 	 */
 	public List<?> getSelf(String departcode){
 		if("0".equals(departcode)){//0代表所有一级单位
-			return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by cast(CODE as int)");
+			return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by PARENT,NAME");
 		}else {
-			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "' order by cast(CODE as int)");
+			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "' order by PARENT,NAME");
 		}
 	}
 	
@@ -106,14 +107,10 @@ public class DepartmentDAO extends CommonDAO{
 	}
 	
 	/**
-	 * 获取编码
+	 * 获取编码,生成随机15位编码
 	 * @return
 	 */
 	public String getCode(){
-		int code = 0;
-		
-		code = jdbcTemplate.queryForInt("select Max(cast(CODE as int)) from DEPARTMENT");
-		
-		return String.valueOf(code + 1);
+		return StringUtil.createNumberString(15);
 	}
 }
