@@ -18,6 +18,7 @@ List listTable = (List)request.getAttribute("listTable");
 	<%@ include file="../../common/meta.jsp" %>
 	<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 	<script type="text/javascript">
+	var win;
 	Ext.onReady(function(){
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
 		tb.add('选择表');
@@ -28,6 +29,16 @@ List listTable = (List)request.getAttribute("listTable");
   		tb.add(document.getElementById('selCol'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add({text: '导入excel',cls: 'x-btn-text-icon export',handler: onExportClick});
+  		
+  		if(!win){
+        win = new Ext.Window({
+        	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
+	        {text:'关闭',handler: function(){win.hide();}}
+	        ]
+        });
+    }
   		
   		function onExportClick(){
   			var sel_table = document.getElementById('sel_table').value;
@@ -40,7 +51,11 @@ List listTable = (List)request.getAttribute("listTable");
 	  			alert('请选择字段！');
 	  			return false;
 	  		}
-    		document.getElementById('list_preview').src = "/excel.do?action=custom_preview&sel_table=" + sel_table + "&colnames=" + colnames
+	  		
+	  		action = "/excel.do?action=custom_preview&sel_table=" + sel_table + "&colnames=" + colnames;
+    		win.setTitle('导入excel');
+       		Ext.getDom('dataForm').reset();
+        	win.show();
   		}
 	});
 	
@@ -74,7 +89,7 @@ List listTable = (List)request.getAttribute("listTable");
 		for(int i=0;i<listTable.size();i++){
 			Map mapTable = (Map)listTable.get(i);
 %>  		
-		<option value="<%=mapTable.get("") %>">
+		<option value="<%=mapTable.get("OID") %>"><%=mapTable.get("COMMENTS") %></option>
 <%
 		}
 %>
@@ -86,5 +101,19 @@ List listTable = (List)request.getAttribute("listTable");
 		<input type="hidden" id="checkedCol" name="checkedCol">
 	</form>
 	<div style="position:absolute; top:110px; left:100px;display: none;" id="colsel" name="colsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree" name="checkedtree"></iframe></div>
+	
+	<div id="dlg" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm" name="dataForm" action="" method="post" enctype="multipart/form-data">
+                <table>
+				  <tr>
+				    <td>选择文件</td>
+				    <td><input type="file" name="file" style="width:200"></td>
+				  </tr>	
+				</table>
+			</form>
+	</div>
+</div>  	
   </body>
 </html>
