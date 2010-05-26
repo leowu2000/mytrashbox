@@ -176,6 +176,9 @@ public class ExcelController extends CommonController {
 			}else if("CAR".equals(table)){//班车信息
 				errorMessage = excelDAO.insertCar(data);
 			}
+			if(errorMessage.length()>200){
+				errorMessage = errorMessage.substring(0, 200) + "...";
+			}
 			
 			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp + "&f_level=" + f_level + "&f_type=" + f_type + "&sel_empcode=" + sel_empcode + "&sel_carcode=" + sel_carcode);
 		}else if("export".equals(action)){//excel导出
@@ -254,6 +257,11 @@ public class ExcelController extends CommonController {
 			
 			mv.addObject("listTable", listTable);
 			return mv;
+		}else if("custom_preview".equals(action)){//自定义导入预览
+			mv = new ModelAndView("modules/excel/custom_preview");
+			String sel_table = ServletRequestUtils.getStringParameter(request, "sel_table", "");
+			String colnames = ServletRequestUtils.getStringParameter(request, "colnames", "");
+			
 		}
 		
 		return null;

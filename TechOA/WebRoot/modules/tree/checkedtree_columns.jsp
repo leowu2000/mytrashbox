@@ -77,9 +77,9 @@
 		if(codevalue == ''){
 		    textvalue = "请选择...";
 		}
-		parent.document.getElementById('pjcodes').value = codevalue;
-		parent.document.getElementById('pjnames').value = textvalue;
-		parent.document.getElementById('pjsel').style.display = 'none';
+		parent.document.getElementById('colnames').value = codevalue;
+		parent.document.getElementById('colcomments').value = textvalue;
+		parent.document.getElementById('colsel').style.display = 'none';
 		return false;
 	}
 	
@@ -92,7 +92,7 @@
 	} 
 	
 	function closedlg(){
-	    parent.document.getElementById('pjsel').style.display = 'none';
+	    parent.document.getElementById('colsel').style.display = 'none';
 	}
 	
 	Ext.onReady(buildTree);

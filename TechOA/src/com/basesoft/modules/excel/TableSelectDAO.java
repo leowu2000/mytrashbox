@@ -26,4 +26,22 @@ public class TableSelectDAO extends CommonDAO {
 		
 		return jdbcTemplate.queryForList(sql);
 	}
+	
+	/**
+	 * 生成转换的xml字符串
+	 * @param sel_table
+	 * @param colnames
+	 * @return
+	 */
+	public String createConversion(String sel_table, String colnames){
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("<?xml version='1.0' encoding='UTF-8'?><config><head>");
+		
+		String tableSql = "SELECT a.TABLE_NAME,b.OID,OBJ_DESCRIPTION(" + sel_table + " , 'SYS_CLASS') AS COMMENTS FROM INFORMATION_SCHEMA.TABLES a,SYS_CLASS b  WHERE TABLE_SCHEMA='PUBLIC' AND TABLE_TYPE='BASE TABLE' AND a.TABLE_NAME=b.RELNAME AND OID='" + sel_table + "'";
+		
+		
+		
+		return sb.toString();
+	}
 }
