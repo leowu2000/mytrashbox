@@ -69,6 +69,7 @@ Ext.onReady(function(){
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
        	AJAX_PJ(document.getElementById('pjcode').value);
+       	document.getElementById('pjcode_d').disabled = '';
         win.show(btn.dom);
     }
     
@@ -89,6 +90,7 @@ Ext.onReady(function(){
 				Ext.get('pjcode').set({'value':data.item.pjcode});
 				AJAX_PJ(document.getElementById('pjcode').value);
 				Ext.get('pjcode_d').set({'value':data.item.pjcode__d});
+				document.getElementById('pjcode_d').disabled = '';
 				Ext.get('stage').set({'value':data.item.stagecode});
 				Ext.get('amount').set({'value':data.item.amount});
 				Ext.get('bz').set({'value':data.item.bz});

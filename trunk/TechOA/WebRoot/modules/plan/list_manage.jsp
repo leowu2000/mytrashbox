@@ -61,6 +61,7 @@ Ext.onReady(function(){
 	tb.add({text: '标志确认',cls: 'x-btn-text-icon update',handler: onConfirmClick});
 	tb.add({text: '标志完成',cls: 'x-btn-text-icon save',handler: onCompleteClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: '删除全部',cls: 'x-btn-text-icon delete',handler: onDeleteAllClick});
 	tb.add({text: '设置完成情况百分比',cls: 'x-btn-text-icon xiugai',handler: onSetClick});
 	tb.add({text: '任务分解',cls: 'x-btn-text-icon add',handler: onApartClick});
 	tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
@@ -183,6 +184,15 @@ Ext.onReady(function(){
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     		if(btn=='yes'){
       			Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';       
+      			Ext.getDom('listForm').submit();
+       		}
+    	});
+    }
+    
+    function onDeleteAllClick(btn){
+		Ext.Msg.confirm('确认','确定删除以往所有的计划信息?',function(btn){
+    		if(btn=='yes'){
+      			Ext.getDom('listForm').action=url+'?action=deleteall&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
