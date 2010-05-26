@@ -74,7 +74,7 @@ public class EmployeeDAO extends CommonDAO{
 		if(!"".equals(empcode)){
 			sql = sql + " and CODE like '%" + empcode + "%'";
 		}
-		sql = sql + " order by cast(CODE as int)";
+		sql = sql + " order by DEPARTCODE,NAME";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";

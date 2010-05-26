@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Util类
@@ -236,5 +237,20 @@ public class StringUtil {
 		}
 		
 		return b;
+	}
+	
+	/**
+	 * 生成length位的由0-9构成的字符串
+	 * @param length 字符串长度
+	 * @return
+	 */
+	public static String createNumberString(int length){
+		final String numberChar = "0123456789";
+		StringBuffer sb = new StringBuffer(); 
+        Random random = new Random(); 
+        for (int i = 0; i < length; i++) { 
+                sb.append(numberChar.charAt(random.nextInt(numberChar.length()))); 
+        } 
+		return sb.toString();
 	}
 }
