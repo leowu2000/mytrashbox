@@ -41,7 +41,7 @@
 	  			alert('请选择员工！');
 	  			return false;
 	  		}
-	  		commit();
+	  		//commit();
 	  		var startdate = document.getElementById('startdate').value;
 	  		var enddate = document.getElementById('enddate').value;
 	  		var selproject = document.getElementById('selproject').value;
