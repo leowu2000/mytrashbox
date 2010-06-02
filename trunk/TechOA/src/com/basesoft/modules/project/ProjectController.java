@@ -141,9 +141,8 @@ public class ProjectController extends CommonController {
 			
 			//生成id和code
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
-			int code = projectDAO.findTotalCount("PROJECT") + 1;
 			
-			projectDAO.insert("insert into PROJECT values('" + id + "','" + code + "','" + pjname + "','" + status + "','" + manager + "','" + manager + "'," + planedworkload + ",0," + startdate + "," + enddate + ",'" + note + "')");
+			projectDAO.insert("insert into PROJECT values('" + id + "','" + pjname + "','" + pjname + "','" + status + "','" + manager + "','" + manager + "'," + planedworkload + ",0," + startdate + "," + enddate + ",'" + note + "')");
 			
 			response.sendRedirect("pj.do?action=list&page=" + page);
 			return null;
