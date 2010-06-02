@@ -24,6 +24,10 @@ public class FinanceDAO extends EmployeeDAO {
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
+		if("".equals(datepick)){
+			datepick = StringUtil.DateToString(new Date(), "yyyy-MM-dd");
+		}
+		
 		Date startdate = StringUtil.StringToDate(datepick + "-01", "yyyy-MM-dd"); 
 		Date enddate = StringUtil.getEndOfMonth(startdate);
 		
