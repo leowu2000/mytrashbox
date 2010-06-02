@@ -50,7 +50,7 @@ Ext.onReady(function(){
   	<h1>固定资产领用信息</h1>
   	<div id="toolbar"></div>
 	<form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("infoequip.do?action=sellend&empcode=" + empcode) %>
+<%=pageList.getPageInfo().getHtml("customequip.do?action=sellend&empcode=" + empcode) %>
 	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
