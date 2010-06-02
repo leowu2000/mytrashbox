@@ -155,9 +155,17 @@ public class CarDAO extends CommonDAO {
 		int end = pagesize*page;
 		
 		if("0".equals(carid)){//全部班车
-			sql = sql + "ORDERDATE='" + datepick + "'";
+			if("".equals(datepick)){
+				sql = sql + " 1=1 ";
+			}else {
+				sql = sql + "ORDERDATE='" + datepick + "'";
+			}
 		}else {
-			sql = sql + "CARID='" + carid + "' and ORDERDATE='" + datepick + "'";
+			if("".equals(datepick)){
+				sql = sql + "CARID='" + carid + "'";
+			}else {
+				sql = sql + "CARID='" + carid + "' and ORDERDATE='" + datepick + "'";
+			}
 		}
 		
 		sql = sql + "  order by ORDERDATE desc, ORDERSENDTIME desc";
