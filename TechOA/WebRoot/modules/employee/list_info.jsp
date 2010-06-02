@@ -138,12 +138,28 @@ Ext.onReady(function(){
     
     function validate(){
     	var depart = document.getElementById('depart').value;
+    	var empcode = document.getElementById('loginid').value
     	
     	if(depart=='0'){
     		alert('请选择部门!');
     		return false;
     	}else {
-    		return true;
+    		if(window.XMLHttpRequest){ //Mozilla 
+      			var xmlHttpReq=new XMLHttpRequest();
+    		}else if(window.ActiveXObject){
+ 	  			var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    		}
+    		xmlHttpReq.open("GET", url+'?action=validate&empcode='+empcode, false);
+    		xmlHttpReq.send();
+    		if(xmlHttpReq.responseText!=''){
+        		var result = xmlHttpReq.responseText;
+        		if(result=='true'){
+        			alert('已存在此工号！');
+        			return false;
+        		}else {
+        			return true;
+        		}
+    		}
     	}
     }
     

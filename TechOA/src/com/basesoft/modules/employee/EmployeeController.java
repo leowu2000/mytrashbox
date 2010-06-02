@@ -72,6 +72,21 @@ public class EmployeeController extends CommonController {
 			
 			response.sendRedirect(returnUrl_infolist);
 			return null;
+		}else if("validate".equals(action)){
+			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
+			Map mapEm = emDAO.findByCode("EMPLOYEE", empcode);
+			String returnString = "false";
+			if(mapEm.get("CODE")!=null){
+				returnString = "true";
+			}
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=UTF-8");
+			response.getWriter().write(returnString);
+			response.getWriter().close();
+			return null;
 		}else if("changepass".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			String newpassword = ServletRequestUtils.getStringParameter(request, "newpassword", "");
