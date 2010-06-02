@@ -159,7 +159,7 @@ function checkAll(){
   <h1>参与人员管理管理</h1>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("train.do?action=manage&page1=" + page1) %>
+<%=pageList.getPageInfo().getHtml("train.do?action=manage&page1=" + page1 + "&trainid=" + trainid) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

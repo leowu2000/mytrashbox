@@ -40,7 +40,7 @@
   <body>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("pos.do?action=list_manage&page=" + pagenum + "&type=" + type + "&seltrain=" +seltrain + "&selassess=" + selassess + "&cost=" + cost) %>
+<%=pageList.getPageInfo().getHtml("train.do?action=list_pxtj&type=" + type + "&seltrain=" +seltrain + "&selassess=" + selassess + "&cost=" + cost + "&empcode=" + empcode) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

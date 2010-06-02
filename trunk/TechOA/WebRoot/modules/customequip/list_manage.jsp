@@ -49,7 +49,7 @@ var win1;
 var win2;
 var win3;
 var action;
-var url='/infoequip.do';
+var url='/customequip.do';
 var vali = "";
 Ext.onReady(function(){
 	var comboBoxTree = new Ext.ux.ComboBoxTree({
@@ -230,7 +230,7 @@ function checkAll(){
   <body >
   	<div id="toolbar"></div>
 	<form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("infoequip.do?action=list_info&status="+status+"&depart="+depart+"&emp="+emp) %>
+<%=pageList.getPageInfo().getHtml("customequip.do?action=list_info&status="+status+"&depart="+depart+"&emp="+emp) %>
 	<input type="hidden" name="status" value="<%=status %>">
 	<input type="hidden" name="depart" value="<%=depart %>">
 	<input type="hidden" name="emp" value="<%=emp %>">

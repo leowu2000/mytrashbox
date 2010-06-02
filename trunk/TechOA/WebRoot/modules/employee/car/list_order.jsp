@@ -153,6 +153,7 @@ function validate(){
   <body>
   <h1>班车预约</h1>
   <div id="toolbar"></div>
+ <%=pageList.getPageInfo().getHtml("car.do?action=list_order") %>
 <form id="listForm" name="listForm" action="" method="post">
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
