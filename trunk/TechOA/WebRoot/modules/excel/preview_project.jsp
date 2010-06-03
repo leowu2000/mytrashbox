@@ -50,7 +50,7 @@ Ext.onReady(function(){
 </script>
 	</head>
 	<body>
-	<h1>工作令导入预览</h1>
+	<h1>工作令号导入预览</h1>
 	<div id="toolbar"></div>
 		<div id="tabs1">
 			<div id="main" class="tab-content">
@@ -60,7 +60,7 @@ Ext.onReady(function(){
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
   	  			<td>工作令号</td>              
-                <td>工作令负责人</td>
+                <td>工作令号负责人</td>
                 <td>计划工作量</td>
                 <td>开始时间</td>
                 <td>截止时间</td>

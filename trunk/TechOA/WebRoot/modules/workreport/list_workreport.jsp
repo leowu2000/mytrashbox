@@ -253,7 +253,7 @@ for(int i=0;i<list.size();i++){
 				    <td><input type="text" name="reportname" style="width:200"></td>
 				  </tr>	
 				  <tr>
-				    <td>工作令</td>
+				    <td>工作令号</td>
 				    <td><select name="pjcode" onchange="AJAX_PJ(this.value);" style="width:200">
 <%
 					for(int i=0;i<listProject.size();i++){
@@ -266,7 +266,7 @@ for(int i=0;i<list.size();i++){
 				    </select></td>
 				  </tr>
 				  <tr>
-				    <td>子系统</td>
+				    <td>分系统</td>
 				    <td id="selpj_d" name="selpj_d"><select name="pjcode_d" style="width:200;"><option value="0">请选择...</option></select></td>
 				  </tr>	
 				  <tr>

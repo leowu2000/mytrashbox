@@ -22,7 +22,7 @@ errorMessage = new String(errorMessage.getBytes("ISO8859-1"), "UTF-8");
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<title>工作令管理</title>
+		<title>工作令号管理</title>
 		<style type="text/css">
 		<!--
 		input{
@@ -188,7 +188,7 @@ function checkAll(){
 </script>
 	</head>
 	<body>
-	<h1>工作令管理</h1>
+	<h1>工作令号管理</h1>
 	<div id="toolbar"></div>
 		<div id="tabs1">
 			<div id="main" class="tab-content">
@@ -198,8 +198,8 @@ function checkAll(){
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td><input type="checkbox" name="checkall" onclick="checkAll();">选　择</td>
                 <td>工作令号</td>              
-                <td>工作令状态</td>
-                <td>工作令负责人</td>
+                <td>令号状态</td>
+                <td>令号负责人</td>
                 <!-- <td>参与人员</td> -->
                 <td>计划工作量</td>
                 <!-- <td>投入工作量</td> -->
@@ -256,7 +256,7 @@ for(int i=0;i<listProject.size();i++){
 				    <td><input type="text" name="pjname" style="width:200"></td>
 				  </tr>
 				  <tr>
-				    <td>工作令状态</td>
+				    <td>令号状态</td>
 				    <td><select name="status" style="width:200;">
 				    	<option value="0">关闭</option>
 				    	<option value="1">开启</option>

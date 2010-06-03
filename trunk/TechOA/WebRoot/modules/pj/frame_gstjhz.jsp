@@ -81,7 +81,7 @@ if("".equals(departname)){
   			var depart = document.getElementById('depart').value;
   			var pjcodes = document.getElementById('pjcodes').value;
   			if(pjcodes == ''){
-	  			alert('请选择工作令！');
+	  			alert('请选择工作令号！');
 	  			return false;
 	  		}
 	  		if(depart == '0'){
@@ -110,7 +110,7 @@ if("".equals(departname)){
 	  	datepick = document.getElementById('datepick').value;
 	  }
 	  if(pjcodes == ''){
-	  	alert('请选择工作令！');
+	  	alert('请选择工作令号！');
 	  	return false;
 	  }
 	  if(depart == '0'){
