@@ -8,9 +8,9 @@ public class Cost {
 	//单据编号
 	public String djbh;
 	//工作令号
-	public String gzlh;
+	public String pjcode;
 	//分系统
-	public String fxt;
+	public String pjcode_d;
 	//整件号
 	public String zjh;
 	//编码
@@ -24,7 +24,9 @@ public class Cost {
 	//金额
 	public float je;
 	//姓名
-	public String xm;
+	public String empcode;
+	//领料单位
+	public String empname;
 	//领料单位
 	public String lldw;
 	//结算单位
@@ -56,20 +58,20 @@ public class Cost {
 		this.djbh = djbh;
 	}
 	
-	public String getGzlh() {
-		return gzlh;
+	public String getPjcode() {
+		return pjcode;
 	}
 	
-	public void setGzlh(String gzlh) {
-		this.gzlh = gzlh;
+	public void setPjcode(String pjcode) {
+		this.pjcode = pjcode;
 	}
 	
-	public String getFxt() {
-		return fxt;
+	public String getPjcode_d() {
+		return pjcode_d;
 	}
 	
-	public void setFxt(String fxt) {
-		this.fxt = fxt;
+	public void setPjcode_d(String pjcode_d) {
+		this.pjcode_d = pjcode_d;
 	}
 	
 	public String getZjh() {
@@ -120,12 +122,20 @@ public class Cost {
 		this.je = je;
 	}
 	
-	public String getXm() {
-		return xm;
+	public String getEmpcode() {
+		return empcode;
 	}
 	
-	public void setXm(String xm) {
-		this.xm = xm;
+	public void setEmpcode(String empcode) {
+		this.empcode = empcode;
+	}
+	
+	public String getEmpname() {
+		return empname;
+	}
+	
+	public void setEmpname(String empname) {
+		this.empname = empname;
 	}
 	
 	public String getLldw() {
