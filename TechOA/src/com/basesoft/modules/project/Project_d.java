@@ -9,7 +9,7 @@ public class Project_d {
 	public String manager;
 	public String startdate;
 	public String enddate;
-	public int planedworkload;
+	public float planedworkload;
 	public String note;
 	public String managername;
 	
@@ -69,11 +69,11 @@ public class Project_d {
 		this.enddate = enddate;
 	}
 	
-	public int getPlanedworkload() {
+	public float getPlanedworkload() {
 		return planedworkload;
 	}
 	
-	public void setPlanedworkload(int planedworkload) {
+	public void setPlanedworkload(float planedworkload) {
 		this.planedworkload = planedworkload;
 	}
 	

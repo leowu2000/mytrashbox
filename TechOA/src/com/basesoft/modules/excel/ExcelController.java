@@ -161,9 +161,9 @@ public class ExcelController extends CommonController {
 				errorMessage = excelDAO.insertCard(data);
 			}else if("EMP_POS".equals(table)){//导入班车打卡信息
 				errorMessage = excelDAO.insertPos(data);
-			}else if("GOODS".equals(table)){//物资资产
+			}else if("GOODS".equals(table)){//领料
 				errorMessage = excelDAO.insertGoods(data);
-			}else if("GOODS_PRICE".equals(table)){
+			}else if("GOODS_PRICE".equals(table)){//物资
 				errorMessage = excelDAO.insertGoods_price(data);
 			}else if("PLAN".equals(table)){//计划
 				errorMessage = excelDAO.insertPlan(data, datepick);

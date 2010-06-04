@@ -377,8 +377,8 @@ public class ProjectDAO extends CommonDAO{
 		pj.setStatus(mapPj.get("STATUS")==null?"":mapPj.get("STATUS").toString());
 		pj.setManager(mapPj.get("MANAGER")==null?"":mapPj.get("MANAGER").toString());
 		pj.setMember(mapPj.get("MEMBER")==null?"":mapPj.get("MEMBER").toString());
-		pj.setPlanedworkload(mapPj.get("PLANEDWORKLOAD")==null?0:Integer.parseInt(mapPj.get("PLANEDWORKLOAD").toString()));
-		pj.setNowworkload(mapPj.get("NOWWORKLOAD")==null?0:Integer.parseInt(mapPj.get("NOWWORKLOAD").toString()));
+		pj.setPlanedworkload(mapPj.get("PLANEDWORKLOAD")==null?0:Float.parseFloat(mapPj.get("PLANEDWORKLOAD").toString()));
+		pj.setNowworkload(mapPj.get("NOWWORKLOAD")==null?0:Float.parseFloat(mapPj.get("NOWWORKLOAD").toString()));
 		pj.setStartdate(mapPj.get("STARTDATE")==null?"":mapPj.get("STARTDATE").toString());
 		pj.setEnddate(mapPj.get("ENDDATE")==null?"":mapPj.get("ENDDATE").toString());
 		pj.setNote(mapPj.get("NOTE")==null?"":mapPj.get("NOTE").toString());
