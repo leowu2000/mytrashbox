@@ -173,6 +173,18 @@ public class CommonDAO {
 	}
 	
 	/**
+	 * 得到所有选中的部门
+	 * @param departcode
+	 * @return
+	 */
+	public List getDeparts(String departcodes){
+		String sql = "select * from DEPARTMENT where CODE in (" + departcodes + ")";
+		List listself = jdbcTemplate.queryForList(sql);
+				
+		return listself;
+	}
+	
+	/**
 	 * 得到下级部门
 	 * @param departcode
 	 * @return
@@ -203,6 +215,9 @@ public class CommonDAO {
 			}
 		}
 		
+		if("".equals(departCodes)){
+			departCodes = "''";
+		}
 		return departCodes;
 	}
 	

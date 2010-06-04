@@ -75,7 +75,7 @@ public class ExportExcel {
 			insertRowData(sheet, i + 2, str2);
 		}	
 		//导出图片
-		WritableImage ri=new WritableImage(0,list.size() + 3,listDepart.size() + 4,list.size() + 5,new File(imagepath));   
+		WritableImage ri=new WritableImage(0,list.size() + 3,listDepart.size() + 4,list.size() + 15,new File(imagepath));   
 		sheet.addImage(ri);   
 		
 		wb.write();
@@ -221,7 +221,7 @@ public class ExportExcel {
 			insertRowData(sheet, i + 4, str4);
 		}
 		//导出图片
-		WritableImage ri=new WritableImage(0, list.size() + 5, 13, list.size() + 13,new File(imagepath));   
+		WritableImage ri=new WritableImage(0, list.size() + 5, 13, list.size() + 17,new File(imagepath));   
 		sheet.addImage(ri); 
 		
 		wb.write();
@@ -275,7 +275,7 @@ public class ExportExcel {
 			insertRowData(sheet, i + 2, str2);
 		}
 		//导出图片
-		WritableImage ri=new WritableImage(0, list.size() + 5, 10, list.size() + 8,new File(imagepath));   
+		WritableImage ri=new WritableImage(0, list.size() + 3, 10, list.size() + 15,new File(imagepath));   
 		sheet.addImage(ri); 
 		
 		wb.write();

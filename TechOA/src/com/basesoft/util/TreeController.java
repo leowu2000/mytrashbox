@@ -147,6 +147,32 @@ public class TreeController extends CommonController {
 			response.setContentType("text/html; charset=GBK");
 			response.getWriter().write(sb.toString());
 			response.getWriter().close();
+		}else if("multidepart_init".equals(action)){
+			mv = new ModelAndView("/modules/tree/checkedtree_depart");
+			String checkedDepart = ServletRequestUtils.getStringParameter(request, "checkedDepart", "");
+			mv.addObject("checkedDepart", checkedDepart);
+			return mv;
+		}else if("multidepart".equals(action)){
+			String checkedDepart = ServletRequestUtils.getStringParameter(request, "checkedDepart", "");
+			//封装成checkboxtree
+			List<CheckBoxTree> checkBoxTreeList = treeDAO.getDepartEmpTree("2", checkedDepart, "0");
+			//循环转换为json格式
+			StringBuffer sb = new StringBuffer();
+			sb.append("[");
+			for (int i = 0; i < checkBoxTreeList.size(); i++) {
+				if (i != 0) {
+					sb.append(",");
+				}
+				sb.append(checkBoxTreeList.get(i).toJSONString());
+			}
+			sb.append("]");
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=GBK");
+			response.getWriter().write(sb.toString());
+			response.getWriter().close();
 		}
 		
 		return null;

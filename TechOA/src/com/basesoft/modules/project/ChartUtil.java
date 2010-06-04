@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -19,12 +20,12 @@ import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer3D;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
+import org.jfree.data.general.PieDataset;
 import org.jfree.ui.TextAnchor;
-
-import com.basesoft.modules.employee.EmployeeDAO;
 
 public class ChartUtil {
 
@@ -37,25 +38,25 @@ public class ChartUtil {
 	 * @param datepick
 	 * @return
 	 */
-	public static String createChart(String method, List<?> list, String path, ProjectDAO pjDAO, List listDepart, String pjcodes) throws Exception{
+	public static String createChart(String method, List<?> list, String path, ProjectDAO pjDAO, List listDepart, String pjcodes, String sel_type) throws Exception{
 		path = path + "\\" + method + ".png";
 		String title = "";
 		if("gstjhz".equals(method)){//工时统计汇总
 			title = "工时统计汇总";
 			CategoryDataset dataset = createDatasetGstjhz(pjDAO, list, listDepart, pjcodes);   
 	        //步骤2：根据Dataset 生成JFreeChart对象，以及做相应的设置   
-	        JFreeChart freeChart = createChart(dataset, title);   
+	        JFreeChart freeChart = createChart(dataset, title, sel_type);   
 	        //步骤3：将JFreeChart对象输出到文件，Servlet输出流等   
 	        saveAsFile(freeChart, path, 800, 350);   
 		}else if("kygstj".equals(method)){
 			title = "科研工时统计";
 			CategoryDataset dataset = createDatasetKygstj(pjDAO, list, pjcodes);   
-	        JFreeChart freeChart = createChart(dataset, title);   
+	        JFreeChart freeChart = createChart(dataset, title, sel_type);   
 	        saveAsFile(freeChart, path, 800, 350);   
 		}else if("cdrwqk".equals(method)){
 			title = "承担任务情况";
 			CategoryDataset dataset = createDatasetCdrwqk(pjDAO, list, pjcodes);   
-	        JFreeChart freeChart = createChart(dataset, title);   
+	        JFreeChart freeChart = createChart(dataset, title, sel_type);   
 	        saveAsFile(freeChart, path, 800, 350);   
 		}
 		
@@ -70,11 +71,11 @@ public class ChartUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String createChartYgtrfx(List listData, String selpjname, String path) throws Exception{
+	public static String createChartYgtrfx(List listData, String selpjname, String path, String sel_type) throws Exception{
 		path = path + "\\ygtrfx.png";
 		String title = "员工投入分析";
 		CategoryDataset dataset = createDatasetYgtrfx(listData, selpjname);  
-		JFreeChart freeChart = createChart(dataset, title);   
+		JFreeChart freeChart = createChart(dataset, title, sel_type);   
 		saveAsFile(freeChart, path, 800, 350);   
 		return path;
 	}
@@ -209,15 +210,37 @@ public class ChartUtil {
 	 * @param dataset
 	 * @return
 	 */ 
-    public static JFreeChart createChart(CategoryDataset dataset, String title) throws Exception{   
-        JFreeChart jfreechart = ChartFactory.createBarChart3D(title,    //标题   
-                "",    //categoryAxisLabel （category轴，横轴，X轴的标签）   
-                "",    //valueAxisLabel（value轴，纵轴，Y轴的标签）   
-                dataset, // dataset   
-                PlotOrientation.VERTICAL,   
-                true, // legend   
-                false, // tooltips   
-                false); // URLs   
+    public static JFreeChart createChart(CategoryDataset dataset, String title, String sel_type) throws Exception{   
+        JFreeChart jfreechart = null;
+    	
+        if("1".equals(sel_type)){//柱状图
+        	jfreechart = ChartFactory.createBarChart3D(title,    //标题   
+                    "",    //categoryAxisLabel （category轴，横轴，X轴的标签）   
+                    "",    //valueAxisLabel（value轴，纵轴，Y轴的标签）   
+                    dataset, // dataset   
+                    PlotOrientation.VERTICAL,   
+                    true, // legend   
+                    false, // tooltips   
+                    false); // URLs   
+        }else if("2".equals(sel_type)){//饼图
+        	jfreechart = ChartFactory.createPieChart3D(title, // 图表标题
+        			(PieDataset)dataset, //数据集
+                    true, //是否显示图例
+                    true, // 是否生成工具
+                    false); // 是否生成URL链接 
+
+        }else if("3".equals(sel_type)){//折线图
+        	jfreechart = ChartFactory.createLineChart3D(title, // chart title
+        			"",
+        			"",
+        		    dataset, // data
+        		    PlotOrientation.VERTICAL, // orientation
+        		    true, // include legend
+        		    true, // tooltips
+        		    false // urls
+        		    );
+
+        }
            
         //以下的设置可以由用户定制，也可以省略   
         CategoryPlot plot = (CategoryPlot) jfreechart.getPlot();   
@@ -239,14 +262,23 @@ public class ChartUtil {
         //图例
         jfreechart.getLegend().setItemFont(new Font("宋体",Font.BOLD,10));  
         
-        //柱子显示
-        BarRenderer3D renderer = (BarRenderer3D) plot.getRenderer();
-        //显示条目标签
-        renderer.setBaseItemLabelsVisible(true);
-        //设置条目标签生成器
-        renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-        //设置条目标签显示的位置,outline表示在条目区域外,baseline_center表示基于基线且居中
-        renderer.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.BASELINE_CENTER));
+        if("1".equals(sel_type)){
+        	//柱子显示
+            BarRenderer3D renderer = (BarRenderer3D) plot.getRenderer();
+            //显示条目标签
+            renderer.setBaseItemLabelsVisible(true);
+            //设置条目标签生成器
+            renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+            //设置条目标签显示的位置,outline表示在条目区域外,baseline_center表示基于基线且居中
+            renderer.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.BASELINE_CENTER));
+        }else if("3".equals(sel_type)){
+        	LineAndShapeRenderer renderer = (LineAndShapeRenderer)plot.getRenderer();
+            DecimalFormat decimalformat1 = new DecimalFormat("##.#");//数据点显示数据值的格式
+            renderer.setBaseItemLabelsVisible(true);
+            renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+            //设置条目标签显示的位置,outline表示在条目区域外,baseline_center表示基于基线且居中
+            renderer.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.BASELINE_CENTER));
+        }
 
         return jfreechart;   
     }   

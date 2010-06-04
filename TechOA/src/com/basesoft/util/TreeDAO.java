@@ -11,9 +11,8 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 	 * @return
 	 */
 	public List<CheckBoxTree> getDepartEmpTree(String state, String checkedEmp, String departcode) {
+		String[] checkedEmps = checkedEmp.split(",");
 		List<CheckBoxTree> treeList = new ArrayList<CheckBoxTree>();
-		
-		
 		List<?> listDepart = getSelf(departcode);
 		for (int i=0;i<listDepart.size();i++) {//一级部门
 			Map mapDepart = (Map)listDepart.get(i);
@@ -38,7 +37,16 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 				CheckBoxTree leaf = new CheckBoxTree();
 				leaf.setId(mapChild.get("CODE").toString());
 				leaf.setText(mapChild.get("NAME").toString());
+				
+				for(int l=0;l<checkedEmps.length;l++){
+					if(leaf.getId().equals(checkedEmps[l])){
+						leaf.setChecked(true);
+						break;
+					}
+				}
+				
 				leaf.setLeaf(false);
+				
 				
 				//装有下级部门及本部门人员的list
 				List<CheckBoxTree> leafList2 = new ArrayList<CheckBoxTree>();
@@ -61,11 +69,14 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 					if("1".equals(state)){
 						leaf2.setLeaf(false);
 					}else if("2".equals(state)){
-						if (!"".equals(checkedEmp) && checkedEmp.indexOf(leaf2.getId()) != -1) {
-							leaf2.setChecked(true);
-							leaf.setChecked(true);
-						} else {
-							leaf2.setChecked(false);
+						for(int m=0;m<checkedEmps.length;m++){
+							if(leaf2.getId().equals(checkedEmps[m])){
+								leaf2.setChecked(true);
+								leaf.setChecked(true);
+								break;
+							}else {
+								leaf2.setChecked(false);
+							}
 						}
 						leaf2.setLeaf(true);
 					}
@@ -107,6 +118,7 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 	 * @return
 	 */
 	public List<CheckBoxTree> getLeafEMP(String departcode, String checkedEmp, CheckBoxTree tree){
+		String[] checkedEmps = checkedEmp.split(",");
 		//设置节点下人员
 		List listEmp = this.findEmpsByDepart(departcode);
 		List<CheckBoxTree> leafList = new ArrayList<CheckBoxTree>();
@@ -115,11 +127,14 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 			CheckBoxTree leaf = new CheckBoxTree();
 			leaf.setId(mapEmp.get("CODE").toString());
 			leaf.setText(mapEmp.get("NAME").toString());
-			if (!"".equals(checkedEmp) && checkedEmp.indexOf(leaf.getId()) != -1) {
-				leaf.setChecked(true);
-				tree.setChecked(true);
-			} else {
-				leaf.setChecked(false);
+			for(int k=0;k<checkedEmps.length;k++){
+				if(leaf.getId().equals(checkedEmps[k])){
+					leaf.setChecked(true);
+					tree.setChecked(true);
+					break;
+				}else {
+					leaf.setChecked(false);
+				}
 			}
 			leaf.setLeaf(true);
 			
@@ -129,12 +144,14 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 		return leafList;
 	}
 	
+	
 	/**
-	 * 获取多选工作令号树
+	 * 获取部门工作令号树
 	 * @param checkedEmp
 	 * @return
 	 */
 	public List<CheckBoxTree> getProjectTree(String checkedPj) {
+		String[] checkedPjs = checkedPj.split(",");
 		List<CheckBoxTree> treeList = new ArrayList<CheckBoxTree>();
 		
 		List<?> listProject = getProject();
@@ -145,10 +162,13 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 			tree.setId(mapDepart.get("CODE").toString());
 			tree.setText(mapDepart.get("NAME").toString());
 			tree.setLeaf(true);
-			if (!"".equals(checkedPj) && checkedPj.indexOf(tree.getId()) != -1) {
-				tree.setChecked(true);
-			} else {
-				tree.setChecked(false);
+			for(int j=0;j<checkedPjs.length;j++){
+				if(tree.getId().equals(checkedPjs[j])){
+					tree.setChecked(true);
+					break;
+				}else {
+					tree.setChecked(false);
+				}
 			}
 		
 			treeList.add(tree);
@@ -164,6 +184,7 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 	 * @return
 	 */
 	public List<CheckBoxTree> getColumnTree(List listCols, String checkedCol) {
+		String[] checkedCols = checkedCol.split(",");
 		List<CheckBoxTree> treeList = new ArrayList<CheckBoxTree>();
 		
 		for (int i=0;i<listCols.size();i++) {//工作令号
@@ -173,12 +194,14 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 			tree.setId(mapCol.get("COLUMN_NAME").toString());
 			tree.setText(mapCol.get("COL_DESCRIPTION").toString());
 			tree.setLeaf(true);
-			if (!"".equals(checkedCol) && checkedCol.indexOf(tree.getId()) != -1) {
-				tree.setChecked(true);
-			} else {
-				tree.setChecked(false);
+			for(int j=0;j<checkedCols.length;j++){
+				if(tree.getId().equals(checkedCols[j])){
+					tree.setChecked(true);
+					break;
+				}else {
+					tree.setChecked(false);
+				}
 			}
-		
 			treeList.add(tree);
 			
 		}

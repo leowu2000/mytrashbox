@@ -448,6 +448,7 @@ public class EmployeeController extends CommonController {
 			String startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
 			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
 			String selproject = ServletRequestUtils.getStringParameter(request, "selproject", "");
+			String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "1");
 			
 			List listYgtrfx = emDAO.getYgtrfx(empcodes, startdate, enddate, selproject);
 			String selpjname = "合计";
@@ -456,7 +457,7 @@ public class EmployeeController extends CommonController {
 				selpjname = mapProject.get("NAME").toString();
 			}
 			
-			ChartUtil.createChartYgtrfx(listYgtrfx, selpjname, path);
+			ChartUtil.createChartYgtrfx(listYgtrfx, selpjname, path, sel_type);
 			
 			mv.addObject("listYgtrfx", listYgtrfx);
 			mv.addObject("selpjname", selpjname);

@@ -194,7 +194,9 @@ public class ExcelController extends CommonController {
 			
 			if("GSTJHZ".equals(model)){//工时统计汇总
 				imagepath = imagepath + "\\gstjhz.png";
-				List listDepart = excelDAO.getDeparts(depart, new ArrayList());
+				depart =  StringUtil.ListToStringAdd(depart.split(","), ",");
+				List listDepart = excelDAO.getDeparts(depart);
+				
 				list = excelDAO.getExportData_GSTJHZ(datepick, listDepart, pjcodes);
 				path = exportExcel.exportExcel_GSTJHZ(list, excelDAO, imagepath, listDepart);
 			}else if("KYGSTJ".equals(model)){//科研工时统计
