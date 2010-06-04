@@ -31,6 +31,9 @@
   		tb.add('选择工作令号');
   		tb.add(document.getElementById('selproject'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
+  		//tb.add('选择出图类型：');
+  		//tb.add(document.getElementById('sel_type'));
+  		//tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
@@ -41,7 +44,6 @@
 	  			alert('请选择员工！');
 	  			return false;
 	  		}
-	  		//commit();
 	  		var startdate = document.getElementById('startdate').value;
 	  		var enddate = document.getElementById('enddate').value;
 	  		var selproject = document.getElementById('selproject').value;
@@ -72,8 +74,9 @@
 	  var startdate = document.getElementById('startdate').value;
 	  var enddate = document.getElementById('enddate').value;
 	  var selproject = document.getElementById('selproject').value;
+	  var sel_type = document.getElementById('sel_type').value;
 	  
-	  document.getElementById('list_ygtrfx').src = "/em.do?action=list_ygtrfx&empcodes=" + empcodes + "&startdate=" + startdate + "&enddate=" + enddate + "&selproject=" + selproject;
+	  document.getElementById('list_ygtrfx').src = "/em.do?action=list_ygtrfx&empcodes=" + empcodes + "&startdate=" + startdate + "&enddate=" + enddate + "&selproject=" + selproject + "&sel_type=" + sel_type;
 	}
 	</script>
   </head>
@@ -103,5 +106,10 @@
 		<input type="hidden" id="checkedEmp" name="checkedEmp">
 	</form>
 	<div style="position:absolute; top:110px; left:100px;display: none;" id="empsel" name="empsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree" name="checkedtree"></iframe></div>
+  	<select name="sel_type" id="sel_type">
+  		<option value="1">柱状图</option>
+  		<!-- <option value="2">饼状图</option> -->
+  		<option value="3">折线图</option>
+  	</select>
   </body>
 </html>

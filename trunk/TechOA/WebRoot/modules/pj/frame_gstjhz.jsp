@@ -24,67 +24,34 @@ if("".equals(departname)){
 	<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	Ext.onReady(function(){
-		var comboBoxTree = new Ext.ux.ComboBoxTree({
-			renderTo : 'departspan',
-			width : 200,
-			hiddenName : 'depart',
-			hiddenId : 'depart',
-			tree : {
-				id:'tree1',
-				xtype:'treepanel',
-				rootVisible:false,
-				loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departTree'}),
-		   	 	root : new Ext.tree.AsyncTreeNode({})
-			},
-			    	
-			//all:所有结点都可选中
-			//exceptRoot：除根结点，其它结点都可选(默认)
-			//folder:只有目录（非叶子和非根结点）可选
-			//leaf：只有叶子结点可选
-			selectNodeModel:'all',
-			listeners:{
-	            beforeselect: function(comboxtree,newNode,oldNode){//选择树结点设值之前的事件   
-	                   //... 
-	                   return;  
-	            },   
-	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
-	            	   return;
-	            },   
-	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
-	                  //...   
-	                  //alert("显示值="+comboBoxTree.getRawValue()+"  真实值="+comboBoxTree.getValue());
-	                  return; 
-	            }   
-      		}
-			
-		});
-		
-		comboBoxTree.setValue({id:'<%=departcode %>',text:'<%=departname %>'});
-	
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
 		tb.add('选择工作令号');
   		tb.add(document.getElementById('pjnames'));
   		tb.add(document.getElementById('selpj'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
 		tb.add('选择部门：');
-  		tb.add(document.getElementById('departspan'));
+  		tb.add(document.getElementById('departnames'));
+  		tb.add(document.getElementById('seldepart'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('选择年月：');
   		tb.add(document.getElementById('datepick'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
+  		//tb.add('选择出图类型：');
+  		//tb.add(document.getElementById('sel_type'));
+  		//tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
   		
   		function onExportClick(){
   			var datepick = document.getElementById('datepick').value;
-  			var depart = document.getElementById('depart').value;
+  			var departcodes = document.getElementById('departcodes').value;
   			var pjcodes = document.getElementById('pjcodes').value;
   			if(pjcodes == ''){
 	  			alert('请选择工作令号！');
 	  			return false;
 	  		}
-	  		if(depart == '0'){
+	  		if(departcodes == '0'){
 	  			alert('请选择部门！');
 	  			return false;
 	  		}
@@ -92,19 +59,15 @@ if("".equals(departname)){
 	  			document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
 	  			datepick = document.getElementById('datepick').value;
 	  		}
-    		window.location.href = "/excel.do?action=export&model=GSTJHZ&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + pjcodes;
+    		window.location.href = "/excel.do?action=export&model=GSTJHZ&datepick=" + datepick + "&depart=" + departcodes + "&pjcodes=" + pjcodes;
   		}
 	});
 	
 	function commit(){
 	  var datepick = document.getElementById('datepick').value;
-	  var depart = document.getElementById('depart');
+	  var departcodes = document.getElementById('departcodes').value;
 	  var pjcodes = document.getElementById('pjcodes').value;
-	  if(depart == null){
-	  	depart = '<%=departcode %>';
-	  }else {
-	  	depart = depart.value;
-	  }
+	  var sel_type = document.getElementById('sel_type').value;
 	  if(datepick == ''){
 	  	document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
 	  	datepick = document.getElementById('datepick').value;
@@ -113,11 +76,11 @@ if("".equals(departname)){
 	  	alert('请选择工作令号！');
 	  	return false;
 	  }
-	  if(depart == '0'){
+	  if(departcodes == '0'){
 	  	alert('请选择部门！');
 	  	return false;
 	  }
-	  document.getElementById('list_gstjhz').src = "/pj.do?action=gstjhz&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + pjcodes;
+	  document.getElementById('list_gstjhz').src = "/pj.do?action=gstjhz&datepick=" + datepick + "&departcodes=" + departcodes + "&pjcodes=" + pjcodes + "&sel_type=" + sel_type;
 	}
 	
 	function IFrameResize(){
@@ -133,6 +96,16 @@ if("".equals(departname)){
     	document.getElementById("pjsel").style.left=(event.clientX-135)+"px";
     	document.getElementById("pjsel").style.display="";
 	}
+	
+	function changeDepart(){
+    	document.getElementById('checkedDepart').value = document.getElementById('departcodes').value;
+    	document.getElementById('treeForm1').action = "tree.do?action=multidepart_init";
+    	document.getElementById('treeForm1').submit();
+    
+    	document.getElementById("departsel").style.top=(event.clientY+30)+"px";
+    	document.getElementById("departsel").style.left=(event.clientX-135)+"px";
+    	document.getElementById("departsel").style.display="";
+	}
 	</script>
   </head>
   
@@ -142,12 +115,23 @@ if("".equals(departname)){
     <span id="departspan" name="departspan"></span>
     <input type="text" id="pjnames" name="pjnames" style="width:120;" value="请选择..." disabled="disabled"><input class="btn" name="selpj" type="button" onclick="changePj();" value="选择">
 	<input type="hidden" id="pjcodes" name="pjcodes">
-	<input type="button" class="btn" value="分析" name="search" onclick="commit();">
     <input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" style="width: 50">
     <iframe name="list_gstjhz" width="100%" frameborder="0" height="500"></iframe>
     <form id="treeForm" name="treeForm" method="POST" target="checkedtree">
 		<input type="hidden" id="checkedPj" name="checkedPj">
 	</form>
 	<div style="position:absolute; top:110px; left:100px;display: none;" id="pjsel" name="pjsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree" name="checkedtree"></iframe></div>
+	<input type="text" id="departnames" name="departnames" style="width:120;" value="请选择..." disabled="disabled"><input class="btn" name="seldepart" type="button" onclick="changeDepart();" value="选择">
+	<input type="hidden" id="departcodes" name="departcodes">
+	<form id="treeForm1" name="treeForm1" method="POST" target="checkedtree1">
+		<input type="hidden" id="checkedDepart" name="checkedDepart">
+	</form>
+	<div style="position:absolute; top:110px; left:100px;display: none;" id="departsel" name="departsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree1" name="checkedtree1"></iframe></div>
+  	<select name="sel_type" id="sel_type">
+  		<option value="1">柱状图</option>
+  		<!-- <option value="2">饼状图</option> -->
+  		<option value="3">折线图</option>
+  	</select>
+  	<input type="button" class="btn" value="分析" name="search" onclick="commit();">
   </body>
 </html>

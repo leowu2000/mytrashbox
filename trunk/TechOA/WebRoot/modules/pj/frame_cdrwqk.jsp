@@ -73,6 +73,9 @@ if("".equals(departname)){
   		tb.add('选择年月：');
   		tb.add(document.getElementById('datepick'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
+  		//tb.add('选择出图类型：');
+  		//tb.add(document.getElementById('sel_type'));
+  		//tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
@@ -93,6 +96,7 @@ if("".equals(departname)){
 	  var datepick = document.getElementById('datepick').value;
 	  var depart = document.getElementById('depart').value;
 	  var pjcodes = document.getElementById('pjcodes').value;
+	  var sel_type = document.getElementById('sel_type').value;
 	  if(datepick == ''){
 	  	document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
 	  	datepick = document.getElementById('datepick').value;
@@ -102,7 +106,7 @@ if("".equals(departname)){
 	  	return false;
 	  }
 	  
-	  document.getElementById('list_cdrwqk').src = "/pj.do?action=cdrwqk&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + pjcodes;
+	  document.getElementById('list_cdrwqk').src = "/pj.do?action=cdrwqk&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + pjcodes + "&sel_type=" + sel_type;
 	}
 	
 	function IFrameResize(){
@@ -134,5 +138,10 @@ if("".equals(departname)){
 		<input type="hidden" id="checkedPj" name="checkedPj">
 	</form>
 	<div style="position:absolute; top:110px; left:100px;display: none;" id="pjsel" name="pjsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree" name="checkedtree"></iframe></div>
+  	<select name="sel_type" id="sel_type">
+  		<option value="1">柱状图</option>
+  		<!-- <option value="2">饼状图</option> -->
+  		<option value="3">折线图</option>
+  	</select>
   </body>
 </html>

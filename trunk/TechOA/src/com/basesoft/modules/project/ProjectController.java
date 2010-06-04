@@ -30,6 +30,7 @@ public class ProjectController extends CommonController {
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String path = request.getRealPath("\\chart\\");
+		String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "1");
 		
 		if("frame_gstjhz".equals(action)){//工时统计汇总frame
 			mv = new ModelAndView("modules/pj/frame_gstjhz");
@@ -39,15 +40,16 @@ public class ProjectController extends CommonController {
 			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 			Date start = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 			Date end = StringUtil.getEndOfMonth(start);
-			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
+			String departcodes = ServletRequestUtils.getStringParameter(request, "departcodes", "");
+			departcodes =  StringUtil.ListToStringAdd(departcodes.split(","), ",");
 			String pjcodes = ServletRequestUtils.getStringParameter(request, "pjcodes", "");
 			pjcodes = StringUtil.ListToStringAdd(pjcodes.split(","), ",");
 			
-			List listDepart = projectDAO.getDeparts(depart, new ArrayList());
+			List listDepart = projectDAO.getDeparts(departcodes);
 			List listGstjhz = projectDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"), listDepart, pjcodes);
 			List listGstjhznoCount = projectDAO.getGstjhznoCount(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"), listDepart, pjcodes);
 			
-			ChartUtil.createChart("gstjhz", listGstjhz, path, projectDAO, listDepart, pjcodes);
+			ChartUtil.createChart("gstjhz", listGstjhz, path, projectDAO, listDepart, pjcodes, sel_type);
 			
 			mv.addObject("listDepart", listDepart);
 			mv.addObject("listGstjhz", listGstjhz);
@@ -73,7 +75,7 @@ public class ProjectController extends CommonController {
 			List listKygstj = projectDAO.getKygstj(start, end, listPeriod, depart, pjcodes);
 			List listKygstjnoCount = projectDAO.getKygstjnoCount(start, end, listPeriod, depart, pjcodes);
 			
-			ChartUtil.createChart("kygstj", listKygstjnoCount, path, projectDAO, null, pjcodes);
+			ChartUtil.createChart("kygstj", listKygstjnoCount, path, projectDAO, null, pjcodes, sel_type);
 			
 			mv.addObject("listKygstj", listKygstj);
 			mv.addObject("listPeriod", listPeriod);
@@ -100,7 +102,7 @@ public class ProjectController extends CommonController {
 			List listCdrwqk = projectDAO.getCdrwqk(start, end, depart, pjcodes);
 			List listCdrwqknoCount = projectDAO.getCdrwqknoCount(start, end, depart, pjcodes);
 			
-			ChartUtil.createChart("cdrwqk", listCdrwqknoCount, path, projectDAO, null, pjcodes);
+			ChartUtil.createChart("cdrwqk", listCdrwqknoCount, path, projectDAO, null, pjcodes, sel_type);
 			
 			mv.addObject("datepick", datepick);
 			mv.addObject("listCdrwqk", listCdrwqk);
