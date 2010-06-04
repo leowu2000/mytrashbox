@@ -11,7 +11,7 @@ public class WorkReport {
 	public String pjcode;
 	public String pjcode_d;
 	public String stagecode;
-	public int amount;
+	public float amount;
 	public String bz;
 	public int flag;
 	public String departcode;
@@ -72,11 +72,11 @@ public class WorkReport {
 		this.stagecode = stagecode;
 	}
 	
-	public int getAmount() {
+	public float getAmount() {
 		return amount;
 	}
 	
-	public void setAmount(int amount) {
+	public void setAmount(float amount) {
 		this.amount = amount;
 	}
 	

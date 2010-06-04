@@ -90,7 +90,20 @@ Ext.onReady(function(){
 			return false;
 		}
     	
-    	action = url+'?action=addWorkcheck&empcode='+selValue;
+    	var empcodes = '';
+    	var check = document.getElementsByName('check');
+    	for(var i=0;i<check.length;i++){
+    		if(empcodes == ''){
+    			empcodes = check[i].value;
+    		}else {
+    			empcodes = empcodes + ',' + check[i].value;
+    		}
+    	}
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+    	action = url+'?action=addWorkcheck&empcodes='+empcodes;
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -119,6 +132,20 @@ Ext.onReady(function(){
     	window.location.href = "/holiday.do?action=list&depart=" + depart + "&datepick=" + datepick;
 	}
 });
+function checkAll(){
+	var checkall = document.getElementById('checkall');
+	var checks = document.getElementsByName('check');
+	if(checkall.checked == 'true'){
+	alert(checkall.checked);
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = 'true';
+		}
+	}else {
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = !checks[i].checked;
+		}
+	}
+}
 	</script>
   </head>
   
@@ -142,7 +169,7 @@ Ext.onReady(function(){
 <%  
 	if(!"003".equals(emprole)&&!"search".equals(method)){	
 %>
-    		<td rowspan="2">选择</td>
+    		<td rowspan="2"><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
 <%
 	}
 %>    		
@@ -197,11 +224,11 @@ Ext.onReady(function(){
 %>			
 			<td nowrap="nowrap">&nbsp;<%=mapWorkCheck.get(StringUtil.DateToString((Date)listDate.get(j),"yyyy-MM-dd")) %></td>
 <%} %>
-			<td><%=mapWorkCheck.get("cd") %></td>
-			<td><%=mapWorkCheck.get("zt") %></td>
-			<td><%=mapWorkCheck.get("bj") %></td>
-			<td><%=mapWorkCheck.get("sj") %></td>
-			<td><%=mapWorkCheck.get("kg") %></td>
+			<td><%=mapWorkCheck.get("cd")==null?"0":mapWorkCheck.get("cd") %></td>
+			<td><%=mapWorkCheck.get("zt")==null?"0":mapWorkCheck.get("zt") %></td>
+			<td><%=mapWorkCheck.get("bj")==null?"0":mapWorkCheck.get("bj") %></td>
+			<td><%=mapWorkCheck.get("sj")==null?"0":mapWorkCheck.get("sj") %></td>
+			<td><%=mapWorkCheck.get("kg")==null?"0":mapWorkCheck.get("kg") %></td>
 		</tr>
 <%} %>		
     </table>

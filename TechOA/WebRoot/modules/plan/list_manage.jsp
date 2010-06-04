@@ -59,6 +59,7 @@ Ext.onReady(function(){
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '修  改',cls: 'x-btn-text-icon xiugai',handler: onUpdateClick});
 	tb.add({text: '标志确认',cls: 'x-btn-text-icon update',handler: onConfirmClick});
+	tb.add({text: '退回反馈',cls: 'x-btn-text-icon update',handler: onSendbackClick});
 	tb.add({text: '标志完成',cls: 'x-btn-text-icon save',handler: onCompleteClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
 	tb.add({text: '删除全部',cls: 'x-btn-text-icon delete',handler: onDeleteAllClick});
@@ -208,6 +209,21 @@ Ext.onReady(function(){
 		Ext.Msg.confirm('确认','注意，标记确认后不可进行反馈',function(btn){
     		if(btn=='yes'){
       			Ext.getDom('listForm').action=url+'?action=confirm&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';       
+      			Ext.getDom('listForm').submit();
+       		}
+    	});
+    }
+    
+    function onSendbackClick(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+		
+		Ext.Msg.confirm('确认','确实要退回给责任人继续反馈？',function(btn){
+    		if(btn=='yes'){
+      			Ext.getDom('listForm').action=url+'?action=sendback&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -420,14 +436,22 @@ List listPlan = pageList.getList();
 for(int i=0;i<listPlan.size();i++){
 	Map mapPlan = (Map)listPlan.get(i);
 	String status = mapPlan.get("STATUS").toString();
+	String color = "black";
 	if("1".equals(status)){
 		status = "新下发";
+		color = "green";
 	}else if("2".equals(status)){
 		status = "已反馈";
+		color = "orange";
 	}else if("3".equals(status)){
 		status = "已确认";
+		color = "blue";
 	}else if("4".equals(status)){
 		status = "已完成";
+		color = "gray";
+	}else if("5".equals(status)){
+		status = "已退回";
+		color = "red";
 	}
 	
 	String pjname = planDAO.findNameByCode("PROJECT", mapPlan.get("PJCODE").toString());
@@ -481,7 +505,7 @@ for(int i=0;i<listPlan.size();i++){
                 <td nowrap="nowrap">&nbsp;<%=mapPlan.get("PLANNERNAME")==null?"":mapPlan.get("PLANNERNAME") %></td>
                 <td nowrap="nowrap">&nbsp;<%=mapPlan.get("LEADER_ROOM")==null?"":mapPlan.get("LEADER_ROOM") %></td>
                 <td nowrap="nowrap">&nbsp;<%=mapPlan.get("LEADER_SECTION")==null?"":mapPlan.get("LEADER_SECTION") %></td>
-                <td nowrap="nowrap">&nbsp;<%=status %></td>
+                <td nowrap="nowrap">&nbsp;<font color="<%=color %>"><%=status %></td>
             </tr>
 <%} %>            
 </table>

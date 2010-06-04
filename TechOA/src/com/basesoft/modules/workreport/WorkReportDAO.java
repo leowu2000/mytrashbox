@@ -84,7 +84,7 @@ public class WorkReportDAO extends CommonDAO {
 		workReport.setPjcode_d(map.get("pjcode_d")==null?"":map.get("pjcode_d").toString());
 		workReport.setStagecode(map.get("stagecode")==null?"":map.get("stagecode").toString());
 		workReport.setBz(map.get("bz")==null?"":map.get("bz").toString());
-		workReport.setAmount(map.get("amount")==null?0:Integer.parseInt(map.get("amount").toString()));
+		workReport.setAmount(map.get("amount")==null?0:Float.parseFloat(map.get("amount").toString()));
 		workReport.setFlag(map.get("flag")==null?0:Integer.parseInt(map.get("flag").toString()));
 		workReport.setDepartcode(map.get("departcode")==null?"":map.get("departcode").toString());
 		

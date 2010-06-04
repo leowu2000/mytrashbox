@@ -55,8 +55,6 @@ public class PlanDAO extends CommonDAO {
 				}
 			}
 		}
-		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
-		Date enddate = StringUtil.getEndOfMonth(startdate);
 		
 		if(!"0".equals(emdepart)){
 			sql = sql + " and DEPARTCODE='" + emdepart + "'";
@@ -66,7 +64,13 @@ public class PlanDAO extends CommonDAO {
 			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
 		}
 		
-		sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' order by TYPE,TYPE2,cast(ordercode as int),ENDDATE desc";
+		if("".equals(datepick)){
+			sql = sql + " order by TYPE,TYPE2,cast(ordercode as int),ENDDATE desc";
+		}else {
+			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+			Date enddate = StringUtil.getEndOfMonth(startdate);
+			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' order by TYPE,TYPE2,cast(ordercode as int),ENDDATE desc";
+		}
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -91,10 +95,16 @@ public class PlanDAO extends CommonDAO {
 	 */
 	public PageList findAllRemind(String level, String type, String datepick, String empname, String empdepart, String empcode, int page){
 		PageList pageList = new PageList();
+		String sql = "";
 		
-		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
-		Date enddate = StringUtil.getEndOfMonth(startdate);
-		String sql = "select * from PLAN where ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' and (STATUS='3' or STATUS='4')";
+		if("".equals(datepick)){
+			sql = "select * from PLAN where STATUS='3' or STATUS='4'";
+		}else {
+			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+			Date enddate = StringUtil.getEndOfMonth(startdate);
+			sql = "select * from PLAN where ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' and (STATUS='3' or STATUS='4')";
+		}
+		
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
@@ -348,5 +358,16 @@ public class PlanDAO extends CommonDAO {
 	 */
 	public List getType2(String typecode){
 		return jdbcTemplate.queryForList("select * from PLAN_TYPE where TYPE='2' and PARENT='" + typecode + "' order by ORDERCODE");
+	}
+	
+	/**
+	 * 获取计划内的工作令号
+	 * @param empcode 工号
+	 * @return
+	 */
+	public List<?> getPlanedProject(String empcode){
+		String sql = "select * from PROJECT where CODE in (select PJCODE from PLAN where EMPCODE like '%" + empcode + "%')";
+		
+		return jdbcTemplate.queryForList(sql);
 	}
 }

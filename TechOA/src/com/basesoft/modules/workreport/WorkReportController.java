@@ -40,12 +40,10 @@ public class WorkReportController extends CommonController {
 			//工作报告列表
 			PageList listReport = workReportDAO.findAll(emcode, page);
 			
-			//项目列表和投入阶段列表
-			List listProject = workReportDAO.getProject();
+			//工作令号列表和投入阶段列表
 			List listStage = workReportDAO.getDICTByType("5");
 			
 			mv.addObject("listReport", listReport);
-			mv.addObject("listProject", listProject);
 			mv.addObject("listStage", listStage);
 			mv.addObject("method", method);
 		}else if("auditlist".equals(action)){//审核列表

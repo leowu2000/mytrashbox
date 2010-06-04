@@ -389,17 +389,24 @@ public class EmployeeController extends CommonController {
 		}else if("addWorkcheck".equals(action)){//增加考勤记录
 			String checkdate = ServletRequestUtils.getStringParameter(request, "checkdate", "");
 			String checkcode = ServletRequestUtils.getStringParameter(request, "checkcode", "");
-			String emptyhour = ServletRequestUtils.getStringParameter(request, "emptyhour");
+			float emptyhour = ServletRequestUtils.getFloatParameter(request, "emptyhour", 0);
 			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
-			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
+			String empcodes = ServletRequestUtils.getStringParameter(request, "empcodes", "");
 			
-			
-			if("".equals(emptyhour)){
-				emptyhour = "0";
+			String[] codes = empcodes.split(",");
+			String sql = "";
+			//循环按empcode填写考勤
+			for(int i=0;i<codes.length;i++){
+				List list = emDAO.findWorkCheck(codes[i], checkdate);
+				if(list.size()>0){
+					sql = "update WORKCHECK set CHECKRESULT='" + checkcode + "',EMPTYHOURS=" + emptyhour + " where EMPCODE='" + codes[i] + "' and CHECKDATE='" + checkdate + "'";
+				}else {
+					sql = "insert into WORKCHECK values('" + codes[i] + "','" + checkdate + "','" + checkcode + "'," + emptyhour + ")";
+				}
+				emDAO.insert(sql);
 			}
 			
-			emDAO.insert("insert into WORKCHECK values('" + empcode + "','" + checkdate + "','" + checkcode + "'," + emptyhour + ")");
 			
 			response.sendRedirect("em.do?action=workcheck&datepick=" + datepick + "&depart=" + depart);
 			return null;

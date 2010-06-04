@@ -5,7 +5,6 @@
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 PageList listReport = (PageList)request.getAttribute("listReport");
-List listProject = (List)request.getAttribute("listProject");
 List listStage = (List)request.getAttribute("listStage");
 int pagenum = listReport.getPageInfo().getCurPage();
 
@@ -148,6 +147,7 @@ function AJAX_PJ(pjcode){
     if(xmlHttpReq.responseText!=''){
         document.getElementById('selpj_d').innerHTML = xmlHttpReq.responseText;
     }
+    document.getElementById('pjcode_d').disabled = '';
 }
 
 function checkAll(){
@@ -164,10 +164,24 @@ function checkAll(){
 		}
 	}
 }
+
+function AJAX_PJTYPE(type){
+	if(window.XMLHttpRequest){ //Mozilla 
+      var xmlHttpReq=new XMLHttpRequest();
+    }else if(window.ActiveXObject){
+ 	  var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    }
+    xmlHttpReq.open("GET", "/plan.do?action=AJAX_PJTYPE&type="+type, false);
+    xmlHttpReq.send();
+    if(xmlHttpReq.responseText!=''){
+        document.getElementById('selpj').innerHTML = xmlHttpReq.responseText;
+    }
+}
+
 //-->
 </script>
 	</head>
-	<body>
+	<body onload="AJAX_PJTYPE('1');">
 	<h1>工作报告</h1>
 	<div id="toolbar"></div>
 		<div id="tabs1">
@@ -253,17 +267,15 @@ for(int i=0;i<list.size();i++){
 				    <td><input type="text" name="reportname" style="width:200"></td>
 				  </tr>	
 				  <tr>
+				    <td>计划内/外</td>
+				    <td><select name="sel_type" onchange="AJAX_PJTYPE(this.value);" style="width:200">
+				    	<option value="1">计划内工作令号</option>
+				    	<option value="2">计划外工作令号</option>
+				  	</select></td>
+				  </tr>
+				  <tr>
 				    <td>工作令号</td>
-				    <td><select name="pjcode" onchange="AJAX_PJ(this.value);" style="width:200">
-<%
-					for(int i=0;i<listProject.size();i++){
-						Map mapProject = (Map)listProject.get(i);
-%>				    
-						<option value="<%=mapProject.get("CODE") %>"><%=mapProject.get("NAME") %></option>
-<%
-					}
-%>
-				    </select></td>
+				    <td id="selpj" name="selpj"></td>
 				  </tr>
 				  <tr>
 				    <td>分系统</td>
@@ -284,7 +296,56 @@ for(int i=0;i<list.size();i++){
 				  </tr>	
 				  <tr>
 				    <td>投入工时</td>
-				    <td><input type="text" name="amount" style="width:200"></td>
+				    <td>
+				      <select name="amount" id="amount" style="width:200">
+				    	<option value="0.5">0.5</option>
+				    	<option value="0.5">1.0</option>
+				    	<option value="0.5">1.5</option>
+				    	<option value="0.5">2.0</option>
+				    	<option value="0.5">3.5</option>
+				    	<option value="0.5">4.0</option>
+				    	<option value="0.5">4.5</option>
+				    	<option value="0.5">5.0</option>
+				    	<option value="0.5">5.5</option>
+				    	<option value="0.5">6.0</option>
+				    	<option value="0.5">6.5</option>
+				    	<option value="0.5">7.0</option>
+				    	<option value="0.5">7.5</option>
+				    	<option value="0.5">8.0</option>
+				    	<option value="0.5">8.5</option>
+				    	<option value="0.5">9.0</option>
+				    	<option value="0.5">9.5</option>
+				    	<option value="0.5">10.0</option>
+				    	<option value="0.5">10.5</option>
+				    	<option value="0.5">11.0</option>
+				    	<option value="0.5">11.5</option>
+				    	<option value="0.5">12.0</option>
+				    	<option value="0.5">12.5</option>
+				    	<option value="0.5">13.0</option>
+				    	<option value="0.5">13.5</option>
+				    	<option value="0.5">14.0</option>
+				    	<option value="0.5">14.5</option>
+				    	<option value="0.5">15.0</option>
+				    	<option value="0.5">15.5</option>
+				    	<option value="0.5">16.0</option>
+				    	<option value="0.5">16.5</option>
+				    	<option value="0.5">17.0</option>
+				    	<option value="0.5">17.5</option>
+				    	<option value="0.5">18.0</option>
+				    	<option value="0.5">18.5</option>
+				    	<option value="0.5">19.0</option>
+				    	<option value="0.5">19.5</option>
+				    	<option value="0.5">20.0</option>
+				    	<option value="0.5">20.5</option>
+				    	<option value="0.5">21.0</option>
+				    	<option value="0.5">21.5</option>
+				    	<option value="0.5">22.0</option>
+				    	<option value="0.5">22.5</option>
+				    	<option value="0.5">23.0</option>
+				    	<option value="0.5">23.5</option>
+				    	<option value="0.5">24.0</option>
+				      </select>
+				    </td>
 				  </tr>
 				  <tr>
 				    <td>备注</td>

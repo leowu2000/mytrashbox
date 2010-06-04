@@ -1,6 +1,7 @@
 package com.basesoft.modules.plan;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +91,35 @@ public class PlanController extends CommonController {
 				  .append(mapType2.get("CODE"))
 				  .append("'>")
 				  .append(mapType2.get("NAME"))
+				  .append("</option>");
+			}
+			
+			sb.append("</select>");
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=UTF-8");
+			response.getWriter().write(sb.toString());
+			response.getWriter().close();
+		}else if("AJAX_PJTYPE".equals(action)){//计划内/计划外工作令号选择ajax
+			StringBuffer sb = new StringBuffer();
+			String type = ServletRequestUtils.getStringParameter(request, "type", "");
+			List listProject = new ArrayList();
+			if("1".equals(type)){//计划内工作令号
+				listProject = planDAO.getPlanedProject(emcode);
+			}else if("2".equals(type)){//计划外工作令号
+				listProject = planDAO.getProject();
+			}
+			
+			sb.append("<select name='pjcode' onchange='AJAX_PJ(this.value);' style='width:200;'");
+			
+			for(int i=0;i<listProject.size();i++){
+				Map mapPj = (Map)listProject.get(i);
+				sb.append("<option value='")
+				  .append(mapPj.get("CODE"))
+				  .append("'>")
+				  .append(mapPj.get("NAME"))
 				  .append("</option>");
 			}
 			
@@ -222,6 +252,14 @@ public class PlanController extends CommonController {
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
 				String updateSql = "update PLAN set STATUS='3' where ID='" + check[i] + "'";
+				planDAO.delete(updateSql);
+			}
+			
+			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode);
+		}else if("sendback".equals(action)){//退回
+			String[] check=request.getParameterValues("check");
+			for(int i=0;i<check.length;i++){
+				String updateSql = "update PLAN set STATUS='5' where ID='" + check[i] + "'";
 				planDAO.delete(updateSql);
 			}
 			
