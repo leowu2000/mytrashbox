@@ -233,25 +233,29 @@ public class ProjectDAO extends CommonDAO{
 			String s = "";
 			
 			if("0".equals(depart)){
-				s = "select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'";
-				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (" + s + ")");
-				C2 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200001','200002') and CODE in (" + s + ")");
-				C3 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100001' and CODE in (" + s + ")");
-				C4 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100002' and CODE in (" + s + ")");
-				C5 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100003' and CODE in (" + s + ")");
-				C6 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100004' and CODE in (" + s + ")");
-				C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100005' and CODE in (" + s + ")");
-				C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100006' and CODE in (" + s + ")");
+				s = "select DISTINCT EMPCODE from PLAN where PJCODE='" + mapProject.get("CODE") + "' and ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
+				List list = jdbcTemplate.queryForList(s);
+				String empcodes = StringUtil.ListToStringAdd(list, ",", "EMPCODE");
+				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (" + empcodes + ")");
+				C2 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200001','200002') and CODE in (" + empcodes + ")");
+				C3 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100001' and CODE in (" + empcodes + ")");
+				C4 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100002' and CODE in (" + empcodes + ")");
+				C5 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100003' and CODE in (" + empcodes + ")");
+				C6 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100004' and CODE in (" + empcodes + ")");
+				C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100005' and CODE in (" + empcodes + ")");
+				C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100006' and CODE in (" + empcodes + ")");
 			}else {
-				s = "select DISTINCT EMPCODE from WORKREPORT where DEPARTCODE='" + depart + "' and FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'";
-				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (" + s + ")");
-				C2 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200001','200002') and CODE in (" + s + ")");
-				C3 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100001' and CODE in (" + s + ")");
-				C4 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100002' and CODE in (" + s + ")");
-				C5 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100003' and CODE in (" + s + ")");
-				C6 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100004' and CODE in (" + s + ")");
-				C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100005' and CODE in (" + s + ")");
-				C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100006' and CODE in (" + s + ")");
+				s = "select DISTINCT EMPCODE from PLAN where DEPARTCODE='" + depart + "' and PJCODE='" + mapProject.get("CODE") + "' and ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
+				List list = jdbcTemplate.queryForList(s);
+				String empcodes = StringUtil.ListToStringAdd(list, ",", "EMPCODE");
+				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (" + empcodes + ")");
+				C2 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200001','200002') and CODE in (" + empcodes + ")");
+				C3 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100001' and CODE in (" + empcodes + ")");
+				C4 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100002' and CODE in (" + empcodes + ")");
+				C5 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100003' and CODE in (" + empcodes + ")");
+				C6 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100004' and CODE in (" + empcodes + ")");
+				C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100005' and CODE in (" + empcodes + ")");
+				C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100006' and CODE in (" + empcodes + ")");
 			}
 			
 			totalCount = C1 + C2;
@@ -296,25 +300,29 @@ public class ProjectDAO extends CommonDAO{
 			
 			String s = "";
 			if("0".equals(depart)){
-				s = "select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'";
-				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (" + s + ")");
+				s = "select DISTINCT EMPCODE from PLAN where PJCODE='" + mapProject.get("CODE") + "' and ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
+				List list = jdbcTemplate.queryForList(s);
+				String empcodes = StringUtil.ListToStringAdd(list, ",", "EMPCODE");
+				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (" + empcodes + ")");
 				C2 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200001','200002') and CODE in (select DISTINCT EMPCODE from WORKREPORT where PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "')");
-				C3 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100001' and CODE in (" + s + ")");
-				C4 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100002' and CODE in (" + s + ")");
-				C5 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100003' and CODE in (" + s + ")");
-				C6 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100004' and CODE in (" + s + ")");
-				C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100005' and CODE in (" + s + ")");
-				C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100006' and CODE in (" + s + ")");
+				C3 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100001' and CODE in (" + empcodes + ")");
+				C4 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100002' and CODE in (" + empcodes + ")");
+				C5 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100003' and CODE in (" + empcodes + ")");
+				C6 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100004' and CODE in (" + empcodes + ")");
+				C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100005' and CODE in (" + empcodes + ")");
+				C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100006' and CODE in (" + empcodes + ")");
 			}else {
-				s = "select DISTINCT EMPCODE from WORKREPORT where DEPARTCODE='" + depart + "' and FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'";
-				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (" + s + ")");
-				C2 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200001','200002') and CODE in (" + s + ")");
-				C3 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100001' and CODE in (" + s + ")");
-				C4 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100002' and CODE in (" + s + ")");
-				C5 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100003' and CODE in (" + s + ")");
-				C6 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100004' and CODE in (" + s + ")");
-				C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100005' and CODE in (" + s + ")");
-				C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100006' and CODE in (" + s + ")");
+				s = "select DISTINCT EMPCODE from PLAN where DEPARTCODE='" + depart + "' and PJCODE='" + mapProject.get("CODE") + "' and ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
+				List list = jdbcTemplate.queryForList(s);
+				String empcodes = StringUtil.ListToStringAdd(list, ",", "EMPCODE");
+				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (" + empcodes + ")");
+				C2 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200001','200002') and CODE in (" + empcodes + ")");
+				C3 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100001' and CODE in (" + empcodes + ")");
+				C4 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100002' and CODE in (" + empcodes + ")");
+				C5 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100003' and CODE in (" + empcodes + ")");
+				C6 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100004' and CODE in (" + empcodes + ")");
+				C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100005' and CODE in (" + empcodes + ")");
+				C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100006' and CODE in (" + empcodes + ")");
 			}
 			
 			totalCount = C1 + C2;
@@ -404,7 +412,7 @@ public class ProjectDAO extends CommonDAO{
 		pj_d.setName(mapPj.get("NAME").toString());
 		pj_d.setPjcode(mapPj.get("PJCODE").toString());
 		pj_d.setManager(mapPj.get("MANAGER").toString());
-		pj_d.setPlanedworkload(mapPj.get("PLANEDWORKLOAD")==null?0:Integer.parseInt(mapPj.get("PLANEDWORKLOAD").toString()));
+		pj_d.setPlanedworkload(mapPj.get("PLANEDWORKLOAD")==null?0:Float.parseFloat(mapPj.get("PLANEDWORKLOAD").toString()));
 		pj_d.setStartdate(mapPj.get("STARTDATE")==null?"":mapPj.get("STARTDATE").toString());
 		pj_d.setEnddate(mapPj.get("ENDDATE")==null?"":mapPj.get("ENDDATE").toString());
 		pj_d.setNote(mapPj.get("NOTE").toString());
