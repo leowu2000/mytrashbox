@@ -24,13 +24,16 @@ public class ProjectDAO extends CommonDAO{
 		
 		for(int i=0;i<listProject.size();i++){//循环项目
 			Map mapProject = (Map)listProject.get(i);
-			int totalCount = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and DEPARTCODE in (" + departCodes + ")");
-			
+			String sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and DEPARTCODE in (" + departCodes + ")";
+			Map map = jdbcTemplate.queryForMap(sql);
+			float totalCount = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
 			mapProject.put("totalCount", totalCount);
 			
 			for(int j=0;j<listDepart.size();j++){//循环部门
 				Map mapDepart = (Map)listDepart.get(j);
-				int departCount = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and DEPARTCODE='" + mapDepart.get("CODE") + "' and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'");
+				String sql1 = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE='" + mapDepart.get("CODE") + "' and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'"; 
+				Map map1 = jdbcTemplate.queryForMap(sql1);
+				float departCount = map1.get("AMOUNT")==null?0:Float.parseFloat(map1.get("AMOUNT").toString());
 				
 				mapProject.put("departCount" + j, departCount);
 			}
@@ -53,7 +56,10 @@ public class ProjectDAO extends CommonDAO{
 			Map mapProject = (Map)listProject.get(i);
 			for(int j=0;j<listDepart.size();j++){//循环部门
 				Map mapDepart = (Map)listDepart.get(j);
-				int departCount = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and DEPARTCODE='" + mapDepart.get("CODE") + "' and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'");
+				String sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE='" + mapDepart.get("CODE") + "' and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'";
+				Map map = jdbcTemplate.queryForMap(sql);
+				
+				float departCount = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString()); 
 				
 				mapProject.put("departCount" + j, departCount);
 			}
@@ -76,7 +82,7 @@ public class ProjectDAO extends CommonDAO{
 		List listProject = getProject(pjcodes);
 		
 		//合计
-		int[] hj = new int[listPeriod.size()];
+		float[] hj = new float[listPeriod.size()];
 		
 		for(int i=0;i<listProject.size();i++){//循环所有的项目
 			Map returnMap = new HashMap();
@@ -85,17 +91,23 @@ public class ProjectDAO extends CommonDAO{
 			
 			returnMap.put("PJCODE", mapProject.get("NAME"));
 			
-			int countCol = 0;
+			float countCol = 0;
 			
 			for(int j=0;j<listPeriod.size();j++){//循环项目阶段，取工时
 				Map mapPeriod = (Map)listPeriod.get(j);
 				
-				int count = 0;
+				float count = 0;
 				
 				if("0".equals(depart)){//所有部门
-					count = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'");;
+					String sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
+					Map map = jdbcTemplate.queryForMap(sql);
+					
+					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
 				}else {
-					count = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and DEPARTCODE='" + depart + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'");
+					String sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE='" + depart + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
+					Map map = jdbcTemplate.queryForMap(sql);
+					
+					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
 				}
 				
 				
@@ -113,7 +125,7 @@ public class ProjectDAO extends CommonDAO{
 		
 		Map mapHj = new HashMap();
 		//计算总的合计值
-		int totalCount = 0;
+		float totalCount = 0;
 		for(int i=0;i<hj.length;i++){
 			totalCount = totalCount + hj[i];
 		}
@@ -144,7 +156,7 @@ public class ProjectDAO extends CommonDAO{
 		List listProject = getProject(pjcodes);
 		
 		//合计
-		int[] hj = new int[listPeriod.size()];
+		float[] hj = new float[listPeriod.size()];
 		
 		for(int i=0;i<listProject.size();i++){//循环所有的项目
 			Map returnMap = new HashMap();
@@ -153,17 +165,24 @@ public class ProjectDAO extends CommonDAO{
 			
 			returnMap.put("PJCODE", mapProject.get("NAME"));
 			
-			int countCol = 0;
+			float countCol = 0;
 			
 			for(int j=0;j<listPeriod.size();j++){//循环项目阶段，取工时
 				Map mapPeriod = (Map)listPeriod.get(j);
 				
-				int count = 0;
+				float count = 0;
 				
 				if("0".equals(depart)){//所有部门
-					count = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'");;
+					String sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
+					Map map = jdbcTemplate.queryForMap(sql);
+					
+					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
+					
 				}else {
-					count = jdbcTemplate.queryForInt("select sum(AMOUNT) from WORKREPORT where FLAG=2 and DEPARTCODE='" + depart + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'");
+					String sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE='" + depart + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
+					Map map = jdbcTemplate.queryForMap(sql);
+					
+					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
 				}
 				
 				

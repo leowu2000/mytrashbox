@@ -48,10 +48,6 @@
 	  var empname = document.getElementById('empname').value;
 	  var sel_empcode = document.getElementById('sel_empcode').value;
 	  var datepick = document.getElementById('datepick').value;
-	  if(datepick == ''){
-	  	document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
-	  	datepick = document.getElementById('datepick').value;
-	  }
 	  
 	  document.getElementById('list_manage').src = "/plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + empname + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode;
 	}

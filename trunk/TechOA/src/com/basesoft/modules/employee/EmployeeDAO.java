@@ -145,11 +145,11 @@ public class EmployeeDAO extends CommonDAO{
 				}
 			}
 			//给出迟到,早退,病假,事假,旷工的一个月的小结
-			returnMap.put("cd", jdbcTemplate.queryForInt("select sum(EMPTYHOURS) from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400002'"));
-			returnMap.put("zt", jdbcTemplate.queryForInt("select sum(EMPTYHOURS) from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400003'"));
-			returnMap.put("bj", jdbcTemplate.queryForInt("select sum(EMPTYHOURS) from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400004'"));
-			returnMap.put("sj", jdbcTemplate.queryForInt("select sum(EMPTYHOURS) from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400005'"));
-			returnMap.put("kg", jdbcTemplate.queryForInt("select sum(EMPTYHOURS) from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400006'"));
+			returnMap.put("cd", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400002'").get("AMOUNT"));
+			returnMap.put("zt", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400003'").get("AMOUNT"));
+			returnMap.put("bj", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400004'").get("AMOUNT"));
+			returnMap.put("sj", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400005'").get("AMOUNT"));
+			returnMap.put("kg", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400006'").get("AMOUNT"));
 			
 			returnList.add(returnMap);
 		}else {//领导和管理员看整个部门的
@@ -172,17 +172,28 @@ public class EmployeeDAO extends CommonDAO{
 				}
 				
 				//给出迟到,早退,病假,事假,旷工的一个月的小结
-				returnMap.put("cd", jdbcTemplate.queryForInt("select sum(EMPTYHOURS) from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400002'"));
-				returnMap.put("zt", jdbcTemplate.queryForInt("select sum(EMPTYHOURS) from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400003'"));
-				returnMap.put("bj", jdbcTemplate.queryForInt("select sum(EMPTYHOURS) from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400004'"));
-				returnMap.put("sj", jdbcTemplate.queryForInt("select sum(EMPTYHOURS) from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400005'"));
-				returnMap.put("kg", jdbcTemplate.queryForInt("select sum(EMPTYHOURS) from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400006'"));
+				returnMap.put("cd", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400002'").get("AMOUNT"));
+				returnMap.put("zt", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400003'").get("AMOUNT"));
+				returnMap.put("bj", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400004'").get("AMOUNT"));
+				returnMap.put("sj", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400005'").get("AMOUNT"));
+				returnMap.put("kg", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400006'").get("AMOUNT"));
 			
 				returnList.add(returnMap);
 			}
 		}
 		
 		return returnList;
+	}
+	
+	/**
+	 * 获取单人某天的考勤记录
+	 * @param empcode
+	 * @param datepick
+	 * @return
+	 */
+	public List findWorkCheck(String empcode, String datepick){
+		String sql = "select * from WORKCHECK where EMPCODE='" + empcode + "' and CHECKDATE='" + datepick + "'";
+		return jdbcTemplate.queryForList(sql);
 	}
 	
 	/**
@@ -350,7 +361,7 @@ public class EmployeeDAO extends CommonDAO{
 			String majorname = findNameByCode("DICT", mapYgtrfx.get("MAJORCODE")==null?"":mapYgtrfx.get("MAJORCODE").toString());
 			String departname = findNameByCode("DEPARTMENT", mapYgtrfx.get("DEPARTCODE")==null?"":mapYgtrfx.get("DEPARTCODE").toString());
 			
-			sql = "select sum(AMOUNT) from WORKREPORT where EMPCODE='" + empcode[i] + "'";
+			sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where EMPCODE='" + empcode[i] + "'";
 			if(!"0".equals(selproject)){
 				sql = sql + " and PJCODE='" + selproject + "'";
 			}
@@ -361,7 +372,9 @@ public class EmployeeDAO extends CommonDAO{
 				sql = sql + " and STARTDATE<='" + enddate + "'";
 			}
 			
-			int amount = jdbcTemplate.queryForInt(sql);
+			Map map = jdbcTemplate.queryForMap(sql);
+			
+			float amount = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
 			mapYgtrfx.put("AMOUNT", amount);
 			mapYgtrfx.put("MAJORNAME", majorname);
 			mapYgtrfx.put("DEGREENAME", degreename);
