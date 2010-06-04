@@ -127,11 +127,11 @@ if("".equals(departname)){
 		<input type="hidden" id="checkedDepart" name="checkedDepart">
 	</form>
 	<div style="position:absolute; top:110px; left:100px;display: none;" id="departsel" name="departsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree1" name="checkedtree1"></iframe></div>
-  	<select name="sel_type" id="sel_type">
+  	<!-- <select name="sel_type" id="sel_type">
   		<option value="1">柱状图</option>
-  		<!-- <option value="2">饼状图</option> -->
+  		<option value="2">饼状图</option>
   		<option value="3">折线图</option>
-  	</select>
+  	</select> -->
   	<input type="button" class="btn" value="分析" name="search" onclick="commit();">
   </body>
 </html>
