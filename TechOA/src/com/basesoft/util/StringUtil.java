@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -68,7 +69,7 @@ public class StringUtil {
 	}
 	
 	/**
-	 * list转化为字符串，中间追加分割符， 字符串用''引起来，主要hql里面使用
+	 * 数组转化为字符串，中间追加分割符， 字符串用''引起来，主要hql里面使用
 	 * @param strList
 	 * @param sep
 	 * @return
@@ -88,7 +89,37 @@ public class StringUtil {
 			}
 		}
 		return sb.toString();
+	}
+	
+	/**
+	 * list转化为字符串，中间追加分割符， 字符串用''引起来，主要hql里面使用
+	 * @param list list
+	 * @param sep 分隔符
+	 * @param name 取的名称
+	 * @return
+	 */
+	public static String ListToStringAdd(List list, String sep, String name) {
+		if (list == null) {
+			return "";
+		}
 		
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < list.size(); i++) {
+			Map map = (Map)list.get(i);
+			String s = map.get(name)==null?"":map.get(name).toString();
+			String[] ss = s.split(sep);
+			for(int j=0;j<ss.length;j++){
+				if ("".equals(sb.toString())) {
+					sb.append("'" + ss[j] + "'");
+				} else {
+					sb.append(sep + "'" + ss[j] + "'");
+				}
+			}
+		}
+		if ("".equals(sb.toString())) {
+			sb.append("''");
+		}
+		return sb.toString();
 	}
 	
 	/**
