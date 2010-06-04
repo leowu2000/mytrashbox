@@ -10,8 +10,8 @@ public class Project {
 	public String status;
 	public String manager;
 	public String member;
-	public int planedworkload;
-	public int nowworkload;
+	public float planedworkload;
+	public float nowworkload;
 	public String startdate;
 	public String enddate;
 	public String note;
@@ -66,19 +66,19 @@ public class Project {
 		this.member = member;
 	}
 	
-	public int getPlanedworkload() {
+	public float getPlanedworkload() {
 		return planedworkload;
 	}
 	
-	public void setPlanedworkload(int planedworkload) {
+	public void setPlanedworkload(float planedworkload) {
 		this.planedworkload = planedworkload;
 	}
 	
-	public int getNowworkload() {
+	public float getNowworkload() {
 		return nowworkload;
 	}
 	
-	public void setNowworkload(int nowworkload) {
+	public void setNowworkload(float nowworkload) {
 		this.nowworkload = nowworkload;
 	}
 	

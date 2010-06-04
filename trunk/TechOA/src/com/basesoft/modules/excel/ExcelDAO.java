@@ -909,7 +909,7 @@ public class ExcelDAO extends CommonDAO {
 			if("".equals(sys_pjcode)){//不存在工作令号则入库
 				String pjname = row.optString("PJNAME");
 				String managername = row.optString("MANAGERNAME");
-				int planedworkload = row.optInt("PLANEDWORKLOAD");
+				String planedworkload = row.optString("PLANEDWORKLOAD");
 				String startdate = row.optString("STARTDATE");
 				String enddate = row.optString("ENDDATE");
 				String note = row.optString("NOTE");
@@ -921,6 +921,9 @@ public class ExcelDAO extends CommonDAO {
 				//找出managercode
 				String managercode = findCodeByName("EMPLOYEE", managername);
 				
+				if("".equals(planedworkload)){
+					planedworkload = "0";
+				}
 				if("".equals(startdate)){
 					startdate = null;
 				}else {

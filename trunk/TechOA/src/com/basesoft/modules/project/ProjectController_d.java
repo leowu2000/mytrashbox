@@ -88,11 +88,14 @@ public class ProjectController_d extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			String  name = ServletRequestUtils.getStringParameter(request, "name", "");
 			String  manager = ServletRequestUtils.getStringParameter(request, "manager", "");
-			int  planedworkload = ServletRequestUtils.getIntParameter(request, "planedworkload", 0);
+			String  planedworkload = ServletRequestUtils.getStringParameter(request, "planedworkload", "");
 			String  startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
 			String  enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
 			String  note = ServletRequestUtils.getStringParameter(request, "note", "");
 			
+			if("".equals(planedworkload)){
+				planedworkload = "0";
+			}
 			if("".equals(startdate)){
 				startdate = null;
 			}else {
