@@ -145,10 +145,10 @@ if("".equals(departname)){
 		<input type="hidden" id="checkedPj" name="checkedPj">
 	</form>
 	<div style="position:absolute; top:110px; left:100px;display: none;" id="pjsel" name="pjsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree" name="checkedtree"></iframe></div>
-  	<select name="sel_type" id="sel_type">
+  	<!-- <select name="sel_type" id="sel_type">
   		<option value="1">柱状图</option>
-  		<!-- <option value="2">饼状图</option> -->
+  		<option value="2">饼状图</option>
   		<option value="3">折线图</option>
-  	</select>
+  	</select> -->
   </body>
 </html>
