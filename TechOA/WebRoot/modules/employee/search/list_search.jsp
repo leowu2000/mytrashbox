@@ -25,6 +25,9 @@ EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<%@ include file="../../../common/meta.jsp" %>
+<style type="text/css">
+#the-table { border:1px solid #bbb;border-collapse:collapse;margin: 5px auto 5px auto; font-size: 20px;color:#696969;}
+</style>
   </head>
   
   <body>
@@ -43,8 +46,8 @@ EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
     		<td>财务信息</td>
     		<td>一卡通信息</td>
     		<td>班车刷卡信息</td>
-    		<td>物资资产领用信息</td>
-    		<td>固定资产领用信息</td>
+    		<td>物资资产<br>领用信息</td>
+    		<td>固定资产<br>领用信息</td>
     		
     	</tr>
 <%

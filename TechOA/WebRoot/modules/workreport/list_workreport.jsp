@@ -298,52 +298,14 @@ for(int i=0;i<list.size();i++){
 				    <td>投入工时</td>
 				    <td>
 				      <select name="amount" id="amount" style="width:200">
-				    	<option value="0.5">0.5</option>
-				    	<option value="0.5">1.0</option>
-				    	<option value="0.5">1.5</option>
-				    	<option value="0.5">2.0</option>
-				    	<option value="0.5">3.5</option>
-				    	<option value="0.5">4.0</option>
-				    	<option value="0.5">4.5</option>
-				    	<option value="0.5">5.0</option>
-				    	<option value="0.5">5.5</option>
-				    	<option value="0.5">6.0</option>
-				    	<option value="0.5">6.5</option>
-				    	<option value="0.5">7.0</option>
-				    	<option value="0.5">7.5</option>
-				    	<option value="0.5">8.0</option>
-				    	<option value="0.5">8.5</option>
-				    	<option value="0.5">9.0</option>
-				    	<option value="0.5">9.5</option>
-				    	<option value="0.5">10.0</option>
-				    	<option value="0.5">10.5</option>
-				    	<option value="0.5">11.0</option>
-				    	<option value="0.5">11.5</option>
-				    	<option value="0.5">12.0</option>
-				    	<option value="0.5">12.5</option>
-				    	<option value="0.5">13.0</option>
-				    	<option value="0.5">13.5</option>
-				    	<option value="0.5">14.0</option>
-				    	<option value="0.5">14.5</option>
-				    	<option value="0.5">15.0</option>
-				    	<option value="0.5">15.5</option>
-				    	<option value="0.5">16.0</option>
-				    	<option value="0.5">16.5</option>
-				    	<option value="0.5">17.0</option>
-				    	<option value="0.5">17.5</option>
-				    	<option value="0.5">18.0</option>
-				    	<option value="0.5">18.5</option>
-				    	<option value="0.5">19.0</option>
-				    	<option value="0.5">19.5</option>
-				    	<option value="0.5">20.0</option>
-				    	<option value="0.5">20.5</option>
-				    	<option value="0.5">21.0</option>
-				    	<option value="0.5">21.5</option>
-				    	<option value="0.5">22.0</option>
-				    	<option value="0.5">22.5</option>
-				    	<option value="0.5">23.0</option>
-				    	<option value="0.5">23.5</option>
-				    	<option value="0.5">24.0</option>
+<%
+					for(float i=0;i<=23;i++){
+%>				    	
+						<option value="<%=i + 0.5 %>"><%=i + 0.5 %></option>
+						<option value="<%=i + 1.0 %>"><%=i + 1.0 %></option>
+<%
+					}
+%>
 				      </select>
 				    </td>
 				  </tr>

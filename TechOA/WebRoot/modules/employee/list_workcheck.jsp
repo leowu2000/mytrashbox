@@ -93,16 +93,19 @@ Ext.onReady(function(){
     	var empcodes = '';
     	var check = document.getElementsByName('check');
     	for(var i=0;i<check.length;i++){
-    		if(empcodes == ''){
-    			empcodes = check[i].value;
-    		}else {
-    			empcodes = empcodes + ',' + check[i].value;
+    		if(check[i].checked){
+    			if(empcodes == ''){
+    				empcodes = check[i].value;
+    			}else {
+    				empcodes = empcodes + ',' + check[i].value;
+    			}
     		}
     	}
 		if(selValue==undefined) {
 			alert('请选择数据项！');
 			return false;
 		}
+		changeStatus('400001');
     	action = url+'?action=addWorkcheck&empcodes='+empcodes;
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
@@ -144,6 +147,15 @@ function checkAll(){
 		for(var i=0;i<checks.length;i++){
 			checks[i].checked = !checks[i].checked;
 		}
+	}
+}
+
+function changeStatus(value){
+	var text_empty = document.getElementById('text_empty');
+	if(value=='400002'||value=='400003'||value=='400004'||value=='400005'||value=='400006'){
+		text_empty.style.display = '';
+	}else {
+		text_empty.style.display = 'none';
 	}
 }
 	</script>
@@ -245,7 +257,7 @@ function checkAll(){
 		  </tr>
 		  <tr>
 		  	<td>考勤状态</td>
-		  	<td><select name="checkcode" style="width:200;">
+		  	<td><select name="checkcode" style="width:200;" onchange="changeStatus(this.value);">
 <%
 			for(int i=0;i<listCheck.size();i++){
 				Map mapCheck = (Map)listCheck.get(i);
@@ -256,8 +268,8 @@ function checkAll(){
 %>
 		  	</select></td>
 		  </tr>	
-		  <tr>
-		  	<td>缺勤时间</td>
+		  <tr id="text_empty" name="text_empty" style="display:none;">
+		  	<td >缺勤时间</td>
 		  	<td><input type="text" name="emptyhour" style="width:200;"></td>
 		  </tr>
 		</table>
