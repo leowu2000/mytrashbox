@@ -1,5 +1,6 @@
 package com.basesoft.modules.plan;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +58,9 @@ public class PlanDAO extends CommonDAO {
 		}
 		
 		if(!"0".equals(emdepart)){
-			sql = sql + " and DEPARTCODE='" + emdepart + "'";
+			List listDepart = getDeparts(emdepart, new ArrayList());
+			String departcodes = getDepartCodes(listDepart);
+			sql = sql + " and DEPARTCODE in (" + departcodes + ")";
 		}
 		
 		if(!"".equals(sel_empcode)){
@@ -65,11 +68,11 @@ public class PlanDAO extends CommonDAO {
 		}
 		
 		if("".equals(datepick)){
-			sql = sql + " order by TYPE,TYPE2,cast(ordercode as int),ENDDATE desc";
+			sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc";
 		}else {
 			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 			Date enddate = StringUtil.getEndOfMonth(startdate);
-			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' order by TYPE,TYPE2,cast(ordercode as int),ENDDATE desc";
+			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' order by TYPE,TYPE2,ORDERCODE,ENDDATE desc";
 		}
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
@@ -98,7 +101,7 @@ public class PlanDAO extends CommonDAO {
 		String sql = "";
 		
 		if("".equals(datepick)){
-			sql = "select * from PLAN where STATUS='3' or STATUS='4'";
+			sql = "select * from PLAN where (STATUS='3' or STATUS='4')";
 		}else {
 			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 			Date enddate = StringUtil.getEndOfMonth(startdate);
@@ -140,7 +143,9 @@ public class PlanDAO extends CommonDAO {
 		}
 		
 		if(!"0".equals(empdepart)){
-			sql = sql + " and DEPARTCODE='" + empdepart + "'";
+			List listDepart = getDeparts(empdepart, new ArrayList());
+			String departcodes = getDepartCodes(listDepart);
+			sql = sql + " and DEPARTCODE in (" + departcodes + ")";
 		}
 		
 		if(!"".equals(empcode)){
