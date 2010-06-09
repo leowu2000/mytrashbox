@@ -419,7 +419,7 @@ function checkAll(){
                 <table>
 				  <tr>
 				    <td>年检日期</td>
-					<td><input type="text" name="checkdate" style="width:200" onclick="WdatePicker()"></td>
+					<td><input type="text" name="checkdatenow" style="width:200" onclick="WdatePicker()"></td>
 				  </tr>
 				</table>
 	        </form>

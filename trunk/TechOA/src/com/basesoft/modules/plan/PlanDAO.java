@@ -21,7 +21,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String level, String type, String empname, String datepick, int page, String emdepart, String sel_empcode){
+	public PageList findAll(String level, String type, String empname, String datepick, int page, String emrole, String emcode, String emdepart, String sel_empcode){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
@@ -57,11 +57,17 @@ public class PlanDAO extends CommonDAO {
 			}
 		}
 		
-		if(!"0".equals(emdepart)){
-			List listDepart = getDeparts(emdepart, new ArrayList());
-			String departcodes = getDepartCodes(listDepart);
-			sql = sql + " and DEPARTCODE in (" + departcodes + ")";
+		if("004".equals(emrole)){//计划员,看到自己所管理的计划
+			sql = sql + " and PLANNERCODE='" + emcode + "'";
+		}else if("005".equals(emrole)){//组长,看到组成员的计划
+			sql = sql + " and (EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE='" + emdepart + "') or EMPNAME in (select NAME from EMPLOYEE where DEPARTCODE='" + emdepart + "'))";
 		}
+		
+//		if(!"0".equals(emdepart)){
+//			List listDepart = getDeparts(emdepart, new ArrayList());
+//			String departcodes = getDepartCodes(listDepart);
+//			sql = sql + " and DEPARTCODE in (" + departcodes + ")";
+//		}
 		
 		if(!"".equals(sel_empcode)){
 			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
@@ -154,7 +160,7 @@ public class PlanDAO extends CommonDAO {
 		
 		sql = sql + " order by ENDDATE ,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
 		
-		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+ 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
 		
 		List list = jdbcTemplate.queryForList(sqlData);

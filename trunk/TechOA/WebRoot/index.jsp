@@ -45,15 +45,6 @@ Ext.onReady(function(){
         		        animate: true
             		},
             		items:[{
-                    	title:'收藏菜单',
-                     	id:'tree1',
-    	                xtype: 'treepanel',
-        	            autoScroll: true,
-            	        border: false,   
-                	    loader: treeloader1,
-                    	rootVisible:false,
-                   	  	root: new Ext.tree.AsyncTreeNode({text:'功能演示'})
-                   	},{
                      	title:'默认菜单',
                      	id:'tree2',
                      	xtype: 'treepanel',
@@ -62,6 +53,15 @@ Ext.onReady(function(){
                      	loader: treeloader2,
                      	rootVisible:false,
                      	root: new Ext.tree.AsyncTreeNode({text:'功能演示'})
+                   	},{
+                    	title:'收藏菜单',
+                     	id:'tree1',
+    	                xtype: 'treepanel',
+        	            autoScroll: true,
+            	        border: false,   
+                	    loader: treeloader1,
+                    	rootVisible:false,
+                   	  	root: new Ext.tree.AsyncTreeNode({text:'功能演示'})
                    	}]
                 }, {
                     region:'center',

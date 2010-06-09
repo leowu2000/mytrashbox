@@ -23,6 +23,19 @@ public class Employee {
 	public String degreecode;
 	public String procode;
 	public String departname;
+	public String xb;
+	public String mz;
+	public String csrq;
+	public String xl;
+	public String xzzw;
+	public String jszc;
+	public String rzsj;
+	public String rsbz;
+	public String bz;
+	public String gmmc;
+	public String gwsx;
+	public String gj;
+	public String zj;
 
 	public String getId() {
 		return id;
@@ -190,6 +203,110 @@ public class Employee {
 
 	public void setDepartname(String departname) {
 		this.departname = departname;
+	}
+
+	public String getXb() {
+		return xb;
+	}
+
+	public void setXb(String xb) {
+		this.xb = xb;
+	}
+
+	public String getMz() {
+		return mz;
+	}
+
+	public void setMz(String mz) {
+		this.mz = mz;
+	}
+
+	public String getCsrq() {
+		return csrq;
+	}
+
+	public void setCsrq(String csrq) {
+		this.csrq = csrq;
+	}
+
+	public String getXl() {
+		return xl;
+	}
+
+	public void setXl(String xl) {
+		this.xl = xl;
+	}
+
+	public String getXzzw() {
+		return xzzw;
+	}
+
+	public void setXzzw(String xzzw) {
+		this.xzzw = xzzw;
+	}
+
+	public String getJszc() {
+		return jszc;
+	}
+
+	public void setJszc(String jszc) {
+		this.jszc = jszc;
+	}
+
+	public String getRzsj() {
+		return rzsj;
+	}
+
+	public void setRzsj(String rzsj) {
+		this.rzsj = rzsj;
+	}
+
+	public String getRsbz() {
+		return rsbz;
+	}
+
+	public void setRsbz(String rsbz) {
+		this.rsbz = rsbz;
+	}
+
+	public String getBz() {
+		return bz;
+	}
+
+	public void setBz(String bz) {
+		this.bz = bz;
+	}
+
+	public String getGmmc() {
+		return gmmc;
+	}
+
+	public void setGmmc(String gmmc) {
+		this.gmmc = gmmc;
+	}
+
+	public String getGwsx() {
+		return gwsx;
+	}
+
+	public void setGwsx(String gwsx) {
+		this.gwsx = gwsx;
+	}
+
+	public String getGj() {
+		return gj;
+	}
+
+	public void setGj(String gj) {
+		this.gj = gj;
+	}
+
+	public String getZj() {
+		return zj;
+	}
+
+	public void setZj(String zj) {
+		this.zj = zj;
 	}
 
 }

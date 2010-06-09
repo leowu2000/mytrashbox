@@ -66,6 +66,11 @@ public class ExcelController extends CommonController {
 				mv.addObject("seldepart", seldepart);
 				mv.addObject("emname", emname);
 				mv.addObject("sel_empcode", sel_empcode);
+			}else if("EMPLOYEE_DETAIL".equals(table)){//导入人员详细
+				mv = new ModelAndView("modules/excel/preview_employee_detail");
+				mv.addObject("seldepart", seldepart);
+				mv.addObject("emname", emname);
+				mv.addObject("sel_empcode", sel_empcode);
 			}else if("EMPLOYEE_MOBILE".equals(table)){//导入人员手机号码
 				mv = new ModelAndView("modules/excel/preview_employee_mobile");
 				mv.addObject("seldepart", seldepart);
@@ -151,6 +156,8 @@ public class ExcelController extends CommonController {
 				errorMessage = excelDAO.insertDepart(data);
 			}else if("EMPLOYEE".equals(table)){//导入人员
 				errorMessage = excelDAO.insertEmployee(data);
+			}else if("EMPLOYEE_DETAIL".equals(table)){//导入人员详细
+				errorMessage = excelDAO.insertEmployee_detail(data);
 			}else if("EMPLOYEE_MOBILE".equals(table)){//导入人员
 				errorMessage = excelDAO.insertEmployee_Mobile(data);
 			}else if("EMPLOYEE_ADDRESS".equals(table)){//导入人员

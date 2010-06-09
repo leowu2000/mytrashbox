@@ -300,9 +300,9 @@ for(int i=0;i<list.size();i++){
 				      <select name="amount" id="amount" style="width:200">
 <%
 					for(float i=0;i<=23;i++){
-%>				    	
-						<option value="<%=i + 0.5 %>"><%=i + 0.5 %></option>
-						<option value="<%=i + 1.0 %>"><%=i + 1.0 %></option>
+%>				      
+ 						<option value="<%=i + 0.5 %>"><%=i + 0.5 %></option>
+ 						<option value="<%=i + 1.0 %>"><%=i + 1.0 %></option>
 <%
 					}
 %>

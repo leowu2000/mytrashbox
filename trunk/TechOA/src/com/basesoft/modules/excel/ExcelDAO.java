@@ -177,7 +177,7 @@ public class ExcelDAO extends CommonDAO {
 			if(map.get("CODE")==null){//没有此员工编码，则入库
 				String name = row.optString("NAME");
 				String code = row.optString("CODE");
-				String departname = row.optString("DEPARTNAME");
+				String departname = row.optString("DEPARTNAME")==null?"":row.optString("DEPARTNAME").trim();
 				String mainjob = row.optString("MAINJOB");
 				String secjob = row.optString("SECJOB");
 				String level = row.optString("LEVEL");
@@ -209,6 +209,67 @@ public class ExcelDAO extends CommonDAO {
 				}
 			}else {
 				errorMessage = getErrorMessage2(errorMessage, i);
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 员工详细信息入库
+	 * @param data 员工详细信息
+	 * @return
+	 */
+	public String insertEmployee_detail(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			
+			String name = row.optString("NAME");
+			String code = row.optString("CODE");
+			String xb = row.optString("XB");
+			String bm = row.optString("BM");
+			String dw = row.optString("DW");
+			String mz = row.optString("MZ");
+			String csrq = row.optString("CSRQ");
+			String xl = row.optString("XL");
+			String xzzw = row.optString("XZZW");
+			String jszc = row.optString("JSZC");
+			String rzsj = row.optString("RZSJ");
+			String rsbz = row.optString("RSBZ");
+			String bz = row.optString("BZ");
+			String gwmc = row.optString("GWMC");
+			String gwsx = row.optString("GWSX");
+			String gj = row.optString("GJ");
+			String zj = row.optString("ZJ");
+			
+			if("".equals(csrq)){
+				csrq = null;
+			}else {
+				csrq = "'" + csrq + "'";
+			}
+			if("".equals(rzsj)){
+				rzsj = null;
+			}else {
+				rzsj = "'" + rzsj + "'";
+			}
+			
+			String updateSql = "update EMPLOYEE set xb='" + xb + "',mz='" + mz + "',csrq=" + csrq + ",xl='" + xl + "',xzzw='" + xzzw + "',jszc='" + jszc + "',rzsj=" + rzsj + ",rsbz='" + rsbz + "',bz='" + bz + "',gwmc='" + gwmc + "',gwsx='" + gwsx + "',gj='" + gj + "',zj='" + zj + "' where CODE='" + code + "'";
+			
+			try{
+				update(updateSql);
+			}catch(Exception e){
+				e.printStackTrace();
+				errorMessage = getErrorMessage(errorMessage, i);
+				continue;
 			}
 		}
 		

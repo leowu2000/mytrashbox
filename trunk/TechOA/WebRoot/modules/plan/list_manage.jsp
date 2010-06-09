@@ -124,7 +124,6 @@ Ext.onReady(function(){
        	Ext.getDom('dataForm').reset();
        	Ext.get('pjcode').set({'disabled':''});
        	AJAX_PJ(document.getElementById('pjcode').value);
-       	Ext.get('pjcode_d').set({'disabled':''});
        	Ext.get('stagecode').set({'disabled':''});
        	Ext.get('typecode').set({'disabled':''});
        	changeType();
@@ -167,6 +166,7 @@ Ext.onReady(function(){
 				Ext.get('leader_station').set({'value':data.item.leader__station});
 				Ext.get('leader_section').set({'value':data.item.leader__section});
 				Ext.get('leader_room').set({'value':data.item.leader__room});
+				Ext.get('pjcode_d').set({'disabled':'disabled'});
 				
 		    	action = url+'?action=update&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>';
 	    		win.setTitle('修改');
@@ -458,8 +458,8 @@ for(int i=0;i<listPlan.size();i++){
 	String plantype = planDAO.findNameByCode("PLAN_TYPE", mapPlan.get("TYPE").toString());
 	String plantype2 = planDAO.findNameByCode("PLAN_TYPE", mapPlan.get("TYPE2").toString());
 %>
-            <tr align="center">
-                <td>
+            <tr align="LEFT">
+                <td width="40">
 <%
 				if(!"已完成".equals(status)){
 %>                
@@ -471,7 +471,7 @@ for(int i=0;i<listPlan.size();i++){
                 <td>&nbsp;<%=plantype %>--<%=plantype2 %></td>
                 <td nowrap="nowrap">&nbsp;<%=pjname %></td>
                 <td nowrap="nowrap">&nbsp;<%=mapPlan.get("ORDERCODE")==null?"":mapPlan.get("ORDERCODE") %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapPlan.get("NOTE")==null?"":mapPlan.get("NOTE") %></td>
+                <td>&nbsp;<%=mapPlan.get("NOTE")==null?"":mapPlan.get("NOTE") %></td>
                 <td nowrap="nowrap">&nbsp;<%=mapPlan.get("SYMBOL")==null?"":mapPlan.get("SYMBOL") %></td>
                 <td nowrap="nowrap">&nbsp;<%=mapPlan.get("ENDDATE")==null?"":mapPlan.get("ENDDATE") %></td>
                 <td nowrap="nowrap">&nbsp;<%=mapPlan.get("DEPARTNAME")==null?"":mapPlan.get("DEPARTNAME") %></td>
