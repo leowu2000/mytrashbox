@@ -30,6 +30,7 @@ public class PlanController extends CommonController {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		String emdepart = request.getSession().getAttribute("DEPARTCODE")==null?"":request.getSession().getAttribute("DEPARTCODE").toString();
+		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
@@ -51,7 +52,7 @@ public class PlanController extends CommonController {
 		}else if("list".equals(action)){//计划管理
 			mv = new ModelAndView("modules/plan/list_manage");
 			
-			PageList pageList = planDAO.findAll(f_level, f_type, f_empname, datepick, page, emdepart, sel_empcode);
+			PageList pageList = planDAO.findAll(f_level, f_type, f_empname, datepick, page, emrole, emcode, emdepart, sel_empcode);
 			List listPersent = planDAO.getListPersent();
 			
 			List listLevel = planDAO.getLevel();
@@ -83,7 +84,7 @@ public class PlanController extends CommonController {
 			String selectname = "typecode" + id;
 			sb.append("<select name='")
 			  .append(selectname)
-			  .append("' style='width:200;' disabled='disabled'>");
+			  .append("' style='width:200;' >");
 			
 			for(int i=0;i<listType2.size();i++){
 				Map mapType2 = (Map)listType2.get(i);
@@ -137,7 +138,7 @@ public class PlanController extends CommonController {
 			
 			List listPj_d = planDAO.getProject_d(pjcode);
 			
-			sb.append("<select name='pjcode_d' style='width:200;' disabled='disabled'>");
+			sb.append("<select name='pjcode_d' style='width:200;'>");
 			
 			for(int i=0;i<listPj_d.size();i++){
 				Map mapPj_d = (Map)listPj_d.get(i);

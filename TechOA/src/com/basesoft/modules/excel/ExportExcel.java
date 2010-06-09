@@ -317,7 +317,7 @@ public class ExportExcel {
 		str1[7] = "责任人";
 		str1[8] = "计划员";
 		str1[9] = "分管室领导";
-		str1[10] = "完成率(%)";
+		str1[10] = "时间进度(%)";
 		str1[11] = "备注";
 		
 		insertRowData(sheet, 1, str1);

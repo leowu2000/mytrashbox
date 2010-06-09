@@ -170,39 +170,74 @@ if("search".equals(method)){
     		<td>&nbsp;<%=mapEm.get("CODE")==null?"":mapEm.get("CODE") %></td>
     	</tr>
     	<tr align="center" height="30">
+    		<td bgcolor="#E0F1F8"  class="b_tr">性别</td>
+    		<td>&nbsp;<%=mapEm.get("XB")==null?"":mapEm.get("XB") %></td>
     		<td bgcolor="#E0F1F8"  class="b_tr">部门</td>
     		<td>&nbsp;<%=mapEm.get("DEPART")==null?"":mapEm.get("DEPART") %></td>
+    	</tr>
+    	<tr align="center" height="30">
+    		<td bgcolor="#E0F1F8"  class="b_tr">出生日期</td>
+    		<td>&nbsp;<%=mapEm.get("CSRQ")==null?"":mapEm.get("CSRQ") %></td>
+    		<td bgcolor="#E0F1F8"  class="b_tr">民族</td>
+    		<td>&nbsp;<%=mapEm.get("MZ")==null?"":mapEm.get("MZ") %></td>
+    	</tr>
+    	<tr align="center" height="30">
     		<td bgcolor="#E0F1F8"  class="b_tr">主岗</td>
     		<td>&nbsp;<%=mapEm.get("MAINJOB")==null?"":mapEm.get("MAINJOB") %></td>
-    	</tr>
-    	<tr align="center" height="30">
     		<td bgcolor="#E0F1F8"  class="b_tr">职务级别</td>
     		<td>&nbsp;<%=mapEm.get("LEVEL")==null?"":mapEm.get("LEVEL") %></td>
+    	</tr>
+    	<tr align="center" height="30">
     		<td bgcolor="#E0F1F8"  class="b_tr">电子邮件</td>
     		<td>&nbsp;<%=mapEm.get("EMAIL")==null?"":mapEm.get("EMAIL") %></td>
-    	</tr>
-    	<tr align="center" height="30">
     		<td bgcolor="#E0F1F8"  class="b_tr">固定电话</td>
     		<td>&nbsp;<%=mapEm.get("STCPHONE")==null?"":mapEm.get("STCPHONE") %></td>
+    	</tr>
+    	<tr align="center" height="30">
     		<td bgcolor="#E0F1F8"  class="b_tr">手机号码</td>
     		<td>&nbsp;<%=mapEm.get("MOBPHONE")==null?"":mapEm.get("MOBPHONE") %></td>
-    	</tr>
-    	<tr align="center" height="30">
-    		
     		<td bgcolor="#E0F1F8"  class="b_tr">家庭住址</td>
     		<td>&nbsp;<%=mapEm.get("ADDRESS")==null?"":mapEm.get("ADDRESS") %></td>
+    	</tr>
+    	<tr align="center" height="30">
     		<td bgcolor="#E0F1F8"  class="b_tr">邮政编码</td>
     		<td>&nbsp;<%=mapEm.get("POST")==null?"":mapEm.get("POST") %></td>
-    	</tr>
-    	<tr align="center" height="30">
     		<td bgcolor="#E0F1F8"  class="b_tr">专业</td>
     		<td>&nbsp;<%=mapEm.get("MAJOR")==null?"":mapEm.get("MAJOR") %></td>
-    		<td bgcolor="#E0F1F8"  class="b_tr">学历</td>
-    		<td>&nbsp;<%=mapEm.get("DEGREE")==null?"":mapEm.get("DEGREE") %></td>
     	</tr>
     	<tr align="center" height="30">
+    		<td bgcolor="#E0F1F8"  class="b_tr">学历</td>
+    		<td>&nbsp;<%=mapEm.get("XL")==null?"":mapEm.get("XL") %></td>
     		<td bgcolor="#E0F1F8"  class="b_tr">职称</td>
     		<td>&nbsp;<%=mapEm.get("PRO")==null?"":mapEm.get("PRO") %></td>
+    	</tr>
+    	<tr align="center" height="30">
+    		<td bgcolor="#E0F1F8"  class="b_tr">行政职称/务</td>
+    		<td>&nbsp;<%=mapEm.get("XZZW")==null?"":mapEm.get("XZZW") %></td>
+    		<td bgcolor="#E0F1F8"  class="b_tr">技术职称</td>
+    		<td>&nbsp;<%=mapEm.get("JSZC")==null?"":mapEm.get("JSZC") %></td>
+    	</tr>
+    	<tr align="center" height="30">
+    		<td bgcolor="#E0F1F8"  class="b_tr">任职时间</td>
+    		<td>&nbsp;<%=mapEm.get("RZSJ")==null?"":mapEm.get("RZSJ") %></td>
+    		<td bgcolor="#E0F1F8"  class="b_tr">入所编制</td>
+    		<td>&nbsp;<%=mapEm.get("RSBZ")==null?"":mapEm.get("RSBZ") %></td>
+    	</tr>
+    	<tr align="center" height="30">
+    		<td bgcolor="#E0F1F8"  class="b_tr">编制</td>
+    		<td>&nbsp;<%=mapEm.get("BZ")==null?"":mapEm.get("BZ") %></td>
+    		<td bgcolor="#E0F1F8"  class="b_tr">岗位名称</td>
+    		<td>&nbsp;<%=mapEm.get("GWMC")==null?"":mapEm.get("GWMC") %></td>
+    	</tr>
+    	<tr align="center" height="30">
+    		<td bgcolor="#E0F1F8"  class="b_tr">岗位属性</td>
+    		<td>&nbsp;<%=mapEm.get("GWSX")==null?"":mapEm.get("GWSX") %></td>
+    		<td bgcolor="#E0F1F8"  class="b_tr">岗级</td>
+    		<td>&nbsp;<%=mapEm.get("GJ")==null?"":mapEm.get("GJ") %></td>
+    	</tr>
+    	<tr align="center" height="30">
+    		<td bgcolor="#E0F1F8"  class="b_tr">职级</td>
+    		<td>&nbsp;<%=mapEm.get("ZJ")==null?"":mapEm.get("ZJ") %></td>
     		<td bgcolor="#E0F1F8"  class="b_tr"></td>
     		<td>&nbsp;</td>
     	</tr>

@@ -41,6 +41,7 @@ String errorMessage = request.getAttribute("errorMessage")==null?"":request.getA
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
 		tb.add({text: '手机号码导入',cls: 'x-btn-text-icon import',handler: onImportMobileClick});
 		tb.add({text: '家庭住址导入',cls: 'x-btn-text-icon import',handler: onImportAddressClick});
+		tb.add({text: '人员详细信息导入',cls: 'x-btn-text-icon import',handler: onImportDetailClick});
 		
 		if(!win){
         	win = new Ext.Window({
@@ -61,6 +62,13 @@ String errorMessage = request.getAttribute("errorMessage")==null?"":request.getA
     	
     	function onImportAddressClick(btn){
 			action = 'excel.do?action=preview&table=EMPLOYEE_ADDRESS&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
+    		win.setTitle('家庭住址导入');
+       		Ext.getDom('dataForm').reset();
+        	win.show(btn.dom);
+    	}
+    	
+    	function onImportDetailClick(btn){
+			action = 'excel.do?action=preview&table=EMPLOYEE_DETAIL&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
     		win.setTitle('家庭住址导入');
        		Ext.getDom('dataForm').reset();
         	win.show(btn.dom);

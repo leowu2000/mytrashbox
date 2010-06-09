@@ -186,9 +186,13 @@ public class AssetsController extends CommonController {
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
-			String checkdate = ServletRequestUtils.getStringParameter(request, "checkdate", "1");
+			String checkdate = ServletRequestUtils.getStringParameter(request, "checkdatenow", "");
 			
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			
+			if("".equals(checkdate)){
+				checkdate = StringUtil.DateToString(new Date(), "yyyy-MM-dd");
+			}
 			
 			String updateSql = "update ASSETS set CHECKDATE='" + checkdate + "' where ID='" + id + "'";
 			assetsDAO.update(updateSql);

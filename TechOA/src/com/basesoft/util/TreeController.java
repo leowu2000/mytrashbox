@@ -114,7 +114,7 @@ public class TreeController extends CommonController {
 			response.setHeader("Cache-Control", "no-cache");
 			response.setDateHeader("Expires", 0L);
 			response.setContentType("text/html; charset=GBK");
-			response.getWriter().write(sb.toString());
+			response.getWriter().write(sb.toString().replaceAll("\n", ""));
 			response.getWriter().close();
 		}else if("col_init".equals(action)){
 			mv = new ModelAndView("/modules/tree/checkedtree_columns");

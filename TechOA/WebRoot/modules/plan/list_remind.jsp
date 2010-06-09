@@ -56,7 +56,7 @@ PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
                 <td>责任人</td>
                 <td>计划员</td>
                 <td>分管室领导</td>
-                <td>完成率(%)</td>
+                <td>时间进度(%)</td>
                 <td>备注</td>
             </tr>
 <%
