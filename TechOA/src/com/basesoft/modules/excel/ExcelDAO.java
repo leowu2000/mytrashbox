@@ -603,42 +603,50 @@ public class ExcelDAO extends CommonDAO {
 		for(int i=0;i<rows.length();i++){
 			//取出一行数据
 			JSONObject row = rows.getJSONObject(i);
-			if(!goodsDAO.haveCkdh(row.optString("CKDH"))){
-				int kjnd = row.optInt("KJND");
-				String kjh = row.optString("KJH");
-				String ckdh = row.optString("CKDH");
-				double je = "".equals(row.optString("JE"))?0:row.optDouble("JE");
-				String llbmmc = row.optString("LLBMMC");
-				String llbmbm = row.optString("LLBMBM");
-				String jsbmbm = row.optString("JSBMBM");
-				String jsbmmc = row.optString("JSBMMC");
-				String llrbm = row.optString("LLRBM");
-				String llrmc = row.optString("LLRMC");
-				String zjh = row.optString("ZJH");
-				String chmc = row.optString("CHMC");
-				String gg = row.optString("GG");
-				String pjcode = row.optString("PJCODE");
-				String th = row.optString("TH");
-				String zjldw = row.optString("ZJLDW");
-				int sl = row.optInt("SL");
-				double dj = "".equals(row.optString("DJ"))?0:row.optDouble("DJ");
-				String xmyt = row.optString("XMYT");
-				String chbm = row.optString("CHBM");
-				
-				//生成32位uuid
-				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-				
-				String insertSql = "insert into GOODS values('" + uuid + "'," + kjnd + ",'" + kjh + "','" + ckdh + "'," + je + ",'" + llbmmc + "','" + llbmbm + "','" + jsbmmc + "','" + jsbmbm + "','" + llrmc + "','" + llrbm + "','" + zjh + "','" + chmc + "','" + gg + "','" + pjcode + "','" + th + "','" + zjldw + "'," + sl + "," + dj + ",'" + xmyt + "','" + chbm + "')";
-				
+			
+			int kjnd = row.optInt("KJND");
+			String kjh = row.optString("KJH");
+			String ckdh = row.optString("CKDH");
+			double je = "".equals(row.optString("JE"))?0:row.optDouble("JE");
+			String llbmmc = row.optString("LLBMMC");
+			String llbmbm = row.optString("LLBMBM");
+			String jsbmbm = row.optString("JSBMBM");
+			String jsbmmc = row.optString("JSBMMC");
+			String llrbm = row.optString("LLRBM");
+			String llrmc = row.optString("LLRMC");
+			String zjh = row.optString("ZJH");
+			String chmc = row.optString("CHMC");
+			String gg = row.optString("GG");
+			String pjcode = row.optString("PJCODE");
+			String th = row.optString("TH");
+			String zjldw = row.optString("ZJLDW");
+			int sl = row.optInt("SL");
+			double dj = "".equals(row.optString("DJ"))?0:row.optDouble("DJ");
+			String xmyt = row.optString("XMYT");
+			String chbm = row.optString("CHBM");
+			
+			//生成32位uuid
+			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			
+			String insertSql = "insert into GOODS values('" + uuid + "'," + kjnd + ",'" + kjh + "','" + ckdh + "'," + je + ",'" + llbmmc + "','" + llbmbm + "','" + jsbmmc + "','" + jsbmbm + "','" + llrmc + "','" + llrbm + "','" + zjh + "','" + chmc + "','" + gg + "','" + pjcode + "','" + th + "','" + zjldw + "'," + sl + "," + dj + ",'" + xmyt + "','" + chbm + "')";
+			if(goodsDAO.haveCkdh(row.optString("CKDH"))){//有此出库单号
+				if(!goodsDAO.equal(row)){
+					try{
+						insert(insertSql);
+					}catch(Exception e){
+						e.printStackTrace();
+						errorMessage = getErrorMessage(errorMessage, i);
+					}
+				}else{
+					errorMessage = getErrorMessage2(errorMessage, i);
+				}
+			}else {
 				try{
 					insert(insertSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
-					continue;
 				}
-			}else {
-				errorMessage = getErrorMessage2(errorMessage, i);
 			}
 		}
 		
@@ -759,21 +767,29 @@ public class ExcelDAO extends CommonDAO {
 				String empnameSql = "";
 				
 				String empname = row.optString("EMPNAME")==null?"":row.optString("EMPNAME").trim();
-				empname = empname.replaceAll("等", "");
-				String[] empnames = {""};
-				if(empname.indexOf(" ")>0){//以各种符号分隔的责任人
-					empnames = empname.split(" ");
-				}else if(empname.indexOf(",")>0){
-					empnames = empname.split(",");
-				}else if(empname.indexOf("、")>0){
-					empnames = empname.split("、");
-				}else if(empname.indexOf("，")>0){
-					empnames = empname.split("，");
-				}else {
-					empnames[0] = empname;
-				}
+				
+				String[] splitechars = {" ", ",", "，", "、", "等"};
+				String[] empnames =	StringUtil.splite(empname, splitechars);
+					
+//				if(empname.indexOf(" ")>0){//以各种符号分隔的责任人
+//					empnames = empname.split(" ");
+//				}else if(empname.indexOf(",")>0){
+//					empnames = empname.split(",");
+//				}else if(empname.indexOf("、")>0){
+//					empnames = empname.split("、");
+//				}else if(empname.indexOf("，")>0){
+//					empnames = empname.split("，");
+//				}else {
+//					empnames[0] = empname;
+//				}
 				boolean flag = false;
 				for(int j=0;j<empnames.length;j++){
+//					String empname_1 = empnames[j].replaceAll(" ", "").replaceAll(",", "").replaceAll("，", "").replaceAll("、", "");
+//					if("".equals(empname_1)){
+//						continue;
+//					}
+					
+					
 					String empcode = planDAO.findCodeByName("EMPLOYEE", empnames[j]);
 					//enpname入库字段
 					if("".equals(empnameSql)){

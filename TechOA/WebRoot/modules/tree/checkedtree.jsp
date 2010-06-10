@@ -8,6 +8,7 @@
 <%@ include file="../../common/meta.jsp" %>
 <%
 	String checkedEmp = (String)request.getAttribute("checkedEmp"); 
+	String id = (String)request.getAttribute("id"); 
 %>
 <script type="text/javascript">
 
@@ -35,7 +36,8 @@
                         requestMethod : 'post',
 	        			baseParams : {
 	            			action : 'multiemp',
-	            			checkedEmp : '<%=checkedEmp %>'
+	            			checkedEmp : '<%=checkedEmp %>',
+	            			id : '<%=id %>'
 	            		}
 	        }),
 
@@ -75,8 +77,20 @@
 		if(codevalue == ''){
 		    textvalue = "请选择...";
 		}
+	<%
+		if(!"".equals(id)&&!"null".equals(id)&&id!=null){
+	%>
+		parent.window.location.href = "/plan.do?action=changeMultiEMP&empcodes=" + codevalue + "&id=<%=id %>";
+	<%
+		}else {
+	%>
+		
 		parent.document.getElementById('empcodes').value = codevalue;
 		parent.document.getElementById('empnames').value = textvalue;
+		
+	<%
+		}
+	%>
 		parent.document.getElementById('empsel').style.display = 'none';
 		return false;
 	}

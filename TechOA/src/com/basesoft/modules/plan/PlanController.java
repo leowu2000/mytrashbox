@@ -360,6 +360,12 @@ public class PlanController extends CommonController {
 			planDAO.update(updateSql);
 			
 			response.sendRedirect("plan.do?action=feedback&page=" + page);
+		}else if("changeMultiEMP".equals(action)){//去除重名
+			String empcodes = ServletRequestUtils.getStringParameter(request, "empcodes", "");
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			planDAO.update("update PLAN set EMPCODE='" + empcodes + "' where ID='" + id + "'");
+			
+			response.sendRedirect("/plan.do?action=list&f_level=0&f_type=0");
 		}
 		
 		return null;

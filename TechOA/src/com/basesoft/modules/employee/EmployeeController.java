@@ -111,11 +111,7 @@ public class EmployeeController extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			String rolecode = ServletRequestUtils.getStringParameter(request, "oldrolecode", "");
 			
-			if("004".equals(rolecode)||"001".equals(rolecode)||"006".equals(rolecode)||"007".equals(rolecode)){
-				emDAO.update("update EMPLOYEE set ROLECODE='" + rolecode + "', DEPARTCODE='0' where ID='" + id + "'");
-			}else {
-				emDAO.update("update EMPLOYEE set ROLECODE='" + rolecode + "' where ID='" + id + "'");
-			}
+			emDAO.update("update EMPLOYEE set ROLECODE='" + rolecode + "' where ID='" + id + "'");
 			
 			response.sendRedirect(returnUrl_infolist);
 			return null;
@@ -448,6 +444,7 @@ public class EmployeeController extends CommonController {
 			String startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
 			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
 			String selproject = ServletRequestUtils.getStringParameter(request, "selproject", "");
+			selproject = new String(selproject.getBytes("ISO8859-1"),"UTF-8");
 			String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "1");
 			
 			List listYgtrfx = emDAO.getYgtrfx(empcodes, startdate, enddate, selproject);

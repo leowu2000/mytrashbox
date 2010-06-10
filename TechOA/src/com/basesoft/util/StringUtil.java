@@ -284,4 +284,30 @@ public class StringUtil {
         } 
 		return sb.toString();
 	}
+	
+	/**
+	 * 格式化字符串
+	 * @param s 原始字符串
+	 * @param splitechars 分割符
+	 * @return 格式化后的字符串数组
+	 */
+	public static String[] splite(String s, String[] splitechars){
+		for(String ch:splitechars){
+			s = s.replaceAll(ch,"@");
+		}
+		String r[]=s.split("@");
+		
+		List<String> list = new ArrayList<String>();
+		for(int i=0;i<r.length;i++){
+			if(!"".equals(r[i])){
+				list.add(r[i]);
+			}
+		}
+		String[] returnS = new String[list.size()];
+		int i = 0;
+		for(String o:list){
+			returnS[i++] = o;
+		}
+		return returnS;
+	}
 }

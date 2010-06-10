@@ -88,7 +88,7 @@ if("".equals(departname)){
 	  			alert('请选择工作令号！');
 	  			return false;
 	  		}
-    		window.location.href = "/excel.do?action=export&model=CDRWQK&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + pjcodes;
+    		window.location.href = "/excel.do?action=export&model=CDRWQK&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + encodeURI(pjcodes);
   		}
 	});
 	
@@ -106,7 +106,7 @@ if("".equals(departname)){
 	  	return false;
 	  }
 	  
-	  document.getElementById('list_cdrwqk').src = "/pj.do?action=cdrwqk&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + pjcodes + "&sel_type=" + sel_type;
+	  document.getElementById('list_cdrwqk').src = "/pj.do?action=cdrwqk&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + encodeURI(pjcodes);
 	}
 	
 	function IFrameResize(){

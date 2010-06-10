@@ -389,6 +389,15 @@ function changeEmp(){
     	document.getElementById("empsel").style.display="";
 }
 
+function changeEmp1(value){
+    	document.getElementById('treeForm').action = "tree.do?action=multiemp1_init&id=" + value;
+    	document.getElementById('treeForm').submit();
+    
+    	document.getElementById("empsel").style.top=(event.clientY-200)+"px";
+    	document.getElementById("empsel").style.left=(event.clientX+50)+"px";
+    	document.getElementById("empsel").style.display="";
+}
+
 function checkAll(){
 	var checkall = document.getElementById('checkall');
 	var checks = document.getElementsByName('check');
@@ -478,8 +487,9 @@ for(int i=0;i<listPlan.size();i++){
 <%
 			String empcode = mapPlan.get("EMPCODE")==null?"":mapPlan.get("EMPCODE").toString();
 			if("".equals(empcode)){
-%>                
-                <td nowrap="nowrap" bgcolor="#FF0088" title="责任人未正确关联，请修改">&nbsp;<%=mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME") %></td>
+				String empname = mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME").toString();
+%>
+            	<td bgcolor="#FF0088" title="系统中此员工有重名！" onclick="changeEmp1('<%=mapPlan.get("ID") %>');">&nbsp;<%=empname %></td>
 <%
 			}else {
 %>                

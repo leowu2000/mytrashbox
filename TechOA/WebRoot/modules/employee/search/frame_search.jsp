@@ -24,7 +24,7 @@ if("".equals(departname)){
 	Ext.onReady(function(){
 		var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'departspan',
-			width : 200,
+			width : 270,
 			hiddenName : 'seldepart',
 			hiddenId : 'seldepart',
 			tree : {
@@ -47,7 +47,7 @@ if("".equals(departname)){
 	            },   
 	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
 	            	  var emname = document.getElementById('emname').value;
-	                  document.getElementById('list_search').src = "/search.do?action=list_search&seldepart=" + newNode.id + "&emname=" + emname;
+	                  document.getElementById('list_search').src = "/search.do?action=list_search&seldepart=" + newNode.id + "&emname=" + encodeURI(emname);
 	            },   
 	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
 	                  //...   
@@ -75,7 +75,7 @@ if("".equals(departname)){
   		
   		var emname = document.getElementById('emname').value;
   		var sel_empcode = document.getElementById('sel_empcode').value;
-	    document.getElementById('list_search').src = "/search.do?action=list_search&seldepart=" + comboBoxTree.getValue() + "&emname=" + emname + "&sel_empcode=" + sel_empcode;
+	    document.getElementById('list_search').src = "/search.do?action=list_search&seldepart=" + comboBoxTree.getValue() + "&emname=" + encodeURI(emname) + "&sel_empcode=" + sel_empcode;
 	});
 	
 	function IFrameResize(){
@@ -86,7 +86,7 @@ if("".equals(departname)){
 	  var seldepart = document.getElementById('seldepart').value;
 	  var emname = document.getElementById('emname').value;
 	  var sel_empcode = document.getElementById('sel_empcode').value;
-	  document.getElementById('list_search').src = "/search.do?action=list_search&seldepart=" + seldepart + "&emname=" + emname + "&sel_empcode=" + sel_empcode;
+	  document.getElementById('list_search').src = "/search.do?action=list_search&seldepart=" + seldepart + "&emname=" + encodeURI(emname) + "&sel_empcode=" + sel_empcode;
 	}
 	</script>
   </head>

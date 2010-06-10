@@ -99,7 +99,7 @@ Ext.onReady(function(){
 			}else {
 			
 %>            
-            <tr align="center">
+            <tr align="left">
             	<td>&nbsp;<%=type %>--<%=type2 %></td>
 				<td>&nbsp;<%=row.optString("PJNAME") %></td>
             	<td>&nbsp;<%=row.optString("ORDERCODE") %></td>
@@ -120,19 +120,8 @@ Ext.onReady(function(){
 				<td>&nbsp;<%=row.optString("DEPARTNAME") %></td>
 <%
 			String empname = row.optString("EMPNAME")==null?"":row.optString("EMPNAME").trim();
-			empname = empname.replaceAll("等", "");
-			String[] empnames = {""};
-			if(empname.indexOf(" ")>0){//以空格分隔的责任人
-				empnames = empname.split(" ");
-			}else if(empname.indexOf(",")>0){
-				empnames = empname.split(",");
-			}else if(empname.indexOf("、")>0){
-				empnames = empname.split("、");
-			}else if(empname.indexOf("，")>0){
-				empnames = empname.split("，");
-			}else {
-				empnames[0] = empname;
-			}
+			String[] splitechars = {" ", ",", "，", "、", "等"};
+			String[] empnames =	StringUtil.splite(empname, splitechars);
 %>            	
             	<td>
             		<table border="0" style="font-size:13px;color:#696969;border:0px;width:100%;height:100%">

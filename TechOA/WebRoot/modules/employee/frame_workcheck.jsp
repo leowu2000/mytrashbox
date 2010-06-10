@@ -27,7 +27,7 @@
 		var method = '<%=method %>';
 		var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'departspan',
-			width : 200,
+			width : 250,
 			hiddenName : 'depart',
 			hiddenId : 'depart',
 			tree : {

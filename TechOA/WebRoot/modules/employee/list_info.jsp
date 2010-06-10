@@ -267,17 +267,21 @@ function checkAll(){
     	if("001".equals(rolecode)){
     		rolename = "系统管理员";
     	}else if("002".equals(rolecode)){
-    		rolename = "部领导";
-    	}else if("005".equals(rolecode)){
-    		rolename = "组长";
+    		rolename = "领导";
+    	}else if("003".equals(rolecode)){
+    		rolename = "普通员工";
     	}else if("004".equals(rolecode)){
     		rolename = "计划员";
+    	}else if("005".equals(rolecode)){
+    		rolename = "组长";
     	}else if("006".equals(rolecode)){
     		rolename = "固定资产管理员";
     	}else if("007".equals(rolecode)){
     		rolename = "人事管理员";
-    	}else if("003".equals(rolecode)){
-    		rolename = "普通员工";
+    	}else if("008".equals(rolecode)){
+    		rolename = "信息设备管理员";
+    	}else if("009".equals(rolecode)){
+    		rolename = "合同管理员";
     	}
 
 %>    	
@@ -308,12 +312,14 @@ function checkAll(){
 				  <tr>
 				    <td>角色</td>
 				    <td><select name="rolecode" style="width:200">
-				    	<option value="002">部领导</option>
+				    	<option value="002">领导</option>
 				    	<option value="005">组长</option>
 				    	<option value="003">普通员工</option>
 				    	<option value="004">计划员</option>
 				    	<option value="006">固定资产管理员</option>
+				    	<option value="008">信息设备管理员</option>
 				    	<option value="007">人事管理员</option>
+				    	<option value="009">合同管理员</option>
 				    </select></td>
 				  </tr>	
 				  <tr>

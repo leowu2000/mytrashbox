@@ -43,6 +43,7 @@ public class ProjectController extends CommonController {
 			String departcodes = ServletRequestUtils.getStringParameter(request, "departcodes", "");
 			departcodes =  StringUtil.ListToStringAdd(departcodes.split(","), ",");
 			String pjcodes = ServletRequestUtils.getStringParameter(request, "pjcodes", "");
+			pjcodes = new String(pjcodes.getBytes("ISO8859-1"),"UTF-8");
 			pjcodes = StringUtil.ListToStringAdd(pjcodes.split(","), ",");
 			
 			List listDepart = projectDAO.getDeparts(departcodes);
@@ -61,6 +62,7 @@ public class ProjectController extends CommonController {
 			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			String pjcodes = ServletRequestUtils.getStringParameter(request, "pjcodes", "");
+			pjcodes = new String(pjcodes.getBytes("ISO8859-1"),"UTF-8");
 			pjcodes = StringUtil.ListToStringAdd(pjcodes.split(","), ",");
 			String start = "";
 			String end = datepick + "-25";
@@ -89,6 +91,7 @@ public class ProjectController extends CommonController {
 			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			String pjcodes = ServletRequestUtils.getStringParameter(request, "pjcodes", "");
+			pjcodes = new String(pjcodes.getBytes("ISO8859-1"),"UTF-8");
 			pjcodes = StringUtil.ListToStringAdd(pjcodes.split(","), ",");
 			String start = "";
 			String end = datepick + "-25";

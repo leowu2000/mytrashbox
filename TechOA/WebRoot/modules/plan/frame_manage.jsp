@@ -49,7 +49,7 @@
 	  var sel_empcode = document.getElementById('sel_empcode').value;
 	  var datepick = document.getElementById('datepick').value;
 	  
-	  document.getElementById('list_manage').src = "/plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + empname + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode;
+	  document.getElementById('list_manage').src = "/plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + encodeURI(empname) + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode;
 	}
 	</script>
   </head>

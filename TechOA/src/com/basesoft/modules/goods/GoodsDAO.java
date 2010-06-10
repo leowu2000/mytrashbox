@@ -3,6 +3,8 @@ package com.basesoft.modules.goods;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import com.basesoft.core.PageInfo;
 import com.basesoft.core.PageList;
 
@@ -170,6 +172,44 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 		}
 		
 		return haveCkdh;
+	}
+	
+	/**
+	 * 是否存在此领料信息
+	 * @param row 
+	 * @return
+	 */
+	public boolean equal(JSONObject row){
+		boolean equal = false;
+		int kjnd = row.optInt("KJND");
+		String kjh = row.optString("KJH");
+		String ckdh = row.optString("CKDH");
+		double je = "".equals(row.optString("JE"))?0:row.optDouble("JE");
+		String llbmmc = row.optString("LLBMMC");
+		String llbmbm = row.optString("LLBMBM");
+		String jsbmbm = row.optString("JSBMBM");
+		String jsbmmc = row.optString("JSBMMC");
+		String llrbm = row.optString("LLRBM");
+		String llrmc = row.optString("LLRMC");
+		String zjh = row.optString("ZJH");
+		String chmc = row.optString("CHMC");
+		String gg = row.optString("GG");
+		String pjcode = row.optString("PJCODE");
+		String th = row.optString("TH");
+		String zjldw = row.optString("ZJLDW");
+		int sl = row.optInt("SL");
+		double dj = "".equals(row.optString("DJ"))?0:row.optDouble("DJ");
+		String xmyt = row.optString("XMYT");
+		String chbm = row.optString("CHBM");
+		
+		String sql = "select * from GOODS where CKDH='" + ckdh + "' and KJND=" + kjnd + " and kjh='" + kjh + "' and je=" + je + " and llbmmc='" + llbmmc + "' and llbmbm='" + llbmbm + "' and jsbmbm='" + jsbmbm + "' and jsbmmc='" + jsbmmc + "' and zjh='" + zjh + "' and chmc='" + chmc + "' and gg='" + gg + "' and pjcode='" + pjcode + "' and th='" + th + "' and zjldw='" + zjldw + "' and sl=" + sl + " and dj=" + dj + " and xmyt='" + xmyt + "' and chbm='" + chbm + "'";
+		List list = jdbcTemplate.queryForList(sql);
+		
+		if(list.size()>0){
+			equal = true;
+		}
+		
+		return equal;
 	}
 	
 	/**

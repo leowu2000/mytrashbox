@@ -295,7 +295,9 @@ if("search".equals(method)){
 				    	<option value="003">普通员工</option>
 				    	<option value="004">计划员</option>
 				    	<option value="006">固定资产管理员</option>
+				    	<option value="008">信息设备管理员</option>
 				    	<option value="007">人事管理员</option>
+				    	<option value="009">合同管理员</option>
 				    </select></td>
 				  </tr>	
 				   <tr>

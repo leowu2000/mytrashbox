@@ -207,4 +207,32 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 		}
 		return treeList;
 	}
+	
+	/**
+	 * 获取重名用户树
+	 * @param id
+	 * @return
+	 */
+	public List<CheckBoxTree> getMuiltiEMPTree(String id) {
+		List<CheckBoxTree> treeList = new ArrayList<CheckBoxTree>();
+		
+		Map mapPlan = jdbcTemplate.queryForMap("select * from PLAN where ID='" + id + "'");
+		String empnames = mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME").toString();
+		empnames = StringUtil.ListToStringAdd(empnames.split(","), ",");
+		List listEmp = jdbcTemplate.queryForList("select * from EMPLOYEE where name in (" + empnames + ")");
+		for(int i=0;i<listEmp.size();i++){
+			Map mapEmp = (Map)listEmp.get(i);
+			
+			CheckBoxTree tree = new CheckBoxTree();
+			tree.setId(mapEmp.get("CODE").toString());
+			String departname = findNameByCode("DEPARTMENT", mapEmp.get("DEPARTCODE").toString());
+			String describe = mapEmp.get("NAME").toString() + "(" + mapEmp.get("CODE").toString() + ")--" + departname;
+			tree.setText(describe);
+			tree.setLeaf(true);
+		
+			treeList.add(tree);
+		}
+			
+		return treeList;
+	}
 }

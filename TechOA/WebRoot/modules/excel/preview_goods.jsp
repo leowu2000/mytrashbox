@@ -85,7 +85,8 @@ Ext.onReady(function(){
 		for(int i=0;i<rows.length();i++){
 			JSONObject row = rows.optJSONObject(i);
 			boolean haveCkdh = goodsDAO.haveCkdh(row.optString("CKDH"));
-			if(haveCkdh){
+			boolean isEqual = goodsDAO.equal(row);
+			if(haveCkdh&&isEqual){
 %>            
 			<tr align="center" bgcolor="orange" title="系统中已存在此记录！">
 <%
