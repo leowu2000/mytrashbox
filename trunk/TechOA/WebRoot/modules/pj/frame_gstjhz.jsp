@@ -43,6 +43,9 @@ if("".equals(departname)){
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
   		
+  		document.getElementById('departnames').value = '<%=departname %>';
+  		document.getElementById('departcodes').value = '<%=departcode %>';
+  		
   		function onExportClick(){
   			var datepick = document.getElementById('datepick').value;
   			var departcodes = document.getElementById('departcodes').value;
@@ -59,7 +62,7 @@ if("".equals(departname)){
 	  			document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
 	  			datepick = document.getElementById('datepick').value;
 	  		}
-    		window.location.href = "/excel.do?action=export&model=GSTJHZ&datepick=" + datepick + "&depart=" + departcodes + "&pjcodes=" + pjcodes;
+    		window.location.href = "/excel.do?action=export&model=GSTJHZ&datepick=" + datepick + "&depart=" + departcodes + "&pjcodes=" + encodeURI(pjcodes);
   		}
 	});
 	
@@ -80,7 +83,7 @@ if("".equals(departname)){
 	  	alert('请选择部门！');
 	  	return false;
 	  }
-	  document.getElementById('list_gstjhz').src = "/pj.do?action=gstjhz&datepick=" + datepick + "&departcodes=" + departcodes + "&pjcodes=" + pjcodes + "&sel_type=" + sel_type;
+	  document.getElementById('list_gstjhz').src = "/pj.do?action=gstjhz&datepick=" + datepick + "&departcodes=" + departcodes + "&pjcodes=" + encodeURI(pjcodes);
 	}
 	
 	function IFrameResize(){

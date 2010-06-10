@@ -17,7 +17,7 @@
 	Ext.onReady(function(){
 		var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'departspan',
-			width : 200,
+			width : 270,
 			hiddenName : 'seldepart',
 			hiddenId : 'seldepart',
 			tree : {
@@ -42,7 +42,7 @@
 	            	  var emname = document.getElementById('emname').value;
 	            	  var datepick = document.getElementById('datepick').value;
 	            	  var sel_empcode = document.getElementById('sel_empcode').value;
-	                  document.getElementById('list_manage').src = "/pos.do?action=list_manage&seldepart=" + newNode.id + "&emname=" + emname + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode;
+	                  document.getElementById('list_manage').src = "/pos.do?action=list_manage&seldepart=" + newNode.id + "&emname=" + encodeURI(emname) + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode;
 	            },   
 	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
 	                  //...   
@@ -74,7 +74,7 @@
   		var emname = document.getElementById('emname').value;
   		var datepick = document.getElementById('datepick').value;
   		var sel_empcode = document.getElementById('sel_empcode').value;
-	    document.getElementById('list_manage').src = "/pos.do?action=list_manage&seldepart=" + comboBoxTree.getValue() + "&emname=" + emname + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode;
+	    document.getElementById('list_manage').src = "/pos.do?action=list_manage&seldepart=" + comboBoxTree.getValue() + "&emname=" + encodeURI(emname) + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode;
 	});
 	
 	function IFrameResize(){
@@ -86,7 +86,7 @@
 	  var emname = document.getElementById('emname').value;
 	  var datepick = document.getElementById('datepick').value;
 	  var sel_empcode = document.getElementById('sel_empcode').value;
-	  document.getElementById('list_manage').src = "/pos.do?action=list_manage&seldepart=" + seldepart + "&emname=" + emname + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode;
+	  document.getElementById('list_manage').src = "/pos.do?action=list_manage&seldepart=" + seldepart + "&emname=" + encodeURI(emname) + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode;
 	}
 	</script>
   </head>

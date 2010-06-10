@@ -1,5 +1,6 @@
 package com.basesoft.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,8 +46,12 @@ public class TreeController extends CommonController {
 			response.getWriter().write(sb.toString());
 			response.getWriter().close();
 		}else if("departTree".equals(action)){//部门下拉树
-			//封装成checkboxtree
-			List<CheckBoxTree> checkBoxTreeList = treeDAO.getDepartEmpTree("2", "", departcode);
+			List<CheckBoxTree> checkBoxTreeList = new ArrayList<CheckBoxTree>();
+			if("007".equals(emrole)){//人事管理员看到所有的部门
+				checkBoxTreeList = treeDAO.getDepartEmpTree("2", "", "0");
+			}else {
+				checkBoxTreeList = treeDAO.getDepartEmpTree("2", "", departcode);
+			}
 			//循环转换为json格式
 			StringBuffer sb = new StringBuffer();
 			sb.append("[");
@@ -71,8 +76,17 @@ public class TreeController extends CommonController {
 			return mv;
 		}else if("multiemp".equals(action)){
 			String checkedEmp = ServletRequestUtils.getStringParameter(request, "checkedEmp", "");
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			//封装成checkboxtree
-			List<CheckBoxTree> checkBoxTreeList = treeDAO.getDepartEmpTree("1", checkedEmp, departcode);
+			List<CheckBoxTree> checkBoxTreeList = new ArrayList<CheckBoxTree>();
+			if("004".equals(emrole)){//计划员看到所有的部门员工
+				checkBoxTreeList = treeDAO.getDepartEmpTree("1", checkedEmp, "0");
+			}else {
+				checkBoxTreeList = treeDAO.getDepartEmpTree("1", checkedEmp, departcode);
+			}
+			if(!"".equals(id)&&!"null".equals(id)){
+				checkBoxTreeList = treeDAO.getMuiltiEMPTree(id);
+			}
 			//循环转换为json格式
 			StringBuffer sb = new StringBuffer();
 			sb.append("[");
@@ -90,6 +104,11 @@ public class TreeController extends CommonController {
 			response.setContentType("text/html; charset=GBK");
 			response.getWriter().write(sb.toString());
 			response.getWriter().close();
+		}else if("multiemp1_init".equals(action)){
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			mv = new ModelAndView("/modules/tree/checkedtree");
+			mv.addObject("id", id);
+			return mv;
 		}else if("multipj_init".equals(action)){
 			mv = new ModelAndView("/modules/tree/checkedtree_pj");
 			String checkedPj = ServletRequestUtils.getStringParameter(request, "checkedPj", "");

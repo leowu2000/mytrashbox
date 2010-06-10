@@ -47,7 +47,7 @@
 	  		var startdate = document.getElementById('startdate').value;
 	  		var enddate = document.getElementById('enddate').value;
 	  		var selproject = document.getElementById('selproject').value;
-    		window.location.href = "/excel.do?action=export&model=YGTRFX&empcodes=" + empcodes + "&startdate=" + startdate + "&enddate=" + enddate + "&selproject=" + selproject;
+    		window.location.href = "/excel.do?action=export&model=YGTRFX&empcodes=" + empcodes + "&startdate=" + startdate + "&enddate=" + enddate + "&selproject=" + encodeURI(selproject);
   		}
 	});
 	
@@ -76,7 +76,7 @@
 	  var selproject = document.getElementById('selproject').value;
 	  var sel_type = document.getElementById('sel_type').value;
 	  
-	  document.getElementById('list_ygtrfx').src = "/em.do?action=list_ygtrfx&empcodes=" + empcodes + "&startdate=" + startdate + "&enddate=" + enddate + "&selproject=" + selproject + "&sel_type=" + sel_type;
+	  document.getElementById('list_ygtrfx').src = "/em.do?action=list_ygtrfx&empcodes=" + empcodes + "&startdate=" + startdate + "&enddate=" + enddate + "&selproject=" + encodeURI(selproject);
 	}
 	</script>
   </head>

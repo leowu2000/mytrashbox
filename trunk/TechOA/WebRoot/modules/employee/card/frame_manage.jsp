@@ -15,7 +15,7 @@
 	Ext.onReady(function(){
 		var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'departspan',
-			width : 200,
+			width : 270,
 			hiddenName : 'seldepart',
 			hiddenId : 'seldepart',
 			tree : {
@@ -39,7 +39,7 @@
 	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
 	            	  var emname = document.getElementById('emname').value;
 	            	  var sel_empcode = document.getElementById('sel_empcode').value;
-	                  document.getElementById('list_manage').src = "/card.do?action=list_manage&seldepart=" + newNode.id + "&emname=" + emname + "&sel_empcode=" + sel_empcode;
+	                  document.getElementById('list_manage').src = "/card.do?action=list_manage&seldepart=" + newNode.id + "&emname=" + encodeURI(emname) + "&sel_empcode=" + sel_empcode;
 	            },   
 	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
 	                  //...   
@@ -67,7 +67,7 @@
   		
   		var emname = document.getElementById('emname').value;
   		var sel_empcode = document.getElementById('sel_empcode').value;
-	    document.getElementById('list_manage').src = "/card.do?action=list_manage&seldepart=" + comboBoxTree.getValue() + "&emname=" + emname + "&sel_empcode=" + sel_empcode;
+	    document.getElementById('list_manage').src = "/card.do?action=list_manage&seldepart=" + comboBoxTree.getValue() + "&emname=" + encodeURI(emname) + "&sel_empcode=" + sel_empcode;
 	});
 	
 	function IFrameResize(){
@@ -78,7 +78,7 @@
 	  var seldepart = document.getElementById('seldepart').value;
 	  var emname = document.getElementById('emname').value;
 	  var sel_empcode = document.getElementById('sel_empcode').value;
-	  document.getElementById('list_manage').src = "/card.do?action=list_manage&seldepart=" + seldepart + "&emname=" + emname + "&sel_empcode=" + sel_empcode;
+	  document.getElementById('list_manage').src = "/card.do?action=list_manage&seldepart=" + seldepart + "&emname=" + encodeURI(emname) + "&sel_empcode=" + sel_empcode;
 	}
 	</script>
   </head>

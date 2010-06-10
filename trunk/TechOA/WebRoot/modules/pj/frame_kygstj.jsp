@@ -91,7 +91,7 @@ if("".equals(departname)){
 	  			alert('请选择部门！');
 	  			return false;
 	  		}
-    		window.location.href = "/excel.do?action=export&model=KYGSTJ&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + pjcodes;
+    		window.location.href = "/excel.do?action=export&model=KYGSTJ&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + encodeURI(pjcodes);
   		}
   		
 	});
@@ -113,7 +113,7 @@ if("".equals(departname)){
 	  	alert('请选择部门！');
 	  	return false;
 	  }
-	  document.getElementById('list_kygstj').src = "/pj.do?action=kygstj&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + pjcodes + "&sel_type=" + sel_type;
+	  document.getElementById('list_kygstj').src = "/pj.do?action=kygstj&datepick=" + datepick + "&depart=" + depart + "&pjcodes=" + encodeURI(pjcodes);
 	}
 	
 	function IFrameResize(){
