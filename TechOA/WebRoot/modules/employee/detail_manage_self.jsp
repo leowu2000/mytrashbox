@@ -5,6 +5,8 @@ Map mapEm = (Map)request.getAttribute("mapEm");
 List listAttach = (List)request.getAttribute("listAttach");
 
 String havePhoto = request.getAttribute("havePhoto").toString();
+
+String message = request.getAttribute("message")==null?"":request.getAttribute("message").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -23,13 +25,26 @@ String havePhoto = request.getAttribute("havePhoto").toString();
 	<%@ include file="../../common/meta.jsp" %>
 	<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
+var message = '<%=message %>';
+if(message != ""){
+	if(message == "1"){
+		alert("修改成功！");
+	}else if(message == "2"){
+		alert("两次输入密码不同，请检查！");
+	}else if(message == "3"){
+		alert("原密码输入错误！");
+	}
+}
+
 var win;
 var win1;
+var win2;
 var action;
 var url='/em.do';
 Ext.onReady(function(){
 	var tb1 = new Ext.Toolbar({renderTo:'toolbar1'});
 	tb1.add({text: '修改基本信息',cls: 'x-btn-text-icon update',handler: onUpdateClick});
+	tb1.add({text: '修改密码',cls: 'x-btn-text-icon update',handler: onChangepassClick});
 	tb1.add({text: '添加/修改照片',cls: 'x-btn-text-icon add',handler: onPhotoClick});
 	tb1.add({text: '添加附件',cls: 'x-btn-text-icon add',handler: onAttachClick});
 
@@ -49,6 +64,16 @@ Ext.onReady(function(){
 	        buttons: [
 	        {text:'提交',handler: function(){Ext.getDom('dataForm1').action=action; Ext.getDom('dataForm1').submit();}},
 	        {text:'关闭',handler: function(){win1.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
 	        ]
         });
     }
@@ -86,7 +111,14 @@ Ext.onReady(function(){
 		        win.show(btn.dom);
 		  	}
 		});
-    }   
+    }  
+    
+    function onChangepassClick(btn){
+    	action = url+'?action=userchangepass&id=<%=mapEm.get("ID") %>'
+    	win2.setTitle('修改密码');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
+    }    
 });
 
 </script>
@@ -154,7 +186,7 @@ Ext.onReady(function(){
 <%
 	if("true".equals(havePhoto)){
 %>
-      		<image src="em.do?action=photo&empcode=<%=mapEm.get("CODE") %>"  height="200" width="200">
+      		<image src="em.do?action=photo&empcode=<%=mapEm.get("CODE") %>"  height="200">
 <%
 	}else {
 %>
@@ -229,6 +261,28 @@ Ext.onReady(function(){
                 </table>
             </form>
     </div>
+</div>
+
+<div id="dlg2" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm2" name="dataForm2" action="" method="post">
+                <table>
+                  <tr>
+				    <td>原密码</td>
+				    <td><input type="password" name="oldpassword" style="width:200"></td>
+				  </tr>
+				  <tr>
+				    <td>新密码</td>
+				    <td><input type="password" name="newpassword" style="width:200"></td>
+				  </tr>	
+				  <tr>
+				    <td>新密码</td>
+				    <td><input type="password" name="newpassword2" style="width:200"></td>
+				  </tr>	
+				</table>
+			</form>
+	</div>
 </div>
   </body>
 </html>

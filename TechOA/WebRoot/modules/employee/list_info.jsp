@@ -343,7 +343,7 @@ function checkAll(){
                 <table>
 				  <tr>
 				    <td>新密码</td>
-				    <td><input type="text" name="newpassword" style="width:200"></td>
+				    <td><input type="password" name="newpassword" style="width:200"></td>
 				  </tr>	
 				</table>
 			</form>
@@ -375,12 +375,14 @@ function checkAll(){
 				    <td>角色</td>
 				    <td><select name="oldrolecode" style="width:200">
 				    	<option value="001">系统管理员</option>
-				    	<option value="002">部领导</option>
+				    	<option value="002">领导</option>
 				    	<option value="005">组长</option>
 				    	<option value="003">普通员工</option>
 				    	<option value="004">计划员</option>
 				    	<option value="006">固定资产管理员</option>
+				    	<option value="008">信息设备管理员</option>
 				    	<option value="007">人事管理员</option>
+				    	<option value="009">合同管理员</option>
 				    </select></td>
 				  </tr>	
 				</table>

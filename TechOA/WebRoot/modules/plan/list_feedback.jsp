@@ -106,7 +106,7 @@ for(int i=0;i<listAssess.size();i++){
 	
 	String pjname = planDAO.findNameByCode("PROJECT", mapAssess.get("PJCODE").toString());
 %>
-            <tr align="center">
+            <tr align="left">
 				<td>&nbsp;
 <%
 				if("已反馈".equals(status)||"新下发".equals(status)){
@@ -117,7 +117,7 @@ for(int i=0;i<listAssess.size();i++){
 %>				
 				</td>
                 <td nowrap="nowrap">&nbsp;<%=pjname %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
+                <td>&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
                 <td nowrap="nowrap">&nbsp;<%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
                 <td nowrap="nowrap">&nbsp;<%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>
                 <td nowrap="nowrap">&nbsp;<%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>

@@ -60,7 +60,24 @@ public class PlanDAO extends CommonDAO {
 		if("004".equals(emrole)){//计划员,看到自己所管理的计划
 			sql = sql + " and PLANNERCODE='" + emcode + "'";
 		}else if("005".equals(emrole)){//组长,看到组成员的计划
-			sql = sql + " and (EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE='" + emdepart + "') or EMPNAME in (select NAME from EMPLOYEE where DEPARTCODE='" + emdepart + "'))";
+			List listEmp = jdbcTemplate.queryForList("select CODE,NAME from EMPLOYEE where DEPARTCODE='" + emdepart + "'");
+			String empcodesql = "";
+			String empnamesql = "";
+			for(int i=0;i<listEmp.size();i++){
+				Map mapEmp = (Map)listEmp.get(i);
+				if("".equals(empcodesql)){
+					empcodesql = " EMPCODE LIKE '%" + mapEmp.get("CODE") + "%'";
+				}else {
+					empcodesql = empcodesql + " or EMPCODE LIKE '%" + mapEmp.get("CODE") + "%'";
+				}
+				if("".equals(empnamesql)){
+					empnamesql = " EMPNAME LIKE '%" + mapEmp.get("NAME") + "%'";
+				}else {
+					empnamesql = empnamesql + " or EMPNAME LIKE '%" + mapEmp.get("NAME") + "%'";
+				}
+			}
+			
+			sql = sql + " and (" + empcodesql + " or " + empnamesql + ")";
 		}
 		
 //		if(!"0".equals(emdepart)){
@@ -102,12 +119,12 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllRemind(String level, String type, String datepick, String empname, String empdepart, String empcode, int page){
+	public PageList findAllRemind(String level, String type, String datepick, String empname, String empcode, String emrole, String emcode, String emdepart, int page){
 		PageList pageList = new PageList();
 		String sql = "";
 		
 		if("".equals(datepick)){
-			sql = "select * from PLAN where (STATUS='3' or STATUS='4')";
+			sql = "select * from PLAN where STATUS!='4'";
 		}else {
 			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 			Date enddate = StringUtil.getEndOfMonth(startdate);
@@ -148,10 +165,27 @@ public class PlanDAO extends CommonDAO {
 			}
 		}
 		
-		if(!"0".equals(empdepart)){
-			List listDepart = getDeparts(empdepart, new ArrayList());
-			String departcodes = getDepartCodes(listDepart);
-			sql = sql + " and DEPARTCODE in (" + departcodes + ")";
+		if("004".equals(emrole)){//计划员，看到自己的
+			sql = sql + " and PLANNERCODE='" + emcode + "'";
+		}else if("005".equals(emrole)){//组长，看组内人员的
+			List listEmp = jdbcTemplate.queryForList("select CODE,NAME from EMPLOYEE where DEPARTCODE='" + emdepart + "'");
+			String empcodesql = "";
+			String empnamesql = "";
+			for(int i=0;i<listEmp.size();i++){
+				Map mapEmp = (Map)listEmp.get(i);
+				if("".equals(empcodesql)){
+					empcodesql = " EMPCODE LIKE '%" + mapEmp.get("CODE") + "%'";
+				}else {
+					empcodesql = empcodesql + " or EMPCODE LIKE '%" + mapEmp.get("CODE") + "%'";
+				}
+				if("".equals(empnamesql)){
+					empnamesql = " EMPNAME LIKE '%" + mapEmp.get("NAME") + "%'";
+				}else {
+					empnamesql = empnamesql + " or EMPNAME LIKE '%" + mapEmp.get("NAME") + "%'";
+				}
+			}
+			
+			sql = sql + " and (" + empcodesql + " or " + empnamesql + ")";
 		}
 		
 		if(!"".equals(empcode)){
