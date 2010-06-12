@@ -74,6 +74,9 @@ for(int i=0;i<listAssess.size();i++){
 	if(daypersent>100){
 		daypersent = 100;
 	}
+	if(daypersent<0){
+		daypersent = 0;
+	}
 	
 	Map mapPersent = planDAO.getPersent(daypersent);
 	
@@ -83,10 +86,10 @@ for(int i=0;i<listAssess.size();i++){
 	String plantype = planDAO.findNameByCode("PLAN_TYPE", mapAssess.get("TYPE").toString());
 	String plantype2 = planDAO.findNameByCode("PLAN_TYPE", mapAssess.get("TYPE2").toString());
 %>
-            <tr align="center">
+            <tr align="left">
             	<td>&nbsp;<%=plantype %>--<%=plantype2 %></td>
                 <td nowrap="nowrap">&nbsp;<%=pjname %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
+                <td>&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
                 <td nowrap="nowrap">&nbsp;<%=state %></td>
                 <td nowrap="nowrap">&nbsp;<%=mapAssess.get("ASSESS")==null?"":mapAssess.get("ASSESS") %></td>
                 <td nowrap="nowrap">&nbsp;<%="" %></td>

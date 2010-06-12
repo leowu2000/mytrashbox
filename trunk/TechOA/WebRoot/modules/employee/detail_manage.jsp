@@ -10,6 +10,7 @@ List listDegree = (List)request.getAttribute("listDegree");
 List listPro = (List)request.getAttribute("listPro");
 String havePhoto = request.getAttribute("havePhoto").toString();
 String method = request.getAttribute("method").toString();
+String rolecode = session.getAttribute("rolecode")==null?"":session.getAttribute("rolecode").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -211,6 +212,9 @@ if("search".equals(method)){
     		<td bgcolor="#E0F1F8"  class="b_tr">职称</td>
     		<td>&nbsp;<%=mapEm.get("PRO")==null?"":mapEm.get("PRO") %></td>
     	</tr>
+<%
+	if("007".equals(rolecode)||"002".equals(rolecode)){
+ %>    	
     	<tr align="center" height="30">
     		<td bgcolor="#E0F1F8"  class="b_tr">行政职称/务</td>
     		<td>&nbsp;<%=mapEm.get("XZZW")==null?"":mapEm.get("XZZW") %></td>
@@ -241,6 +245,9 @@ if("search".equals(method)){
     		<td bgcolor="#E0F1F8"  class="b_tr"></td>
     		<td>&nbsp;</td>
     	</tr>
+<%
+	}
+ %>    	
     </table>
     </form>
     
@@ -254,7 +261,7 @@ if("search".equals(method)){
 <%
 	if("true".equals(havePhoto)){
 %>
-      		<image src="em.do?action=photo&empcode=<%=mapEm.get("CODE") %>"  height="200" width="200">
+      		<image src="em.do?action=photo&empcode=<%=mapEm.get("CODE") %>"  height="200">
 <%
 	}else {
 %>
@@ -290,7 +297,7 @@ if("search".equals(method)){
 				  <tr>
 				    <td>角色</td>
 				    <td><select name="rolecode" style="width:200">
-				    	<option value="002">部领导</option>
+				    	<option value="002">领导</option>
 				    	<option value="005">组长</option>
 				    	<option value="003">普通员工</option>
 				    	<option value="004">计划员</option>

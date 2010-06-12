@@ -56,16 +56,22 @@ var url='/plan.do';
 var vali = "";
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
+<%
+	if(!"005".equals(rolecode)){
+%>	
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '修  改',cls: 'x-btn-text-icon xiugai',handler: onUpdateClick});
-	tb.add({text: '标志确认',cls: 'x-btn-text-icon update',handler: onConfirmClick});
-	tb.add({text: '退回反馈',cls: 'x-btn-text-icon update',handler: onSendbackClick});
 	tb.add({text: '标志完成',cls: 'x-btn-text-icon save',handler: onCompleteClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
 	tb.add({text: '删除全部',cls: 'x-btn-text-icon delete',handler: onDeleteAllClick});
+	tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
+<%
+	}
+%>
+	tb.add({text: '标志确认',cls: 'x-btn-text-icon update',handler: onConfirmClick});
+	tb.add({text: '退回反馈',cls: 'x-btn-text-icon update',handler: onSendbackClick});
 	tb.add({text: '设置完成情况百分比',cls: 'x-btn-text-icon xiugai',handler: onSetClick});
 	tb.add({text: '任务分解',cls: 'x-btn-text-icon add',handler: onApartClick});
-	tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
     if(!win){
         win = new Ext.Window({

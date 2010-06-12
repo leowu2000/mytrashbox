@@ -95,6 +95,28 @@ public class EmployeeController extends CommonController {
 			
 			response.sendRedirect(returnUrl_infolist);
 			return null;
+		}else if("userchangepass".equals(action)){//员工修改密码
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			String oldpassword = ServletRequestUtils.getStringParameter(request, "oldpassword", "");
+			String newpassword = ServletRequestUtils.getStringParameter(request, "newpassword", "");
+			String newpassword2 = ServletRequestUtils.getStringParameter(request, "newpassword2", "");
+			
+			Employee em = emDAO.findById(id);
+			String message = "";
+			if(oldpassword.equals(em.getPassword())){//新旧密码相同
+				if(newpassword.equals(newpassword2)){//两次输入相同
+					String updateSql = "update EMPLOYEE set PASSWORD='" + newpassword + "' where ID='" + id + "'";
+					emDAO.update(updateSql);
+					message = "1";
+				}else {
+					message = "2";
+				}
+			}else {
+				message = "3";
+			}
+			
+			response.sendRedirect("em.do?action=manage_self&empcode=" + em.getCode() + "&message=" + message);
+			return null;
 		}else if("roleajax".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
@@ -189,6 +211,8 @@ public class EmployeeController extends CommonController {
 			mv.addObject("method", method);
 		}else if("manage_self".equals(action)){//人事管理详细信息
 			mv = new ModelAndView("modules/employee/detail_manage_self");
+			String message = ServletRequestUtils.getStringParameter(request, "message", "");
+			message = new String(message.getBytes("ISO8859-1"),"UTF-8");
 			
 			//获取人员信息
 			Map mapEm = emDAO.findByCode("EMPLOYEE", emcode);
@@ -225,6 +249,7 @@ public class EmployeeController extends CommonController {
 			mv.addObject("mapEm", mapEm);
 			mv.addObject("listAttach", listAttach);
 			mv.addObject("havePhoto", havePhoto);
+			mv.addObject("message", message);
 		}else if("query".equals(action)){//查找返回修改
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			Employee employee = emDAO.findById(id);

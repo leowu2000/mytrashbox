@@ -113,7 +113,7 @@ public class PlanController extends CommonController {
 				listProject = planDAO.getProject();
 			}
 			
-			sb.append("<select name='pjcode' onchange='AJAX_PJ(this.value);' style='width:200;'");
+			sb.append("<select name='pjcode' onchange='AJAX_PJ(this.value);' style='width:200;'>");
 			
 			for(int i=0;i<listProject.size();i++){
 				Map mapPj = (Map)listProject.get(i);
@@ -316,7 +316,7 @@ public class PlanController extends CommonController {
 		}else if("remind_list".equals(action)){//计划提醒列表
 			mv = new ModelAndView("modules/plan/list_remind");
 			
-			PageList pageList = planDAO.findAllRemind(f_level, f_type, datepick, f_empname,emdepart, sel_empcode, page);
+			PageList pageList = planDAO.findAllRemind(f_level, f_type, datepick, f_empname, sel_empcode, emrole, emcode, emdepart, page);
 						
 			mv.addObject("pageList", pageList);
 			mv.addObject("f_level", f_level);
