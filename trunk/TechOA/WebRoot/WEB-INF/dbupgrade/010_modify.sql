@@ -46,9 +46,6 @@ INSERT INTO MENU VALUES('113','预算管理','1','',43,'1','110','11.png');
 INSERT INTO MENU VALUES('114','下月付款申请管理','1','',44,'1','110','11.png');
 INSERT INTO MENU VALUES('120','信息设备管理','2','',45,'1','0','5.png');
 INSERT INTO MENU VALUES('121','信息设备维护','1','infoequip.do?action=manage',46,'1','120','5.png');
-INSERT INTO MENU VALUES('130','订餐管理','2','',47,'1','0','10.png');
-INSERT INTO MENU VALUES('131','订餐管理','1','/modules/food/list_order.jsp',48,'1','130','10.png');
-INSERT INTO MENU VALUES('132','订餐统计','1','/modules/food/list_collect.jsp',49,'1','130','10.png');
 INSERT INTO MENU VALUES('009','收藏管理','2','',47,'1','0','9.png');
 INSERT INTO MENU VALUES('091','收藏菜单','1','menu.do?action=manage_favor',48,'1','009','9.png');
 
