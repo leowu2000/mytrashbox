@@ -71,4 +71,5 @@
 	<bean id="infoEquipDAO" class="com.basesoft.modules.infoequip.InfoEquipDAO"></bean>
 	<bean id="customEquipDAO" class="com.basesoft.modules.customequip.CustomEquipDAO"></bean>
 	<bean id="treeDAO" class="com.basesoft.util.TreeDAO"></bean>
+	<bean id="roleDAO" class="com.basesoft.modules.role.RoleDAO"></bean>
 </beans>
