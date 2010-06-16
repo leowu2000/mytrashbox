@@ -235,4 +235,50 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 			
 		return treeList;
 	}
+	
+	/**
+	 * 获取菜单树
+	 * @param checkedMenu 多选菜单树
+	 * @return
+	 */
+	public List<CheckBoxTree> getMultiMenuTree(String checkedMenu) {
+		String[] checkedMenus = checkedMenu.split(",");
+		
+		List<CheckBoxTree> treeList = new ArrayList<CheckBoxTree>();
+		
+		List listMenu = jdbcTemplate.queryForList("select * from MENU where MENUTYPE='2'");
+		for(int i=0;i<listMenu.size();i++){
+			Map mapMenu = (Map)listMenu.get(i);
+			
+			CheckBoxTree tree = new CheckBoxTree();
+			tree.setId(mapMenu.get("MENUCODE").toString());
+			tree.setText(mapMenu.get("MENUNAME").toString());
+			tree.setLeaf(false);
+			for(String checked:checkedMenus){
+				if(checked.equals(mapMenu.get("MENUCODE"))){
+					tree.setChecked(true);
+				}
+			}
+			
+			List listMenu2 = jdbcTemplate.queryForList("select * from MENU where MENUTYPE='1' and PARENT='" + mapMenu.get("MENUCODE") + "'");
+			List<CheckBoxTree> leafList = new ArrayList<CheckBoxTree>();
+			for(int j=0;j<listMenu2.size();j++){
+				Map mapMenu2 = (Map)listMenu2.get(j);
+				CheckBoxTree leaf = new CheckBoxTree();
+				leaf.setId(mapMenu2.get("MENUCODE").toString());
+				leaf.setText(mapMenu2.get("MENUNAME").toString());
+				leaf.setLeaf(true);
+				for(String checked:checkedMenus){
+					if(checked.equals(mapMenu2.get("MENUCODE"))){
+						leaf.setChecked(true);
+					}
+				}
+				leafList.add(leaf);
+			}
+			tree.setChildren(leafList);
+			treeList.add(tree);
+		}
+			
+		return treeList;
+	}
 }

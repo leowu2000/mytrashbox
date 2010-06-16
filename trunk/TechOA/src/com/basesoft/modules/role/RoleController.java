@@ -1,5 +1,7 @@
 package com.basesoft.modules.role;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
-import com.basesoft.modules.employee.Employee;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
@@ -79,10 +80,24 @@ public class RoleController extends CommonController {
 			mv = new ModelAndView("/modules/role/list_role_menu");
 			
 			PageList pageList = roleDAO.findAllMenu(page, code);
+			Map map = roleDAO.getMenus(code);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("code", code);
+			mv.addObject("menucodes", map.get("menucodes"));
+			mv.addObject("menunames", map.get("menunames"));
 			return mv;
+		}else if("set_rolemenu".equals(action)){//配置角色菜单
+			String menucodes = ServletRequestUtils.getStringParameter(request, "menucodes", "");
+			String deleteSql = "delete from USER_MENU where EMPCODE='" + code + "'";
+			roleDAO.delete(deleteSql);
+			
+			String[] menus = menucodes.split(",");
+			for(int i=0;i<menus.length;i++){
+				String insertString = "insert into USER_MENU values('" + code + "','" + menus[i] + "','1')";
+				roleDAO.insert(insertString);
+			}
+			response.sendRedirect("role.do?action=role_menu_list&code=" + code);
 		}
 		
 		// TODO Auto-generated method stub

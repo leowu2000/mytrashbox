@@ -6,7 +6,9 @@
 	PageList pageList = (PageList)request.getAttribute("pageList");
 	List listMenu = pageList.getList();
 	int pagenum = pageList.getPageInfo().getCurPage();
-	
+	String code = request.getAttribute("code")==null?"":request.getAttribute("code").toString();
+	String menucodes = request.getAttribute("menucodes")==null?"":request.getAttribute("menucodes").toString();
+	String menunames = request.getAttribute("menunames")==null?"":request.getAttribute("menunames").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -30,28 +32,26 @@ var url = '/role.do';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
-	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '批量设置',cls: 'x-btn-text-icon add',handler: onAddAllClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
 
     if(!win){
         win = new Ext.Window({
         	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
 	        {text:'提交',handler: function(){
-	        	if(haveRolecode()){
-		        	Ext.getDom('dataForm').action=action; 
-	    	    	Ext.getDom('dataForm').submit();
-	        	}
+		        Ext.getDom('dataForm').action=action; 
+	    	    Ext.getDom('dataForm').submit();
 	        }},
 	        {text:'关闭',handler: function(){win.hide();}}
 	        ]
         });
     }
     
-    function onAddClick(btn){
-    	action = url+'?action=add';
-    	win.setTitle('增加');
+    function onAddAllClick(btn){
+    	action = url+'?action=set_rolemenu&code=<%=code %>';
+    	win.setTitle('批量设置');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
     }
@@ -65,12 +65,15 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>';       
+	    		Ext.getDom('listForm').action=url+'?action=delete_rolemenu&page=<%=pagenum %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
     }
     
+    function onBackClick(btn){
+    	history.back(-1);
+    }
 });
 
 function haveRolecode(){
@@ -139,7 +142,6 @@ function changeMenu(){
 			<td><%=mapMenu.get("CODE")==null?"":mapMenu.get("CODE") %></td>
 			<td><%=mapMenu.get("NAME")==null?"":mapMenu.get("NAME") %></td>
 			<td><%=mapMenu.get("MENUNAME") %></td>
-			<td></td>
 		</tr>
 <%
 	} 
@@ -155,9 +157,9 @@ function changeMenu(){
                   <tr>
 				    <td>选择菜单</td>
 				    <td>
-				      <input type="text" id="menunames" name="menunames" style="width:155;" value="请选择...">
+				      <input type="text" id="menunames" name="menunames" style="width:155;" value="<%=menunames %>">
 				      <input class="btn" name="selemp" type="button" onclick="changeMenu();" value="选择" style="width:40;">
-					  <input type="hidden" id="menucodes" name="menucodes">
+					  <input type="hidden" id="menucodes" name="menucodes" value="<%=menucodes %>">
 					</td>
 				  </tr>	
 				  <tr>
