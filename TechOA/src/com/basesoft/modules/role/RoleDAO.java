@@ -1,5 +1,6 @@
 package com.basesoft.modules.role;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -76,5 +77,32 @@ public class RoleDAO extends CommonDAO {
 		}
 		
 		return role;
+	}
+	
+	public Map getMenus(String rolecode){
+		Map map = new HashMap();
+		
+		String menucodes = "";
+		String menunames = "";
+		List listMenu = jdbcTemplate.queryForList("select * from USER_MENU a,MENU b where a.EMPCODE='" + rolecode + "' and b.MENUCODE=a.MENUCODE order by a.MENUCODE");
+		for(int i=0;i<listMenu.size();i++){
+			Map mapMenu = (Map)listMenu.get(i);
+			if("".equals(menucodes)){
+				menucodes = mapMenu.get("MENUCODE").toString();
+			}else {
+				menucodes = menucodes + "," + mapMenu.get("MENUCODE");
+			}
+			
+			if("".equals(menunames)){
+				menunames = mapMenu.get("MENUNAME")==null?"":mapMenu.get("MENUNAME").toString();
+			}else {
+				menunames = menunames + "," +mapMenu.get("MENUNAME");
+			}
+		}
+		
+		map.put("menucodes", menucodes);
+		map.put("menunames", menunames);
+		
+		return map;
 	}
 }
