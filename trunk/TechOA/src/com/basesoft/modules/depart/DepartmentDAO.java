@@ -1,5 +1,6 @@
 package com.basesoft.modules.depart;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public class DepartmentDAO extends CommonDAO{
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		sql = "select * from DEPARTMENT order by PARENT,NAME";
+		sql = "select * from DEPARTMENT order by ORDERCODE";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -81,7 +82,7 @@ public class DepartmentDAO extends CommonDAO{
 	 * @return
 	 */
 	public List<?> getChild(String departcode){
-		return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by PARENT,NAME");
+		return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by ORDERCODE");
 	}
 	
 	/**
@@ -91,9 +92,9 @@ public class DepartmentDAO extends CommonDAO{
 	 */
 	public List<?> getSelf(String departcode){
 		if("0".equals(departcode)){//0代表所有一级单位
-			return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by PARENT,NAME");
+			return jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by ORDERCODE");
 		}else {
-			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "' order by PARENT,NAME");
+			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "' order by ORDERCODE");
 		}
 	}
 	
@@ -103,7 +104,7 @@ public class DepartmentDAO extends CommonDAO{
 	 * @return
 	 */
 	public List<?> findEmpsByDepart(String departcode){
-		return jdbcTemplate.queryForList("select * from EMPLOYEE where DEPARTCODE='" + departcode + "' order by NAME");
+		return jdbcTemplate.queryForList("select * from EMPLOYEE where DEPARTCODE='" + departcode + "'");
 	}
 	
 	/**
@@ -112,5 +113,43 @@ public class DepartmentDAO extends CommonDAO{
 	 */
 	public String getCode(){
 		return StringUtil.createNumberString(15);
+	}
+	
+	/**
+	 * 根据用户数据权限和角色数据权限获取有权查看的部门列表
+	 * @param empcode 用户编码
+	 * @param rolecode 角色编码
+	 * @param parent 父级部门编码
+	 * @return
+	 */
+	public List<?> findByRoleAndEmpcode(String empcode, String rolecode, int level, String parent){
+		String querySql = "";
+		List listDepart = new ArrayList();
+		if("".equals(parent)){//没有上级单位属性，用于第一级部门检索
+			querySql = "select * from DEPARTMENT where CODE in (select DEPARTCODE from USER_DEPART where EMPCODE='" + empcode + "') and LEVEL=" + level + " order by ORDERCODE";
+			listDepart = jdbcTemplate.queryForList(querySql);
+			if(listDepart.size() == 0){//没有为用户配置数据权限的时候取角色配置的数据权限
+				querySql = "select * from DEPARTMENT where CODE in (select DEPARTCODE from ROLE_DEPART where ROLECODE='" + rolecode + "') and LEVEL=" + level + " order by ORDERCODE";
+				listDepart = jdbcTemplate.queryForList(querySql);
+			}
+		}else {
+			querySql = "select * from DEPARTMENT where CODE in (select DEPARTCODE from USER_DEPART where EMPCODE='" + empcode + "') and PARENT='" + parent + "' order by ORDERCODE";
+			listDepart = jdbcTemplate.queryForList(querySql);
+			if(listDepart.size() == 0){//没有为用户配置数据权限的时候取角色配置的数据权限
+				querySql = "select * from DEPARTMENT where CODE in (select DEPARTCODE from ROLE_DEPART where ROLECODE='" + rolecode + "') and PARENT='" + parent + "' order by ORDERCODE";
+				listDepart = jdbcTemplate.queryForList(querySql);
+			}
+		}
+		
+		return listDepart;
+	}
+	
+	/**
+	 * 获取部门级别
+	 * @return
+	 */
+	public int getMaxLevel(){
+		String querySql = "select MAX(LEVEL) from DEPARTMENT ";
+		return jdbcTemplate.queryForInt(querySql);
 	}
 }

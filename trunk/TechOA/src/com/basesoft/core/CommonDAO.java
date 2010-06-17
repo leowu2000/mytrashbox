@@ -35,7 +35,7 @@ public class CommonDAO {
 	 * @return
 	 */
 	public List<?> getDepartment(){
-		return jdbcTemplate.queryForList("select * from DEPARTMENT");
+		return jdbcTemplate.queryForList("select * from DEPARTMENT order by ORDERCODE");
 	}
 	
 	/**
@@ -142,11 +142,11 @@ public class CommonDAO {
 		String rolecode = mapEm.get("ROLECODE")==null?"":mapEm.get("ROLECODE").toString();
 		String departcode = mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString();
 		if("001".equals(rolecode)||"000".equals(rolecode)){//管理员
-			return jdbcTemplate.queryForList("select * from DEPARTMENT order by LEVEL");
+			return jdbcTemplate.queryForList("select * from DEPARTMENT order by ORDERCODE");
 		}else if("002".equals(rolecode)){//领导
 			return getDeparts(departcode, new ArrayList());
 		}else {//普通员工
-			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "' order by LEVEL");
+			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "' order by ORDERCODE");
 		}
 	}
 	
@@ -156,11 +156,11 @@ public class CommonDAO {
 	 * @return
 	 */
 	public List getDeparts(String departcode, List list){
-		List listself = jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "'");
+		List listself = jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "' order by ORDERCODE");
 		if(listself.size()>0){
 			list.add((Map)listself.get(0));
 		}
-		List listChild = jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "'");
+		List listChild = jdbcTemplate.queryForList("select * from DEPARTMENT where PARENT='" + departcode + "' order by ORDERCODE");
 		
 		if(listChild.size()>0){
 			for(int i=0;i<listChild.size();i++){
@@ -178,14 +178,14 @@ public class CommonDAO {
 	 * @return
 	 */
 	public List getDeparts(String departcodes){
-		String sql = "select * from DEPARTMENT where CODE in (" + departcodes + ")";
+		String sql = "select * from DEPARTMENT where CODE in (" + departcodes + ") order by ORDERCODE";
 		List listself = jdbcTemplate.queryForList(sql);
 				
 		return listself;
 	}
 	
 	/**
-	 * 得到下级部门
+	 * 获取部门
 	 * @param departcode
 	 * @return
 	 */
@@ -401,6 +401,16 @@ public class CommonDAO {
         }
         buffOut.close();
         fos.close();
+	}
+	
+	/**
+	 * 获取角色列表
+	 * @return
+	 */
+	public List getRoleList(){
+		String querySql = "select * from USER_ROLE order by CODE";
+		
+		return jdbcTemplate.queryForList(querySql);
 	}
 	
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate){

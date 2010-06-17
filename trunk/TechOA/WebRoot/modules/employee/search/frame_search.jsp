@@ -30,9 +30,9 @@ if("".equals(departname)){
 			tree : {
 				id:'tree1',
 				xtype:'treepanel',
-				rootVisible:false,
+				rootVisible:true,
 				loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departTree'}),
-		   	 	root : new Ext.tree.AsyncTreeNode({})
+		   	 	root : new Ext.tree.AsyncTreeNode({id:'-1',text:'全部'})
 			},
 			    	
 			//all:所有结点都可选中
@@ -58,7 +58,7 @@ if("".equals(departname)){
 			
 		});
 		
-		comboBoxTree.setValue({id:'<%=departcode %>',text:'<%=departname %>'});
+		comboBoxTree.setValue({id:'-1',text:'全部'});
 		
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
   		tb.add('&nbsp;&nbsp;&nbsp;');

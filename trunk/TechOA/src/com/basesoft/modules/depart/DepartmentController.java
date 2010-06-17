@@ -43,9 +43,10 @@ public class DepartmentController extends CommonController {
 			String parent = ServletRequestUtils.getStringParameter(request, "departparent", "");
 			String code = departDAO.getCode();
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			int ordercode = ServletRequestUtils.getIntParameter(request, "ordercode", 0);
 			
 			if("0".equals(parent)){//根部门作为父部门
-				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "','',1)");
+				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "','',1," + ordercode + ")");
 				
 				response.sendRedirect("depart.do?action=list");
 				return null;
@@ -55,7 +56,7 @@ public class DepartmentController extends CommonController {
 				int level = Integer.parseInt(mapParent.get("LEVEL").toString()) + 1;
 				String allParents = mapParent.get("ALLPARENTS").toString() + "," + parent;
 				
-				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "','" + allParents + "'," + level + ")");
+				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "','" + allParents + "'," + level + ", " + ordercode + ")");
 				
 				response.sendRedirect("depart.do?action=list");
 				return null;
@@ -86,11 +87,12 @@ public class DepartmentController extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			String name = ServletRequestUtils.getStringParameter(request, "departname", "");
 			String parent = ServletRequestUtils.getStringParameter(request, "departparent", "");
+			int ordercode = ServletRequestUtils.getIntParameter(request, "ordercode", 0);
 			
 			if("0".equals(parent)){//根部门作为父部门
-				departDAO.update("update DEPARTMENT set NAME='" + name + "',PARENT='" + parent + "',level=1,ALLPARENTS='' where ID='" + id + "'");
+				departDAO.update("update DEPARTMENT set NAME='" + name + "',PARENT='" + parent + "',LEVEL=1,ALLPARENTS='',ORDERCODE=" + ordercode + " where ID='" + id + "'");
 				
-				response.sendRedirect("depart.do?action=list");
+				response.sendRedirect("depart.do?action=list&page=" + page);
 				return null;
 			}else{
 				Map mapParent = departDAO.findByCode("DEPARTMENT", parent);
@@ -103,9 +105,9 @@ public class DepartmentController extends CommonController {
 					allParents = parent;
 				}
 				
-				departDAO.update("update DEPARTMENT set NAME='" + name + "',PARENT='" + parent + "',level=" + level + ",ALLPARENTS='" + allParents + "' where ID='" + id + "'");
+				departDAO.update("update DEPARTMENT set NAME='" + name + "',PARENT='" + parent + "',level=" + level + ",ALLPARENTS='" + allParents + "',ORDERCODE=" + ordercode + " where ID='" + id + "'");
 				
-				response.sendRedirect("depart.do?action=list");
+				response.sendRedirect("depart.do?action=list&page=" + page);
 				return null;
 			}
 		}else if("validate".equals(action)){//验证

@@ -1,6 +1,8 @@
 package com.basesoft.modules.employee;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,18 +14,22 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
+import com.basesoft.modules.role.RoleDAO;
+import com.basesoft.util.StringUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 public class FinanceController extends CommonController {
 
 	FinanceDAO financeDAO;
+	RoleDAO roleDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
@@ -47,8 +53,19 @@ public class FinanceController extends CommonController {
 			mv = new ModelAndView("modules/employee/finance/list_manage");
 			
 			String method = ServletRequestUtils.getStringParameter(request, "method", "");
+			List listDepart = new ArrayList();
+			String departcodes = "";
+			if("-1".equals(seldepart)){//需要进行数据权限的过滤
+				listDepart = roleDAO.findAllUserDepart(emcode);
+				if(listDepart.size() == 0){
+					listDepart = roleDAO.findAllRoleDepart(emcode);
+				}
+				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+			}else {
+				departcodes = "'" + seldepart + "'";
+			}
 			
-			PageList pageList = financeDAO.findAll(seldepart, emname, datepick, sel_empcode, page);
+			PageList pageList = financeDAO.findAll(emname, datepick, sel_empcode, page, departcodes);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
@@ -152,5 +169,9 @@ public class FinanceController extends CommonController {
 
 	public void setFinanceDAO(FinanceDAO financeDAO){
 		this.financeDAO = financeDAO;
+	}
+	
+	public void setRoleDAO(RoleDAO roleDAO){
+		this.roleDAO = roleDAO;
 	}
 }

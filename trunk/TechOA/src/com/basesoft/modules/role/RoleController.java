@@ -98,6 +98,51 @@ public class RoleController extends CommonController {
 				roleDAO.insert(insertString);
 			}
 			response.sendRedirect("role.do?action=role_menu_list&code=" + code);
+		}else if("role_depart_list".equals(action)){//配置角色数据权限页面
+			mv = new ModelAndView("/modules/role/list_role_depart");
+			
+			PageList pageList = roleDAO.findAllRoleDepart(page, code);
+			Map map = roleDAO.getRoleDepart(code);
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("code", code);
+			mv.addObject("departcodes", map.get("departcodes"));
+			mv.addObject("departnames", map.get("departnames"));
+			return mv;
+		}else if("set_roledepart".equals(action)){//配置角色部门数据权限
+			String departcodes = ServletRequestUtils.getStringParameter(request, "departcodes", "");
+			String deleteSql = "delete from ROLE_DEPART where ROLECODE='" + code + "'";
+			roleDAO.delete(deleteSql);
+			
+			String[] departs = departcodes.split(",");
+			for(int i=0;i<departs.length;i++){
+				String insertString = "insert into ROLE_DEPART values('" + code + "','" + departs[i] + "')";
+				roleDAO.insert(insertString);
+			}
+			response.sendRedirect("role.do?action=role_depart_list&code=" + code);
+		}else if("user_depart_list".equals(action)){//配置用户数据权限页面
+			mv = new ModelAndView("/modules/role/list_user_depart");
+			
+			PageList pageList = roleDAO.findAllUserDepart(page, code);
+			Map map = roleDAO.getUserDepart(code);
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("code", code);
+			mv.addObject("departcodes", map.get("departcodes"));
+			mv.addObject("departnames", map.get("departnames"));
+			return mv;
+		}else if("set_userdepart".equals(action)){//配置用户部门数据权限
+			String departcodes = ServletRequestUtils.getStringParameter(request, "departcodes", "");
+			String deleteSql = "delete from USER_DEPART where EMPCODE='" + code + "'";
+			roleDAO.delete(deleteSql);
+			
+			String[] departs = departcodes.split(",");
+			Map mapEm = roleDAO.findByCode("EMPLOYEE", code);
+			for(int i=0;i<departs.length;i++){
+				String insertString = "insert into USER_DEPART values('" + code + "','" + departs[i] + "','" + mapEm.get("ROLECODE") + "')";
+				roleDAO.insert(insertString);
+			}
+			response.sendRedirect("role.do?action=user_depart_list&code=" + code);
 		}
 		
 		// TODO Auto-generated method stub

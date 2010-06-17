@@ -157,7 +157,7 @@ function checkAll(){
     		<td>角色编码</td>
     		<td>角色名称</td>
     		<td>配置菜单</td>
-    		<td>配置部门</td>
+    		<td>配置数据权限</td>
 <%
 	for(int i=0;i<listRole.size();i++){
 		Map mapRole = (Map)listRole.get(i);
@@ -168,7 +168,7 @@ function checkAll(){
 			<td><%=mapRole.get("CODE")==null?"":mapRole.get("CODE") %></td>
 			<td><%=mapRole.get("NAME")==null?"":mapRole.get("NAME") %></td>
 			<td><a href="/role.do?action=role_menu_list&code=<%=mapRole.get("CODE") %>">配置菜单</a></td>
-			<td><a href="/role.do?action=role_depart_list&code=<%=mapRole.get("CODE") %>">配置部门</a></td>
+			<td><a href="/role.do?action=role_depart_list&code=<%=mapRole.get("CODE") %>">配置数据权限</a></td>
 		</tr>
 <%
 	} 

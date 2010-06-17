@@ -110,8 +110,8 @@ public class ExcelDAO extends CommonDAO {
 	 * @param empname 姓名模糊检索
 	 * @return
 	 */
-	public List getExportData_JBF(String seldepart, String datepick, String emname){
-		return financeDAO.findAll(seldepart, datepick, emname);
+	public List getExportData_JBF(String datepick, String emname, String departcodes){
+		return financeDAO.findAll(datepick, emname, departcodes);
 	}
 	
 	/**
