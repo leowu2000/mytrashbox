@@ -7,6 +7,7 @@
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listEm = pageList.getList();
 List listChildDepart = (List)request.getAttribute("listChildDepart");
+List listRole = (List)request.getAttribute("listRole");
 String seldepart = request.getAttribute("seldepart").toString();
 String emname = request.getAttribute("emname").toString();
 emname = URLEncoder.encode(emname,"UTF-8");
@@ -254,6 +255,7 @@ function checkAll(){
     		<td>姓名</td>
     		<td>部门</td>
     		<td>角色</td>
+    		<td>配置数据权限</td>
     	</tr>
 <%
     for(int i=0;i<listEm.size();i++){
@@ -263,26 +265,8 @@ function checkAll(){
     		departname = employeeDAO.findNameByCode("DEPARTMENT",mapEm.get("DEPARTCODE").toString());
     	}
     	String rolecode = mapEm.get("ROLECODE")==null?"":mapEm.get("ROLECODE").toString();
-    	String rolename = "";
-    	if("001".equals(rolecode)){
-    		rolename = "系统管理员";
-    	}else if("002".equals(rolecode)){
-    		rolename = "领导";
-    	}else if("003".equals(rolecode)){
-    		rolename = "普通员工";
-    	}else if("004".equals(rolecode)){
-    		rolename = "计划员";
-    	}else if("005".equals(rolecode)){
-    		rolename = "组长";
-    	}else if("006".equals(rolecode)){
-    		rolename = "固定资产管理员";
-    	}else if("007".equals(rolecode)){
-    		rolename = "人事管理员";
-    	}else if("008".equals(rolecode)){
-    		rolename = "信息设备管理员";
-    	}else if("009".equals(rolecode)){
-    		rolename = "合同管理员";
-    	}
+    	String rolename = employeeDAO.findNameByCode("USER_ROLE", rolecode);
+    	
 
 %>    	
 		<tr align="center">
@@ -291,6 +275,7 @@ function checkAll(){
 			<td>&nbsp;<%=mapEm.get("NAME")==null?"":mapEm.get("NAME") %></td>
 			<td>&nbsp;<%=departname %></td>
 			<td>&nbsp;<%=rolename %></td>
+			<td><a href="/role.do?action=user_depart_list&code=<%=mapEm.get("CODE") %>">配置数据权限</a></td>
 		</tr>
 <%  } %>
     </table>
@@ -312,14 +297,14 @@ function checkAll(){
 				  <tr>
 				    <td>角色</td>
 				    <td><select name="rolecode" style="width:200">
-				    	<option value="002">领导</option>
-				    	<option value="005">组长</option>
-				    	<option value="003">普通员工</option>
-				    	<option value="004">计划员</option>
-				    	<option value="006">固定资产管理员</option>
-				    	<option value="008">信息设备管理员</option>
-				    	<option value="007">人事管理员</option>
-				    	<option value="009">合同管理员</option>
+<%
+					for(int i=0;i<listRole.size();i++){
+						Map mapRole = (Map)listRole.get(i);
+%>				    	
+						<option value="<%=mapRole.get("CODE") %>"><%=mapRole.get("NAME") %></option>
+<%
+					}
+%>
 				    </select></td>
 				  </tr>	
 				  <tr>
@@ -374,15 +359,14 @@ function checkAll(){
 				  <tr>
 				    <td>角色</td>
 				    <td><select name="oldrolecode" style="width:200">
-				    	<option value="001">系统管理员</option>
-				    	<option value="002">领导</option>
-				    	<option value="005">组长</option>
-				    	<option value="003">普通员工</option>
-				    	<option value="004">计划员</option>
-				    	<option value="006">固定资产管理员</option>
-				    	<option value="008">信息设备管理员</option>
-				    	<option value="007">人事管理员</option>
-				    	<option value="009">合同管理员</option>
+<%
+					for(int i=0;i<listRole.size();i++){
+						Map mapRole = (Map)listRole.get(i);
+%>				    	
+						<option value="<%=mapRole.get("CODE") %>"><%=mapRole.get("NAME") %></option>
+<%
+					}
+%>
 				    </select></td>
 				  </tr>	
 				</table>

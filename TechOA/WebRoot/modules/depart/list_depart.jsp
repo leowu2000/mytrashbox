@@ -8,6 +8,8 @@ PageList pageList = (PageList)request.getAttribute("pageList");
 List listDepart = pageList.getList();
 String emrole = session.getAttribute("EMROLE").toString();
 
+int pagenum = pageList.getPageInfo().getCurPage();
+
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 DepartmentDAO departDAO = (DepartmentDAO)ctx.getBean("departmentDAO");
 
@@ -110,14 +112,14 @@ Ext.onReady(function(){
 			return false;
 		}
 		Ext.Ajax.request({
-			url: url+'?action=query&id='+selValue,
+			url: url+'?action=query&id=' + selValue,
 			method: 'GET',
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
 				Ext.get('departname').set({'value':data.item.name});
 				comboBoxTree.setValue({id:data.item.parent,text:data.item.parentname});
-		    	action = url+'?action=update';
+		    	action = url+'?action=update&page=<%=pagenum %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -152,7 +154,7 @@ Ext.onReady(function(){
 					success: function(transport) {
 			    		result = transport.responseText;
 			    		if(result=='true'){
-	       					Ext.getDom('listForm').action=url+'?action=delete';       
+	       					Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>';       
     	   					Ext.getDom('listForm').submit();
     	   				}else {
     	   					alert('所选部门还有下属部门，请先删除下属部门！');
@@ -203,6 +205,7 @@ function checkAll(){
                 <td>部门名称</td>              
                 <td>部门级别</td>
                 <td>上级部门</td>
+                <td>排序号</td>
             </tr>
 <%
 for(int i=0;i<listDepart.size();i++){
@@ -219,6 +222,7 @@ for(int i=0;i<listDepart.size();i++){
                 <td>&nbsp;<%=mapDepart.get("NAME") %></td>
                 <td>&nbsp;<%=mapDepart.get("LEVEL") %>级部门</td>
                 <td>&nbsp;<%=parentname %></td>
+                <td>&nbsp;<%=mapDepart.get("ORDERCODE")==null?"":mapDepart.get("ORDERCODE") %></td>
             </tr>
 <%} %>            
 </table>
@@ -240,6 +244,10 @@ for(int i=0;i<listDepart.size();i++){
 				    <td>上级部门</td>
 				    <td><span name="departspan" id="departspan"></td>
 				  </tr>	
+				  <tr>
+				  	<td>排序号</td>
+				    <td><input type="text" name="ordercode" style="width:200"></td>
+				  </tr>
 				</table>
 	        </form>
     </div>

@@ -5,6 +5,7 @@ Map mapEm = (Map)request.getAttribute("mapEm");
 List listAttach = (List)request.getAttribute("listAttach");
 
 List listChildDepart = (List)request.getAttribute("listChildDepart");
+List listRole = (List)request.getAttribute("listRole");
 List listMajor = (List)request.getAttribute("listMajor");
 List listDegree = (List)request.getAttribute("listDegree");
 List listPro = (List)request.getAttribute("listPro");
@@ -297,14 +298,14 @@ if("search".equals(method)){
 				  <tr>
 				    <td>角色</td>
 				    <td><select name="rolecode" style="width:200">
-				    	<option value="002">领导</option>
-				    	<option value="005">组长</option>
-				    	<option value="003">普通员工</option>
-				    	<option value="004">计划员</option>
-				    	<option value="006">固定资产管理员</option>
-				    	<option value="008">信息设备管理员</option>
-				    	<option value="007">人事管理员</option>
-				    	<option value="009">合同管理员</option>
+<%
+					for(int i=0;i<listRole.size();i++){
+						Map mapRole = (Map)listRole.get(i);
+%>				    	
+						<option value="<%=mapRole.get("CODE") %>"><%=mapRole.get("NAME") %></option>
+<%
+					}
+%>
 				    </select></td>
 				  </tr>	
 				   <tr>

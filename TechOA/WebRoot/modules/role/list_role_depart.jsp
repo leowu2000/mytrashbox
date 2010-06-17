@@ -4,17 +4,17 @@
 <%@ page import="com.basesoft.core.*" %>
 <%
 	PageList pageList = (PageList)request.getAttribute("pageList");
-	List listMenu = pageList.getList();
+	List listDepart = pageList.getList();
 	int pagenum = pageList.getPageInfo().getCurPage();
 	String code = request.getAttribute("code")==null?"":request.getAttribute("code").toString();
-	String menucodes = request.getAttribute("menucodes")==null?"":request.getAttribute("menucodes").toString();
-	String menunames = request.getAttribute("menunames")==null?"":request.getAttribute("menunames").toString();
+	String departcodes = request.getAttribute("departcodes")==null?"":request.getAttribute("departcodes").toString();
+	String departnames = request.getAttribute("departnames")==null?"":request.getAttribute("departnames").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>配置角色菜单</title>
+    <title>数据权限管理</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -49,7 +49,7 @@ Ext.onReady(function(){
     }
     
     function onAddAllClick(btn){
-    	action = url+'?action=set_rolemenu&code=<%=code %>';
+    	action = url+'?action=set_roledepart&code=<%=code %>';
     	win.setTitle('批量设置');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -76,38 +76,38 @@ function checkAll(){
 }
 
 function changeMenu(){
-    	document.getElementById('checkedMenu').value = document.getElementById('menucodes').value;
-    	document.getElementById('treeForm').action = "tree.do?action=multimenu_init";
+    	document.getElementById('checkedDepart').value = document.getElementById('departcodes').value;
+    	document.getElementById('treeForm').action = "tree.do?action=multidepart_init";
     	document.getElementById('treeForm').submit();
     
-    	document.getElementById("menusel").style.top=(event.clientY-200)+"px";
-    	document.getElementById("menusel").style.left=(event.clientX+50)+"px";
-    	document.getElementById("menusel").style.display="";
+    	document.getElementById("departsel").style.top=(event.clientY-200)+"px";
+    	document.getElementById("departsel").style.left=(event.clientX+50)+"px";
+    	document.getElementById("departsel").style.display="";
 }
 //-->
 </script>
   </head>
   
   <body>
-	<h1>配置角色菜单</h1>
+	<h1>数据权限管理</h1>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("role.do?action=role_menu_list&code=" + code) %>
+<%=pageList.getPageInfo().getHtml("role.do?action=role_depart_list&code=" + code) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
     		<td>角色编码</td>
     		<td>角色名称</td>
-    		<td>菜单名称</td>
+    		<td>部门数据权限</td>
 <%
-	for(int i=0;i<listMenu.size();i++){
-		Map mapMenu = (Map)listMenu.get(i);
+	for(int i=0;i<listDepart.size();i++){
+		Map mapDepart = (Map)listDepart.get(i);
 		
 %>
 		<tr>
-			<td><%=mapMenu.get("CODE")==null?"":mapMenu.get("CODE") %></td>
-			<td><%=mapMenu.get("NAME")==null?"":mapMenu.get("NAME") %></td>
-			<td><%=mapMenu.get("MENUNAME") %></td>
+			<td><%=mapDepart.get("ROLECODE")==null?"":mapDepart.get("ROLECODE") %></td>
+			<td><%=mapDepart.get("ROLENAME")==null?"":mapDepart.get("ROLENAME") %></td>
+			<td><%=mapDepart.get("DEPARTNAME")==null?"":mapDepart.get("DEPARTNAME") %></td>
 		</tr>
 <%
 	} 
@@ -121,11 +121,11 @@ function changeMenu(){
 	        <input type="hidden" name="id" id="id">
                 <table>
                   <tr>
-				    <td>选择菜单</td>
+				    <td>选择部门</td>
 				    <td>
-				      <input type="text" id="menunames" name="menunames" style="width:155;" value="<%=menunames %>">
+				      <input type="text" id="departnames" name="departnames" style="width:155;" value="<%=departnames %>">
 				      <input class="btn" name="selemp" type="button" onclick="changeMenu();" value="选择" style="width:40;">
-					  <input type="hidden" id="menucodes" name="menucodes" value="<%=menucodes %>">
+					  <input type="hidden" id="departcodes" name="departcodes" value="<%=departcodes %>">
 					</td>
 				  </tr>	
 				</table>
@@ -133,8 +133,8 @@ function changeMenu(){
     </div>
 </div>
 <form id="treeForm" name="treeForm" method="POST" target="checkedtree">
-		<input type="hidden" id="checkedMenu" name="checkedMenu">
+		<input type="hidden" id="checkedDepart" name="checkedDepart">
 </form>
-<div style="position:absolute; top:110px; left:100px;display: none;" id="menusel" name="menusel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree" name="checkedtree"></iframe></div>
+<div style="position:absolute; top:110px; left:100px;display: none;" id="departsel" name="departsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree" name="checkedtree"></iframe></div>
   </body>
 </html>

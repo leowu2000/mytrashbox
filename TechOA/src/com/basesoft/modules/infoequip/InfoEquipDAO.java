@@ -17,9 +17,9 @@ public class InfoEquipDAO extends CommonDAO {
 		String sql = "";
 		
 		if("0".equals(status)){//全部状态
-			sql = "select CODE,NAME from DEPARTMENT where CODE in (select DISTINCT DEPARTCODE from ASSETS)";
+			sql = "select CODE,NAME from DEPARTMENT where CODE in (select DISTINCT DEPARTCODE from ASSETS) order by ORDERCODE";
 		}else {
-			sql = "select CODE,NAME from DEPARTMENT where CODE in (select DISTINCT DEPARTCODE from ASSETS where STATUS='" + status + "')";
+			sql = "select CODE,NAME from DEPARTMENT where CODE in (select DISTINCT DEPARTCODE from ASSETS where STATUS='" + status + "' order by ORDERCODE)";
 		}
 		
 		return jdbcTemplate.queryForList(sql);

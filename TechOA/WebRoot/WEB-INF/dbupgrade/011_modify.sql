@@ -49,6 +49,28 @@ comment on column ROLE_DEPART.ROLECODE is
 comment on column ROLE_DEPART.DEPARTCODE is
 '部门编码';
 
+/*==============================================================*/
+/* Table: USER_DEPART                                           */
+/*==============================================================*/
+create table USER_DEPART  (
+   EMPCODE              VARCHAR(20),
+   DEPARTCODE           VARCHAR(20),
+   ROLECODE             VARCHAR(20)
+);
+
+comment on table USER_DEPART is
+'用户数据权限配置表';
+
+comment on column USER_DEPART.EMPCODE is
+'用户编码';
+
+comment on column USER_DEPART.DEPARTCODE is
+'部门编码';
+
+comment on column USER_DEPART.ROLECODE is
+'角色编码';
+
+
 DELETE FROM MENU;
 
 INSERT INTO MENU VALUES('001','系统维护','2','',1,'1','0','1.png');
@@ -149,3 +171,10 @@ comment on column DICT_COL.COL_COMMENT is
 
 comment on column DICT_COL.COL_TYPE is
 '字段类型';
+
+ALTER TABLE ROLE_DEPART ALTER COLUMN DEPARTCODE TYPE VARCHAR(200);
+delete from role_depart where rolecode='001';
+INSERT INTO ROLE_DEPART SELECT '001',CODE FROM DEPARTMENT;
+
+alter table department add column ordercode integer;
+update department set ordercode=1 where name='三部' or code in (select code from department where parent=(select code from department where name='三部'));

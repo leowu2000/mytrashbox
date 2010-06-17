@@ -4,7 +4,7 @@
 <%
 PageList pageList = (PageList)request.getAttribute("pageList");
 List list = pageList.getList();
-Map map = (Map)list.get(0);
+Map map = list.size()>0?(Map)list.get(0):(new HashMap());
 
 Employee em = (Employee)request.getAttribute("em");
 

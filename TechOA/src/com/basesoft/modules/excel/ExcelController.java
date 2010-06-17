@@ -23,6 +23,7 @@ import com.basesoft.modules.employee.CarDAO;
 import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.excel.config.Config;
 import com.basesoft.modules.plan.PlanDAO;
+import com.basesoft.modules.role.RoleDAO;
 import com.basesoft.util.StringUtil;
 
 public class ExcelController extends CommonController {
@@ -32,11 +33,14 @@ public class ExcelController extends CommonController {
 	CarDAO carDAO;
 	EmployeeDAO emDAO;
 	TableSelectDAO tableSelectDAO;
+	RoleDAO roleDAO;
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
+		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		String table = ServletRequestUtils.getStringParameter(request, "table", "");
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
@@ -193,6 +197,17 @@ public class ExcelController extends CommonController {
 			String imagepath = request.getRealPath("\\chart\\");
 			String pjcodes = ServletRequestUtils.getStringParameter(request, "pjcodes", "");
 			pjcodes = StringUtil.ListToStringAdd(pjcodes.split(","), ",");
+			List listDepart = new ArrayList();
+			String departcodes = ""; 
+			if("-1".equals(seldepart)){//需要进行数据权限的过滤
+				listDepart = roleDAO.findAllUserDepart(emcode);
+				if(listDepart.size() == 0){
+					listDepart = roleDAO.findAllRoleDepart(emrole);
+				}
+				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+			}else {
+				departcodes = "'" + seldepart + "'";
+			}
 			
 			List list = new ArrayList();
 			
@@ -202,7 +217,7 @@ public class ExcelController extends CommonController {
 			if("GSTJHZ".equals(model)){//工时统计汇总
 				imagepath = imagepath + "\\gstjhz.png";
 				depart =  StringUtil.ListToStringAdd(depart.split(","), ",");
-				List listDepart = excelDAO.getDeparts(depart);
+				listDepart = excelDAO.getDeparts(depart);
 				
 				list = excelDAO.getExportData_GSTJHZ(datepick, listDepart, pjcodes);
 				path = exportExcel.exportExcel_GSTJHZ(list, excelDAO, imagepath, listDepart);
@@ -232,7 +247,7 @@ public class ExcelController extends CommonController {
 				list = excelDAO.getExportData_PLAN(f_level, f_type, datepick, f_empname);
 				path = exportExcel.exportExcel_PLAN(list, planDAO, datepick);
 			}else if("JBF".equals(model)){//加班费
-				list = excelDAO.getExportData_JBF(seldepart, datepick, emname);
+				list = excelDAO.getExportData_JBF(datepick, emname, departcodes);
 				path = exportExcel.exportExcel_JBF(list, datepick);
 			}else if("KQJL".equals(model)){//考勤记录
 				list = excelDAO.getExportData_KQJL(depart, datepick);
@@ -294,5 +309,9 @@ public class ExcelController extends CommonController {
 	
 	public void setTableSelectDAO(TableSelectDAO tableSelectDAO){
 		this.tableSelectDAO = tableSelectDAO;
+	}
+	
+	public void setRoleDAO(RoleDAO roleDAO){
+		this.roleDAO = roleDAO;
 	}
 }

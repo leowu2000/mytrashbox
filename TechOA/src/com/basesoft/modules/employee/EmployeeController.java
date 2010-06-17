@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
 import com.basesoft.modules.project.ChartUtil;
+import com.basesoft.modules.role.RoleDAO;
 import com.basesoft.util.StringUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
@@ -25,6 +26,7 @@ import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 public class EmployeeController extends CommonController {
 
 	EmployeeDAO emDAO;
+	RoleDAO roleDAO;
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
@@ -49,15 +51,29 @@ public class EmployeeController extends CommonController {
 			mv = new ModelAndView("modules/employee/list_info");
 			
 			List listChildDepart = emDAO.getChildDepart(emid);
+			List listRole = emDAO.getRoleList();
 
 			mv.addObject("listChildDepart", listChildDepart);
+			List listDepart = new ArrayList();
+			String departcodes = ""; 
+			if("-1".equals(seldepart)){//需要进行数据权限的过滤
+				listDepart = roleDAO.findAllUserDepart(emcode);
+				if(listDepart.size() == 0){
+					listDepart = roleDAO.findAllRoleDepart(emcode);
+				}
+				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+			}else {
+				departcodes = "'" + seldepart + "'";
+			}
+			
 			//获取部门下员工列表
-			PageList pageList = emDAO.findAll(seldepart, emname, sel_empcode, page);
+			PageList pageList = emDAO.findAll(seldepart, emname, sel_empcode, page, departcodes);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
 			mv.addObject("sel_empcode", sel_empcode);
+			mv.addObject("listRole", listRole);
 			mv.addObject("errorMessage", errorMessage);
 		}else if("add".equals(action)){//新用户添加操作
 			//接收页面参数
@@ -151,7 +167,18 @@ public class EmployeeController extends CommonController {
 		}else if("list_manage".equals(action)){//人事管理列表
 			mv = new ModelAndView("modules/employee/list_manage");
 			
-			PageList pageList = emDAO.findAll(seldepart, emname, sel_empcode, page);
+			List listDepart = new ArrayList();
+			String departcodes = ""; 
+			if("-1".equals(seldepart)){//需要进行数据权限的过滤
+				listDepart = roleDAO.findAllUserDepart(emcode);
+				if(listDepart.size() == 0){
+					listDepart = roleDAO.findAllRoleDepart(emcode);
+				}
+				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+			}else {
+				departcodes = "'" + seldepart + "'";
+			}
+			PageList pageList = emDAO.findAll(seldepart, emname, sel_empcode, page, departcodes);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
@@ -198,10 +225,13 @@ public class EmployeeController extends CommonController {
 			List listMajor = emDAO.getDICTByType("1");
 			List listDegree = emDAO.getDICTByType("2");
 			List listPro = emDAO.getDICTByType("3");
+			//角色列表
+			List listRole = emDAO.getRoleList();
 			//获取是否有照片
 			boolean havePhoto = emDAO.havePhoto(empcode);
 			
 			mv.addObject("listChildDepart", listChildDepart);
+			mv.addObject("listRole", listRole);
 			mv.addObject("listMajor", listMajor);
 			mv.addObject("listDegree", listDegree);
 			mv.addObject("listPro", listPro);
@@ -490,5 +520,9 @@ public class EmployeeController extends CommonController {
 	
 	public void setEmployeeDAO(EmployeeDAO emDAO){
 		this.emDAO = emDAO;
+	}
+	
+	public void setRoleDAO(RoleDAO roleDAO){
+		this.roleDAO = roleDAO;
 	}
 }

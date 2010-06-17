@@ -40,7 +40,7 @@ public class EmployeeDAO extends CommonDAO{
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String departcode, String emname, String empcode, int page){
+	public PageList findAll(String departcode, String emname, String empcode, int page, String departcodes){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
@@ -48,16 +48,6 @@ public class EmployeeDAO extends CommonDAO{
 		int end = pagesize*page;
 		
 		if("0".equals(departcode)){//全部部门
-			List listDepart = getDepartment();
-			String departs = "";
-			for(int i=0;i<listDepart.size();i++){
-				Map map = (Map)listDepart.get(i);
-				if(i==0){
-					departs = "'" + map.get("CODE").toString() + "'";
-				}else {
-					departs = departs + ",'" + map.get("CODE").toString() + "'";
-				}
-			}
 			if("".equals(emname)){//没有名字过滤
 				sql = "select * from EMPLOYEE where ROLECODE!='000'";
 			}else {
@@ -65,9 +55,9 @@ public class EmployeeDAO extends CommonDAO{
 			}
 		}else {
 			if("".equals(emname)){
-				sql = "select * from EMPLOYEE where ROLECODE!='000' and DEPARTCODE = '" + departcode + "'";
+				sql = "select * from EMPLOYEE where ROLECODE!='000' and DEPARTCODE in (" + departcodes + ")";
 			}else {
-				sql = "select * from EMPLOYEE where ROLECODE!='000' and DEPARTCODE = '" + departcode + "' and NAME like '%" + emname + "%'";
+				sql = "select * from EMPLOYEE where ROLECODE!='000' and DEPARTCODE in (" + departcodes + ") and NAME like '%" + emname + "%'";
 			}
 		}
 		
