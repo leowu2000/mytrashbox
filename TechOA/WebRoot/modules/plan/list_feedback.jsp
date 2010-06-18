@@ -147,7 +147,7 @@ for(int i=0;i<listAssess.size();i++){
 	String pjname = planDAO.findNameByCode("PROJECT", mapAssess.get("PJCODE").toString());
 %>
             <tr align="left">
-				<td>&nbsp;
+				<td>
 <%
 				if("<font color='blue'>新下发</font>".equals(status)||"<font color='green'>已反馈<br>无问题</font>".equals(status)||"<font color='red'>已反馈<br>有问题</font>".equals(status)){
 %>				
@@ -156,15 +156,15 @@ for(int i=0;i<listAssess.size();i++){
 				}
 %>				
 				</td>
-                <td>&nbsp;<%=pjname %></td>
-                <td>&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
-                <td>&nbsp;<%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
-                <td>&nbsp;<%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>
-                <td>&nbsp;<%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
-                <td>&nbsp;<%=mapAssess.get("PLANNERNAME")==null?"":mapAssess.get("PLANNERNAME") %></td>
-                <td>&nbsp;<%=mapAssess.get("LEADER_ROOM")==null?"":mapAssess.get("LEADER_ROOM") %></td>
-                <td>&nbsp;<%=mapAssess.get("REMARK")==null?"":mapAssess.get("REMARK") %></td>
-            	<td nowrap="nowrap">&nbsp;<%=status %></td>
+                <td><%=pjname %></td>
+                <td><%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
+                <td><%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
+                <td><%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>
+                <td><%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
+                <td><%=mapAssess.get("PLANNERNAME")==null?"":mapAssess.get("PLANNERNAME") %></td>
+                <td><%=mapAssess.get("LEADER_ROOM")==null?"":mapAssess.get("LEADER_ROOM") %></td>
+                <td><%=mapAssess.get("REMARK")==null?"":mapAssess.get("REMARK") %></td>
+            	<td nowrap="nowrap"><%=status %></td>
             </tr>
 <%} %>            
 </table>
