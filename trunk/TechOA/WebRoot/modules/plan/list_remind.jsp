@@ -45,19 +45,19 @@ PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 <%=pageList.getPageInfo().getHtml("plan.do?action=remind_list&f_level=" + f_level + "&f_type=" + f_type + "&datepick=" + datepick + "&empname=" + f_empname + "&sel_empcode=" + sel_empcode) %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
-            	<td>计划分类</td>
-                <td>产品令号</td>              
-                <td>计划要求</td>
-                <td>计划完成情况</td>
-                <td>考核</td>
-                <td>内因/外因</td>
-                <td>分管部门领导</td>
-                <td>责任单位</td>
-                <td>责任人</td>
-                <td>计划员</td>
-                <td>分管室领导</td>
-                <td>时间进度(%)</td>
-                <td>备注</td>
+            	<td nowrap="nowrap">计划分类</td>
+                <td nowrap="nowrap">产品令号</td>              
+                <td nowrap="nowrap">计划要求</td>
+                <td nowrap="nowrap">计划完成情况</td>
+                <td nowrap="nowrap">考核</td>
+                <td nowrap="nowrap">内因/外因</td>
+                <td nowrap="nowrap">部领导</td>
+                <td nowrap="nowrap">责任单位</td>
+                <td nowrap="nowrap">责任人</td>
+                <td nowrap="nowrap">计划员</td>
+                <td nowrap="nowrap">室领导</td>
+                <td nowrap="nowrap">时间进度(%)</td>
+                <td nowrap="nowrap">备注</td>
             </tr>
 <%
 for(int i=0;i<listAssess.size();i++){
@@ -87,19 +87,19 @@ for(int i=0;i<listAssess.size();i++){
 	String plantype2 = planDAO.findNameByCode("PLAN_TYPE", mapAssess.get("TYPE2").toString());
 %>
             <tr align="left">
-            	<td>&nbsp;<%=plantype %>--<%=plantype2 %></td>
-                <td>&nbsp;<%=pjname %></td>
-                <td>&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
-                <td nowrap="nowrap">&nbsp;<%=state %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("ASSESS")==null?"":mapAssess.get("ASSESS") %></td>
-                <td nowrap="nowrap">&nbsp;<%="" %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>
-                <td>&nbsp;<%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("PLANNERNAME")==null?"":mapAssess.get("PLANNERNAME") %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("LEADER_ROOM")==null?"":mapAssess.get("LEADER_ROOM") %></td>
-                <td nowrap="nowrap">&nbsp;<%=daypersent %></td>
-                <td>&nbsp;<%=mapAssess.get("REMARK")==null?"":mapAssess.get("REMARK") %></td>
+            	<td><%=plantype %>--<%=plantype2 %></td>
+                <td><%=pjname %></td>
+                <td><%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
+                <td><%=state %></td>
+                <td><%=mapAssess.get("ASSESS")==null?"":mapAssess.get("ASSESS") %></td>
+                <td><%="" %></td>
+                <td><%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
+                <td><%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>
+                <td><%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
+                <td><%=mapAssess.get("PLANNERNAME")==null?"":mapAssess.get("PLANNERNAME") %></td>
+                <td><%=mapAssess.get("LEADER_ROOM")==null?"":mapAssess.get("LEADER_ROOM") %></td>
+                <td><%=daypersent %></td>
+                <td><%=mapAssess.get("REMARK")==null?"":mapAssess.get("REMARK") %></td>
             </tr>
 <%} %>            
 </table>

@@ -96,18 +96,18 @@ for(int i=0;i<listAssess.size();i++){
 	String pjname = planDAO.findNameByCode("PROJECT", mapAssess.get("PJCODE").toString());
 %>
             <tr align="center">
-                <td>&nbsp;<%=pjname %></td>
-                <td>&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
-                <td>&nbsp;<%=state %></td>
-                <td>&nbsp;<%=mapAssess.get("ASSESS")==null?"":mapAssess.get("ASSESS") %></td>
-                <td>&nbsp;<%="" %></td>
-                <td>&nbsp;<%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
-                <td>&nbsp;<%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>
-                <td>&nbsp;<%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
-                <td>&nbsp;<%=mapAssess.get("PLANNERNAME")==null?"":mapAssess.get("PLANNERNAME") %></td>
-                <td>&nbsp;<%=mapAssess.get("LEADER_ROOM")==null?"":mapAssess.get("LEADER_ROOM") %></td>
-                <td>&nbsp;<%=daypersent %></td>
-                <td>&nbsp;<%=mapAssess.get("REMARK")==null?"":mapAssess.get("REMARK") %></td>
+                <td><%=pjname %></td>
+                <td><%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
+                <td><%=state %></td>
+                <td><%=mapAssess.get("ASSESS")==null?"":mapAssess.get("ASSESS") %></td>
+                <td><%="" %></td>
+                <td><%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
+                <td><%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>
+                <td><%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
+                <td><%=mapAssess.get("PLANNERNAME")==null?"":mapAssess.get("PLANNERNAME") %></td>
+                <td><%=mapAssess.get("LEADER_ROOM")==null?"":mapAssess.get("LEADER_ROOM") %></td>
+                <td><%=daypersent %></td>
+                <td><%=mapAssess.get("REMARK")==null?"":mapAssess.get("REMARK") %></td>
             </tr>
 <%} %>            
 </table>

@@ -212,8 +212,8 @@ function changeEmp1(value){
     	document.getElementById('treeForm').action = "tree.do?action=multiemp1_init&id=" + value;
     	document.getElementById('treeForm').submit();
     
-    	document.getElementById("empsel").style.top=(event.clientY-200)+"px";
-    	document.getElementById("empsel").style.left=(event.clientX+50)+"px";
+    	document.getElementById("empsel").style.top="100px";
+    	document.getElementById("empsel").style.left="200px";
     	document.getElementById("empsel").style.display="";
 }
 
@@ -269,7 +269,7 @@ for(int i=0;i<listPlan.size();i++){
 		status = "新下发";
 		color = "green";
 	}else if("2".equals(status)){
-		status = "已反馈无问题";
+		status = "已反馈<br>无问题";
 		color = "orange";
 	}else if("3".equals(status)){
 		status = "已确认";
@@ -281,7 +281,7 @@ for(int i=0;i<listPlan.size();i++){
 		status = "已退回";
 		color = "red";
 	}else if("6".equals(status)){
-		status = "已反馈有问题";
+		status = "已反馈<br>有问题";
 		color = "red";
 	}
 	
@@ -299,28 +299,28 @@ for(int i=0;i<listPlan.size();i++){
 				}
 %>                	                
                 </td>
-                <td>&nbsp;<%=plantype %>--<%=plantype2 %></td>
-                <td>&nbsp;<%=pjname %></td>
-                <td>&nbsp;<%=mapPlan.get("ORDERCODE")==null?"":mapPlan.get("ORDERCODE") %></td>
-                <td>&nbsp;<%=mapPlan.get("NOTE")==null?"":mapPlan.get("NOTE") %></td>
-                <td>&nbsp;<%=mapPlan.get("SYMBOL")==null?"":mapPlan.get("SYMBOL") %></td>
-                <td>&nbsp;<%=mapPlan.get("ENDDATE")==null?"":mapPlan.get("ENDDATE") %></td>
-                <td>&nbsp;<%=mapPlan.get("DEPARTNAME")==null?"":mapPlan.get("DEPARTNAME") %></td>
+                <td><%=plantype %>--<%=plantype2 %></td>
+                <td><%=pjname %></td>
+                <td><%=mapPlan.get("ORDERCODE")==null?"":mapPlan.get("ORDERCODE") %></td>
+                <td><%=mapPlan.get("NOTE")==null?"":mapPlan.get("NOTE") %></td>
+                <td><%=mapPlan.get("SYMBOL")==null?"":mapPlan.get("SYMBOL") %></td>
+                <td><%=mapPlan.get("ENDDATE")==null?"":mapPlan.get("ENDDATE") %></td>
+                <td><%=mapPlan.get("DEPARTNAME")==null?"":mapPlan.get("DEPARTNAME") %></td>
 <%
 			String empcode = mapPlan.get("EMPCODE")==null?"":mapPlan.get("EMPCODE").toString();
 			if("".equals(empcode)){
 				String empname = mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME").toString();
 %>
-            	<td bgcolor="#FF0088" title="系统中此员工有重名！" onclick="changeEmp1('<%=mapPlan.get("ID") %>');">&nbsp;<%=empname %></td>
+            	<td bgcolor="#FF0088" title="系统中此员工有重名！" onclick="changeEmp1('<%=mapPlan.get("ID") %>');"><%=empname %></td>
 <%
 			}else {
 %>                
-				<td>&nbsp;<%=mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME") %></td>
+				<td><%=mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME") %></td>
 <%
 			}
 %>
-                <td>&nbsp;<%=mapPlan.get("ASSESS")==null?"":mapPlan.get("ASSESS") %></td>
-                <td>&nbsp;
+                <td><%=mapPlan.get("ASSESS")==null?"":mapPlan.get("ASSESS") %></td>
+                <td>
 <%
 				if("已反馈".equals(status)){
 %>                
@@ -333,11 +333,11 @@ for(int i=0;i<listPlan.size();i++){
 				}
 %>                	
                 </td>
-                <td>&nbsp;<%=mapPlan.get("LEADER_STATION")==null?"":mapPlan.get("LEADER_STATION") %></td>
-                <td>&nbsp;<%=mapPlan.get("PLANNERNAME")==null?"":mapPlan.get("PLANNERNAME") %></td>
-                <td>&nbsp;<%=mapPlan.get("LEADER_ROOM")==null?"":mapPlan.get("LEADER_ROOM") %></td>
-                <td>&nbsp;<%=mapPlan.get("LEADER_SECTION")==null?"":mapPlan.get("LEADER_SECTION") %></td>
-                <td>&nbsp;<font color="<%=color %>"><%=status %></td>
+                <td><%=mapPlan.get("LEADER_STATION")==null?"":mapPlan.get("LEADER_STATION") %></td>
+                <td><%=mapPlan.get("PLANNERNAME")==null?"":mapPlan.get("PLANNERNAME") %></td>
+                <td><%=mapPlan.get("LEADER_ROOM")==null?"":mapPlan.get("LEADER_ROOM") %></td>
+                <td><%=mapPlan.get("LEADER_SECTION")==null?"":mapPlan.get("LEADER_SECTION") %></td>
+                <td nowrap="nowrap"><font color="<%=color %>"><%=status %></td>
             </tr>
 <%} %>            
 </table>
