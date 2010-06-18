@@ -30,6 +30,7 @@ public class FinanceController extends CommonController {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
+		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
@@ -58,7 +59,7 @@ public class FinanceController extends CommonController {
 			if("-1".equals(seldepart)){//需要进行数据权限的过滤
 				listDepart = roleDAO.findAllUserDepart(emcode);
 				if(listDepart.size() == 0){
-					listDepart = roleDAO.findAllRoleDepart(emcode);
+					listDepart = roleDAO.findAllRoleDepart(emrole);
 				}
 				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 			}else {

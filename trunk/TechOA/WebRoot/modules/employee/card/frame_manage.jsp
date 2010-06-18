@@ -21,9 +21,9 @@
 			tree : {
 				id:'tree1',
 				xtype:'treepanel',
-				rootVisible:false,
+				rootVisible:true,
 				loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departTree'}),
-		   	 	root : new Ext.tree.AsyncTreeNode({})
+		   	 	root : new Ext.tree.AsyncTreeNode({id:'-1',text:'全部'})
 			},
 			    	
 			//all:所有结点都可选中
@@ -63,7 +63,7 @@
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
   		
-  		comboBoxTree.setValue({id:'0',text:'请选择...'});
+  		comboBoxTree.setValue({id:'-1',text:'全部'});
   		
   		var emname = document.getElementById('emname').value;
   		var sel_empcode = document.getElementById('sel_empcode').value;

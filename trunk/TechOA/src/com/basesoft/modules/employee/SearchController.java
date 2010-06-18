@@ -43,7 +43,7 @@ public class SearchController extends CommonController {
 			if("-1".equals(seldepart)){//需要进行数据权限的过滤
 				listDepart = roleDAO.findAllUserDepart(emcode);
 				if(listDepart.size() == 0){
-					listDepart = roleDAO.findAllRoleDepart(emcode);
+					listDepart = roleDAO.findAllRoleDepart(emrole);
 				}
 				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 			}else {
