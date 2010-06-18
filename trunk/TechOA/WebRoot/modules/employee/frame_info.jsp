@@ -22,7 +22,7 @@
 			tree : {
 				id:'tree1',
 				xtype:'treepanel',
-				rootVisible:false,
+				rootVisible:true,
 				loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departTree'}),
 		   	 	root : new Ext.tree.AsyncTreeNode({id:'0',text:'全部'})
 			},

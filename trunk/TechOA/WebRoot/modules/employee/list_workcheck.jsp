@@ -9,6 +9,7 @@
 	String departname = request.getAttribute("departname").toString();
 	String datepick = request.getAttribute("datepick").toString();
 	String depart = request.getAttribute("depart").toString();
+	String departcodes = request.getAttribute("departcodes").toString();
 	
 	String minDate = StringUtil.DateToString((Date)listDate.get(0),"yyyy-MM-dd");
 	String maxDate = StringUtil.DateToString((Date)listDate.get(listDate.size()-1),"yyyy-MM-dd");
@@ -57,9 +58,13 @@ Ext.onReady(function(){
 	}else {
 %>
 	tb.add({text: '填写考勤记录',cls: 'x-btn-text-icon add',handler: onAddClick});
+<%
+		if(!"".equals(departcodes)){
+%>
 	tb.add({text: '节假日管理',cls: 'x-btn-text-icon xiugai',handler: onHolidayClick});
 	tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
 <%
+		}
 	}
 %>
 	
@@ -169,7 +174,7 @@ function checkAll(){
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center"  bgcolor="#E0F1F8" class="b_tr">
 <%  
-	if(!"003".equals(emprole)&&!"search".equals(method)){	
+	if(!"search".equals(method)){	
 %>
     		<td rowspan="2"><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
 <%

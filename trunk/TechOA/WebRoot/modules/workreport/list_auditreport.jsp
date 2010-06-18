@@ -43,6 +43,7 @@ Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	tb.add({text: '通  过',cls: 'x-btn-text-icon guihuan',handler: onPassClick});
 	tb.add({text: '退  回',cls: 'x-btn-text-icon delete1',handler: onDenyClick});
+	tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
 
     function onPassClick(btn){
     	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
@@ -75,6 +76,10 @@ Ext.onReady(function(){
     		}
     	});
     }
+    
+    function onExportClick(){
+    	window.location.href = "/excel.do?action=export&model=WORKREPORT";
+  	}
 });
 
 //-->
@@ -106,14 +111,10 @@ List list = listReport.getList();
 for(int i=0;i<list.size();i++){
 	Map map = (Map)list.get(i);
 	String flag = map.get("FLAG").toString();
-	if("0".equals(flag)){
-		flag = "未上报";
-	}else if("1".equals(flag)){
-		flag = "待审批";
+	if("1".equals(flag)){
+		flag = "<font color='red'>待审批</font>";
 	}else if("2".equals(flag)){
-		flag = "已通过";
-	}else {
-		flag = "已退回";
+		flag = "<font color='green'>已通过</font>";
 	}
 	
 	String empname = wrDAO.findNameByCode("EMPLOYEE", map.get("EMPCODE").toString());

@@ -43,10 +43,8 @@ public class WorkReportDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllAudit(String emid, int page){
-		Map mapEm = findByEmId(emid);
-		
-		String sql = "select * from WORKREPORT where EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE ='" + mapEm.get("DEPARTCODE") + "') and (flag=1 or flag=2) order by FLAG, STARTDATE desc";
+	public PageList findAllAudit(int page, String departcodes, String emcode){
+		String sql = "select * from WORKREPORT where DEPARTCODE in (" + departcodes + ") and EMPCODE!='" + emcode + "' and (flag=1 or flag=2) order by FLAG, STARTDATE desc";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
@@ -64,6 +62,20 @@ public class WorkReportDAO extends CommonDAO {
 		pageList.setPageInfo(pageInfo);
 			
 		return pageList;
+	}
+	
+	/**
+	 * 获取员工的工作报告列表
+	 * @param departcodes 
+	 * @param emcode 
+	 * @return
+	 */
+	public List findAllAudit(String departcodes, String emcode){
+		String sql = "select * from WORKREPORT where DEPARTCODE in (" + departcodes + ") and EMPCODE!='" + emcode + "' and (flag=1 or flag=2) order by FLAG, STARTDATE desc";
+		
+		List list = jdbcTemplate.queryForList(sql);
+			
+		return list;
 	}
 	
 	/**

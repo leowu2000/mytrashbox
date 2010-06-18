@@ -309,7 +309,7 @@ function checkAll(){
 				  </tr>	
 				  <tr>
 				    <td>姓名</td>
-				    <td><input type="text" name="emname" style="width:200"></td>
+				    <td><input type="text" name="empname" style="width:200"></td>
 				  </tr>	
 				  <tr id="departtr" name="departtr">
 				    <td>部门</td>

@@ -23,6 +23,7 @@ import jxl.write.WriteException;
 import com.basesoft.modules.employee.Car;
 import com.basesoft.modules.employee.CarDAO;
 import com.basesoft.modules.plan.PlanDAO;
+import com.basesoft.modules.workreport.WorkReportDAO;
 import com.basesoft.util.StringUtil;
 
 public class ExportExcel {
@@ -365,6 +366,91 @@ public class ExportExcel {
 	}
 	
 	/**
+	 * 计划考核统计表写成一个excel文件，返回这个文件的路径
+	 * @param list 数据列表
+	 * @param planDAO
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_PLAN1(List<Map<String, String>> list, PlanDAO planDAO, String datepick) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		String[] str = new String[1];
+		str[0] = datepick + "绩效考核项目计划";
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, 12, 0);
+		
+		//插入表头
+		String str1[] = new String[13];
+		str1[0] = "产品令号";
+		str1[1] = "序号";
+		str1[2] = "计划内容";
+		str1[3] = "标志";
+		str1[4] = "完成日期";
+		str1[5] = "责任单位";
+		str1[6] = "责任人";
+		str1[7] = "考核";
+		str1[8] = "备注";
+		str1[9] = "所领导";
+		str1[10] = "计划员";
+		str1[11] = "室领导";
+		str1[12] = "部领导";
+		
+		insertRowData(sheet, 1, str1);
+		String type = "";
+		String type2 = "";
+		int count = 0;
+		for (int i = 0; i < list.size(); i++) {
+			String[] str2 = new String[13];
+			Map<String, String> map = (Map<String, String>) list.get(i);
+			String plantype = planDAO.findNameByCode("PLAN_TYPE", map.get("TYPE").toString());
+			String plantype2 = planDAO.findNameByCode("PLAN_TYPE", map.get("TYPE2").toString());
+			if(!plantype.equals(type)){//跟上面的计划分类不同，则加上一条作为分类信息
+				String[] str3 = new String[13];
+				str3[2] = plantype;
+				insertRowData(sheet, i + 2 + count, str3);
+				count = count + 1;
+				if(!plantype2.equals(type2)){//跟上面的计划分类不同，则加上一条作为二级分类信息
+					String[] str4 = new String[13];
+					str4[2] = plantype2;
+					insertRowData(sheet, i + 2 + count, str4);
+					count = count + 1;
+				}
+			}
+			
+			str2[0] = map.get("PJCODE")==null?"":planDAO.findNameByCode("PROJECT", map.get("PJCODE"));
+            str2[1] = map.get("ORDERCODE")==null?"":map.get("ORDERCODE");
+            str2[2] = map.get("NOTE")==null?"":map.get("NOTE");
+            str2[3] = map.get("SYMBOL")==null?"":map.get("SYMBOL");
+            str2[4] = map.get("ENDDATE")==null?"":String.valueOf(map.get("ENDDATE"));
+            str2[5] = map.get("DEPARTNAME")==null?"":map.get("DEPARTNAME");
+            str2[6] = map.get("EMPNAME")==null?"":map.get("EMPNAME");
+            str2[7] = map.get("ASSESS")==null?"":map.get("ASSESS");
+            str2[8] = map.get("REMARK")==null?"":map.get("REMARK");
+            str2[9] = map.get("LEADER_STATION")==null?"":map.get("LEADER_STATION");
+            str2[10] = map.get("PLANNERNAME")==null?"":map.get("PLANNERNAME");
+            str2[11] = map.get("LEADER_ROOM")==null?"":map.get("LEADER_ROOM");
+            str2[12] = map.get("LEADER_SECTION")==null?"":map.get("LEADER_SECTION");
+            
+            type = plantype;
+			type2 = plantype2;
+            
+            insertRowData(sheet, i + 2 + count, str2);
+		}
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
 	 * 员工加班费表写成一个excel文件，返回这个文件的路径
 	 * @param list 数据列表
 	 * @param planDAO
@@ -581,6 +667,68 @@ public class ExportExcel {
 			str2[3] = orderCar.getCarcode();
 			str2[4] = orderCar.getCarno();
 			str2[5] = status;
+            
+            insertRowData(sheet, i + 2, str2);
+		}
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
+	 * 班车预约信息写成一个excel文件，返回这个文件的路径
+	 * @param list 数据列表
+	 * @param car 班车
+	 * @param datepick 日期
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_WORKREPORT(List<Map<String, String>> list, WorkReportDAO wrDAO) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		String[] str = new String[1];
+		str[0] = "工作日志";
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, 7, 0);
+		
+		//插入表头
+		String str1[] = new String[8];
+		str1[0] = "上报人";
+		str1[1] = "日期";
+		str1[2] = "名称";
+		str1[3] = "工作令号";
+		str1[4] = "分系统";
+		str1[5] = "投入阶段";
+		str1[6] = "投入工时";
+		str1[7] = "备注";
+		
+		insertRowData(sheet, 1, str1);
+		
+		for (int i = 0; i < list.size(); i++) {
+			String[] str2 = new String[8];
+			Map<String, String> map = (Map<String, String>) list.get(i);
+		
+			String empname = wrDAO.findNameByCode("EMPLOYEE", map.get("EMPCODE").toString());
+			String pjname = wrDAO.findNameByCode("PROJECT", map.get("PJCODE").toString());
+			String pjname_d = wrDAO.findNameByCode("PROJECT_D", map.get("PJCODE_D").toString());
+			String stagename = wrDAO.findNameByCode("DICT", map.get("STAGECODE").toString());
+			
+			str2[0] = empname;
+			str2[1] = map.get("STARTDATE")==null?"":String.valueOf(map.get("STARTDATE"));
+			str2[2] = map.get("NAME")==null?"":String.valueOf(map.get("NAME"));
+			str2[3] = pjname;
+			str2[4] = pjname_d;
+			str2[5] = stagename;
+			str2[6] = map.get("AMOUNT")==null?"0":String.valueOf(map.get("AMOUNT"));
+			str2[7] = map.get("BZ")==null?"":map.get("BZ");
             
             insertRowData(sheet, i + 2, str2);
 		}

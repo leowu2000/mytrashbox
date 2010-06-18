@@ -24,10 +24,12 @@
 	        animate:true,
 	        enableDD:false,
 	        containerScroll: true,
-	        rootVisible: false,
+	        rootVisible: true,
 	        frame: false,
 	        root: {
-	            nodeType: 'async'
+	            nodeType: 'async',
+	            text:'全选',
+	            checked:false
 	        },
 	        
 	        loader: new Ext.tree.TreeLoader({

@@ -112,7 +112,7 @@ public class EmployeeDAO extends CommonDAO{
 	 * @param empcode 员工code
 	 * @return
 	 */
-	public List<?> findWorkCheck(String start, String end, String depart, String method, String empcode){
+	public List<?> findWorkCheck(String start, String end, String depart, String method, String empcode, String departcodes){
 		List<Date> listDate = StringUtil.getDateList(start, end);
 		List returnList = new ArrayList();
 
@@ -143,7 +143,12 @@ public class EmployeeDAO extends CommonDAO{
 			
 			returnList.add(returnMap);
 		}else {//领导和管理员看整个部门的
-			List listEmployee = findEmployeeByDepart(depart);
+			List listEmployee = new ArrayList();
+			if(!"".equals(departcodes)){
+				listEmployee = jdbcTemplate.queryForList("select * from EMPLOYEE where DEPARTCODE in (" + departcodes + ")");
+			}else {
+				listEmployee = jdbcTemplate.queryForList("select * from EMPLOYEE where CODE='" + empcode + "'");
+			}
 			for(int i=0;i<listEmployee.size();i++){//循环部门中的雇员
 				Map returnMap = new HashMap();
 				Map mapEmployee = (Map)listEmployee.get(i);
@@ -351,7 +356,7 @@ public class EmployeeDAO extends CommonDAO{
 			String majorname = findNameByCode("DICT", mapYgtrfx.get("MAJORCODE")==null?"":mapYgtrfx.get("MAJORCODE").toString());
 			String departname = findNameByCode("DEPARTMENT", mapYgtrfx.get("DEPARTCODE")==null?"":mapYgtrfx.get("DEPARTCODE").toString());
 			
-			sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where EMPCODE='" + empcode[i] + "'";
+			sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where EMPCODE='" + empcode[i] + "' and FLAG=2";
 			if(!"0".equals(selproject)){
 				sql = sql + " and PJCODE='" + selproject + "'";
 			}

@@ -57,9 +57,17 @@ var url='/plan.do';
 var vali = "";
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
+	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
+	tb.add({text: '修  改',cls: 'x-btn-text-icon xiugai',handler: onUpdateClick});
 	tb.add({text: '标志确认',cls: 'x-btn-text-icon update',handler: onConfirmClick});
 	tb.add({text: '退回反馈',cls: 'x-btn-text-icon update',handler: onSendbackClick});
+	tb.add({text: '标志完成',cls: 'x-btn-text-icon save',handler: onCompleteClick});
+	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: '删除全部',cls: 'x-btn-text-icon delete',handler: onDeleteAllClick});
 	tb.add({text: '任务分解',cls: 'x-btn-text-icon add',handler: onApartClick});
+	tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
+	tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
+	tb.add({text: '设置完成情况百分比',cls: 'x-btn-text-icon xiugai',handler: onSetClick});
 
     if(!win){
         win = new Ext.Window({
@@ -67,6 +75,36 @@ Ext.onReady(function(){
 	        buttons: [
 	        {text:'提交',handler: function(){if(validate()){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}}},
 	        {text:'关闭',handler: function(){win.hide();document.getElementById("empsel").style.display="none";}}
+	        ]
+        });
+    }
+    
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'预览',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win3){
+        win3 = new Ext.Window({
+        	el:'dlg3',width:450,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm3').action=action; Ext.getDom('dataForm3').submit();}},
+	        {text:'关闭',handler: function(){win3.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win4){
+        win4 = new Ext.Window({
+        	el:'dlg4',width:450,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm4').action=action; Ext.getDom('dataForm4').submit();}},
+	        {text:'关闭',handler: function(){win4.hide();}}
 	        ]
         });
     }
@@ -82,6 +120,87 @@ Ext.onReady(function(){
     	}
     }
     
+    function onAddClick(btn){
+    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>';
+    	win.setTitle('增加');
+       	Ext.getDom('dataForm').reset();
+       	Ext.get('pjcode').set({'disabled':''});
+       	AJAX_PJ(document.getElementById('pjcode').value);
+       	Ext.get('stagecode').set({'disabled':''});
+       	Ext.get('typecode').set({'disabled':''});
+       	changeType();
+		Ext.get('typecode2').set({'disabled':''});
+       	//comboBoxTree.setValue({id:'0',text:'请选择...'});
+        win.show(btn.dom);
+    }
+    
+    function onUpdateClick(btn){
+		var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+		Ext.Ajax.request({
+			url: url+'?action=query&planid='+selValue,
+			method: 'GET',
+			success: function(transport) {
+			    var data = eval('('+transport.responseText+')');
+			    Ext.get('id').set({'value':data.item.id});
+			    Ext.get('pjcode').set({'value':data.item.pjcode});
+			    Ext.get('pjcode').set({'disabled':'disabled'});
+			    AJAX_PJ(document.getElementById('pjcode').value);
+				Ext.get('pjcode_d').set({'value':data.item.pjcode__d});
+				Ext.get('stagecode').set({'value':data.item.stagecode});
+				Ext.get('ordercode').set({'value':data.item.ordercode});
+				Ext.get('note').set({'value':data.item.note});
+				Ext.get('symbol').set({'value':data.item.symbol});
+				Ext.get('enddate').set({'value':data.item.enddate});
+				//comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
+				Ext.get('empnames').set({'value':data.item.empname});
+				Ext.get('empcodes').set({'value':data.item.empcode});
+				Ext.get('assess').set({'value':data.item.assess});
+				Ext.get('remark').set({'value':data.item.remark});
+				Ext.get('typecode').set({'value':data.item.type});
+				Ext.get('typecode').set({'disabled':'disabled'});
+				changeType();
+				Ext.get('typecode2').set({'value':data.item.type2});
+				Ext.get('typecode2').set({'disabled':'disabled'});
+				Ext.get('leader_station').set({'value':data.item.leader__station});
+				Ext.get('leader_section').set({'value':data.item.leader__section});
+				Ext.get('leader_room').set({'value':data.item.leader__room});
+				Ext.get('pjcode_d').set({'disabled':'disabled'});
+				
+		    	action = url+'?action=update&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>';
+	    		win.setTitle('修改');
+		        win.show(btn.dom);
+		  	}
+		});
+    }   
+    
+    function onDeleteClick(btn){
+		var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+		
+		Ext.Msg.confirm('确认','确定删除?',function(btn){
+    		if(btn=='yes'){
+      			Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>';       
+      			Ext.getDom('listForm').submit();
+       		}
+    	});
+    }
+    
+    function onDeleteAllClick(btn){
+		Ext.Msg.confirm('确认','确定删除以往所有的计划信息?',function(btn){
+    		if(btn=='yes'){
+      			Ext.getDom('listForm').action=url+'?action=deleteall&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>';       
+      			Ext.getDom('listForm').submit();
+       		}
+    	});
+    }
+    
     function onConfirmClick(btn){
     	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
 		if(selValue==undefined) {
@@ -91,7 +210,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','注意，标记确认后不可进行反馈',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=confirm&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&isplanner=false&sel_status=<%=sel_status %>';       
+      			Ext.getDom('listForm').action=url+'?action=confirm&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -106,10 +225,38 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确实要退回给责任人继续反馈？',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=sendback&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&isplanner=false&sel_status=<%=sel_status %>';       
+      			Ext.getDom('listForm').action=url+'?action=sendback&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
+    }
+    
+    function onCompleteClick(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+		
+		Ext.Msg.confirm('确认','注意，标记完成后不可进行修改',function(btn){
+    		if(btn=='yes'){
+      			Ext.getDom('listForm').action=url+'?action=complete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>';       
+      			Ext.getDom('listForm').submit();
+       		}
+    	});
+    }
+    
+	function onImportClick(btn){
+		action = 'excel.do?action=preview&table=PLAN&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>';
+    	win2.setTitle('导入excel');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
+    }
+    
+    function onSetClick(btn){
+		action = url + '?action=setpersent&f_level=<%=level %>&f_type=<%=type %>&page=<%=pagenum %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>';
+    	win3.setTitle('设置完成情况百分比');
+        win3.show(btn.dom);
     }
     
     function onApartClick(btn){
@@ -153,6 +300,52 @@ Ext.onReady(function(){
 		});
     }
     
+    var colorMenu1 = new Ext.menu.ColorMenu({
+    	selectHandler:function(value){
+    		Ext.get('color1').set({'value':'#'+value.value});
+    	}
+    });   
+	Ext.get('color1').on("click",function(e){   
+    	e.stopEvent();   
+    	colorMenu1.showAt(e.getXY());   
+	}); 
+	var colorMenu2 = new Ext.menu.ColorMenu({
+    	selectHandler:function(value){
+    		Ext.get('color2').set({'value':'#'+value.value});
+    	}
+    });   
+	Ext.get('color2').on("click",function(e){   
+    	e.stopEvent();   
+    	colorMenu2.showAt(e.getXY());   
+	}); 
+	var colorMenu3 = new Ext.menu.ColorMenu({
+    	selectHandler:function(value){
+    		Ext.get('color3').set({'value':'#'+value.value});
+    	}
+    });   
+	Ext.get('color3').on("click",function(e){   
+    	e.stopEvent();   
+    	colorMenu3.showAt(e.getXY());   
+	}); 
+	var colorMenu4 = new Ext.menu.ColorMenu({
+    	selectHandler:function(value){
+    		Ext.get('color4').set({'value':'#'+value.value});
+    	}
+    });   
+	Ext.get('color4').on("click",function(e){   
+    	e.stopEvent();   
+    	colorMenu4.showAt(e.getXY());   
+	});  
+	
+	function onExportClick(){
+		var level = '<%=level %>';
+		var type = '<%=type %>';
+		var f_empname = '<%=f_empname %>';
+		var sel_empcode = '<%=sel_empcode %>';
+		var datepick = '<%=datepick %>';
+		var sel_status = '<%=sel_status %>';
+    	window.location.href = "/excel.do?action=export&model=PLAN1&level=" + level + "&type=" + type + "&f_empname=" + f_empname + "&sel_empcode=" + sel_empcode + "&datepick=" + datepick + "&sel_status=" + sel_status;
+  	}
 });
 
 function AJAX_PJ(pjcode){
@@ -461,6 +654,51 @@ for(int i=0;i<listPlan.size();i++){
     </div>
 </div>
 
+<div id="dlg2" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
+	        	<input type="hidden" name="page" value="<%=pagenum %>">
+                <table>
+				  <tr>
+				    <td>选择文件</td>
+				    <td><input type="file" name="file" style="width:200"></td>
+				  </tr>	
+				</table>
+			</form>
+	</div>
+</div>  
+
+<div id="dlg3" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm3" name="dataForm3" action="" method="post">
+	        	<input type="hidden" name="page" value="<%=pagenum %>">
+                <table>
+<%
+	for(int i=1;i<listPersent.size()+1;i++){
+		Map mapPersent = (Map)listPersent.get(i-1);
+		String name = "name" + i;
+		String startname = "startpersent" + i;
+		String endname = "endpersent" + i;
+		String colorname = "color" + i;
+%>
+				  <tr>
+				    <td><input type="text" name="<%=name %>" style="width:70" value="<%=mapPersent.get("NAME") %>"></td>
+				    <td>起始完成率</td>
+				    <td><input type="text" name="<%=startname %>" style="width:45" value="<%=mapPersent.get("STARTPERSENT") %>"></td>
+				    <td>截止完成率</td>
+				    <td><input type="text" name="<%=endname %>" style="width:45" value="<%=mapPersent.get("ENDPERSENT") %>"></td>
+				    <td>颜色</td>
+				    <td><input type="text" name="<%=colorname %>" style="width:55" value="<%=mapPersent.get("COLOR") %>"></td>
+				  </tr>	
+<%
+	}
+%>				  
+				</table>
+			</form>
+	</div>
+</div> 
 <form id="treeForm" name="treeForm" method="POST" target="checkedtree">
 		<input type="hidden" id="checkedEmp" name="checkedEmp">
 	</form>

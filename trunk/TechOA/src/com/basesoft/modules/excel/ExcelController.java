@@ -24,6 +24,7 @@ import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.excel.config.Config;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.role.RoleDAO;
+import com.basesoft.modules.workreport.WorkReportDAO;
 import com.basesoft.util.StringUtil;
 
 public class ExcelController extends CommonController {
@@ -34,6 +35,8 @@ public class ExcelController extends CommonController {
 	EmployeeDAO emDAO;
 	TableSelectDAO tableSelectDAO;
 	RoleDAO roleDAO;
+	WorkReportDAO wrDAO;
+	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
@@ -52,15 +55,18 @@ public class ExcelController extends CommonController {
 		String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
 		String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
+		f_empname = new String(f_empname.getBytes("ISO8859-1"),"UTF-8");
 		String f_level = ServletRequestUtils.getStringParameter(request, "f_level", "");
 		String f_type = ServletRequestUtils.getStringParameter(request, "f_type", "");
-		f_empname = new String(f_empname.getBytes("ISO8859-1"),"UTF-8");
+		String level = ServletRequestUtils.getStringParameter(request, "level", "");
+		String type = ServletRequestUtils.getStringParameter(request, "type", "");
 		String status = ServletRequestUtils.getStringParameter(request, "status", "");
 		String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 		String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
 		String errorMessage = "";
 		String carid = ServletRequestUtils.getStringParameter(request, "carid", "");
 		String sel_carcode = ServletRequestUtils.getStringParameter(request, "sel_carcode", "");
+		String sel_status = ServletRequestUtils.getStringParameter(request, "sel_status", "");
 		
 		if("preview".equals(action)){//导入预览
 			if("DEPARTMENT".equals(table)){//导入部门
@@ -250,11 +256,31 @@ public class ExcelController extends CommonController {
 				list = excelDAO.getExportData_JBF(datepick, emname, departcodes);
 				path = exportExcel.exportExcel_JBF(list, datepick);
 			}else if("KQJL".equals(model)){//考勤记录
-				list = excelDAO.getExportData_KQJL(depart, datepick);
+				listDepart = roleDAO.findAllUserDepart(emcode);
+				if(listDepart.size() == 0){
+					listDepart = roleDAO.findAllRoleDepart(emrole);
+				}
+				if(listDepart.size()>0){
+					departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+				}else {
+					departcodes = "";
+				}
+				list = excelDAO.getExportData_KQJL(depart, datepick, departcodes, emcode);
 				path = exportExcel.exportExcel_KQJL(list, datepick);
 			}else if("BCYY".equals(model)){//班车预约统计
 				list = excelDAO.getExportData_BCYY(carid, datepick);
 				path = exportExcel.exportExcel_BCYY(list, carid, datepick, carDAO);
+			}else if("WORKREPORT".equals(model)){//工作报告
+				listDepart = roleDAO.findAllUserDepart(emcode);
+				if(listDepart.size() == 0){
+					listDepart = roleDAO.findAllRoleDepart(emrole);
+				}
+				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+				list = excelDAO.getExportData_WORKREPORT(emcode, departcodes, wrDAO);
+				path = exportExcel.exportExcel_WORKREPORT(list, wrDAO);
+			}else if("PLAN1".equals(model)){//计划
+				list = excelDAO.getExportData_PLAN1(level, type, f_empname, datepick, emcode, sel_empcode, sel_status);
+				path = exportExcel.exportExcel_PLAN1(list, planDAO, datepick);
 			}
 			
 			
@@ -313,5 +339,9 @@ public class ExcelController extends CommonController {
 	
 	public void setRoleDAO(RoleDAO roleDAO){
 		this.roleDAO = roleDAO;
+	}
+	
+	public void setWorkReportDAO(WorkReportDAO wrDAO){
+		this.wrDAO = wrDAO;
 	}
 }

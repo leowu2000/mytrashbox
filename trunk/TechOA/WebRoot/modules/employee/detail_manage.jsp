@@ -11,7 +11,7 @@ List listDegree = (List)request.getAttribute("listDegree");
 List listPro = (List)request.getAttribute("listPro");
 String havePhoto = request.getAttribute("havePhoto").toString();
 String method = request.getAttribute("method").toString();
-String rolecode = session.getAttribute("rolecode")==null?"":session.getAttribute("rolecode").toString();
+String rolecode = session.getAttribute("EMROLE")==null?"":session.getAttribute("EMROLE").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

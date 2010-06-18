@@ -111,7 +111,9 @@ INSERT INTO MENU VALUES('071','员工考勤记录','1','em.do?action=frame_workc
 INSERT INTO MENU VALUES('008','计划管理','2','',35,'1','0','8.png');
 INSERT INTO MENU VALUES('084','计划分类管理','1','plantype.do?action=list',36,'1','008','8.png');
 INSERT INTO MENU VALUES('081','计划管理','1','plan.do?action=list_frame',37,'1','008','8.png');
+INSERT INTO MENU VALUES('085','计划管理(计划员专用)','1','plan.do?action=list_frame_planner',37,'1','008','8.png');
 INSERT INTO MENU VALUES('082','考核统计','1','plan.do?action=remind_frame',38,'1','008','8.png');
+INSERT INTO MENU VALUES('086','考核统计(计划员专用)','1','plan.do?action=remind_frame_planner',38,'1','008','8.png');
 INSERT INTO MENU VALUES('083','计划反馈','1','plan.do?action=feedback',39,'1','008','8.png');
 INSERT INTO MENU VALUES('110','合同管理','2','',40,'1','0','11.png');
 INSERT INTO MENU VALUES('111','合同管理','1','customequip.do?action=list',41,'1','110','11.png');

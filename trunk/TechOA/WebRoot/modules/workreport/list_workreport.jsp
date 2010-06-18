@@ -1,6 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.util.*" %>
 <%@ page import="com.basesoft.modules.workreport.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
@@ -213,13 +214,13 @@ for(int i=0;i<list.size();i++){
 	Map map = (Map)list.get(i);
 	String flag = map.get("FLAG").toString();
 	if("0".equals(flag)){
-		flag = "未上报";
+		flag = "<font color='red'>未上报</font>";
 	}else if("1".equals(flag)){
-		flag = "审批中";
+		flag = "<font color='green'>审批中</font>";
 	}else if("2".equals(flag)){
-		flag = "已通过";
+		flag = "<font color='blue'>已通过</font>";
 	}else {
-		flag = "已退回";
+		flag = "<font color='red'>已退回</font>";
 	}
 	String pjname = wrDAO.findNameByCode("PROJECT", map.get("PJCODE").toString());
 	String pjname_d = wrDAO.findNameByCode("PROJECT_D", map.get("PJCODE_D").toString());
@@ -260,11 +261,11 @@ for(int i=0;i<list.size();i++){
                 <table>
 				  <tr>
 				    <td>日期</td>
-				    <td><input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="datepick" style="width:200"></td>
+				    <td><input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd") %>" name="datepick" style="width:200"></td>
 				  </tr>				  
 				  <tr>
 				    <td>名称</td>
-				    <td><input type="text" name="reportname" style="width:200"></td>
+				    <td><input type="text" name="reportname" value="<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd") + "工作日志" %>" style="width:200"></td>
 				  </tr>	
 				  <tr>
 				    <td>计划内/外</td>

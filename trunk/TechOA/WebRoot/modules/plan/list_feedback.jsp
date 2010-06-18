@@ -56,18 +56,54 @@ Ext.onReady(function(){
 			return false;
 		}
 		
+		var checks = document.getElementsByName('check');
+		var checkedids = '';
+		for(var i=0;i<checks.length;i++){
+			if(checks[i].checked){
+				if(checkedids == ''){
+					checkedids = checks[i].value;
+				}else {
+					checkedids = checkedids + ',' + checks[i].value;
+				}
+			}
+		}
+		
 		Ext.Ajax.request({
 			url: url+'?action=feedbackquery&planid='+selValue,
 			method: 'GET',
 			success: function(transport) {
 			    Ext.get('remark').set({'value':transport.responseText});
-			    action = url+'?action=feedbackupdate&page=<%=pagenum %>&planid=' + selValue;
+			    action = url+'?action=feedbackupdate&page=<%=pagenum %>&planids=' + checkedids;
 	    		win.setTitle('计划反馈');
 		        win.show(btn.dom);
 		  	}
 		});
     }
 });
+
+function checkAll(){
+	var checkall = document.getElementById('checkall');
+	var checks = document.getElementsByName('check');
+	if(checkall.checked == 'true'){
+	alert(checkall.checked);
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = 'true';
+		}
+	}else {
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = !checks[i].checked;
+		}
+	}
+}
+
+function changeProblem(value){
+	var problem = document.getElementById('problem');
+	if(value == '2'){
+		problem.style.display = 'none';
+	}else if(value == '6'){
+		problem.style.display = '';
+	}
+}
 </script>
 	</head>
 	<body>
@@ -79,7 +115,7 @@ Ext.onReady(function(){
 <%=pageList.getPageInfo().getHtml("plan.do?action=feedback") %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
-				<td>选择</td>
+				<td width="70"><input type="checkbox" name="checkall" onclick="checkAll();" style="width:20">选择</td>
                 <td>产品令号</td>              
                 <td>计划要求</td>
                 <td>分管部门领导</td>
@@ -95,13 +131,17 @@ for(int i=0;i<listAssess.size();i++){
 	Map mapAssess = (Map)listAssess.get(i);
 	String status = mapAssess.get("STATUS").toString();
 	if("1".equals(status)){
-		status = "新下发";
+		status = "<font color='blue'>新下发</font>";
 	}else if("2".equals(status)){
-		status = "已反馈";
+		status = "<font color='green'>已反馈无问题</font>";
 	}else if("3".equals(status)){
-		status = "已确认";
+		status = "<font color='green'>已确认</font>";
 	}else if("4".equals(status)){
-		status = "已完成";
+		status = "<font color='green'>已完成</font>";
+	}else if("5".equals(status)){
+		status = "<font color='red'>已退回</font>";
+	}else if("6".equals(status)){
+		status = "<font color='red'>已反馈有问题</font>";
 	}
 	
 	String pjname = planDAO.findNameByCode("PROJECT", mapAssess.get("PJCODE").toString());
@@ -109,7 +149,7 @@ for(int i=0;i<listAssess.size();i++){
             <tr align="left">
 				<td>&nbsp;
 <%
-				if("已反馈".equals(status)||"新下发".equals(status)){
+				if("<font color='blue'>新下发</font".equals(status)||"<font color='green'>已反馈无问题</font>".equals(status)||"<font color='red'>已反馈有问题</font>".equals(status)){
 %>				
 					<input type="checkbox" name="check" value="<%=mapAssess.get("ID") %>" class="ainput">
 <%
@@ -149,7 +189,16 @@ for(int i=0;i<listAssess.size();i++){
     <div class="x-window-body" id="dlg-body">
 	        <form id="dataForm" name="dataForm" action="" method="post">
                 <table>
-				  <tr>
+                  <tr>
+				    <td>是否有问题</td>
+				    <td>
+				    	<select name="haveproblem" id="haveproblem" onchange="changeProblem(this.value);">
+				    		<option value="2">可以完成</option>
+				    		<option value="6">有问题</option>
+				    	</select>
+				    </td>
+				  </tr>
+				  <tr name="problem" id="problem" style="display:none;">
 				    <td>反馈内容</td>
 				    <td><textarea name="remark" rows="4" style="width:200"></textarea></td>
 				  </tr>

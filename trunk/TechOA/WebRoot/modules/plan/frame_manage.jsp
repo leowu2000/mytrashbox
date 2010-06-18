@@ -29,6 +29,9 @@
   		tb.add('选择年月');
   		tb.add(document.getElementById('datepick'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
+  		tb.add('按状态查看');
+  		tb.add(document.getElementById('sel_status'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add('按责任人工号模糊查询');
   		tb.add(document.getElementById('sel_empcode'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
@@ -48,8 +51,9 @@
 	  var empname = document.getElementById('empname').value;
 	  var sel_empcode = document.getElementById('sel_empcode').value;
 	  var datepick = document.getElementById('datepick').value;
+	  var sel_status = document.getElementById('sel_status').value;
 	  
-	  document.getElementById('list_manage').src = "/plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + encodeURI(empname) + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode;
+	  document.getElementById('list_manage').src = "/plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + encodeURI(empname) + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode + "&sel_status=" + sel_status;
 	}
 	</script>
   </head>
@@ -77,8 +81,17 @@
 	</select>
 	<input type="text" name="empname" style="width:60;">
 	<input type="text" name="sel_empcode" id="sel_empcode" style="width:60;">
-	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" style="width: 50" onchange="commit();">
+	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" style="width: 50" onchange="commit();" value="<%=StringUtil.DateToString(new Date(), "yyyy-MM") %>">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
+	<select name="sel_status" id="sel_status" onchange="commit();">
+		<option value="0">全部</option>
+		<option value="1">新下发</option>
+		<option value="2">已反馈无问题</option>
+		<option value="6">已反馈有问题</option>
+		<option value="3">已确认</option>
+		<option value="4">已退回</option>
+		<option value="5">新下发</option>
+	</select>
     <iframe name="list_manage" width="100%" frameborder="0" height="500"></iframe>
   </body>
 </html>
