@@ -116,15 +116,15 @@ function changeProblem(value){
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
 				<td width="70"><input type="checkbox" name="checkall" onclick="checkAll();" style="width:20">选择</td>
-                <td>产品令号</td>              
-                <td>计划要求</td>
-                <td>分管部门领导</td>
-                <td>责任单位</td>
-                <td>责任人</td>
-                <td>计划员</td>
-                <td>分管室领导</td>
-                <td>备注</td>
-                <td>状态</td>
+                <td nowrap="nowrap">产品令号</td>              
+                <td nowrap="nowrap">计划要求</td>
+                <td nowrap="nowrap">部领导</td>
+                <td nowrap="nowrap">责任单位</td>
+                <td nowrap="nowrap">责任人</td>
+                <td nowrap="nowrap">计划员</td>
+                <td nowrap="nowrap">室领导</td>
+                <td nowrap="nowrap">备注</td>
+                <td nowrap="nowrap">状态</td>
             </tr>
 <%
 for(int i=0;i<listAssess.size();i++){
@@ -133,7 +133,7 @@ for(int i=0;i<listAssess.size();i++){
 	if("1".equals(status)){
 		status = "<font color='blue'>新下发</font>";
 	}else if("2".equals(status)){
-		status = "<font color='green'>已反馈无问题</font>";
+		status = "<font color='green'>已反馈<br>无问题</font>";
 	}else if("3".equals(status)){
 		status = "<font color='green'>已确认</font>";
 	}else if("4".equals(status)){
@@ -141,7 +141,7 @@ for(int i=0;i<listAssess.size();i++){
 	}else if("5".equals(status)){
 		status = "<font color='red'>已退回</font>";
 	}else if("6".equals(status)){
-		status = "<font color='red'>已反馈有问题</font>";
+		status = "<font color='red'>已反馈<br>有问题</font>";
 	}
 	
 	String pjname = planDAO.findNameByCode("PROJECT", mapAssess.get("PJCODE").toString());
@@ -149,34 +149,22 @@ for(int i=0;i<listAssess.size();i++){
             <tr align="left">
 				<td>&nbsp;
 <%
-				if("<font color='blue'>新下发</font".equals(status)||"<font color='green'>已反馈无问题</font>".equals(status)||"<font color='red'>已反馈有问题</font>".equals(status)){
+				if("<font color='blue'>新下发</font>".equals(status)||"<font color='green'>已反馈<br>无问题</font>".equals(status)||"<font color='red'>已反馈<br>有问题</font>".equals(status)){
 %>				
 					<input type="checkbox" name="check" value="<%=mapAssess.get("ID") %>" class="ainput">
 <%
 				}
 %>				
 				</td>
-                <td nowrap="nowrap">&nbsp;<%=pjname %></td>
+                <td>&nbsp;<%=pjname %></td>
                 <td>&nbsp;<%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("PLANNERNAME")==null?"":mapAssess.get("PLANNERNAME") %></td>
-                <td nowrap="nowrap">&nbsp;<%=mapAssess.get("LEADER_ROOM")==null?"":mapAssess.get("LEADER_ROOM") %></td>
+                <td>&nbsp;<%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
+                <td>&nbsp;<%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>
+                <td>&nbsp;<%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
+                <td>&nbsp;<%=mapAssess.get("PLANNERNAME")==null?"":mapAssess.get("PLANNERNAME") %></td>
+                <td>&nbsp;<%=mapAssess.get("LEADER_ROOM")==null?"":mapAssess.get("LEADER_ROOM") %></td>
                 <td>&nbsp;<%=mapAssess.get("REMARK")==null?"":mapAssess.get("REMARK") %></td>
-            	<td nowrap="nowrap">&nbsp;
-<%
-				if("新下发".equals(status)){
-%>            	
-            		<font color="green"><%=status %></font>
-<%
-				}else {
-%>
-					<%=status %>
-<%
-				}
-%>            		
-            	</td>
+            	<td nowrap="nowrap">&nbsp;<%=status %></td>
             </tr>
 <%} %>            
 </table>
