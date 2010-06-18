@@ -1,5 +1,6 @@
 package com.basesoft.modules.workreport;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -12,12 +13,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
+import com.basesoft.modules.role.RoleDAO;
+import com.basesoft.util.StringUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 public class WorkReportController extends CommonController {
 
 	WorkReportDAO workReportDAO;
+	RoleDAO roleDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -48,9 +52,14 @@ public class WorkReportController extends CommonController {
 			mv.addObject("method", method);
 		}else if("auditlist".equals(action)){//审核列表
 			mv = new ModelAndView("modules/workreport/list_auditreport");
-			
+			String departcodes = "";
+			List listDepart = roleDAO.findAllUserDepart(emcode);
+			if(listDepart.size() == 0){
+				listDepart = roleDAO.findAllRoleDepart(emrole);
+			}
+			departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 			//工作报告列表
-			PageList listReport = workReportDAO.findAllAudit(emid, page);
+			PageList listReport = workReportDAO.findAllAudit(page, departcodes, emcode);
 			
 			mv.addObject("listReport", listReport);
 		}else if("add".equals(action)){//新增操作
@@ -162,5 +171,9 @@ public class WorkReportController extends CommonController {
 	
 	public void setWorkReportDAO(WorkReportDAO workReportDAO){
 		this.workReportDAO = workReportDAO;
+	}
+	
+	public void setRoleDAO(RoleDAO roleDAO){
+		this.roleDAO = roleDAO;
 	}
 }

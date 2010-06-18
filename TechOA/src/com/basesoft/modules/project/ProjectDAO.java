@@ -78,12 +78,13 @@ public class ProjectDAO extends CommonDAO{
 	 */
 	public List<?> getKygstj(String start, String end, List listPeriod, String depart, String pjcodes){
 		List returnList = new ArrayList();
-		
+		//令号列表
 		List listProject = getProject(pjcodes);
-		
+		//下级部门列表
+		List listDepart = getDeparts(depart, new ArrayList());
+		String departcodes = StringUtil.ListToStringAdd(listDepart, ",", "CODE");
 		//合计
 		float[] hj = new float[listPeriod.size()];
-		
 		for(int i=0;i<listProject.size();i++){//循环所有的项目
 			Map returnMap = new HashMap();
 			
@@ -104,7 +105,7 @@ public class ProjectDAO extends CommonDAO{
 					
 					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
 				}else {
-					String sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE='" + depart + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
+					String sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE in (" + departcodes + ") and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
 					Map map = jdbcTemplate.queryForMap(sql);
 					
 					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
@@ -154,7 +155,8 @@ public class ProjectDAO extends CommonDAO{
 		List returnList = new ArrayList();
 		
 		List listProject = getProject(pjcodes);
-		
+		List listDepart = getDeparts(depart, new ArrayList());
+		String departcodes = StringUtil.ListToStringAdd(listDepart, ",", "CODE");
 		//合计
 		float[] hj = new float[listPeriod.size()];
 		
@@ -179,7 +181,7 @@ public class ProjectDAO extends CommonDAO{
 					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
 					
 				}else {
-					String sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE='" + depart + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
+					String sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE in (" + departcodes + ") and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
 					Map map = jdbcTemplate.queryForMap(sql);
 					
 					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
@@ -212,7 +214,8 @@ public class ProjectDAO extends CommonDAO{
 		List returnList = new ArrayList();
 		
 		List listProject = getProject(pjcodes);
-		
+		List listDepart = getDeparts(depart, new ArrayList());
+		String departcodes = StringUtil.ListToStringAdd(listDepart, ",", "CODE");
 		for(int i=0;i<listProject.size();i++){//循环项目
 			Map returnMap = new HashMap();
 			
@@ -233,7 +236,7 @@ public class ProjectDAO extends CommonDAO{
 			String s = "";
 			
 			if("0".equals(depart)){
-				s = "select DISTINCT EMPCODE from PLAN where PJCODE='" + mapProject.get("CODE") + "' and ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
+				s = "select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
 				List list = jdbcTemplate.queryForList(s);
 				String empcodes = StringUtil.ListToStringAdd(list, ",", "EMPCODE");
 				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (" + empcodes + ")");
@@ -245,7 +248,7 @@ public class ProjectDAO extends CommonDAO{
 				C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100005' and CODE in (" + empcodes + ")");
 				C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100006' and CODE in (" + empcodes + ")");
 			}else {
-				s = "select DISTINCT EMPCODE from PLAN where DEPARTCODE='" + depart + "' and PJCODE='" + mapProject.get("CODE") + "' and ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
+				s = "select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and DEPARTCODE in (" + departcodes + ") and PJCODE='" + mapProject.get("CODE") + "' and ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
 				List list = jdbcTemplate.queryForList(s);
 				String empcodes = StringUtil.ListToStringAdd(list, ",", "EMPCODE");
 				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (" + empcodes + ")");
@@ -285,7 +288,8 @@ public class ProjectDAO extends CommonDAO{
 			Map returnMap = new HashMap();
 			
 			Map mapProject = (Map)listProject.get(i);
-			
+			List listDepart = getDeparts(depart, new ArrayList());
+			String departcodes = StringUtil.ListToStringAdd(listDepart, ",", "CODE");
 			returnMap.put("PJCODE", mapProject.get("NAME"));
 			
 			int totalCount = 0;
@@ -300,7 +304,7 @@ public class ProjectDAO extends CommonDAO{
 			
 			String s = "";
 			if("0".equals(depart)){
-				s = "select DISTINCT EMPCODE from PLAN where PJCODE='" + mapProject.get("CODE") + "' and ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
+				s = "select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
 				List list = jdbcTemplate.queryForList(s);
 				String empcodes = StringUtil.ListToStringAdd(list, ",", "EMPCODE");
 				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (" + empcodes + ")");
@@ -312,7 +316,7 @@ public class ProjectDAO extends CommonDAO{
 				C7 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100005' and CODE in (" + empcodes + ")");
 				C8 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where MAJORCODE='100006' and CODE in (" + empcodes + ")");
 			}else {
-				s = "select DISTINCT EMPCODE from PLAN where DEPARTCODE='" + depart + "' and PJCODE='" + mapProject.get("CODE") + "' and ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
+				s = "select DISTINCT EMPCODE from WORKREPORT where FLAG=2 and DEPARTCODE in (" + departcodes + ") and PJCODE='" + mapProject.get("CODE") + "' and ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
 				List list = jdbcTemplate.queryForList(s);
 				String empcodes = StringUtil.ListToStringAdd(list, ",", "EMPCODE");
 				C1 = jdbcTemplate.queryForInt("select count(*) from EMPLOYEE where DEGREECODE in ('200003','200004','200005','200006') and CODE in (" + empcodes + ")");

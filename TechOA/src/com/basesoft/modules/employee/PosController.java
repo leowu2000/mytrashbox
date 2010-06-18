@@ -1,6 +1,8 @@
 package com.basesoft.modules.employee;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,18 +14,23 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
+import com.basesoft.modules.role.RoleDAO;
+import com.basesoft.util.StringUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 public class PosController extends CommonController {
 
 	PosDAO posDAO;
+	RoleDAO roleDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
+		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
@@ -40,8 +47,18 @@ public class PosController extends CommonController {
 			mv = new ModelAndView("modules/employee/pos/list_manage");
 			
 			String method = ServletRequestUtils.getStringParameter(request, "method", "");
-			
-			PageList pageList = posDAO.findAll(seldepart, emname, datepick, sel_empcode, page);
+			List listDepart = new ArrayList();
+			String departcodes = "";
+			if("-1".equals(seldepart)){//需要进行数据权限的过滤
+				listDepart = roleDAO.findAllUserDepart(emcode);
+				if(listDepart.size() == 0){
+					listDepart = roleDAO.findAllRoleDepart(emrole);
+				}
+				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+			}else {
+				departcodes = "'" + seldepart + "'";
+			}
+			PageList pageList = posDAO.findAll(emname, datepick, sel_empcode, page, departcodes);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
@@ -129,5 +146,9 @@ public class PosController extends CommonController {
 
 	public void setPosDAO(PosDAO posDAO){
 		this.posDAO = posDAO;
+	}
+	
+	public void setRoleDAO(RoleDAO roleDAO){
+		this.roleDAO = roleDAO;
 	}
 }

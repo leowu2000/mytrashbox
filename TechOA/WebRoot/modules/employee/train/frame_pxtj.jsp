@@ -21,7 +21,7 @@
 	Ext.onReady(function(){
 		var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'empspan',
-			width : 200,
+			width : 270,
 			hiddenName : 'empcode',
 			hiddenId : 'empcode',
 			tree : {

@@ -44,7 +44,7 @@
   			var type = document.getElementById('seltype').value;
 	  		var datepick = document.getElementById('datepick').value;
 	  		var empname = document.getElementById('empname').value;
-    		window.location.href = "/excel.do?action=export&model=PLAN&f_level=" + level + "&f_type=" + type + "&datepick=" + datepick + "&f_empname=" + encodeURI(empname) + "&isplanner=false";
+    		window.location.href = "/excel.do?action=export&model=PLAN&f_level=" + level + "&f_type=" + type + "&datepick=" + datepick + "&f_empname=" + encodeURI(empname) + "&isplanner=true";
   		}
 	});
 	
@@ -59,7 +59,7 @@
 	  var datepick = document.getElementById('datepick').value;
 	  var empname = document.getElementById('empname').value;
 	  
-	  document.getElementById('list_remind').src = "/plan.do?action=remind_list&f_level=" + level + "&f_type=" + type + "&datepick=" + datepick + "&f_empname=" + encodeURI(empname) + "&sel_empcode=" + sel_empcode + "&isplanner=false";
+	  document.getElementById('list_remind').src = "/plan.do?action=remind_list&f_level=" + level + "&f_type=" + type + "&datepick=" + datepick + "&f_empname=" + encodeURI(empname) + "&sel_empcode=" + sel_empcode + "&isplanner=true";
 	}
 	</script>
   </head>

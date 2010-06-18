@@ -80,11 +80,12 @@ public class EmployeeController extends CommonController {
 			String loginid = ServletRequestUtils.getStringParameter(request, "loginid", "");
 			String rolecode = ServletRequestUtils.getStringParameter(request, "rolecode", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
+			String empname = ServletRequestUtils.getStringParameter(request, "empname", "");
 
 			//生成id和code
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			emDAO.insert("insert into EMPLOYEE values('" + id + "','" + loginid + "','1','" + loginid + "','" + rolecode + "','" + emname + "','" + depart + "','','','','','','','','','','','','','')");
+			emDAO.insert("insert into EMPLOYEE values('" + id + "','" + loginid + "','1','" + loginid + "','" + rolecode + "','" + empname + "','" + depart + "','','','','','','','','','','','','','')");
 			
 			response.sendRedirect(returnUrl_infolist);
 			return null;
@@ -423,8 +424,15 @@ public class EmployeeController extends CommonController {
 			}
 			
 			List<Date> listDate = StringUtil.getDateList(start,end);
-			
-			List listWorkCheck = emDAO.findWorkCheck(start, end, depart, method, emcode);
+			String departcodes = ""; 
+			List listDepart = roleDAO.findAllUserDepart(emcode);
+			if(listDepart.size() == 0){
+				listDepart = roleDAO.findAllRoleDepart(emrole);
+			}
+			if(listDepart.size()>0){
+				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+			}
+			List listWorkCheck = emDAO.findWorkCheck(start, end, depart, method, emcode, departcodes);
 			
 			//考勤项列表
 			List listCheck = emDAO.getDICTByType("4");
@@ -436,6 +444,7 @@ public class EmployeeController extends CommonController {
 			mv.addObject("listDate", listDate);
 			mv.addObject("listCheck", listCheck);
 			mv.addObject("method", method);
+			mv.addObject("departcodes", departcodes);
 			mv.addObject("errorMessage", errorMessage);
 		}else if("addWorkcheck".equals(action)){//增加考勤记录
 			String checkdate = ServletRequestUtils.getStringParameter(request, "checkdate", "");

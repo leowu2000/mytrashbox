@@ -18,6 +18,7 @@ import com.basesoft.modules.goods.GoodsDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.plan.PlanTypeDAO;
 import com.basesoft.modules.project.ProjectDAO;
+import com.basesoft.modules.workreport.WorkReportDAO;
 import com.basesoft.util.StringUtil;
 
 public class ExcelDAO extends CommonDAO {
@@ -94,13 +95,28 @@ public class ExcelDAO extends CommonDAO {
 	
 	/**
 	 * 获取要导出的计划考核统计数据
-	 * @param f_pjcode 工作令
+	 * @param f_level 考核级别
+	 * @param f_type 计划类别
 	 * @param datepick 年月
 	 * @param f_empname 姓名模糊检索
 	 * @return
 	 */
 	public List getExportData_PLAN(String f_level, String f_type, String datepick, String f_empname){
 		return planDAO.findAllRemind(f_level, f_type, datepick, f_empname);
+	}
+	
+	/**
+	 * 获取要导出的计划数据
+	 * @param f_level 考核级别
+	 * @param f_type 计划类别
+	 * @param datepick 年月
+	 * @param f_empname 姓名模糊检索
+	 * @param sel_empcode 工号模糊
+	 * @param sel_status 状态
+	 * @return
+	 */
+	public List getExportData_PLAN1(String level, String type, String f_empname, String datepick, String emcode, String sel_empcode, String sel_status){
+		return planDAO.findAll_planner(level, type, f_empname, datepick, emcode, sel_empcode, sel_status);
 	}
 	
 	/**
@@ -120,7 +136,7 @@ public class ExcelDAO extends CommonDAO {
 	 * @param depart 部门
 	 * @return
 	 */
-	public List getExportData_KQJL(String depart, String datepick){
+	public List getExportData_KQJL(String depart, String datepick, String departcodes, String emcode){
 		List list = new ArrayList();
 		String start = "";
 		String end = datepick + "-25";
@@ -132,7 +148,7 @@ public class ExcelDAO extends CommonDAO {
 		}
 		
 		List listPeriod = getDICTByType("5");
-		list = emDAO.findWorkCheck(start, end, depart, "", "");
+		list = emDAO.findWorkCheck(start, end, depart, "", emcode, departcodes);
 		
 		return list;
 	}
@@ -157,6 +173,19 @@ public class ExcelDAO extends CommonDAO {
 		List listBCYY = jdbcTemplate.queryForList(sql);
 		
 		return listBCYY;
+	}
+	
+	/**
+	 * 获取工作日志数据
+	 * @param carid 班车
+	 * @param datepick 日期
+	 * @return
+	 */
+	public List getExportData_WORKREPORT(String emcode, String departcodes, WorkReportDAO wrDAO){
+		
+		List listAudit = wrDAO.findAllAudit(departcodes, emcode);
+		
+		return listAudit;
 	}
 	
 	/**

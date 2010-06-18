@@ -1,6 +1,7 @@
 package com.basesoft.modules.menu;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
-import com.basesoft.modules.employee.Employee;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
@@ -43,14 +43,15 @@ public class MenuController extends CommonController {
 			String menuurl = ServletRequestUtils.getStringParameter(request, "menuurl", "");
 			int ordercode = ServletRequestUtils.getIntParameter(request, "ordercode", 500);
 			String status = ServletRequestUtils.getStringParameter(request, "status", "");
-			String icon = ServletRequestUtils.getStringParameter(request, "icon", "");
 			String menutype = "1";
 			
 			if("0".equals(parent)){
 				menutype = "2";
 			}
 			
-			menuDAO.insert("insert into MENU values('" + menucode + "', '" + menuname + "', '" + menutype + "', '" + menuurl + "', " + ordercode + ", '" + status + "', '" + parent + "', '" + icon + "')");
+			Menu menu = menuDAO.findByMenuCode(parent);
+			
+			menuDAO.insert("insert into MENU values('" + menucode + "', '" + menuname + "', '" + menutype + "', '" + menuurl + "', " + ordercode + ", '" + status + "', '" + parent + "', '" + menu.getIcon() + "')");
 			
 			response.sendRedirect("menu.do?action=manage&page="+page);
 			return null;

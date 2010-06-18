@@ -21,7 +21,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String level, String type, String empname, String datepick, int page, String emrole, String emcode, String emdepart, String sel_empcode){
+	public PageList findAll(String level, String type, String empname, String datepick, int page, String sel_empcode, String departcodes, String sel_status){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
@@ -57,34 +57,11 @@ public class PlanDAO extends CommonDAO {
 			}
 		}
 		
-		if("004".equals(emrole)){//计划员,看到自己所管理的计划
-			sql = sql + " and PLANNERCODE='" + emcode + "'";
-		}else if("005".equals(emrole)){//组长,看到组成员的计划
-			List listEmp = jdbcTemplate.queryForList("select CODE,NAME from EMPLOYEE where DEPARTCODE='" + emdepart + "'");
-			String empcodesql = "";
-			String empnamesql = "";
-			for(int i=0;i<listEmp.size();i++){
-				Map mapEmp = (Map)listEmp.get(i);
-				if("".equals(empcodesql)){
-					empcodesql = " EMPCODE LIKE '%" + mapEmp.get("CODE") + "%'";
-				}else {
-					empcodesql = empcodesql + " or EMPCODE LIKE '%" + mapEmp.get("CODE") + "%'";
-				}
-				if("".equals(empnamesql)){
-					empnamesql = " EMPNAME LIKE '%" + mapEmp.get("NAME") + "%'";
-				}else {
-					empnamesql = empnamesql + " or EMPNAME LIKE '%" + mapEmp.get("NAME") + "%'";
-				}
-			}
-			
-			sql = sql + " and (" + empcodesql + " or " + empnamesql + ")";
+		sql = sql + " and DEPARTCODE in (" + departcodes + ")";
+		//按状态查询
+		if(!"0".equals(sel_status)){
+			sql = sql + " and STATUS='" + sel_status + "'";
 		}
-		
-//		if(!"0".equals(emdepart)){
-//			List listDepart = getDeparts(emdepart, new ArrayList());
-//			String departcodes = getDepartCodes(listDepart);
-//			sql = sql + " and DEPARTCODE in (" + departcodes + ")";
-//		}
 		
 		if(!"".equals(sel_empcode)){
 			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
@@ -112,6 +89,143 @@ public class PlanDAO extends CommonDAO {
 	}
 	
 	/**
+	 * 按照检索条件找出所有符合条件的计划
+	 * @param level 考核级别
+	 * @param type 计划类别
+	 * @param emname 人员名字
+	 * @param page 页码
+	 * @return
+	 */
+	public PageList findAll_planner(String level, String type, String empname, String datepick, int page, String emrole, String emcode, String emdepart, String sel_empcode, String sel_status){
+		PageList pageList = new PageList();
+		String sql = "";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		if("0".equals(level)){//全部级别
+			if("0".equals(type)){//全部类别
+				if("".equals(empname)){//全部人员
+					sql = "select * from PLAN where 1=1";
+				}else {//人员名称模糊检索
+					sql = "select * from PLAN where EMPNAME like '%" + empname + "%'";
+				}
+			}else {//选择了类别
+				if("".equals(empname)){//全部人员
+					sql = "select * from PLAN where TYPE='" + type + "'";
+				}else {
+					sql = "select * from PLAN where TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}
+		}else {
+			if("0".equals(type)){//全部类别
+				if("".equals(empname)){//全部人员
+					sql = "select * from PLAN where ASSESS='" + level + "'";
+				}else {//人员名称模糊检索
+					sql = "select * from PLAN where ASSESS='" + level + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}else {//选择了类别
+				if("".equals(empname)){//全部人员
+					sql = "select * from PLAN where ASSESS='" + level + "' and TYPE='" + type + "'";
+				}else {
+					sql = "select * from PLAN where ASSESS='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}
+		}
+		
+		sql = sql + " and PLANNERCODE='" + emcode + "'";
+		//按状态查询
+		if(!"0".equals(sel_status)){
+			sql = sql + " and STATUS='" + sel_status + "'";
+		}
+		if(!"".equals(sel_empcode)){
+			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
+		}
+		
+		if("".equals(datepick)){
+			sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc";
+		}else {
+			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+			Date enddate = StringUtil.getEndOfMonth(startdate);
+			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' order by TYPE,TYPE2,ORDERCODE,ENDDATE desc";
+		}
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
+	
+	/**
+	 * 按照检索条件找出所有符合条件的计划
+	 * @param level 考核级别
+	 * @param type 计划类别
+	 * @param emname 人员名字
+	 * @param page 页码
+	 * @return
+	 */
+	public List findAll_planner(String level, String type, String empname, String datepick, String emcode, String sel_empcode, String sel_status){
+		PageList pageList = new PageList();
+		String sql = "";
+		if("0".equals(level)){//全部级别
+			if("0".equals(type)){//全部类别
+				if("".equals(empname)){//全部人员
+					sql = "select * from PLAN where 1=1";
+				}else {//人员名称模糊检索
+					sql = "select * from PLAN where EMPNAME like '%" + empname + "%'";
+				}
+			}else {//选择了类别
+				if("".equals(empname)){//全部人员
+					sql = "select * from PLAN where TYPE='" + type + "'";
+				}else {
+					sql = "select * from PLAN where TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}
+		}else {
+			if("0".equals(type)){//全部类别
+				if("".equals(empname)){//全部人员
+					sql = "select * from PLAN where ASSESS='" + level + "'";
+				}else {//人员名称模糊检索
+					sql = "select * from PLAN where ASSESS='" + level + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}else {//选择了类别
+				if("".equals(empname)){//全部人员
+					sql = "select * from PLAN where ASSESS='" + level + "' and TYPE='" + type + "'";
+				}else {
+					sql = "select * from PLAN where ASSESS='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}
+		}
+		
+		sql = sql + " and PLANNERCODE='" + emcode + "'";
+		//按状态查询
+		if(!"0".equals(sel_status)){
+			sql = sql + " and STATUS='" + sel_status + "'";
+		}
+		if(!"".equals(sel_empcode)){
+			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
+		}
+		
+		if("".equals(datepick)){
+			sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc";
+		}else {
+			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+			Date enddate = StringUtil.getEndOfMonth(startdate);
+			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' order by TYPE,TYPE2,ORDERCODE,ENDDATE desc";
+		}
+		
+		List list = jdbcTemplate.queryForList(sql);
+		
+		return list;
+	}
+	
+	/**
 	 * 获取计划提醒列表
 	 * @param pjcode 工作令号
 	 * @param datepick 年月
@@ -119,7 +233,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllRemind(String level, String type, String datepick, String empname, String empcode, String emrole, String emcode, String emdepart, int page){
+	public PageList findAllRemind(String level, String type, String datepick, String empname, String empcode, String departcodes, int page){
 		PageList pageList = new PageList();
 		String sql = "";
 		
@@ -128,7 +242,7 @@ public class PlanDAO extends CommonDAO {
 		}else {
 			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 			Date enddate = StringUtil.getEndOfMonth(startdate);
-			sql = "select * from PLAN where ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' and (STATUS='3' or STATUS='4')";
+			sql = "select * from PLAN where ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' ";
 		}
 		
 		int pagesize = 20;
@@ -165,28 +279,82 @@ public class PlanDAO extends CommonDAO {
 			}
 		}
 		
-		if("004".equals(emrole)){//计划员，看到自己的
-			sql = sql + " and PLANNERCODE='" + emcode + "'";
-		}else if("005".equals(emrole)){//组长，看组内人员的
-			List listEmp = jdbcTemplate.queryForList("select CODE,NAME from EMPLOYEE where DEPARTCODE='" + emdepart + "'");
-			String empcodesql = "";
-			String empnamesql = "";
-			for(int i=0;i<listEmp.size();i++){
-				Map mapEmp = (Map)listEmp.get(i);
-				if("".equals(empcodesql)){
-					empcodesql = " EMPCODE LIKE '%" + mapEmp.get("CODE") + "%'";
-				}else {
-					empcodesql = empcodesql + " or EMPCODE LIKE '%" + mapEmp.get("CODE") + "%'";
+		sql = sql + " and DEPARTCODE in (" + departcodes + ")";
+		
+		if(!"".equals(empcode)){
+			sql = sql + " and EMPCODE like '%" + empcode + "%'";
+		}
+		
+		sql = sql + " order by ENDDATE ,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
+		
+ 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
+	
+	/**
+	 * 获取计划提醒列表
+	 * @param pjcode 工作令号
+	 * @param datepick 年月
+	 * @param empname 责任人名称
+	 * @param page 页码
+	 * @return
+	 */
+	public PageList findAllRemind_planner(String level, String type, String datepick, String empname, String empcode,String emcode, int page){
+		PageList pageList = new PageList();
+		String sql = "";
+		
+		if("".equals(datepick)){
+			sql = "select * from PLAN where STATUS!='4'";
+		}else {
+			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+			Date enddate = StringUtil.getEndOfMonth(startdate);
+			sql = "select * from PLAN where ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' ";
+		}
+		
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		if("0".equals(level)){//全部级别
+			if("0".equals(type)){//全部类别
+				if("".equals(empname)){//全部人员
+					
+				}else {//人员名称模糊检索
+					sql = sql + " and EMPNAME like '%" + empname + "%'";
 				}
-				if("".equals(empnamesql)){
-					empnamesql = " EMPNAME LIKE '%" + mapEmp.get("NAME") + "%'";
-				}else {
-					empnamesql = empnamesql + " or EMPNAME LIKE '%" + mapEmp.get("NAME") + "%'";
+			}else {//选择了类别
+				if("".equals(empname)){//全部人员
+					sql = sql + " and TYPE='" + type + "'";
+				}else {//人员名称模糊检索
+					sql = sql + " and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}
-			
-			sql = sql + " and (" + empcodesql + " or " + empnamesql + ")";
+		}else {
+			if("0".equals(type)){//全部类别
+				if("".equals(empname)){//全部人员
+					sql = sql + " and ASSESS='" + level + "'";
+				}else {//人员名称模糊检索
+					sql = sql + " and ASSESS='" + level + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}else {//选择了类别
+				if("".equals(empname)){//全部人员
+					sql = sql + " and ASSESS='" + level + "' and TYPE='" + type + "'";
+				}else {//人员名称模糊检索
+					sql = sql + " and ASSESS='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
+				}
+			}
 		}
+		
+		sql = sql + " and PLANNERCODE='" + emcode + "'";
 		
 		if(!"".equals(empcode)){
 			sql = sql + " and EMPCODE like '%" + empcode + "%'";
