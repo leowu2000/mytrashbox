@@ -231,7 +231,7 @@ for(int i=0;i<list.size();i++){
 	if(!"search".equals(method)){
 %>               
 			  	<td>
-                <%if("未上报".equals(flag)||"已退回".equals(flag)){%>
+                <%if("<font color='red'>未上报</font>".equals(flag)||"<font color='red'>已退回</font>".equals(flag)){%>
                 	<input type="checkbox" name="check" value="<%=map.get("ID") %>" class="ainput">
                 <%} %>
                 </td>
