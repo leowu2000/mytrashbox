@@ -57,7 +57,7 @@ public class PlanDAO extends CommonDAO {
 			}
 		}
 		
-		sql = sql + " and DEPARTCODE in (" + departcodes + ")";
+		sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")) or SPLIT_PART(EMPNAME,',',1) in (select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")))";
 		//按状态查询
 		if(!"0".equals(sel_status)){
 			sql = sql + " and STATUS='" + sel_status + "'";
@@ -279,7 +279,7 @@ public class PlanDAO extends CommonDAO {
 			}
 		}
 		
-		sql = sql + " and DEPARTCODE in (" + departcodes + ")";
+		sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")) or SPLIT_PART(EMPNAME,',',1) in (select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")))";
 		
 		if(!"".equals(empcode)){
 			sql = sql + " and EMPCODE like '%" + empcode + "%'";
