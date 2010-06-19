@@ -432,7 +432,7 @@ function checkAll(){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("plan.do?action=list&f_level=" + level + "&f_type=" + type + "&f_empname=" + f_empname + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode + "&sel_status=" + sel_status) %>
+<%=pageList.getPageInfo().getHtml("plan.do?action=list_planner&f_level=" + level + "&f_type=" + type + "&f_empname=" + f_empname + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode + "&sel_status=" + sel_status) %>
 	<table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
                 <td nowrap="nowrap"><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
