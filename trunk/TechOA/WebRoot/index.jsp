@@ -1,4 +1,6 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page import="com.basesoft.modules.employee.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -6,8 +8,14 @@
 <title>科研项目管理系统</title>
 <%@ include file="common/meta.jsp" %>
 <%
-String emid = session.getAttribute("EMID").toString();
-String emname = session.getAttribute("EMNAME").toString();
+String emid = session.getAttribute("EMID")==null?"":session.getAttribute("EMID").toString();
+String emname = session.getAttribute("EMNAME")==null?"":session.getAttribute("EMNAME").toString();
+String emrole = session.getAttribute("EMROLE")==null?"":session.getAttribute("EMROLE").toString();
+
+ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+EmployeeDAO emDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
+
+String rolename = emDAO.findNameByCode("USER_ROLE", emrole);
 %>
 <script type="text/javascript">
 <!--
@@ -38,7 +46,7 @@ Ext.onReady(function(){
             		maxSize: 400,   
             		collapsible: true,   
             		iconCls:'tag_wand',
-            		title:'<%=emname %>',
+            		title:'<%=emname + "(" + rolename + ")" %>',
             		collapsible: true,  
             		layout:'accordion',
 		            layoutConfig: {

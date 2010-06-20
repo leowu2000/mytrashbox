@@ -56,8 +56,22 @@ public class PlanDAO extends CommonDAO {
 				}
 			}
 		}
-		
-		sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")) or SPLIT_PART(EMPNAME,',',1) in (select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")))";
+		String empcodeSql = "select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+		String empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+		sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',1) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',2) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',2) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',3) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',3) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',4) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',4) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',5) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',5) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',6) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',6) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',7) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',7) in (" + empnameSql + "))";
 		//按状态查询
 		if(!"0".equals(sel_status)){
 			sql = sql + " and STATUS='" + sel_status + "'";
@@ -279,7 +293,22 @@ public class PlanDAO extends CommonDAO {
 			}
 		}
 		
-		sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")) or SPLIT_PART(EMPNAME,',',1) in (select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")))";
+		String empcodeSql = "select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+		String empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+		sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',1) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',2) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',2) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',3) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',3) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',4) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',4) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',5) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',5) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',6) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',6) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',7) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',7) in (" + empnameSql + "))";
 		
 		if(!"".equals(empcode)){
 			sql = sql + " and EMPCODE like '%" + empcode + "%'";
