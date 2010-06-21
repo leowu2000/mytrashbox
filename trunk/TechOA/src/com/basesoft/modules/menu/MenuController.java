@@ -91,7 +91,7 @@ public class MenuController extends CommonController {
 				menutype = "2";
 			}
 			
-			menuDAO.update("update MENU set MENUCODE='" + menucode + "', MENUNAME='" + menuname + "', MENUTYPE='" + menutype + "', MENUURL='" + menuurl + "', ORDERCODE=" + ordercode + ", STATUS='" + status + "', PARENT='" + parent + "', ICON='" + icon + "' where MENUCODE='" + menucode + "'");
+			menuDAO.update("update MENU set MENUCODE='" + menucode + "', MENUNAME='" + menuname + "', MENUTYPE='" + menutype + "', MENUURL='" + menuurl + "', ORDERCODE=" + ordercode + ", STATUS='" + status + "', PARENT='" + parent + "' where MENUCODE='" + menucode + "'");
 			
 			response.sendRedirect("menu.do?action=manage&page="+page);
 			return null;

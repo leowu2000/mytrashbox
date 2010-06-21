@@ -1110,6 +1110,76 @@ public class ExcelDAO extends CommonDAO {
 	}
 	
 	/**
+	 * 访问工号信息入库
+	 * @param data
+	 * @return
+	 */
+	public String insertVisit_em(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		String deleteSql = "delete from SYS_VISIT where TYPE='1'";
+		delete(deleteSql);
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			
+			String empcode = row.optString("EMPCODE");
+			String insertSql = "insert into SYS_VISIT values('" + empcode + "', '', '1', '0')";
+			
+			try{
+				insert(insertSql);
+			}catch(Exception e){
+				System.out.println(e);
+				errorMessage = getErrorMessage(errorMessage, i);
+				continue;
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 访问IP信息入库
+	 * @param data
+	 * @return
+	 */
+	public String insertVisit_ip(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		String deleteSql = "delete from SYS_VISIT where TYPE='2'";
+		delete(deleteSql);
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			
+			String ip = row.optString("IP");
+			String insertSql = "insert into SYS_VISIT values('', '" + ip + "', '2', '0')";
+			
+			try{
+				insert(insertSql);
+			}catch(Exception e){
+				System.out.println(e);
+				errorMessage = getErrorMessage(errorMessage, i);
+				continue;
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
 	 * 获取错误信息
 	 * @param errorMessage
 	 * @param i

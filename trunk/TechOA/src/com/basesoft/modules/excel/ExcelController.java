@@ -133,6 +133,12 @@ public class ExcelController extends CommonController {
 			}else if("CAR".equals(table)){//班车
 				mv = new ModelAndView("modules/excel/preview_car");
 				mv.addObject("sel_carcode", sel_carcode);
+			}else if("VISIT_EM".equals(table)){
+				mv = new ModelAndView("modules/excel/preview_visit_em");
+				mv.addObject("type", "1");
+			}else if("VISIT_IP".equals(table)){
+				mv = new ModelAndView("modules/excel/preview_visit_ip");
+				mv.addObject("type", "2");
 			}
 			
 			MultipartHttpServletRequest mpRequest = (MultipartHttpServletRequest)request;
@@ -192,12 +198,17 @@ public class ExcelController extends CommonController {
 				errorMessage = excelDAO.insertProject(data);
 			}else if("CAR".equals(table)){//班车信息
 				errorMessage = excelDAO.insertCar(data);
+			}else if("VISIT_EM".equals(table)){//班车信息
+				errorMessage = excelDAO.insertVisit_em(data);
+			}else if("VISIT_IP".equals(table)){//班车信息
+				errorMessage = excelDAO.insertVisit_ip(data);
 			}
+			
 			if(errorMessage.length()>200){
 				errorMessage = errorMessage.substring(0, 200) + "...";
 			}
 			
-			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp + "&f_level=" + f_level + "&f_type=" + f_type + "&sel_empcode=" + sel_empcode + "&sel_carcode=" + sel_carcode);
+			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp + "&f_level=" + f_level + "&f_type=" + f_type + "&sel_empcode=" + sel_empcode + "&sel_carcode=" + sel_carcode + "&type=" + type);
 		}else if("export".equals(action)){//excel导出
 			String model = ServletRequestUtils.getStringParameter(request, "model", "");
 			String imagepath = request.getRealPath("\\chart\\");

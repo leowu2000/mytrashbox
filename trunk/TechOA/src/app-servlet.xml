@@ -32,6 +32,8 @@
 				/customequip.do=CustomEquipController
 				/tree.do=TreeController
 				/role.do=RoleController
+				/visit.do=VisitController
+				/ins.do=InsController
 			</value>
 		</property>
 	</bean>
@@ -76,5 +78,7 @@
 	<bean name="CustomEquipController" class="com.basesoft.modules.customequip.CustomEquipController"></bean>
 	<bean name="TreeController" class="com.basesoft.util.TreeController"></bean>
 	<bean name="RoleController" class="com.basesoft.modules.role.RoleController"></bean>
+	<bean name="VisitController" class="com.basesoft.modules.visit.VisitController"></bean>
+	<bean name="InsController" class="com.basesoft.modules.ins.InsController"></bean>
 </beans>
 
