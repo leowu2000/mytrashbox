@@ -15,6 +15,7 @@ import com.basesoft.modules.employee.CardDAO;
 import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.employee.FinanceDAO;
 import com.basesoft.modules.goods.GoodsDAO;
+import com.basesoft.modules.ins.InsDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.plan.PlanTypeDAO;
 import com.basesoft.modules.project.ProjectDAO;
@@ -31,6 +32,7 @@ public class ExcelDAO extends CommonDAO {
 	GoodsDAO goodsDAO;
 	CarDAO carDAO;
 	PlanTypeDAO planTypeDAO;
+	InsDAO insDAO;
 	
 	/**
 	 * 获取要导出的工时统计汇总数据
@@ -117,6 +119,15 @@ public class ExcelDAO extends CommonDAO {
 	 */
 	public List getExportData_PLAN1(String level, String type, String f_empname, String datepick, String emcode, String sel_empcode, String sel_status){
 		return planDAO.findAll_planner(level, type, f_empname, datepick, emcode, sel_empcode, sel_status);
+	}
+	
+	/**
+	 * 获取反馈的列表
+	 * @param ins_id
+	 * @return
+	 */
+	public List getExportData_INSBack(String ins_id){
+		return insDAO.findBacksById(ins_id);
 	}
 	
 	/**
@@ -1257,5 +1268,9 @@ public class ExcelDAO extends CommonDAO {
 	
 	public void setPlanTypeDAO(PlanTypeDAO planTypeDAO){
 		this.planTypeDAO = planTypeDAO;
+	}
+	
+	public void setInsDAO(InsDAO insDAO){
+		this.insDAO = insDAO;
 	}
 }
