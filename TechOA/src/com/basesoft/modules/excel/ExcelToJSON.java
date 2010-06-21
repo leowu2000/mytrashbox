@@ -49,6 +49,10 @@ public class ExcelToJSON {
 		String count = config.optJSONObject("head").optString("count");
 		String split = config.optJSONObject("head").optString("split");
 		JSONArray relation = config.optJSONObject("body").optJSONArray("relation");
+		if(relation == null){
+			relation = new JSONArray();
+			relation.put(config.optJSONObject("body").optJSONObject("relation"));
+		}
 		data.put("row", excelToJSON(sheet, row, col, relation, type, count, split));
 		wb.close();
 		

@@ -131,9 +131,8 @@ public class CardController extends CommonController {
 			
 			response.setHeader("Pragma", "No-cache");
 			response.setHeader("Cache-Control", "no-cache");
-			response.setDateHeader("Expiresponse", 0L);
-			response.setContentType("application/ms-excel;charset=utf-8");
-			response.setHeader("Content-Disposition","attachment;filename=report.xls");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=UTF-8");
 			response.getWriter().write(haveCardno);
 			response.getWriter().close();
 			return null;
