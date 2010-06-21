@@ -292,6 +292,9 @@ public class ExcelController extends CommonController {
 			}else if("PLAN1".equals(model)){//计划
 				list = excelDAO.getExportData_PLAN1(level, type, f_empname, datepick, emcode, sel_empcode, sel_status);
 				path = exportExcel.exportExcel_PLAN1(list, planDAO, datepick);
+			}else if("INS".equals(model)){//临时调查表
+				String ins_id = ServletRequestUtils.getStringParameter(request, "model", "ins_id");
+				List listadd = excelDAO.getExportData_INSBack(ins_id);
 			}
 			
 			
