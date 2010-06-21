@@ -36,7 +36,7 @@ Ext.onReady(function(){
     }
     
     function onExportClick(btn){
-    	window.location.href = "/excel.do?action=export&model=INS&id=<%=ins_id %>";
+    	window.location.href = "/excel.do?action=export&model=INS&ins_id=<%=ins_id %>";
     }
     
 });

@@ -36,7 +36,7 @@ public class InsController extends CommonController {
 			return mv;
 		}else if("manage".equals(action)){
 			mv = new ModelAndView("modules/ins/manage");
-			PageList pageList = insDAO.findAll(page, sel_title, startdate, enddate);
+			PageList pageList = insDAO.findAll(page, sel_title, startdate, enddate, emcode);
 			mv.addObject("pageList", pageList);
 			mv.addObject("sel_title", sel_title);
 			mv.addObject("startdate", startdate);

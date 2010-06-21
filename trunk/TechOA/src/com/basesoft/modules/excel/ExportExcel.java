@@ -22,6 +22,7 @@ import jxl.write.WriteException;
 
 import com.basesoft.modules.employee.Car;
 import com.basesoft.modules.employee.CarDAO;
+import com.basesoft.modules.ins.Ins;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.workreport.WorkReportDAO;
 import com.basesoft.util.StringUtil;
@@ -731,6 +732,55 @@ public class ExportExcel {
 			str2[7] = map.get("BZ")==null?"":map.get("BZ");
             
             insertRowData(sheet, i + 2, str2);
+		}
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
+	 * 临时调查统计写成一个excel文件，返回这个文件的路径
+	 * @param ins
+	 * @param listBack
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_INS(Ins ins, List listBack) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		String[] str = new String[1];
+		str[0] = "临时调查统计";
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, 1, 0);
+		
+		String str1[] = new String[2];
+		String str2[] = new String[2];
+		String str3[] = new String[2];
+		str1[0] = "调查标题";
+		str1[1] = ins.getTitle();
+		insertRowData(sheet, 1, str1);
+		str2[0] = "调查内容";
+		str2[1] = ins.getNote();
+		insertRowData(sheet, 2, str2);
+		str3[0] = "调查时间";
+		str3[1] = ins.getStartdate();
+		insertRowData(sheet, 3, str3);
+		
+		for(int i=0;i<listBack.size();i++){
+			String str4[] = new String[2];
+			Map mapBack = (Map)listBack.get(i);
+			str4[0] = mapBack.get("EMPNAME")==null?"":mapBack.get("EMPNAME").toString();
+			str4[1] = mapBack.get("NOTE")==null?"":mapBack.get("NOTE").toString();
+			
+			insertRowData(sheet, i + 4, str4);
 		}
 		
 		wb.write();
