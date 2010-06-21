@@ -22,6 +22,8 @@ import com.basesoft.core.CommonController;
 import com.basesoft.modules.employee.CarDAO;
 import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.excel.config.Config;
+import com.basesoft.modules.ins.Ins;
+import com.basesoft.modules.ins.InsDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.role.RoleDAO;
 import com.basesoft.modules.workreport.WorkReportDAO;
@@ -36,6 +38,7 @@ public class ExcelController extends CommonController {
 	TableSelectDAO tableSelectDAO;
 	RoleDAO roleDAO;
 	WorkReportDAO wrDAO;
+	InsDAO insDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -293,8 +296,10 @@ public class ExcelController extends CommonController {
 				list = excelDAO.getExportData_PLAN1(level, type, f_empname, datepick, emcode, sel_empcode, sel_status);
 				path = exportExcel.exportExcel_PLAN1(list, planDAO, datepick);
 			}else if("INS".equals(model)){//临时调查表
-				String ins_id = ServletRequestUtils.getStringParameter(request, "model", "ins_id");
-				List listadd = excelDAO.getExportData_INSBack(ins_id);
+				String ins_id = ServletRequestUtils.getStringParameter(request, "ins_id", "");
+				Ins ins = insDAO.findById(ins_id);
+				List listBack = insDAO.findBacksById(ins_id);
+				path = exportExcel.exportExcel_INS(ins, listBack);
 			}
 			
 			
@@ -357,5 +362,9 @@ public class ExcelController extends CommonController {
 	
 	public void setWorkReportDAO(WorkReportDAO wrDAO){
 		this.wrDAO = wrDAO;
+	}
+	
+	public void setInsDAO(InsDAO insDAO){
+		this.insDAO = insDAO;
 	}
 }

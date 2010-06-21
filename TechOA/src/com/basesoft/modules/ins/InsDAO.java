@@ -17,9 +17,9 @@ public class InsDAO extends CommonDAO {
 	 * @param enddate 截止日期
 	 * @return
 	 */
-	public PageList findAll(int page, String sel_title, String startdate, String enddate){
+	public PageList findAll(int page, String sel_title, String startdate, String enddate, String emcode){
 		PageList pageList = new PageList();
-		String sql = "select * from INVESTIGATION where 1=1 ";
+		String sql = "select * from INVESTIGATION where STARTEMPCODE='" + emcode + "'";
 		
 		if(!"".equals(sel_title)){
 			sql = sql + " and TITLE like '%" + sel_title + "%'";

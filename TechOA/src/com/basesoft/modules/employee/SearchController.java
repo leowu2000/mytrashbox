@@ -62,7 +62,9 @@ public class SearchController extends CommonController {
 			
 			Employee em = searchDAO.findById(emid);
 			
-			PageList pageList = searchDAO.findAll(em.getDepartcode(), em.getName(), sel_empcode, 1, em.getDepartcode());
+			String departcode = "'" + em.getDepartcode() + "'";
+			
+			PageList pageList = searchDAO.findAll(em.getDepartcode(), em.getName(), sel_empcode, 1, departcode);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("em", em);

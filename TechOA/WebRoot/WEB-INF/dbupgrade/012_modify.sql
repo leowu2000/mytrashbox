@@ -1,4 +1,4 @@
-/*update USER_MENU set MENUCODE='102' where EMPCODE='007' and MENUCODE='101';*/
+update USER_MENU set MENUCODE='102' where EMPCODE='007' and MENUCODE='101';
 
 INSERT INTO MENU VALUES('016','系统访问管理','1','visit.do?action=frame',5,'1','001','1.png');
 INSERT INTO MENU VALUES('105','临时调查管理','1','ins.do?action=frame_manage',10,'1','100','10.png');
