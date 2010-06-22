@@ -238,7 +238,7 @@ if("search".equals(method)){
 %> 
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("card.do?action=list_manage&seldepart="+seldepart+"&empname="+emname+"&sel_empcode="+sel_empcode) %>
+<%=pageList.getPageInfo().getHtml("card.do?action=list_manage&seldepart="+seldepart+"&empname="+URLEncoder.encode(emname,"UTF-8")+"&sel_empcode="+sel_empcode) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

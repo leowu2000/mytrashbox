@@ -1,5 +1,6 @@
 package com.basesoft.modules.employee;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class CardController extends CommonController {
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
+		emname = URLDecoder.decode(emname, "ISO8859-1");
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");

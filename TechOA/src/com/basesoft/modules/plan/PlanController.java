@@ -1,5 +1,6 @@
 package com.basesoft.modules.plan;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,6 +37,7 @@ public class PlanController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
+		f_empname = URLDecoder.decode(f_empname, "ISO8859-1");
 		f_empname = new String(f_empname.getBytes("ISO8859-1"),"UTF-8");
 		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
 		String f_level = ServletRequestUtils.getStringParameter(request, "f_level", "");

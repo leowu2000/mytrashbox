@@ -246,7 +246,7 @@ function checkAll(){
   <body>
   	<div id="toolbar1"></div>
 	<form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("em.do?action=infolist&seldepart=" + seldepart + "&emname=" + emname + "&sel_empcode=" + sel_empcode) %>
+<%=pageList.getPageInfo().getHtml("em.do?action=infolist&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&sel_empcode=" + sel_empcode) %>
 	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

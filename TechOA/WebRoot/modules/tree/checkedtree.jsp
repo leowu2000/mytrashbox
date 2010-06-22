@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.net.*" %>
 <%@ include file="/common/taglibs.jsp" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -9,6 +10,16 @@
 <%
 	String checkedEmp = (String)request.getAttribute("checkedEmp"); 
 	String id = (String)request.getAttribute("id"); 
+	
+	String pagenum = request.getAttribute("pagenum")==null?"":request.getAttribute("pagenum").toString();
+	String level = request.getAttribute("f_level")==null?"":request.getAttribute("f_level").toString();
+	String type = request.getAttribute("f_type")==null?"":request.getAttribute("f_type").toString();
+	String f_empname = request.getAttribute("f_empname")==null?"":request.getAttribute("f_empname").toString();
+	f_empname = URLEncoder.encode(f_empname,"UTF-8");
+	String sel_empcode = request.getAttribute("sel_empcode")==null?"":request.getAttribute("sel_empcode").toString();
+	String datepick = request.getAttribute("datepick")==null?"":request.getAttribute("datepick").toString();
+	String sel_status = request.getAttribute("sel_status")==null?"":request.getAttribute("sel_status").toString();
+	String isplanner = request.getAttribute("isplanner")==null?"":request.getAttribute("isplanner").toString();
 %>
 <script type="text/javascript">
 
@@ -80,7 +91,7 @@
 	<%
 		if(!"".equals(id)&&!"null".equals(id)&&id!=null){
 	%>
-		parent.window.location.href = "/plan.do?action=changeMultiEMP&empcodes=" + codevalue + "&id=<%=id %>";
+		parent.window.location.href = "/plan.do?action=changeMultiEMP&empcodes=" + codevalue + "&id=<%=id %>&&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&isplanner=false";
 	<%
 		}else {
 	%>
