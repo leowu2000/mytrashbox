@@ -2,6 +2,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%@ page import="com.basesoft.util.*" %>
+<%@ page import="java.net.*" %>
 <%@ page import="com.basesoft.modules.plan.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
@@ -12,6 +13,7 @@ String f_level = request.getAttribute("f_level").toString();
 String f_type = request.getAttribute("f_type").toString();
 String datepick = request.getAttribute("datepick").toString();
 String f_empname = request.getAttribute("f_empname").toString();
+f_empname = URLEncoder.encode(f_empname,"UTF-8");
 String sel_empcode = request.getAttribute("sel_empcode").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
@@ -42,7 +44,7 @@ PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("plan.do?action=remind_list_planner&f_level=" + f_level + "&f_type=" + f_type + "&datepick=" + datepick + "&empname=" + f_empname + "&sel_empcode=" + sel_empcode) %>
+<%=pageList.getPageInfo().getHtml("plan.do?action=remind_list_planner&f_level=" + f_level + "&f_type=" + f_type + "&datepick=" + datepick + "&f_empname=" + URLEncoder.encode(f_empname, "UTF-8") + "&sel_empcode=" + sel_empcode) %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
             	<td nowrap="nowrap">计划分类</td>

@@ -1,5 +1,6 @@
 package com.basesoft.modules.ins;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,7 @@ public class InsController extends CommonController {
 		String startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
 		String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
 		String sel_title = ServletRequestUtils.getStringParameter(request, "sel_title", "");
+		sel_title = URLDecoder.decode(sel_title, "ISO8859-1");
 		sel_title = new String(sel_title.getBytes("ISO8859-1"),"UTF-8");
 		
 		if("frame_manage".equals(action)){

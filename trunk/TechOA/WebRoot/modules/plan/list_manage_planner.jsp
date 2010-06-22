@@ -293,7 +293,7 @@ Ext.onReady(function(){
 				Ext.get('leader_section').set({'value':data.item.leader__section});
 				Ext.get('leader_room').set({'value':data.item.leader__room});
 				
-		    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>';
+		    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -402,7 +402,7 @@ function changeEmp(){
 }
 
 function changeEmp1(value){
-    	document.getElementById('treeForm').action = "tree.do?action=multiemp1_init&id=" + value;
+    	document.getElementById('treeForm').action = "tree.do?action=multiemp1_init&id=" + value + "&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&isplanner=true";
     	document.getElementById('treeForm').submit();
     
     	document.getElementById("empsel").style.top="100px";
@@ -432,7 +432,7 @@ function checkAll(){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("plan.do?action=list_planner&f_level=" + level + "&f_type=" + type + "&f_empname=" + f_empname + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode + "&sel_status=" + sel_status) %>
+<%=pageList.getPageInfo().getHtml("plan.do?action=list_planner&f_level=" + level + "&f_type=" + type + "&f_empname=" + URLEncoder.encode(f_empname, "UTF-8") + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode + "&sel_status=" + sel_status) %>
 	<table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
                 <td nowrap="nowrap"><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>

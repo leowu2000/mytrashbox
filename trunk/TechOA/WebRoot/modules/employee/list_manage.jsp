@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@	page import="java.net.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%@ page import="com.basesoft.modules.employee.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
@@ -9,6 +10,7 @@ int pagenum = pageList.getPageInfo().getCurPage();
 
 String seldepart = request.getAttribute("seldepart").toString();
 String emname = request.getAttribute("emname").toString();
+emname = URLEncoder.encode(emname,"UTF-8");
 String sel_empcode = request.getAttribute("sel_empcode").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
@@ -80,7 +82,7 @@ String errorMessage = request.getAttribute("errorMessage")==null?"":request.getA
   <body>
   	<div id="toolbar"></div>
 	<form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("em.do?action=list_manage&seldepart="+seldepart+"&emname="+emname+"&sel_empcode=" + sel_empcode) %>
+<%=pageList.getPageInfo().getHtml("em.do?action=list_manage&seldepart="+seldepart+"&emname="+URLEncoder.encode(emname,"UTF-8")+"&sel_empcode=" + sel_empcode) %>
 	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

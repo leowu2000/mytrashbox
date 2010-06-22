@@ -1,5 +1,6 @@
 package com.basesoft.modules.employee;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +41,7 @@ public class EmployeeController extends CommonController {
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		errorMessage = new String(errorMessage.getBytes("ISO8859-1"),"UTF-8");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
+		emname = URLDecoder.decode(emname, "ISO8859-1");
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");

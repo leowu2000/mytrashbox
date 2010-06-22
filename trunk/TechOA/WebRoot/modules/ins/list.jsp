@@ -97,7 +97,7 @@ function checkAll(){
   <body>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("ins.do?action=list&sel_title="+sel_title+"&startdate="+startdate+"&enddate="+enddate) %>
+<%=pageList.getPageInfo().getHtml("ins.do?action=list&sel_title="+URLEncoder.encode(sel_title,"UTF-8")+"&startdate="+startdate+"&enddate="+enddate) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

@@ -80,11 +80,7 @@ public class TreeController extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			//封装成checkboxtree
 			List<CheckBoxTree> checkBoxTreeList = new ArrayList<CheckBoxTree>();
-			if("004".equals(emrole)){//计划员看到所有的部门员工
-				checkBoxTreeList = treeDAO.getDepartEmpTree("1", checkedEmp, emcode, emrole);
-			}else {
-				checkBoxTreeList = treeDAO.getDepartEmpTree("1", checkedEmp, emcode, emrole);
-			}
+			checkBoxTreeList = treeDAO.getDepartEmpTree("1", checkedEmp, emcode, emrole);
 			if(!"".equals(id)&&!"null".equals(id)){
 				checkBoxTreeList = treeDAO.getMuiltiEMPTree(id);
 			}
@@ -107,8 +103,26 @@ public class TreeController extends CommonController {
 			response.getWriter().close();
 		}else if("multiemp1_init".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
+			String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
+			f_empname = new String(f_empname.getBytes("ISO8859-1"),"UTF-8");
+			String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
+			String f_level = ServletRequestUtils.getStringParameter(request, "f_level", "");
+			String f_type = ServletRequestUtils.getStringParameter(request, "f_type", "");
+			String isplanner = ServletRequestUtils.getStringParameter(request, "isplanner", "");
+			String sel_status = ServletRequestUtils.getStringParameter(request, "sel_status", "");
+			String page = ServletRequestUtils.getStringParameter(request, "page", "");
 			mv = new ModelAndView("/modules/tree/checkedtree");
 			mv.addObject("id", id);
+			mv.addObject("datepick", datepick);
+			mv.addObject("f_empname", f_empname);
+			mv.addObject("sel_empcode", sel_empcode);
+			mv.addObject("f_level", f_level);
+			mv.addObject("f_type", f_type);
+			mv.addObject("sel_status", sel_status);
+			mv.addObject("isplanner", isplanner);
+			mv.addObject("pagenum", page);
+			
 			return mv;
 		}else if("multipj_init".equals(action)){
 			mv = new ModelAndView("/modules/tree/checkedtree_pj");

@@ -203,7 +203,7 @@ function checkAll(){
 <%
 if(!"search".equals(method)){
 %>
-<%=pageList.getPageInfo().getHtml("finance.do?action=list_manage&seldepart="+seldepart+"&empname="+emname+"&datepick="+datepick+"&sel_empcode="+sel_empcode) %>
+<%=pageList.getPageInfo().getHtml("finance.do?action=list_manage&seldepart="+seldepart+"&empname="+URLEncoder.encode(emname,"UTF-8")+"&datepick="+datepick+"&sel_empcode="+sel_empcode) %>
 <%} %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">

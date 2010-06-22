@@ -1,6 +1,6 @@
 package com.basesoft.modules.employee;
 
-import java.net.URLEncoder;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,8 +27,10 @@ public class TrainController extends CommonController {
 		String type = ServletRequestUtils.getStringParameter(request, "type", "");
 		String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
 		String seltrain = ServletRequestUtils.getStringParameter(request, "seltrain", "");
+		seltrain = URLDecoder.decode(seltrain, "ISO8859-1");
 		seltrain = new String(seltrain.getBytes("ISO8859-1"),"UTF-8");
 		String selassess = ServletRequestUtils.getStringParameter(request, "selassess", "");
+		selassess = URLDecoder.decode(selassess, "ISO8859-1");
 		selassess = new String(selassess.getBytes("ISO8859-1"),"UTF-8");
 		int cost = ServletRequestUtils.getIntParameter(request, "cost", 0);
 		
