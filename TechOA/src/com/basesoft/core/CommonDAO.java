@@ -256,6 +256,17 @@ public class CommonDAO {
 	}
 	
 	/**
+	 * 根据名称模糊检索
+	 * @param pjname
+	 * @return
+	 */
+	public List<?> searchProjects(String pjname){
+		String querySql = "select * from PROJECT where NAME like '%" + pjname + "%'";
+		
+		return jdbcTemplate.queryForList(querySql);
+	}
+	
+	/**
 	 * 新增记录
 	 * @param insertSql 入库sql
 	 */

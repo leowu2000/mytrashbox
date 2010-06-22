@@ -21,7 +21,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String level, String type, String empname, String datepick, int page, String sel_empcode, String departcodes, String sel_status){
+	public PageList findAll(String level, String type, String empname, String datepick, int page, String sel_empcode, String departcodes, String sel_status, String sel_note){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
@@ -76,9 +76,13 @@ public class PlanDAO extends CommonDAO {
 		if(!"0".equals(sel_status)){
 			sql = sql + " and STATUS='" + sel_status + "'";
 		}
-		
+		//按工号
 		if(!"".equals(sel_empcode)){
 			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
+		}
+		//按内容
+		if(!"".equals(sel_note)){
+			sql = sql + " and NOTE like '%" + sel_note + "%'";
 		}
 		
 		if("".equals(datepick)){
@@ -110,7 +114,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll_planner(String level, String type, String empname, String datepick, int page, String emrole, String emcode, String emdepart, String sel_empcode, String sel_status){
+	public PageList findAll_planner(String level, String type, String empname, String datepick, int page, String emrole, String emcode, String emdepart, String sel_empcode, String sel_status, String sel_note){
 		PageList pageList = new PageList();
 		String sql = "";
 		int pagesize = 20;
@@ -154,6 +158,10 @@ public class PlanDAO extends CommonDAO {
 		if(!"".equals(sel_empcode)){
 			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
 		}
+		//按内容
+		if(!"".equals(sel_note)){
+			sql = sql + " and NOTE like '%" + sel_note + "%'";
+		}
 		
 		if("".equals(datepick)){
 			sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc";
@@ -184,7 +192,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public List findAll_planner(String level, String type, String empname, String datepick, String emcode, String sel_empcode, String sel_status){
+	public List findAll_planner(String level, String type, String empname, String datepick, String emcode, String sel_empcode, String sel_status, String sel_note){
 		PageList pageList = new PageList();
 		String sql = "";
 		if("0".equals(level)){//全部级别
@@ -224,6 +232,10 @@ public class PlanDAO extends CommonDAO {
 		}
 		if(!"".equals(sel_empcode)){
 			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
+		}
+		//按内容
+		if(!"".equals(sel_note)){
+			sql = sql + " and NOTE like '%" + sel_note + "%'";
 		}
 		
 		if("".equals(datepick)){
@@ -247,7 +259,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllRemind(String level, String type, String datepick, String empname, String empcode, String departcodes, int page){
+	public PageList findAllRemind(String level, String type, String datepick, String empname, String empcode, String departcodes, int page, String sel_note){
 		PageList pageList = new PageList();
 		String sql = "";
 		
@@ -309,9 +321,13 @@ public class PlanDAO extends CommonDAO {
 					" or SPLIT_PART(EMPNAME,',',6) in (" + empnameSql + ")" +
 					" or SPLIT_PART(EMPCODE,',',7) in (" + empcodeSql + ")" +
 					" or SPLIT_PART(EMPNAME,',',7) in (" + empnameSql + "))";
-		
+		//按工号
 		if(!"".equals(empcode)){
 			sql = sql + " and EMPCODE like '%" + empcode + "%'";
+		}
+		//按内容
+		if(!"".equals(sel_note)){
+			sql = sql + " and NOTE like '%" + sel_note + "%'";
 		}
 		
 		sql = sql + " order by ENDDATE ,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
@@ -337,7 +353,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllRemind_planner(String level, String type, String datepick, String empname, String empcode,String emcode, int page){
+	public PageList findAllRemind_planner(String level, String type, String datepick, String empname, String empcode,String emcode, int page, String sel_note){
 		PageList pageList = new PageList();
 		String sql = "";
 		
@@ -384,9 +400,13 @@ public class PlanDAO extends CommonDAO {
 		}
 		
 		sql = sql + " and PLANNERCODE='" + emcode + "'";
-		
+		//按工号
 		if(!"".equals(empcode)){
 			sql = sql + " and EMPCODE like '%" + empcode + "%'";
+		}
+		//按内容
+		if(!"".equals(sel_note)){
+			sql = sql + " and NOTE like '%" + sel_note + "%'";
 		}
 		
 		sql = sql + " order by ENDDATE ,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
@@ -412,7 +432,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public List findAllRemind(String level, String type, String datepick, String empname){
+	public List findAllRemind(String level, String type, String datepick, String empname, String sel_empcode, String sel_note){
 		Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 		Date enddate = StringUtil.getEndOfMonth(startdate);
 		String sql = "select a.*,b.* from PLAN a, (select sum(AMOUNT) as AMOUNT from WORKREPORT c,PLAN d where c.PJCODE=d.PJCODE and c.PJCODE_D=d.PJCODE_D and c.STAGECODE=d.STAGECODE and c.STARTDATE>=d.STARTDATE and c.STARTDATE<=d.ENDDATE) b where a.ENDDATE>='" + startdate + "' and a.ENDDATE<='" + enddate + "'";
@@ -445,6 +465,15 @@ public class PlanDAO extends CommonDAO {
 					sql = sql + " and ASSESS='" + level + "' and TYPE='" + type + "' and EMPNAME like '%" + empname + "%'";
 				}
 			}
+		}
+		
+		//按工号
+		if(!"".equals(sel_empcode)){
+			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
+		}
+		//按内容
+		if(!"".equals(sel_note)){
+			sql = sql + " and NOTE like '%" + sel_note + "%'";
 		}
 		
 		sql = sql + " order by ENDDATE,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";

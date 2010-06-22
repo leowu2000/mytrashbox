@@ -17,6 +17,8 @@
 	String f_empname = request.getAttribute("f_empname")==null?"":request.getAttribute("f_empname").toString();
 	f_empname = URLEncoder.encode(f_empname,"UTF-8");
 	String sel_empcode = request.getAttribute("sel_empcode")==null?"":request.getAttribute("sel_empcode").toString();
+	String sel_note = request.getAttribute("sel_note")==null?"":request.getAttribute("sel_note").toString();
+	sel_note = URLEncoder.encode(sel_note,"UTF-8");
 	String datepick = request.getAttribute("datepick")==null?"":request.getAttribute("datepick").toString();
 	String sel_status = request.getAttribute("sel_status")==null?"":request.getAttribute("sel_status").toString();
 	String isplanner = request.getAttribute("isplanner")==null?"":request.getAttribute("isplanner").toString();
@@ -91,7 +93,7 @@
 	<%
 		if(!"".equals(id)&&!"null".equals(id)&&id!=null){
 	%>
-		parent.window.location.href = "/plan.do?action=changeMultiEMP&empcodes=" + codevalue + "&id=<%=id %>&&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&isplanner=false";
+		parent.window.location.href = "/plan.do?action=changeMultiEMP&empcodes=" + codevalue + "&id=<%=id %>&&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&isplanner=false&sel_note=<%=sel_note %>";
 	<%
 		}else {
 	%>

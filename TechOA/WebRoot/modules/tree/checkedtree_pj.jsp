@@ -8,13 +8,14 @@
 <%@ include file="../../common/meta.jsp" %>
 <%
 	String checkedPj = (String)request.getAttribute("checkedPj"); 
+	String sel_pjname =  (String)request.getAttribute("sel_pjname"); 
 %>
 <script type="text/javascript">
 
 	var url='tree.do';
 	var tree;
 	function buildTree(){
-	    	tree = new Ext.tree.TreePanel({
+	    tree = new Ext.tree.TreePanel({
 	        renderTo:'checkboxtree',
 	        title: '请选择令号',
 	        height: 270,
@@ -37,7 +38,8 @@
                         requestMethod : 'post',
 	        			baseParams : {
 	            			action : 'multipj',
-	            			checkedPj : '<%=checkedPj %>'
+	            			checkedPj : '<%=checkedPj %>',
+	            			sel_pjname : '<%=sel_pjname %>'
 	            		}
 	        }),
 
@@ -54,6 +56,7 @@
 	            }
 	        }
 		});
+		tree.expandAll();
 	}
 	
 	function submitBut(){
@@ -77,8 +80,17 @@
 		if(codevalue == ''){
 		    textvalue = "请选择...";
 		}
-		parent.document.getElementById('pjcodes').value = codevalue;
-		parent.document.getElementById('pjnames').value = textvalue;
+		var p_codes = parent.document.getElementById('pjcodes').value;
+		var p_names = parent.document.getElementById('pjnames').value;
+		if(p_codes == ''){
+			parent.document.getElementById('pjcodes').value = codevalue;
+			parent.document.getElementById('pjnames').value = textvalue;
+		}else {
+			parent.document.getElementById('pjcodes').value = p_codes + ',' + codevalue;
+			parent.document.getElementById('pjnames').value = p_names + ',' + textvalue;
+		}
+		 
+		
 		parent.document.getElementById('pjsel').style.display = 'none';
 		return false;
 	}

@@ -42,6 +42,7 @@ var action;
 var url='/workreport.do';
 var method = '<%=method %>';
 Ext.onReady(function(){
+
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
 	if(method=='search'){
@@ -176,6 +177,16 @@ function AJAX_PJTYPE(type){
     xmlHttpReq.send();
     if(xmlHttpReq.responseText!=''){
         document.getElementById('selpj').innerHTML = xmlHttpReq.responseText;
+        var pjcombo = new Ext.form.ComboBox({
+        	typeAhead: true,
+        	triggerAction: 'all',
+        	emptyText:'',
+        	mode: 'local',
+        	selectOnFocus:true,
+        	transform:'pjcode',
+        	width:203,
+        	maxHeight:300
+	});
     }
 }
 
