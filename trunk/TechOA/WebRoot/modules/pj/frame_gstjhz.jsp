@@ -25,9 +25,13 @@ if("".equals(departname)){
 	<script type="text/javascript">
 	Ext.onReady(function(){
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
-		tb.add('选择工作令号');
-  		tb.add(document.getElementById('pjnames'));
+		tb.add('查找令号:');
+  		tb.add(document.getElementById('sel_pjname'));
   		tb.add(document.getElementById('selpj'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
+		tb.add('已选令号：');
+		tb.add(document.getElementById('pjnames'));
+		tb.add(document.getElementById('delpj'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
 		tb.add('选择部门：');
   		tb.add(document.getElementById('departnames'));
@@ -36,9 +40,6 @@ if("".equals(departname)){
   		tb.add('选择年月：');
   		tb.add(document.getElementById('datepick'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
-  		//tb.add('选择出图类型：');
-  		//tb.add(document.getElementById('sel_type'));
-  		//tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
@@ -91,8 +92,8 @@ if("".equals(departname)){
 	}
 	
 	function changePj(){
-    	document.getElementById('checkedPj').value = document.getElementById('pjcodes').value;
-    	document.getElementById('treeForm').action = "tree.do?action=multipj_init";
+    	var sel_pjname = document.getElementById('sel_pjname').value;
+    	document.getElementById('treeForm').action = "tree.do?action=multipj_init&sel_pjname=" + sel_pjname;
     	document.getElementById('treeForm').submit();
     
     	document.getElementById("pjsel").style.top=(event.clientY+30)+"px";
@@ -109,6 +110,11 @@ if("".equals(departname)){
     	document.getElementById("departsel").style.left=(event.clientX-135)+"px";
     	document.getElementById("departsel").style.display="";
 	}
+	
+	function deletePj(){
+		document.getElementById('pjcodes').value = '';
+		document.getElementById('pjnames').value = '请选择...';
+	}
 	</script>
   </head>
   
@@ -116,8 +122,12 @@ if("".equals(departname)){
   	<h1>工时统计汇总</h1>
     <div id="toolbar"></div>
     <span id="departspan" name="departspan"></span>
-    <input type="text" id="pjnames" name="pjnames" style="width:120;" value="请选择..." disabled="disabled"><input class="btn" name="selpj" type="button" onclick="changePj();" value="选择">
-	<input type="hidden" id="pjcodes" name="pjcodes">
+    <input type="text" id="sel_pjname" name="sel_pjname" style="width:120;">
+    <input type="text" id="pjnames" name="pjnames" style="width:120;" value="请选择..." disabled="disabled">
+    <input type="hidden" id="pjcodes" name="pjcodes">
+    <input class="btn" name="selpj" type="button" onclick="changePj();" value="搜索">
+    <input class="btn" name="delpj" type="button" onclick="deletePj();" value="重选">
+	
     <input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" style="width: 50">
     <iframe name="list_gstjhz" width="100%" frameborder="0" height="500"></iframe>
     <form id="treeForm" name="treeForm" method="POST" target="checkedtree">
@@ -130,11 +140,6 @@ if("".equals(departname)){
 		<input type="hidden" id="checkedDepart" name="checkedDepart">
 	</form>
 	<div style="position:absolute; top:110px; left:100px;display: none;" id="departsel" name="departsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree1" name="checkedtree1"></iframe></div>
-  	<select name="sel_type" id="sel_type" style="display:none;">
-  		<option value="1">柱状图</option>
-  		<option value="2">饼状图</option>
-  		<option value="3">折线图</option>
-  	</select>
   	<input type="button" class="btn" value="分析" name="search" onclick="commit();">
   </body>
 </html>

@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class ExcelController extends CommonController {
 		String table = ServletRequestUtils.getStringParameter(request, "table", "");
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
+		emname = URLDecoder.decode(emname, "ISO8859-1");
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
 		String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
@@ -58,6 +60,7 @@ public class ExcelController extends CommonController {
 		String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
 		String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
+		f_empname = URLDecoder.decode(f_empname, "ISO8859-1");
 		f_empname = new String(f_empname.getBytes("ISO8859-1"),"UTF-8");
 		String f_level = ServletRequestUtils.getStringParameter(request, "f_level", "");
 		String f_type = ServletRequestUtils.getStringParameter(request, "f_type", "");
@@ -70,6 +73,9 @@ public class ExcelController extends CommonController {
 		String carid = ServletRequestUtils.getStringParameter(request, "carid", "");
 		String sel_carcode = ServletRequestUtils.getStringParameter(request, "sel_carcode", "");
 		String sel_status = ServletRequestUtils.getStringParameter(request, "sel_status", "");
+		String sel_note = ServletRequestUtils.getStringParameter(request, "sel_note", "");
+		sel_note = URLDecoder.decode(sel_note, "ISO8859-1");
+		sel_note = new String(sel_note.getBytes("ISO8859-1"),"UTF-8");
 		
 		if("preview".equals(action)){//导入预览
 			if("DEPARTMENT".equals(table)){//导入部门
@@ -264,7 +270,7 @@ public class ExcelController extends CommonController {
 				list = emDAO.getYgtrfx(empcodes, startdate, enddate, selproject);
 				path = exportExcel.exportExcel_YGTRFX(list, imagepath, selpjname);
 			}else if("PLAN".equals(model)){//计划
-				list = excelDAO.getExportData_PLAN(f_level, f_type, datepick, f_empname);
+				list = excelDAO.getExportData_PLAN(f_level, f_type, datepick, f_empname, sel_empcode, sel_note);
 				path = exportExcel.exportExcel_PLAN(list, planDAO, datepick);
 			}else if("JBF".equals(model)){//加班费
 				list = excelDAO.getExportData_JBF(datepick, emname, departcodes);
@@ -293,7 +299,7 @@ public class ExcelController extends CommonController {
 				list = excelDAO.getExportData_WORKREPORT(emcode, departcodes, wrDAO);
 				path = exportExcel.exportExcel_WORKREPORT(list, wrDAO);
 			}else if("PLAN1".equals(model)){//计划
-				list = excelDAO.getExportData_PLAN1(level, type, f_empname, datepick, emcode, sel_empcode, sel_status);
+				list = excelDAO.getExportData_PLAN1(level, type, f_empname, datepick, emcode, sel_empcode, sel_status, sel_note);
 				path = exportExcel.exportExcel_PLAN1(list, planDAO, datepick);
 			}else if("INS".equals(model)){//临时调查表
 				String ins_id = ServletRequestUtils.getStringParameter(request, "ins_id", "");

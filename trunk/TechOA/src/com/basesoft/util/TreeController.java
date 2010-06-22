@@ -111,6 +111,8 @@ public class TreeController extends CommonController {
 			String f_type = ServletRequestUtils.getStringParameter(request, "f_type", "");
 			String isplanner = ServletRequestUtils.getStringParameter(request, "isplanner", "");
 			String sel_status = ServletRequestUtils.getStringParameter(request, "sel_status", "");
+			String sel_note = ServletRequestUtils.getStringParameter(request, "sel_note", "");
+			sel_note = new String(sel_note.getBytes("ISO8859-1"),"UTF-8");
 			String page = ServletRequestUtils.getStringParameter(request, "page", "");
 			mv = new ModelAndView("/modules/tree/checkedtree");
 			mv.addObject("id", id);
@@ -120,6 +122,7 @@ public class TreeController extends CommonController {
 			mv.addObject("f_level", f_level);
 			mv.addObject("f_type", f_type);
 			mv.addObject("sel_status", sel_status);
+			mv.addObject("sel_note", sel_note);
 			mv.addObject("isplanner", isplanner);
 			mv.addObject("pagenum", page);
 			
@@ -127,12 +130,16 @@ public class TreeController extends CommonController {
 		}else if("multipj_init".equals(action)){
 			mv = new ModelAndView("/modules/tree/checkedtree_pj");
 			String checkedPj = ServletRequestUtils.getStringParameter(request, "checkedPj", "");
+			String sel_pjname = ServletRequestUtils.getStringParameter(request, "sel_pjname", "");
 			mv.addObject("checkedPj", checkedPj);
+			mv.addObject("sel_pjname", sel_pjname);
 			return mv;
 		}else if("multipj".equals(action)){
 			String checkedPj = ServletRequestUtils.getStringParameter(request, "checkedPj", "");
+			String sel_pjname = ServletRequestUtils.getStringParameter(request, "sel_pjname", "");
+			String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
 			//封装成checkboxtree
-			List<CheckBoxTree> checkBoxTreeList = treeDAO.getProjectTree(checkedPj);
+			List<CheckBoxTree> checkBoxTreeList = treeDAO.getProjectTree(sel_pjname);
 			//循环转换为json格式
 			StringBuffer sb = new StringBuffer();
 			sb.append("[");
