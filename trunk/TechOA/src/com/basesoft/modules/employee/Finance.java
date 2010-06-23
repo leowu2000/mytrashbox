@@ -6,6 +6,8 @@ public class Finance {
 	public String empcode;
 	public String empname;
 	public String departcode;
+	public String p_depart;
+	public String p_depart2;
 	public String departname;
 	public String rq;
 	public float jbf;
@@ -154,5 +156,21 @@ public class Finance {
 
 	public void setRq(String rq) {
 		this.rq = rq;
+	}
+
+	public String getP_depart() {
+		return p_depart;
+	}
+
+	public void setP_depart(String p_depart) {
+		this.p_depart = p_depart;
+	}
+
+	public String getP_depart2() {
+		return p_depart2;
+	}
+
+	public void setP_depart2(String p_depart2) {
+		this.p_depart2 = p_depart2;
 	}
 }

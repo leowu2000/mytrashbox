@@ -29,46 +29,57 @@ String rolecode = session.getAttribute("EMROLE")==null?"":session.getAttribute("
 	<link href="css/bs_custom.css" type="text/css" rel="stylesheet">
 	<%@ include file="../../common/meta.jsp" %>
 	<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
-<script type="text/javascript">
+<script type="text/javascript"><!--
 var win;
 var win1;
 var action;
 var url='/em.do';
 Ext.onReady(function(){
-	var comboBoxTree = new Ext.ux.ComboBoxTree({
-			renderTo : 'departspan',
-			width : 203,
-			hiddenName : 'depart',
-			hiddenId : 'depart',
-			tree : {
-				id:'tree1',
-				xtype:'treepanel',
-				rootVisible:false,
-				loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departTree'}),
-		   	 	root : new Ext.tree.AsyncTreeNode({})
-			},
-			    	
-			//all:所有结点都可选中
-			//exceptRoot：除根结点，其它结点都可选(默认)
-			//folder:只有目录（非叶子和非根结点）可选
-			//leaf：只有叶子结点可选
-			selectNodeModel:'all',
-			listeners:{
-	            beforeselect: function(comboxtree,newNode,oldNode){//选择树结点设值之前的事件   
-	                   //... 
-	                   return;  
-	            },   
-	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
-	            		return;
-	            },   
-	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
-	                  //...   
-	                  //alert("显示值="+comboBoxTree.getRawValue()+"  真实值="+comboBoxTree.getValue());
-	                  return; 
-	            }   
-      		}
-			
-		});
+	var comboxWithTree = new Ext.form.ComboBox({   
+		store:new Ext.data.SimpleStore({fields:[],data:[[]]}),   
+		editable:false,   
+		mode: 'local',   
+		width : 203,
+		triggerAction:'all',   
+		maxHeight: 350,   
+		tpl: "<tpl for='.'><div style='height:200px'><div id='tree'></div></div></tpl>",   
+		selectedClass:'',   
+		onSelect:Ext.emptyFn   
+	});   
+	var tree = new Ext.tree.TreePanel({   
+		loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departTree'}), 
+		border:false, 
+		rootVisible:false,  
+		autoHeight:true,
+		root:new Ext.tree.AsyncTreeNode({})
+	});   
+	tree.on('click',function(node){   
+		comboxWithTree.setValue(node.text);  
+		document.getElementById('depart').value = node.id;
+		comboxWithTree.collapse();   
+	});   
+	tree.on('load',function(){   
+		Ext.Ajax.request({
+			url: url+'?action=query&id=<%=mapEm.get("ID") %>',
+			method: 'GET',
+			success: function(transport) {
+			    var data = eval('('+transport.responseText+')');
+			    var departcode = data.item.departcode;
+				var p_depart = data.item.p__depart;
+				var p_depart2 = data.item.p__depart2;
+				if(p_depart2 != ''&&p_depart2 != '0'){
+					tree.getNodeById(p_depart2).expand(this);
+				}
+				if(p_depart != ''&&p_depart != '0'){
+					tree.getNodeById(p_depart).expand(this);
+				}
+			}
+		});  
+	}); 
+	comboxWithTree.on('expand',function(){   
+		tree.render('tree'); 
+	});   
+	comboxWithTree.render('departspan');  
 
 	var tb1 = new Ext.Toolbar({renderTo:'toolbar1'});
 	var method = '<%=method %>';
@@ -122,7 +133,7 @@ Ext.onReady(function(){
 			    Ext.get('id').set({'value':data.item.id});
 				Ext.get('loginid').set({'value':data.item.loginid});
 				Ext.get('rolecode').set({'value':data.item.rolecode});
-				comboBoxTree.setValue({id:data.item.departcode,text:data.item.departname});
+				comboxWithTree.setValue(data.item.departname);
 				Ext.get('empname').set({'value':data.item.name});
 				Ext.get('mainjob').set({'value':data.item.mainjob});
 				Ext.get('level').set({'value':data.item.level});
@@ -146,7 +157,7 @@ Ext.onReady(function(){
     }
 });
 
-</script>
+--></script>
   </head>
   
   <body>
@@ -314,7 +325,10 @@ if("search".equals(method)){
 				  </tr>	
 				  <tr id="departtr" name="departtr">
 				    <td>部门</td>
-				    <td><span name="departspan" id="departspan"></td>
+				    <td>
+				      <span name="departspan" id="departspan">
+				      <input type="hidden" name="depart" id="depart">
+				    </td>
 				  </tr>	
 				  <tr>
 				    <td>主岗</td>

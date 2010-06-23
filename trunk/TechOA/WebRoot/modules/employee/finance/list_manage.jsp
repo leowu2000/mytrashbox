@@ -42,40 +42,55 @@ var action;
 var url='/finance.do';
 var method = '<%=method %>';
 Ext.onReady(function(){
-	var comboBoxTree = new Ext.ux.ComboBoxTree({
-			renderTo : 'empsel',
-			width : 202,
-			hiddenName : 'empcode',
-			hiddenId : 'empcode',
-			tree : {
-				id:'tree1',
-				xtype:'treepanel',
-				rootVisible:false,
-				loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departempTree'}),
-		   	 	root : new Ext.tree.AsyncTreeNode({})
-			},
-			    	
-			//all:所有结点都可选中
-			//exceptRoot：除根结点，其它结点都可选(默认)
-			//folder:只有目录（非叶子和非根结点）可选
-			//leaf：只有叶子结点可选
-			selectNodeModel:'leaf',
-			listeners:{
-	            beforeselect: function(comboxtree,newNode,oldNode){//选择树结点设值之前的事件   
-	                   //... 
-	                   return;  
-	            },   
-	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
-	            		return;
-	            },   
-	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
-	                  //...   
-	                  //alert("显示值="+comboBoxTree.getRawValue()+"  真实值="+comboBoxTree.getValue());
-	                  return; 
-	            }   
-      		}
-			
-		});
+	var comboxWithTree = new Ext.form.ComboBox({   
+		store:new Ext.data.SimpleStore({fields:[],data:[[]]}),   
+		editable:false,   
+		mode: 'local',   
+		width : 203,
+		triggerAction:'all',   
+		maxHeight: 350,   
+		tpl: "<tpl for='.'><div style='height:200px'><div id='tree'></div></div></tpl>",   
+		selectedClass:'',   
+		onSelect:Ext.emptyFn   
+	});   
+	var tree = new Ext.tree.TreePanel({   
+		loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departempTree'}), 
+		border:false, 
+		rootVisible:false,  
+		autoHeight:true,
+		root:new Ext.tree.AsyncTreeNode({})
+	});   
+	tree.on('click',function(node){   
+		comboxWithTree.setValue(node.text);  
+		document.getElementById('empcode').value = node.id;
+		comboxWithTree.collapse();   
+	});   
+	tree.on('load',function(){ 
+		var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');  
+		Ext.Ajax.request({
+			url: url+'?action=query&id=' + selValue,
+			method: 'GET',
+			success: function(transport) {
+			    var data = eval('('+transport.responseText+')');
+			    var departcode = data.item.departcode;
+				var p_depart = data.item.p__depart;
+				var p_depart2 = data.item.p__depart2;
+				if(p_depart2 != ''&&p_depart2 != '0'){
+					tree.getNodeById(p_depart2).expand(this);
+				}
+				if(p_depart != ''&&p_depart != '0'){
+					tree.getNodeById(p_depart).expand(this);
+				}
+				if(p_depart != ''&&p_depart != '0'){
+					tree.getNodeById(departcode).expand(this);
+				}
+			}
+		});  
+	}); 
+	comboxWithTree.on('expand',function(){   
+		tree.render('tree'); 
+	});   
+	comboxWithTree.render('empsel');  
 
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
@@ -128,8 +143,8 @@ Ext.onReady(function(){
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
-			    comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
 				Ext.get('rq').set({'value':data.item.rq});
+				comboxWithTree.setValue(data.item.empname);
 				Ext.get('jbf').set({'value':data.item.jbf});
 				Ext.get('psf').set({'value':data.item.psf});
 				Ext.get('gc').set({'value':data.item.gc});
@@ -269,7 +284,10 @@ if(!"search".equals(method)){
                 <table>
                   <tr>
 				    <td>人员</td>
-				    <td><span name="empsel" id="empsel"></span></td>
+				    <td>
+				    	<span name="empsel" id="empsel"></span>
+				    	<input type="hidden" name="empcode" id="empcode">
+				    </td>
 				  </tr>	
 				  <tr>
 				    <td>日期</td>

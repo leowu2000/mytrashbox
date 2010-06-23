@@ -59,16 +59,16 @@ var url='/plan.do';
 var vali = "";
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
-	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
-	tb.add({text: '修  改',cls: 'x-btn-text-icon xiugai',handler: onUpdateClick});
-	tb.add({text: '标志确认',cls: 'x-btn-text-icon update',handler: onConfirmClick});
-	tb.add({text: '退回反馈',cls: 'x-btn-text-icon update',handler: onSendbackClick});
-	tb.add({text: '标志完成',cls: 'x-btn-text-icon save',handler: onCompleteClick});
-	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
-	tb.add({text: '删除全部',cls: 'x-btn-text-icon delete',handler: onDeleteAllClick});
+	tb.add({text: '增加',cls: 'x-btn-text-icon add',handler: onAddClick});
+	tb.add({text: '修改',cls: 'x-btn-text-icon xiugai',handler: onUpdateClick});
+	tb.add({text: '确认',cls: 'x-btn-text-icon update',handler: onConfirmClick});
+	tb.add({text: '退回',cls: 'x-btn-text-icon update',handler: onSendbackClick});
+	tb.add({text: '完成',cls: 'x-btn-text-icon save',handler: onCompleteClick});
+	tb.add({text: '删除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
 	tb.add({text: '任务分解',cls: 'x-btn-text-icon add',handler: onApartClick});
-	tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
+	tb.add({text: '删除全部',cls: 'x-btn-text-icon delete',handler: onDeleteAllClick});
 	tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
+	tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
 	tb.add({text: '设置完成情况百分比',cls: 'x-btn-text-icon xiugai',handler: onSetClick});
 
     if(!win){
@@ -574,8 +574,12 @@ for(int i=0;i<listPlan.size();i++){
 <%
 					for(int i=0;i<listPj.size();i++){
 						Map mapPj = (Map)listPj.get(i);
+						String name = mapPj.get("NAME")==null?"":mapPj.get("NAME").toString();
+						if(name.length()>14){
+							name = name.substring(0,13) + "...";
+						}
 %>				    	
-						<option value='<%=mapPj.get("CODE") %>'><%=mapPj.get("NAME") %></option>
+						<option value='<%=mapPj.get("CODE") %>'><%=name %></option>
 <%
 					}
 %>

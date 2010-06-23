@@ -27,7 +27,7 @@ if("".equals(departname)){
 	Ext.onReady(function(){
 		var comboBoxTree = new Ext.ux.ComboBoxTree({
 			renderTo : 'departspan',
-			width : 200,
+			width : 180,
 			hiddenName : 'depart',
 			hiddenId : 'depart',
 			tree : {
@@ -66,20 +66,14 @@ if("".equals(departname)){
 		tb.add('查找令号:');
   		tb.add(document.getElementById('sel_pjname'));
   		tb.add(document.getElementById('selpj'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
 		tb.add('已选令号');
   		tb.add(document.getElementById('pjnames'));
   		tb.add(document.getElementById('delpj'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('选择部门：');
+  		tb.add('部门：');
   		tb.add(document.getElementById('departspan'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('选择年月：');
+  		tb.add('年月：');
   		tb.add(document.getElementById('datepick'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
-  		//tb.add('选择出图类型：');
-  		//tb.add(document.getElementById('sel_type'));
-  		//tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
@@ -100,7 +94,6 @@ if("".equals(departname)){
 	  var datepick = document.getElementById('datepick').value;
 	  var depart = document.getElementById('depart').value;
 	  var pjcodes = document.getElementById('pjcodes').value;
-	  var sel_type = document.getElementById('sel_type').value;
 	  if(datepick == ''){
 	  	document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
 	  	datepick = document.getElementById('datepick').value;
@@ -139,8 +132,8 @@ if("".equals(departname)){
   	<div id="toolbar"></div>
     <span id="departspan" name="departspan"></span>
     <input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" style="width: 50">
-    <input type="text" id="sel_pjname" name="sel_pjname" style="width:120;">
-    <input type="text" id="pjnames" name="pjnames" style="width:120;" value="请选择..." disabled="disabled">
+    <input type="text" id="sel_pjname" name="sel_pjname" style="width:80;">
+    <input type="text" id="pjnames" name="pjnames" style="width:80;" value="请选择..." disabled="disabled">
 	<input type="hidden" id="pjcodes" name="pjcodes">
 	<input class="btn" name="selpj" type="button" onclick="changePj();" value="搜索">
     <input class="btn" name="delpj" type="button" onclick="deletePj();" value="重选">
@@ -150,10 +143,5 @@ if("".equals(departname)){
 		<input type="hidden" id="checkedPj" name="checkedPj">
 	</form>
 	<div style="position:absolute; top:110px; left:100px;display: none;" id="pjsel" name="pjsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree" name="checkedtree"></iframe></div>
-  	<select name="sel_type" id="sel_type" style="display:none;">
-  		<option value="1">柱状图</option>
-  		<option value="2">饼状图</option>
-  		<option value="3">折线图</option>
-  	</select>
   </body>
 </html>

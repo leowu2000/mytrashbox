@@ -48,11 +48,7 @@ public class TreeController extends CommonController {
 			response.getWriter().close();
 		}else if("departTree".equals(action)){//部门下拉树
 			List<CheckBoxTree> checkBoxTreeList = new ArrayList<CheckBoxTree>();
-			if("001".equals(emrole)||"007".equals(emrole)){// 系统管理员、人事管理员看到所有的部门
-				checkBoxTreeList = treeDAO.getDepartEmpTree("2", "", emcode, emrole);
-			}else {
-				checkBoxTreeList = treeDAO.getDepartEmpTree("2", "", emcode, emrole);
-			}
+			checkBoxTreeList = treeDAO.getDepartEmpTree("2", "", emcode, emrole);
 			//循环转换为json格式
 			StringBuffer sb = new StringBuffer();
 			sb.append("[");

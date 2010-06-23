@@ -125,8 +125,10 @@ Ext.onReady(function(){
 			method: 'GET',
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
+			    Ext.get('id').set({'value':data.item.id});
 			    Ext.get('pjcode').set({'value':data.item.pjcode});
 			    Ext.get('pjcode').set({'disabled':''});
+			    pjcombo.setValue(data.item.pjcode);
 			    AJAX_PJ(document.getElementById('pjcode').value);
 				Ext.get('pjcode_d').set({'value':data.item.pjcode__d});
 				Ext.get('pjcode_d').set({'disabled':''});
@@ -148,12 +150,23 @@ Ext.onReady(function(){
 				Ext.get('leader_section').set({'value':data.item.leader__section});
 				Ext.get('leader_room').set({'value':data.item.leader__room});
 				
-		    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';
+		    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>&isplanner=false';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
 		});
     }
+    
+    var pjcombo = new Ext.form.ComboBox({
+       	typeAhead: true,
+       	triggerAction: 'all',
+       	emptyText:'',
+       	mode: 'local',
+       	selectOnFocus:true,
+       	transform:'pjcode',
+       	width:203,
+       	maxHeight:300
+	});
     
 });
 
@@ -380,8 +393,12 @@ for(int i=0;i<listPlan.size();i++){
 <%
 					for(int i=0;i<listPj.size();i++){
 						Map mapPj = (Map)listPj.get(i);
+						String name = mapPj.get("NAME")==null?"":mapPj.get("NAME").toString();
+						if(name.length()>14){
+							name = name.substring(0,13) + "...";
+						}
 %>				    	
-						<option value='<%=mapPj.get("CODE") %>'><%=mapPj.get("NAME") %></option>
+						<option value='<%=mapPj.get("CODE") %>'><%=name %></option>
 <%
 					}
 %>

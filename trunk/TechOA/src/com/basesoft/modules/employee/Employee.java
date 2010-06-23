@@ -9,6 +9,8 @@ public class Employee {
 	public String rolecode;
 	public String name;
 	public String departcode;
+	public String p_depart;
+	public String p_depart2;
 	public String mainjob;
 	public String secjob;
 	public String level;
@@ -307,6 +309,22 @@ public class Employee {
 
 	public void setZj(String zj) {
 		this.zj = zj;
+	}
+
+	public String getP_depart() {
+		return p_depart;
+	}
+
+	public void setP_depart(String p_depart) {
+		this.p_depart = p_depart;
+	}
+
+	public String getP_depart2() {
+		return p_depart2;
+	}
+
+	public void setP_depart2(String p_depart2) {
+		this.p_depart2 = p_depart2;
 	}
 
 }

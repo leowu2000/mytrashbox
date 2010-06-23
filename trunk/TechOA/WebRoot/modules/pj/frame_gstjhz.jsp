@@ -28,16 +28,13 @@ if("".equals(departname)){
 		tb.add('查找令号:');
   		tb.add(document.getElementById('sel_pjname'));
   		tb.add(document.getElementById('selpj'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
 		tb.add('已选令号：');
 		tb.add(document.getElementById('pjnames'));
 		tb.add(document.getElementById('delpj'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
-		tb.add('选择部门：');
+		tb.add('部门：');
   		tb.add(document.getElementById('departnames'));
   		tb.add(document.getElementById('seldepart'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('选择年月：');
+  		tb.add('年月：');
   		tb.add(document.getElementById('datepick'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
@@ -71,7 +68,6 @@ if("".equals(departname)){
 	  var datepick = document.getElementById('datepick').value;
 	  var departcodes = document.getElementById('departcodes').value;
 	  var pjcodes = document.getElementById('pjcodes').value;
-	  var sel_type = document.getElementById('sel_type').value;
 	  if(datepick == ''){
 	  	document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
 	  	datepick = document.getElementById('datepick').value;
@@ -122,8 +118,8 @@ if("".equals(departname)){
   	<h1>工时统计汇总</h1>
     <div id="toolbar"></div>
     <span id="departspan" name="departspan"></span>
-    <input type="text" id="sel_pjname" name="sel_pjname" style="width:120;">
-    <input type="text" id="pjnames" name="pjnames" style="width:120;" value="请选择..." disabled="disabled">
+    <input type="text" id="sel_pjname" name="sel_pjname" style="width:80;">
+    <input type="text" id="pjnames" name="pjnames" style="width:80;" value="请选择..." disabled="disabled">
     <input type="hidden" id="pjcodes" name="pjcodes">
     <input class="btn" name="selpj" type="button" onclick="changePj();" value="搜索">
     <input class="btn" name="delpj" type="button" onclick="deletePj();" value="重选">
