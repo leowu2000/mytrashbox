@@ -32,6 +32,7 @@ public class PlanController extends CommonController {
 		// TODO Auto-generated method stub
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
+		String emname = request.getSession().getAttribute("EMNAME")==null?"":request.getSession().getAttribute("EMNAME").toString();
 		String emdepart = request.getSession().getAttribute("DEPARTCODE")==null?"":request.getSession().getAttribute("DEPARTCODE").toString();
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
@@ -323,7 +324,7 @@ public class PlanController extends CommonController {
 		}else if("confirm".equals(action)){//确认
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
-				String updateSql = "update PLAN set STATUS='3' where ID='" + check[i] + "'";
+				String updateSql = "update PLAN set STATUS='3',DEALEMPCODE='" + emcode + "',DEALEMPNAME='" + emname + "' where ID='" + check[i] + "'";
 				planDAO.delete(updateSql);
 			}
 			
@@ -331,7 +332,7 @@ public class PlanController extends CommonController {
 		}else if("sendback".equals(action)){//退回
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
-				String updateSql = "update PLAN set STATUS='5' where ID='" + check[i] + "'";
+				String updateSql = "update PLAN set STATUS='5',DEALEMPCODE='" + emcode + "',DEALEMPNAME='" + emname + "' where ID='" + check[i] + "'";
 				planDAO.delete(updateSql);
 			}
 			
@@ -339,7 +340,7 @@ public class PlanController extends CommonController {
 		}else if("complete".equals(action)){//完成
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
-				String updateSql = "update PLAN set STATUS='4' where ID='" + check[i] + "'";
+				String updateSql = "update PLAN set STATUS='4',DEALEMPCODE='" + emcode + "',DEALEMPNAME='" + emname + "' where ID='" + check[i] + "'";
 				planDAO.delete(updateSql);
 			}
 			

@@ -19,19 +19,6 @@ WorkReportDAO wrDAO = (WorkReportDAO)ctx.getBean("workReportDAO");
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<title>工作报告审核</title>
-		<style type="text/css">
-		<!--
-		input{
-			width:80px;
-		}
-		.ainput{
-			width:20px;
-		}		
-		th {
-			white-space: nowrap;
-		}
-		-->
-		</style>		
 <%@ include file="../../common/meta.jsp" %>
 <script src="/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -45,6 +32,16 @@ Ext.onReady(function(){
 	tb.add({text: '退  回',cls: 'x-btn-text-icon delete1',handler: onDenyClick});
 	tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
 
+	if(!win){
+        win = new Ext.Window({
+        	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
+	        {text:'关闭',handler: function(){win.hide();}}
+	        ]
+        });
+    }
+
     function onPassClick(btn){
     	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
     	
@@ -52,13 +49,21 @@ Ext.onReady(function(){
 			alert('请选择数据项！');
 			return false;
 		}
-    	Ext.Msg.confirm('确认','确实要审核通过么？',function(btn){
-    		if(btn=='yes'){
-    		   
-            	Ext.getDom('listForm').action=url+'?action=pass&page=<%=pagenum %>';       
-            	Ext.getDom('listForm').submit();
-    		}
-    	});
+		var checks = document.getElementsByName('check');
+		var checkedids = '';
+		for(var i=0;i<checks.length;i++){
+			if(checks[i].checked){
+				if(checkedids == ''){
+					checkedids = checks[i].value;
+				}else {
+					checkedids = checkedids + ',' + checks[i].value;
+				}
+			}
+		}
+    	action = url+'?action=pass&page=<%=pagenum %>&reportids=' + checkedids;
+    	win.setTitle('审核通过');
+       	Ext.getDom('dataForm').reset();
+        win.show(btn.dom);
     }
     
     function onDenyClick(btn){
@@ -68,13 +73,21 @@ Ext.onReady(function(){
 			alert('请选择数据项！');
 			return false;
 		}
-    	Ext.Msg.confirm('确认','确实要退回么？',function(btn){
-    		if(btn=='yes'){
-    		   
-            	Ext.getDom('listForm').action=url+'?action=deny&page=<%=pagenum %>';       
-            	Ext.getDom('listForm').submit();
-    		}
-    	});
+		var checks = document.getElementsByName('check');
+		var checkedids = '';
+		for(var i=0;i<checks.length;i++){
+			if(checks[i].checked){
+				if(checkedids == ''){
+					checkedids = checks[i].value;
+				}else {
+					checkedids = checkedids + ',' + checks[i].value;
+				}
+			}
+		}
+    	action = url+'?action=deny&page=<%=pagenum %>&reportids=' + checkedids;
+    	win.setTitle('审核退回');
+       	Ext.getDom('dataForm').reset();
+        win.show(btn.dom);
     }
     
     function onExportClick(){
@@ -82,11 +95,24 @@ Ext.onReady(function(){
   	}
 });
 
+function checkAll(){
+	var checkall = document.getElementById('checkall');
+	var checks = document.getElementsByName('check');
+	if(checkall.checked == 'true'){
+	alert(checkall.checked);
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = 'true';
+		}
+	}else {
+		for(var i=0;i<checks.length;i++){
+			checks[i].checked = !checks[i].checked;
+		}
+	}
+}
 //-->
 </script>
 	</head>
 	<body>
-	<h1>审核工作报告</h1>
 	<div id="toolbar"></div>
 		<div id="tabs1">
 			<div id="main" class="tab-content">
@@ -94,16 +120,18 @@ Ext.onReady(function(){
 <%=listReport.getPageInfo().getHtml("workreport.do?action=auditlist") %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
-                <td>选　择</td>
-                <td>上报人</td>
-                <td>日  期</td>              
-                <td>名  称</td>
-                <td>工作令号</td>
-                <td>分系统</td>
-                <td>投入阶段</td>
-                <td>投入工时</td>
-                <td>备注</td>
-                <td>状态</td>
+                <td nowrap="nowrap"><input type="checkbox" name="checkall" onclick="checkAll();"><br>选择</td>
+                <td nowrap="nowrap">上报人</td>
+                <td nowrap="nowrap">日  期</td>              
+                <td nowrap="nowrap">名  称</td>
+                <td nowrap="nowrap">工作令号</td>
+                <td nowrap="nowrap">分系统</td>
+                <td nowrap="nowrap">投入阶段</td>
+                <td nowrap="nowrap">投入工时</td>
+                <td nowrap="nowrap">备注</td>
+                <td nowrap="nowrap">状态</td>
+                <td nowrap="nowrap">反馈</td>
+                <td nowrap="nowrap">处理人</td>
             </tr>
 <%
 List list = listReport.getList();
@@ -122,23 +150,38 @@ for(int i=0;i<list.size();i++){
 	String pjname_d = wrDAO.findNameByCode("PROJECT_D", map.get("PJCODE_D").toString());
 	String stagename = wrDAO.findNameByCode("DICT", map.get("STAGECODE").toString());
 %>
-            <tr align="center">
-                <td><input type="checkbox" name="check" value="<%=map.get("ID") %>" class="ainput"></td>
-                <td nowrap="nowrap">&nbsp;<%=empname %></td>
-                <td nowrap="nowrap">&nbsp;<%=map.get("STARTDATE") %></td>
-                <td nowrap="nowrap">&nbsp;<%=map.get("NAME") %></td>
-                <td nowrap="nowrap">&nbsp;<%=pjname %></td>
-                <td nowrap="nowrap">&nbsp;<%=pjname_d %></td>
-                <td nowrap="nowrap">&nbsp;<%=stagename %></td>   
-                <td nowrap="nowrap">&nbsp;<%=map.get("AMOUNT") %></td>
-                <td>&nbsp;<%=map.get("BZ") %></td>
-                <td nowrap="nowrap">&nbsp;<%=flag %></td>
+            <tr align="LEFT">
+                <td><input type="checkbox" name="check" value="<%=map.get("ID") %>"></td>
+                <td><%=empname %></td>
+                <td nowrap="nowrap"><%=map.get("STARTDATE") %></td>
+                <td><%=map.get("NAME") %></td>
+                <td><%=pjname %></td>
+                <td><%=pjname_d %></td>
+                <td><%=stagename %></td>   
+                <td><%=map.get("AMOUNT") %></td>
+                <td><%=map.get("BZ") %></td>
+                <td nowrap="nowrap"><%=flag %></td>
+                <td><%=map.get("BACKBZ")==null?"":map.get("BACKBZ") %></td>
+                <td><%=map.get("BACKEMPNAME")==null?"":map.get("BACKEMPNAME") %></td>
             </tr>
 <%} %>            
 </table>
 </form>
 			</div>
 		</div>
-
+<div id="dlg" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm" name="dataForm" action="" method="post">
+	        <input type="hidden" name="id" >
+                <table>
+				  <tr>
+				    <td>反馈</td>
+				    <td><textarea name="backbz" rows="5" style="width:200"></textarea></td>
+				  </tr>
+				</table>
+	        </form>
+    </div>
+</div>
 	</body>
 </html>

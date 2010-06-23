@@ -22,9 +22,6 @@ WorkReportDAO wrDAO = (WorkReportDAO)ctx.getBean("workReportDAO");
 		<title>员工工作报告</title>
 		<style type="text/css">
 		<!--
-		input{
-			width:80px;
-		}
 		.ainput{
 			width:20px;
 		}		
@@ -53,7 +50,6 @@ Ext.onReady(function(){
 		tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
 		tb.add({text: '上  报',cls: 'x-btn-text-icon jieyue',handler: onSubmitClick});
 	}
-	
 
     if(!win){
         win = new Ext.Window({
@@ -205,18 +201,20 @@ function AJAX_PJTYPE(type){
 <%
 	if(!"search".equals(method)){
 %>            
-                <td><input type="checkbox" name="checkall" onclick="checkAll();">选　择</td>
+                <td nowrap="nowrap"><input type="checkbox" name="checkall" onclick="checkAll();"><br>选择</td>
 <%
 	}
 %>                
-                <td>日  期</td>              
-                <td>名  称</td>
-                <td>工作令号</td>
-                <td>分系统</td>
-                <td>投入阶段</td>
-                <td>投入工时</td>
-                <td>备注</td>
-                <td>状态</td>
+                <td nowrap="nowrap">日  期</td>              
+                <td nowrap="nowrap">名  称</td>
+                <td nowrap="nowrap">工作令号</td>
+                <td nowrap="nowrap">分系统</td>
+                <td nowrap="nowrap">投入阶段</td>
+                <td nowrap="nowrap">投入工时</td>
+                <td nowrap="nowrap">备注</td>
+                <td nowrap="nowrap">状态</td>
+                <td nowrap="nowrap">反馈</td>
+                <td nowrap="nowrap">处理人</td>
             </tr>
 <%
 List list = listReport.getList();
@@ -243,20 +241,22 @@ for(int i=0;i<list.size();i++){
 %>               
 			  	<td>
                 <%if("<font color='red'>未上报</font>".equals(flag)||"<font color='red'>已退回</font>".equals(flag)){%>
-                	<input type="checkbox" name="check" value="<%=map.get("ID") %>" class="ainput">
+                	<input type="checkbox" name="check" value="<%=map.get("ID") %>" width="15">
                 <%} %>
                 </td>
 <%
 	}
 %>                
-                <td nowrap="nowrap">&nbsp;<%=map.get("STARTDATE")==null?"":map.get("STARTDATE") %></td>
-                <td nowrap="nowrap">&nbsp;<%=map.get("NAME") %></td>
-                <td nowrap="nowrap">&nbsp;<%=pjname %></td>
-                <td nowrap="nowrap">&nbsp;<%=pjname_d %></td>
-                <td nowrap="nowrap">&nbsp;<%=stagename %></td>   
-                <td nowrap="nowrap">&nbsp;<%=map.get("AMOUNT") %></td>
-                <td>&nbsp;<%=map.get("BZ") %></td>
-                <td nowrap="nowrap">&nbsp;<%=flag %></td>
+                <td nowrap="nowrap"><%=map.get("STARTDATE")==null?"":map.get("STARTDATE") %></td>
+                <td><%=map.get("NAME") %></td>
+                <td><%=pjname %></td>
+                <td><%=pjname_d %></td>
+                <td><%=stagename %></td>   
+                <td><%=map.get("AMOUNT") %></td>
+                <td><%=map.get("BZ") %></td>
+                <td nowrap="nowrap"><%=flag %></td>
+                <td><%=map.get("BACKBZ")==null?"":map.get("BACKBZ") %></td>
+                <td><%=map.get("BACKEMPNAME")==null?"":map.get("BACKEMPNAME") %></td>
             </tr>
 <%} %>            
 </table>
