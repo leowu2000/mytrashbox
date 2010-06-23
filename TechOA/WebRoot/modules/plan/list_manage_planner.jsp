@@ -436,9 +436,11 @@ function checkAll(){
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
 <%=pageList.getPageInfo().getHtml("plan.do?action=list_planner&f_level=" + level + "&f_type=" + type + "&f_empname=" + URLEncoder.encode(f_empname, "UTF-8") + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode + "&sel_status=" + sel_status + "&sel_note=" + URLEncoder.encode(sel_note, "UTF-8")) %>
-	<table width="98%" align="center" vlign="middle" id="the-table">
+	<table width="1024" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
-                <td nowrap="nowrap"><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
+                <td nowrap="nowrap"><input type="checkbox" name="checkall" onclick="checkAll();"><br>选择</td>
+                <td nowrap="nowrap">状态</td>
+                <td nowrap="nowrap">处理人</td>
                 <td nowrap="nowrap">计划分类</td>
                 <td nowrap="nowrap">产品令号</td>              
                 <td nowrap="nowrap">序号</td>
@@ -453,7 +455,6 @@ function checkAll(){
                 <td nowrap="nowrap">计划员</td>
                 <td nowrap="nowrap">室领导</td>
                 <td nowrap="nowrap">部领导</td>
-                <td nowrap="nowrap">状态</td>
             </tr>
 <%
 List listPlan = pageList.getList();
@@ -495,6 +496,8 @@ for(int i=0;i<listPlan.size();i++){
 				}
 %>                	                
                 </td>
+                <td nowrap="nowrap"><font color="<%=color %>"><%=status %></td>
+                <td><%=mapPlan.get("DEALEMPNAME")==null?"":mapPlan.get("DEALEMPNAME") %></td>
                 <td><%=plantype %>--<%=plantype2 %></td>
                 <td><%=pjname %></td>
                 <td><%=mapPlan.get("ORDERCODE")==null?"":mapPlan.get("ORDERCODE") %></td>
@@ -533,7 +536,6 @@ for(int i=0;i<listPlan.size();i++){
                 <td><%=mapPlan.get("PLANNERNAME")==null?"":mapPlan.get("PLANNERNAME") %></td>
                 <td><%=mapPlan.get("LEADER_ROOM")==null?"":mapPlan.get("LEADER_ROOM") %></td>
                 <td><%=mapPlan.get("LEADER_SECTION")==null?"":mapPlan.get("LEADER_SECTION") %></td>
-                <td nowrap="nowrap"><font color="<%=color %>"><%=status %></td>
             </tr>
 <%} %>            
 </table>

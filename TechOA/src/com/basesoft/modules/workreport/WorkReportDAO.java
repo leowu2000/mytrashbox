@@ -43,8 +43,12 @@ public class WorkReportDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllAudit(int page, String departcodes, String emcode){
-		String sql = "select * from WORKREPORT where DEPARTCODE in (" + departcodes + ") and EMPCODE!='" + emcode + "' and (flag=1 or flag=2) order by FLAG, STARTDATE desc";
+	public PageList findAllAudit(int page, String departcodes, String emcode, String pjcode){
+		String sql = "select * from WORKREPORT where DEPARTCODE in (" + departcodes + ") and EMPCODE!='" + emcode + "' and (flag=1 or flag=2)";
+		if(!"".equals(pjcode)){
+			sql = sql + " and PJCODE='" + pjcode + "'";
+		}
+		sql = sql + " order by FLAG, STARTDATE desc";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;

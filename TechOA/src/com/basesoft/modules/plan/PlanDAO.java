@@ -86,7 +86,7 @@ public class PlanDAO extends CommonDAO {
 		}
 		
 		if("".equals(datepick)){
-			sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc";
+			sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc,STATUS";
 		}else {
 			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 			Date enddate = StringUtil.getEndOfMonth(startdate);
@@ -164,7 +164,7 @@ public class PlanDAO extends CommonDAO {
 		}
 		
 		if("".equals(datepick)){
-			sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc";
+			sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc,STATUS";
 		}else {
 			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 			Date enddate = StringUtil.getEndOfMonth(startdate);
@@ -239,7 +239,7 @@ public class PlanDAO extends CommonDAO {
 		}
 		
 		if("".equals(datepick)){
-			sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc";
+			sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc,STATUS";
 		}else {
 			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 			Date enddate = StringUtil.getEndOfMonth(startdate);
@@ -330,7 +330,7 @@ public class PlanDAO extends CommonDAO {
 			sql = sql + " and NOTE like '%" + sel_note + "%'";
 		}
 		
-		sql = sql + " order by ENDDATE ,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
+		sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc,STATUS";
 		
  		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -409,7 +409,7 @@ public class PlanDAO extends CommonDAO {
 			sql = sql + " and NOTE like '%" + sel_note + "%'";
 		}
 		
-		sql = sql + " order by ENDDATE ,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
+		sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc,STATUS";
 		
  		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -476,7 +476,7 @@ public class PlanDAO extends CommonDAO {
 			sql = sql + " and NOTE like '%" + sel_note + "%'";
 		}
 		
-		sql = sql + " order by ENDDATE,PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
+		sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc,STATUS";
 		
 		List list = jdbcTemplate.queryForList(sql);
 		
@@ -495,7 +495,7 @@ public class PlanDAO extends CommonDAO {
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		sql = sql + " order by PJCODE,PJCODE_D,STAGECODE,ORDERCODE";
+		sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc,STATUS";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";

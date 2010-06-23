@@ -30,6 +30,7 @@ public class WorkReportController extends CommonController {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
+		String emname = request.getSession().getAttribute("EMNAME")==null?"":request.getSession().getAttribute("EMNAME").toString();
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		
@@ -50,8 +51,15 @@ public class WorkReportController extends CommonController {
 			mv.addObject("listReport", listReport);
 			mv.addObject("listStage", listStage);
 			mv.addObject("method", method);
+		}else if("frame_audit".equals(action)){//审核frame
+			mv = new ModelAndView("modules/workreport/frame_auditreport");
+			List listPj = workReportDAO.getProject();
+			mv.addObject("listPj", listPj);
+			return mv;
 		}else if("auditlist".equals(action)){//审核列表
 			mv = new ModelAndView("modules/workreport/list_auditreport");
+			String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
+			pjcode = new String(pjcode.getBytes("ISO8859-1"), "UTF-8");
 			String departcodes = "";
 			List listDepart = roleDAO.findAllUserDepart(emcode);
 			if(listDepart.size() == 0){
@@ -59,7 +67,7 @@ public class WorkReportController extends CommonController {
 			}
 			departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 			//工作报告列表
-			PageList listReport = workReportDAO.findAllAudit(page, departcodes, emcode);
+			PageList listReport = workReportDAO.findAllAudit(page, departcodes, emcode, pjcode);
 			
 			mv.addObject("listReport", listReport);
 		}else if("add".equals(action)){//新增操作
@@ -148,17 +156,21 @@ public class WorkReportController extends CommonController {
 			response.sendRedirect("workreport.do?action=list&page=" + page);
 			return null;
 		}else if("pass".equals(action)){//审批通过
-			String[] check=request.getParameterValues("check");
+			String reportids = ServletRequestUtils.getStringParameter(request, "reportids", "");
+			String backbz = ServletRequestUtils.getStringParameter(request, "backbz", "");
+			String[] check = reportids.split(",");
 			for(int i=0;i<check.length;i++){
-				String updateSql = "update WORKREPORT set FLAG=2 where ID='" + check[i] + "'";
+				String updateSql = "update WORKREPORT set FLAG=2,BACKBZ='" + backbz + "',BACKEMPCODE='" + emcode + "',BACKEMPNAME='" + emname + "' where ID='" + check[i] + "'";
 				workReportDAO.update(updateSql);
 			}
 			response.sendRedirect("workreport.do?action=auditlist&page=" + page);
 			return null;
 		}else if("deny".equals(action)){//审批退回
-			String[] check=request.getParameterValues("check");
+			String reportids = ServletRequestUtils.getStringParameter(request, "reportids", "");
+			String backbz = ServletRequestUtils.getStringParameter(request, "backbz", "");
+			String[] check = reportids.split(",");
 			for(int i=0;i<check.length;i++){
-				String updateSql = "update WORKREPORT set FLAG=3 where ID='" + check[i] + "'";
+				String updateSql = "update WORKREPORT set FLAG=3,BACKBZ='" + backbz + "',BACKEMPCODE='" + emcode + "',BACKEMPNAME='" + emname + "' where ID='" + check[i] + "'";
 				workReportDAO.update(updateSql);
 			}
 			response.sendRedirect("workreport.do?action=auditlist&page=" + page);
