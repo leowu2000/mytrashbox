@@ -108,6 +108,11 @@ public class FinanceDAO extends EmployeeDAO {
 		f.setXmmc(map.get("XMMC")==null?"":map.get("XMMC").toString());
 		f.setBz(map.get("BZ")==null?"":map.get("BZ").toString());
 		
+		Map mapDepart = findByCode("DEPARTMENT", f.getDepartcode());
+		f.setP_depart(mapDepart.get("PARENT")==null?"":mapDepart.get("PARENT").toString());
+		mapDepart = findByCode("DEPARTMENT", f.getP_depart());
+		f.setP_depart2(mapDepart.get("PARENT")==null?"":mapDepart.get("PARENT").toString());
+		
 		return f;
 	}
 }

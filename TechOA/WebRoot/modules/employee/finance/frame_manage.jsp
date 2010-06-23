@@ -79,14 +79,11 @@
 		
   			tb.add('选择部门');
   			tb.add(document.getElementById('departspan'));
-  			tb.add('&nbsp;&nbsp;&nbsp;');
-  			tb.add('选择年月：');
+  			tb.add('年月：');
   			tb.add(document.getElementById('datepick'));
-  			tb.add('&nbsp;&nbsp;&nbsp;');
-  			tb.add('按工号模糊查询');
+  			tb.add('工号');
   			tb.add(document.getElementById('sel_empcode'));
-  			tb.add('&nbsp;&nbsp;&nbsp;');
-  			tb.add('按名字模糊查询');
+  			tb.add('姓名');
   			tb.add(document.getElementById('emname'));
   			tb.add('&nbsp;&nbsp;&nbsp;');
   			tb.add(document.getElementById('search'));

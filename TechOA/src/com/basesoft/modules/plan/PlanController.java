@@ -179,8 +179,8 @@ public class PlanController extends CommonController {
 			for(int i=0;i<listProject.size();i++){
 				Map mapPj = (Map)listProject.get(i);
 				String name = mapPj.get("NAME")==null?"":mapPj.get("NAME").toString();
-				if(name.length()>15){
-					name = name.substring(0, 14) + "...";
+				if(name.length()>14){
+					name = name.substring(0, 13) + "...";
 				}
 				sb.append("<option value='")
 				  .append(mapPj.get("CODE"))
@@ -247,6 +247,12 @@ public class PlanController extends CommonController {
 			String departname = planDAO.findNameByCode("DEPARTMENT", mapEmp.get("DEPARTCODE").toString());
 			String plannercode = request.getSession().getAttribute("EMCODE").toString();
 			String plannername = request.getSession().getAttribute("EMNAME").toString();
+			if("false".equals(isplanner)){
+				String id =  ServletRequestUtils.getStringParameter(request, "id", "");
+				Plan plan = planDAO.findById(id);
+				plannercode = plan.getPlannercode();
+				plannername = plan.getPlannername();
+			}
 			
 			int betweendays = 0;
 			if(!"".equals(enddate)){

@@ -186,7 +186,7 @@ function AJAX_PJTYPE(type){
         	transform:'pjcode',
         	width:203,
         	maxHeight:300
-	});
+		});
     }
 }
 

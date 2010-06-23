@@ -19,21 +19,16 @@
 	Ext.onReady(function(){
 		
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
-		tb.add('选择人员');
+		tb.add('员工');
   		tb.add(document.getElementById('empnames'));
   		tb.add(document.getElementById('selemp'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('选择日期 从');
+  		tb.add('日期 从');
   		tb.add(document.getElementById('startdate'));
   		tb.add('到');
   		tb.add(document.getElementById('enddate'));
-  		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('选择工作令号');
+  		tb.add('选择令号');
   		tb.add(document.getElementById('selproject'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
-  		//tb.add('选择出图类型：');
-  		//tb.add(document.getElementById('sel_type'));
-  		//tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
@@ -74,7 +69,6 @@
 	  var startdate = document.getElementById('startdate').value;
 	  var enddate = document.getElementById('enddate').value;
 	  var selproject = document.getElementById('selproject').value;
-	  var sel_type = document.getElementById('sel_type').value;
 	  
 	  document.getElementById('list_ygtrfx').src = "/em.do?action=list_ygtrfx&empcodes=" + empcodes + "&startdate=" + startdate + "&enddate=" + enddate + "&selproject=" + encodeURI(selproject);
 	}
@@ -88,13 +82,17 @@
 	<input type="hidden" id="empcodes" name="empcodes">
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="startdate" style="width: 70">
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="enddate" style="width: 70">
-	<select name="selproject" id="selproject">
+	<select name="selproject" id="selproject" style="width:210">
 		<option value="0">合计</option>
 <%
 	for(int i=0;i<listProject.size();i++){
 		Map mapProject = (Map)listProject.get(i);
+		String name = mapProject.get("NAME")==null?"":mapProject.get("NAME").toString();
+		if(name.length()>15){
+			name = name.substring(0,14) + "...";
+		}
 %>		
-		<option value="<%=mapProject.get("CODE") %>"><%=mapProject.get("NAME") %></option>
+		<option value="<%=mapProject.get("CODE") %>"><%=name %></option>
 <%
 	}
 %>
@@ -106,10 +104,5 @@
 		<input type="hidden" id="checkedEmp" name="checkedEmp">
 	</form>
 	<div style="position:absolute; top:110px; left:100px;display: none;" id="empsel" name="empsel"><iframe src="" frameborder="0" width="270" height="340" id="checkedtree" name="checkedtree"></iframe></div>
-  	<select name="sel_type" id="sel_type" style="display:none;">
-  		<option value="1">柱状图</option>
-  		<option value="2">饼状图</option>
-  		<option value="3">折线图</option>
-  	</select>
   </body>
 </html>

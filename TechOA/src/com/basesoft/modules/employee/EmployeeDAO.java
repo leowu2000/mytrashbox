@@ -283,6 +283,11 @@ public class EmployeeDAO extends CommonDAO{
 		String departname = findNameByCode("DEPARTMENT", mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString());
 		em.setDepartname(departname);
 		
+		Map mapDepart = findByCode("DEPARTMENT", em.getDepartcode());
+		em.setP_depart(mapDepart.get("PARENT")==null?"":mapDepart.get("PARENT").toString());
+		mapDepart = findByCode("DEPARTMENT", em.getP_depart());
+		em.setP_depart2(mapDepart.get("PARENT")==null?"":mapDepart.get("PARENT").toString());
+		
 		return em;
 	}
 	

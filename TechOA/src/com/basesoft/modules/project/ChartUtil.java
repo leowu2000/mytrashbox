@@ -47,17 +47,17 @@ public class ChartUtil {
 	        //步骤2：根据Dataset 生成JFreeChart对象，以及做相应的设置   
 	        JFreeChart freeChart = createChart(dataset, title, sel_type);   
 	        //步骤3：将JFreeChart对象输出到文件，Servlet输出流等   
-	        saveAsFile(freeChart, path, 800, 350);   
+	        saveAsFile(freeChart, path, 700, 350);   
 		}else if("kygstj".equals(method)){
 			title = "科研工时统计";
 			CategoryDataset dataset = createDatasetKygstj(pjDAO, list, pjcodes);   
 	        JFreeChart freeChart = createChart(dataset, title, sel_type);   
-	        saveAsFile(freeChart, path, 800, 350);   
+	        saveAsFile(freeChart, path, 700, 350);   
 		}else if("cdrwqk".equals(method)){
 			title = "承担任务情况";
 			CategoryDataset dataset = createDatasetCdrwqk(pjDAO, list, pjcodes);   
 	        JFreeChart freeChart = createChart(dataset, title, sel_type);   
-	        saveAsFile(freeChart, path, 800, 350);   
+	        saveAsFile(freeChart, path, 700, 350);   
 		}
 		
 		return path;
@@ -76,7 +76,7 @@ public class ChartUtil {
 		String title = "员工投入分析";
 		CategoryDataset dataset = createDatasetYgtrfx(listData, selpjname);  
 		JFreeChart freeChart = createChart(dataset, title, sel_type);   
-		saveAsFile(freeChart, path, 800, 350);   
+		saveAsFile(freeChart, path, 700, 350);   
 		return path;
 	}
 	
@@ -299,9 +299,9 @@ public class ChartUtil {
             }   
             out = new FileOutputStream(outputPath);   
             //保存为PNG文件   
-            ChartUtilities.writeChartAsPNG(out, chart, 800, 350);   
+            ChartUtilities.writeChartAsPNG(out, chart, 700, 350);   
             //保存为JPEG文件   
-            //ChartUtilities.writeChartAsJPEG(out, chart, 800, 330);   
+            //ChartUtilities.writeChartAsJPEG(out, chart, 600, 350);   
             out.flush();   
         } catch (FileNotFoundException e) {   
             e.printStackTrace();   
