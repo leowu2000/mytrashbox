@@ -465,6 +465,38 @@ public class PlanController extends CommonController {
 			planDAO.update("update PLAN set EMPCODE='" + empcodes + "' where ID='" + id + "'");
 			
 			response.sendRedirect(returnUrl);
+		}else if("frame_follow_emp".equals(action)){//运行情况跟踪frame(员工)
+			mv = new ModelAndView("modules/plan/frame_follow_emp");
+			return mv;
+		}else if("list_follow_emp".equals(action)){//运行情况跟踪(员工)
+			mv = new ModelAndView("modules/plan/list_follow_emp");
+			PageList pageList = planDAO.findAllFollows_emp(page, emcode, datepick, sel_note);
+			mv.addObject("pageList", pageList);
+			mv.addObject("datepick", datepick);
+			mv.addObject("sel_note", sel_note);
+			return mv;
+		}else if("addnote_emp".equals(action)){//员工异常项填写
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			Plan plan = planDAO.findById(id);
+			String emp_note = ServletRequestUtils.getStringParameter(request, "emp_note", "");
+			if(!"".equals(emp_note)){
+				emp_note = emp_note + "(" + emname + ")";
+			}
+			String updateSql = "update PLAN set EMP_NOTE='" + emp_note + "' where ID='" + id + "'";
+			planDAO.update(updateSql);
+			response.sendRedirect("/plan.do?action=list_follow_emp&datepick=" + datepick + "&sel_note=" + sel_note);
+		}else if("frame_follow_plan".equals(action)){//运行情况跟踪frame(计划员)
+			
+		}else if("list_follow_plan".equals(action)){//运行情况跟踪(计划员)
+			mv = new ModelAndView("modules/plan/list_follow");
+			
+			return mv;
+		}else if("frame_follow_lead".equals(action)){//运行情况跟踪frame(领导)
+			
+		}else if("list_follow_lead".equals(action)){//运行情况跟踪(领导)
+			mv = new ModelAndView("modules/plan/list_follow");
+			
+			return mv;
 		}
 		
 		return null;
