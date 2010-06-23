@@ -149,7 +149,7 @@ for(int i=0;i<listAssess.size();i++){
             <tr align="left">
 				<td>
 <%
-				if("<font color='blue'>新下发</font>".equals(status)||"<font color='green'>已反馈<br>无问题</font>".equals(status)||"<font color='red'>已反馈<br>有问题</font>".equals(status)){
+				if("<font color='red'>已退回</font>".equals(status)||"<font color='blue'>新下发</font>".equals(status)||"<font color='green'>已反馈<br>无问题</font>".equals(status)||"<font color='red'>已反馈<br>有问题</font>".equals(status)){
 %>				
 					<input type="checkbox" name="check" value="<%=mapAssess.get("ID") %>" class="ainput">
 <%

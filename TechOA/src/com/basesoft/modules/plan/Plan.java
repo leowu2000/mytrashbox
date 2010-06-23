@@ -25,6 +25,9 @@ public class Plan {
 	public String ordercode;
 	public String type;
 	public String type2;
+	public String emp_note;
+	public String plan_note;
+	public String team_note;
 	
 	public String getId() {
 		return id;
@@ -208,5 +211,29 @@ public class Plan {
 
 	public void setType2(String type2) {
 		this.type2 = type2;
+	}
+
+	public String getEmp_note() {
+		return emp_note;
+	}
+
+	public void setEmp_note(String emp_note) {
+		this.emp_note = emp_note;
+	}
+
+	public String getPlan_note() {
+		return plan_note;
+	}
+
+	public void setPlan_note(String plan_note) {
+		this.plan_note = plan_note;
+	}
+
+	public String getTeam_note() {
+		return team_note;
+	}
+
+	public void setTeam_note(String team_note) {
+		this.team_note = team_note;
 	}
 }
