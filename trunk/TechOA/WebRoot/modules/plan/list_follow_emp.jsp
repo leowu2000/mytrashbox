@@ -45,7 +45,7 @@ Ext.onReady(function(){
         	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
 	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
-	        {text:'关闭',handler: function(){win.hide();document.getElementById("empsel").style.display="none";}}
+	        {text:'关闭',handler: function(){win.hide();}}
 	        ]
         });
     }
