@@ -478,7 +478,11 @@ public class PlanController extends CommonController {
 		}else if("addnote_emp".equals(action)){//员工异常项填写
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			Plan plan = planDAO.findById(id);
+			String oldnote = plan.getEmp_note();
 			String emp_note = ServletRequestUtils.getStringParameter(request, "emp_note", "");
+			if(!"".equals(oldnote)){
+				emp_note = oldnote + ";" + emp_note;
+			}
 			if(!"".equals(emp_note)){
 				emp_note = emp_note + "(" + emname + ")";
 			}
@@ -497,7 +501,6 @@ public class PlanController extends CommonController {
 			return mv;
 		}else if("addnote_plan".equals(action)){//计划员填写意见
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
-			Plan plan = planDAO.findById(id);
 			String plan_note = ServletRequestUtils.getStringParameter(request, "plan_note", "");
 			if(!"".equals(plan_note)){
 				plan_note = plan_note + "(" + emname + ")";
@@ -525,7 +528,11 @@ public class PlanController extends CommonController {
 		}else if("addnote_lead".equals(action)){//领导填写意见
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			Plan plan = planDAO.findById(id);
+			String oldnote = plan.getTeam_note();
 			String lead_note = ServletRequestUtils.getStringParameter(request, "lead_note", "");
+			if(!"".equals(oldnote)){
+				lead_note = oldnote + ";" + lead_note;
+			}
 			if(!"".equals(lead_note)){
 				lead_note = lead_note + "(" + emname + ")";
 			}
