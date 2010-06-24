@@ -209,13 +209,13 @@ public class PlanDAO extends CommonDAO {
 			Date enddate = StringUtil.getEndOfMonth(startdate);
 			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' ";
 		}
-		if(!"0".equals(level)){//全部级别
+		if(!"0".equals(level)){
 			sql = sql + " and ASSESS='" + level + "'";
 		}
-		if(!"0".equals(type)){//全部类别
+		if(!"0".equals(type)){
 			sql = sql + "' and TYPE='" + type + "'";
 		}
-		if(!"".equals(empname)){//全部人员
+		if(!"".equals(empname)){
 			sql = sql + " and EMPNAME like '%" + empname + "%'";
 		}
 		
@@ -279,13 +279,13 @@ public class PlanDAO extends CommonDAO {
 			Date enddate = StringUtil.getEndOfMonth(startdate);
 			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' ";
 		}
-		if(!"0".equals(level)){//全部级别
+		if(!"0".equals(level)){
 			sql = sql + " and ASSESS='" + level + "'";
 		}
-		if(!"0".equals(type)){//全部类别
+		if(!"0".equals(type)){
 			sql = sql + "' and TYPE='" + type + "'";
 		}
-		if(!"".equals(empname)){//全部人员
+		if(!"".equals(empname)){
 			sql = sql + " and EMPNAME like '%" + empname + "%'";
 		}
 		
@@ -322,7 +322,7 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public List findAllRemind(String level, String type, String datepick, String empname, String sel_empcode, String sel_note){
+	public List findAllRemind(String level, String type, String datepick, String empname, String sel_empcode, String sel_note, String emcode){
 		String sql = "select a.*,b.* from PLAN a, (select sum(AMOUNT) as AMOUNT from WORKREPORT c,PLAN d where c.PJCODE=d.PJCODE and c.PJCODE_D=d.PJCODE_D and c.STAGECODE=d.STAGECODE and c.STARTDATE>=d.STARTDATE and c.STARTDATE<=d.ENDDATE) b where STATUS!='4'";
 		
 		if(!"".equals(datepick)){
@@ -330,16 +330,16 @@ public class PlanDAO extends CommonDAO {
 			Date enddate = StringUtil.getEndOfMonth(startdate);
 			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' ";
 		}
-		if(!"0".equals(level)){//全部级别
+		if(!"0".equals(level)){
 			sql = sql + " and ASSESS='" + level + "'";
 		}
-		if(!"0".equals(type)){//全部类别
+		if(!"0".equals(type)){
 			sql = sql + "' and TYPE='" + type + "'";
 		}
-		if(!"".equals(empname)){//全部人员
+		if(!"".equals(empname)){
 			sql = sql + " and EMPNAME like '%" + empname + "%'";
 		}
-		
+		sql = sql + " and PLANNERCODE='" + emcode + "'";
 		//按工号
 		if(!"".equals(sel_empcode)){
 			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
@@ -519,7 +519,7 @@ public class PlanDAO extends CommonDAO {
 	}
 	
 	/**
-	 * 获取员工计划跟踪信息
+	 * 获取计划跟踪信息(员工)
 	 * @param page
 	 * @param emcode 工号
 	 * @param datepick 年月
@@ -532,6 +532,101 @@ public class PlanDAO extends CommonDAO {
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
+		
+		if(!"".equals(datepick)){
+			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+			Date enddate = StringUtil.getEndOfMonth(startdate);
+			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "'";
+		}
+		//按内容
+		if(!"".equals(sel_note)){
+			sql = sql + " and NOTE like '%" + sel_note + "%'";
+		}
+		sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc,STATUS";
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
+	
+	/**
+	 * 获取计划跟踪信息(计划员)
+	 * @param page
+	 * @param emcode 工号
+	 * @param datepick 年月
+	 * @param sel_note 内容模糊
+	 * @return
+	 */
+	public PageList findAllFollows_plan(int page, String emcode, String datepick, String sel_note){
+		PageList pageList = new PageList();
+		String sql = "select * from PLAN where STATUS='3' and PLANNERCODE='" + emcode + "' and EMP_NOTE != ''";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		if(!"".equals(datepick)){
+			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+			Date enddate = StringUtil.getEndOfMonth(startdate);
+			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "'";
+		}
+		//按内容
+		if(!"".equals(sel_note)){
+			sql = sql + " and NOTE like '%" + sel_note + "%'";
+		}
+		sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc,STATUS";
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
+	
+	/**
+	 * 获取计划跟踪信息(领导)
+	 * @param page
+	 * @param emcode 工号
+	 * @param datepick 年月
+	 * @param sel_note 内容模糊
+	 * @return
+	 */
+	public PageList findAllFollows_lead(int page, String departcodes, String datepick, String sel_note){
+		PageList pageList = new PageList();
+		String sql = "select * from PLAN where STATUS='3' and EMP_NOTE != ''";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		String empcodeSql = "select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+		String empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+		sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',1) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',2) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',2) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',3) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',3) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',4) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',4) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',5) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',5) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',6) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',6) in (" + empnameSql + ")" +
+					" or SPLIT_PART(EMPCODE,',',7) in (" + empcodeSql + ")" +
+					" or SPLIT_PART(EMPNAME,',',7) in (" + empnameSql + "))";
 		
 		if(!"".equals(datepick)){
 			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");

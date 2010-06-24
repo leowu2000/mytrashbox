@@ -486,17 +486,52 @@ public class PlanController extends CommonController {
 			planDAO.update(updateSql);
 			response.sendRedirect("/plan.do?action=list_follow_emp&datepick=" + datepick + "&sel_note=" + sel_note);
 		}else if("frame_follow_plan".equals(action)){//运行情况跟踪frame(计划员)
-			
+			mv = new ModelAndView("modules/plan/frame_follow_plan");
+			return mv;
 		}else if("list_follow_plan".equals(action)){//运行情况跟踪(计划员)
-			mv = new ModelAndView("modules/plan/list_follow");
-			
+			mv = new ModelAndView("modules/plan/list_follow_plan");
+			PageList pageList = planDAO.findAllFollows_plan(page, emcode, datepick, sel_note);
+			mv.addObject("pageList", pageList);
+			mv.addObject("datepick", datepick);
+			mv.addObject("sel_note", sel_note);
 			return mv;
+		}else if("addnote_plan".equals(action)){//计划员填写意见
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			Plan plan = planDAO.findById(id);
+			String plan_note = ServletRequestUtils.getStringParameter(request, "plan_note", "");
+			if(!"".equals(plan_note)){
+				plan_note = plan_note + "(" + emname + ")";
+			}
+			String updateSql = "update PLAN set PLAN_NOTE='" + plan_note + "' where ID='" + id + "'";
+			planDAO.update(updateSql);
+			response.sendRedirect("/plan.do?action=list_follow_plan&datepick=" + datepick + "&sel_note=" + sel_note);
 		}else if("frame_follow_lead".equals(action)){//运行情况跟踪frame(领导)
-			
-		}else if("list_follow_lead".equals(action)){//运行情况跟踪(领导)
-			mv = new ModelAndView("modules/plan/list_follow");
-			
+			mv = new ModelAndView("modules/plan/frame_follow_lead");
 			return mv;
+		}else if("list_follow_lead".equals(action)){//运行情况跟踪(领导)
+			mv = new ModelAndView("modules/plan/list_follow_lead");
+			//根据登陆用户的数据权限过滤
+			String departcodes = ""; 
+			List listDepart = roleDAO.findAllUserDepart(emcode);
+			if(listDepart.size() == 0){
+				listDepart = roleDAO.findAllRoleDepart(emrole);
+			}
+			departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+			PageList pageList = planDAO.findAllFollows_lead(page, departcodes, datepick, sel_note);
+			mv.addObject("pageList", pageList);
+			mv.addObject("datepick", datepick);
+			mv.addObject("sel_note", sel_note);
+			return mv;
+		}else if("addnote_lead".equals(action)){//领导填写意见
+			String id = ServletRequestUtils.getStringParameter(request, "id", "");
+			Plan plan = planDAO.findById(id);
+			String lead_note = ServletRequestUtils.getStringParameter(request, "lead_note", "");
+			if(!"".equals(lead_note)){
+				lead_note = lead_note + "(" + emname + ")";
+			}
+			String updateSql = "update PLAN set TEAM_NOTE='" + lead_note + "' where ID='" + id + "'";
+			planDAO.update(updateSql);
+			response.sendRedirect("/plan.do?action=list_follow_lead&datepick=" + datepick + "&sel_note=" + sel_note);
 		}
 		
 		return null;
