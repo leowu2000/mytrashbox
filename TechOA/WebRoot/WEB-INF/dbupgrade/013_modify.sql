@@ -7,9 +7,9 @@ ALTER TABLE WORKREPORT add COLUMN BACKEMPNAME VARCHAR(20);
 
 UPDATE MENU SET MENUURL='workreport.do?action=frame_audit' WHERE MENUCODE='022';
 
-INSERT INTO MENU VALUES('087','运行情况跟踪(员工)','1','plan.do?action=frame_follow_emp',37,'1','008','8.png');
-INSERT INTO MENU VALUES('088','运行情况跟踪(计划员)','1','plan.do?action=frame_follow_plan',37,'1','008','8.png');
-INSERT INTO MENU VALUES('089','运行情况跟踪(领导)','1','plan.do?action=frame_follow_lead',37,'1','008','8.png');
+INSERT INTO MENU VALUES('087','运行情况跟踪(员工)','1','plan.do?action=frame_follow_emp',39,'1','008','8.png');
+INSERT INTO MENU VALUES('088','运行情况跟踪(计划员)','1','plan.do?action=frame_follow_plan',39,'1','008','8.png');
+INSERT INTO MENU VALUES('089','运行情况跟踪(领导)','1','plan.do?action=frame_follow_lead',39,'1','008','8.png');
 INSERT INTO USER_MENU VALUES('003','087','1');
 INSERT INTO USER_MENU VALUES('004','088','1');
 INSERT INTO USER_MENU VALUES('005','089','1');

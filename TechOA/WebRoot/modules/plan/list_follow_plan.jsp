@@ -18,7 +18,7 @@ PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<title>计划管理</title>
+		<title>计划跟踪</title>
 		<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -38,7 +38,7 @@ var action;
 var url='/plan.do';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
-	tb.add({text: '填写异常',cls: 'x-btn-text-icon add',handler: onFeedbackClick});
+	tb.add({text: '反馈意见',cls: 'x-btn-text-icon add',handler: onFeedbackClick});
 
     if(!win){
         win = new Ext.Window({
@@ -56,8 +56,8 @@ Ext.onReady(function(){
 			alert('请选择数据项！');
 			return false;
 		}
-		action = url+'?action=addnote_emp&datepick=<%=datepick %>&sel_note=<%=sel_note %>&id=' + selValue;
-		win.setTitle('异常项');
+		action = url+'?action=addnote_plan&datepick=<%=datepick %>&sel_note=<%=sel_note %>&id=' + selValue;
+		win.setTitle('反馈意见');
 		win.show(btn.dom);
     }
 });
@@ -107,9 +107,9 @@ for(int i=0;i<listPlan.size();i++){
 				<td><%=mapPlan.get("EMPNAME")==null?"":mapPlan.get("EMPNAME") %></td>
                 <td><%=mapPlan.get("ASSESS")==null?"":mapPlan.get("ASSESS") %></td>
                 <td><%=mapPlan.get("REMARK")==null?"":mapPlan.get("REMARK") %></td>
-                <td><%=mapPlan.get("EMP_NOTE")==null?"":mapPlan.get("EMP_NOTE") %></td>
-                <td><font color="blue"><%=mapPlan.get("PLAN_NOTE")==null?"":mapPlan.get("PLAN_NOTE") %></font></td>
-                <td><font color="blue"><%=mapPlan.get("TEAM_NOTE")==null?"":mapPlan.get("TEAM_NOTE") %></font></td>
+                <td><font color="red"><%=mapPlan.get("EMP_NOTE")==null?"":mapPlan.get("EMP_NOTE") %></font></td>
+                <td><%=mapPlan.get("PLAN_NOTE")==null?"":mapPlan.get("PLAN_NOTE") %></td>
+                <td><%=mapPlan.get("TEAM_NOTE")==null?"":mapPlan.get("TEAM_NOTE") %></td>
             </tr>
 <%} %>            
 </table>
@@ -124,8 +124,8 @@ for(int i=0;i<listPlan.size();i++){
 	        	<input type="hidden" name="id">
                 <table>
 				  <tr>
-				    <td>异常项</td>
-				    <td><textarea name="emp_note" rows="4" style="width:200"></textarea></td>
+				    <td>反馈意见</td>
+				    <td><textarea name="plan_note" rows="4" style="width:200"></textarea></td>
 				  </tr>
 				</table>
 	        </form>

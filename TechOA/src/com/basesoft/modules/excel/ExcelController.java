@@ -270,7 +270,7 @@ public class ExcelController extends CommonController {
 				list = emDAO.getYgtrfx(empcodes, startdate, enddate, selproject);
 				path = exportExcel.exportExcel_YGTRFX(list, imagepath, selpjname);
 			}else if("PLAN".equals(model)){//计划
-				list = excelDAO.getExportData_PLAN(f_level, f_type, datepick, f_empname, sel_empcode, sel_note);
+				list = excelDAO.getExportData_PLAN(f_level, f_type, datepick, f_empname, sel_empcode, sel_note, emcode);
 				path = exportExcel.exportExcel_PLAN(list, planDAO, datepick);
 			}else if("JBF".equals(model)){//加班费
 				list = excelDAO.getExportData_JBF(datepick, emname, departcodes);
