@@ -189,7 +189,7 @@ public class ProjectController extends CommonController {
 				enddate  = "'" + enddate + "'";
 			}
 			
-			projectDAO.update("update PROJECT set NAME='" + pjname + "',STATUS='" + status + "',MANAGER='" + manager + "',planedworkload=" + planedworkload + ",startdate=" + startdate + ",enddate=" + enddate + ",note='" + note + "' where ID='" + id + "'");
+			projectDAO.update("update PROJECT set NAME='" + pjname + "',CODE='" + pjname + "',STATUS='" + status + "',MANAGER='" + manager + "',planedworkload=" + planedworkload + ",startdate=" + startdate + ",enddate=" + enddate + ",note='" + note + "' where ID='" + id + "'");
 			
 			response.sendRedirect("pj.do?action=list&page=" + page);
 			return null;

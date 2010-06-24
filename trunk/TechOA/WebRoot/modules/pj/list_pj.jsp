@@ -154,7 +154,7 @@ Ext.onReady(function(){
 			alert('请选择数据项！');
 			return false;
 		}
-    	Ext.Msg.confirm('确认','确实要删除此工程？',function(btn){
+    	Ext.Msg.confirm('确认','确实要删除此工作令号？',function(btn){
     		if(btn=='yes'){
             	Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>';       
             	Ext.getDom('listForm').submit();
