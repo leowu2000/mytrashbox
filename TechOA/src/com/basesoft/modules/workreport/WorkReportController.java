@@ -156,11 +156,9 @@ public class WorkReportController extends CommonController {
 			response.sendRedirect("workreport.do?action=list&page=" + page);
 			return null;
 		}else if("pass".equals(action)){//审批通过
-			String reportids = ServletRequestUtils.getStringParameter(request, "reportids", "");
-			String backbz = ServletRequestUtils.getStringParameter(request, "backbz", "");
-			String[] check = reportids.split(",");
+			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
-				String updateSql = "update WORKREPORT set FLAG=2,BACKBZ='" + backbz + "',BACKEMPCODE='" + emcode + "',BACKEMPNAME='" + emname + "' where ID='" + check[i] + "'";
+				String updateSql = "update WORKREPORT set FLAG=2,BACKEMPCODE='" + emcode + "',BACKEMPNAME='" + emname + "' where ID='" + check[i] + "'";
 				workReportDAO.update(updateSql);
 			}
 			response.sendRedirect("workreport.do?action=auditlist&page=" + page);

@@ -296,7 +296,7 @@ Ext.onReady(function(){
 				Ext.get('leader_room').set({'value':data.item.leader__room});
 				
 		    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&sel_note=<%=sel_note %>';
-	    		win.setTitle('修改');
+	    		win.setTitle('分解');
 		        win.show(btn.dom);
 		  	}
 		});

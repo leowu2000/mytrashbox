@@ -49,21 +49,12 @@ Ext.onReady(function(){
 			alert('请选择数据项！');
 			return false;
 		}
-		var checks = document.getElementsByName('check');
-		var checkedids = '';
-		for(var i=0;i<checks.length;i++){
-			if(checks[i].checked){
-				if(checkedids == ''){
-					checkedids = checks[i].value;
-				}else {
-					checkedids = checkedids + ',' + checks[i].value;
-				}
-			}
-		}
-    	action = url+'?action=pass&page=<%=pagenum %>&reportids=' + checkedids;
-    	win.setTitle('审核通过');
-       	Ext.getDom('dataForm').reset();
-        win.show(btn.dom);
+		Ext.Msg.confirm('确认','确实要通过么？',function(btn){
+    		if(btn=='yes'){
+            	Ext.getDom('listForm').action = url+'?action=pass&page=<%=pagenum %>';
+            	Ext.getDom('listForm').submit();
+    		}
+    	});
     }
     
     function onDenyClick(btn){
@@ -84,6 +75,7 @@ Ext.onReady(function(){
 				}
 			}
 		}
+		
     	action = url+'?action=deny&page=<%=pagenum %>&reportids=' + checkedids;
     	win.setTitle('审核退回');
        	Ext.getDom('dataForm').reset();
