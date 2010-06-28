@@ -6,7 +6,6 @@
 <%
 PageList pageList = (PageList)request.getAttribute("pageList");
 List listEm = pageList.getList();
-List listChildDepart = (List)request.getAttribute("listChildDepart");
 List listRole = (List)request.getAttribute("listRole");
 String seldepart = request.getAttribute("seldepart").toString();
 String emname = request.getAttribute("emname").toString();

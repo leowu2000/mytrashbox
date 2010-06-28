@@ -52,10 +52,8 @@ public class EmployeeController extends CommonController {
 		}else if("infolist".equals(action)){//人员基本信息
 			mv = new ModelAndView("modules/employee/list_info");
 			
-			List listChildDepart = emDAO.getChildDepart(emid);
 			List listRole = emDAO.getRoleList();
 
-			mv.addObject("listChildDepart", listChildDepart);
 			List listDepart = new ArrayList();
 			String departcodes = ""; 
 			if("-1".equals(seldepart)){//需要进行数据权限的过滤
@@ -223,7 +221,6 @@ public class EmployeeController extends CommonController {
 	    	
 			//获取附件信息
 			List listAttach = emDAO.getAttachs("EMPLOYEE", "CODE", empcode, "2");
-			List listChildDepart = emDAO.getChildDepart(emid);
 			//获取专业、学位、职称列表
 			List listMajor = emDAO.getDICTByType("1");
 			List listDegree = emDAO.getDICTByType("2");
@@ -233,7 +230,6 @@ public class EmployeeController extends CommonController {
 			//获取是否有照片
 			boolean havePhoto = emDAO.havePhoto(empcode);
 			
-			mv.addObject("listChildDepart", listChildDepart);
 			mv.addObject("listRole", listRole);
 			mv.addObject("listMajor", listMajor);
 			mv.addObject("listDegree", listDegree);

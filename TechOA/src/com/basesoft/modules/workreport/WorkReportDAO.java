@@ -43,12 +43,22 @@ public class WorkReportDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllAudit(int page, String departcodes, String emcode, String pjcode){
+	public PageList findAllAudit(int page, String departcodes, String emcode, String sel_pjcode, String sel_empcode, String sel_empname){
 		String sql = "select * from WORKREPORT where DEPARTCODE in (" + departcodes + ") and EMPCODE!='" + emcode + "' and (flag=1 or flag=2)";
-		if(!"".equals(pjcode)){
-			sql = sql + " and PJCODE='" + pjcode + "'";
+		if(!"".equals(sel_pjcode)){
+			sql = sql + " and PJCODE='" + sel_pjcode + "'";
 		}
-		sql = sql + " order by FLAG, STARTDATE desc";
+		if(!"".equals(sel_empcode)){
+			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
+		}
+		if(!"".equals(sel_empname)){
+			String querySql = "select * from EMPLOYEE where NAME like '%" + sel_empname + "%'";
+			List listEm = jdbcTemplate.queryForList(querySql);
+			String empcodes = StringUtil.ListToStringAdd(listEm, ",", "CODE");
+			
+			sql = sql + " and EMPCODE in (" + empcodes + ")";
+		}
+		sql = sql + " order by STARTDATE desc";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
@@ -74,8 +84,22 @@ public class WorkReportDAO extends CommonDAO {
 	 * @param emcode 
 	 * @return
 	 */
-	public List findAllAudit(String departcodes, String emcode){
-		String sql = "select * from WORKREPORT where DEPARTCODE in (" + departcodes + ") and EMPCODE!='" + emcode + "' and (flag=1 or flag=2) order by FLAG, STARTDATE desc";
+	public List findAllAudit(String departcodes, String emcode, String sel_pjcode, String sel_empcode, String sel_empname){
+		String sql = "select * from WORKREPORT where DEPARTCODE in (" + departcodes + ") and EMPCODE!='" + emcode + "' and (flag=1 or flag=2) ";
+		if(!"".equals(sel_pjcode)){
+			sql = sql + " and PJCODE='" + sel_pjcode + "'";
+		}
+		if(!"".equals(sel_empcode)){
+			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
+		}
+		if(!"".equals(sel_empname)){
+			String querySql = "select * from EMPLOYEE where NAME like '%" + sel_empname + "%'";
+			List listEm = jdbcTemplate.queryForList(querySql);
+			String empcodes = StringUtil.ListToStringAdd(listEm, ",", "CODE");
+			
+			sql = sql + " and EMPCODE in (" + empcodes + ")";
+		}
+		sql = sql + " order by STARTDATE desc";
 		
 		List list = jdbcTemplate.queryForList(sql);
 			

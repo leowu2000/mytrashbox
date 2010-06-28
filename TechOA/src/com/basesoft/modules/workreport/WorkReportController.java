@@ -1,6 +1,7 @@
 package com.basesoft.modules.workreport;
 
-import java.util.ArrayList;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -33,6 +34,13 @@ public class WorkReportController extends CommonController {
 		String emname = request.getSession().getAttribute("EMNAME")==null?"":request.getSession().getAttribute("EMNAME").toString();
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String sel_pjcode = ServletRequestUtils.getStringParameter(request, "sel_pjcode", "");
+		sel_pjcode = URLDecoder.decode(sel_pjcode, "ISO8859-1");
+		sel_pjcode = new String(sel_pjcode.getBytes("ISO8859-1"), "UTF-8");
+		String sel_empname = ServletRequestUtils.getStringParameter(request, "sel_empname", "");
+		sel_empname = URLDecoder.decode(sel_empname, "ISO8859-1");
+		sel_empname = new String(sel_empname.getBytes("ISO8859-1"),"UTF-8");
+		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
 		
 		if("list".equals(action)){//列表
 			mv = new ModelAndView("modules/workreport/list_workreport");
@@ -58,8 +66,6 @@ public class WorkReportController extends CommonController {
 			return mv;
 		}else if("auditlist".equals(action)){//审核列表
 			mv = new ModelAndView("modules/workreport/list_auditreport");
-			String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
-			pjcode = new String(pjcode.getBytes("ISO8859-1"), "UTF-8");
 			String departcodes = "";
 			List listDepart = roleDAO.findAllUserDepart(emcode);
 			if(listDepart.size() == 0){
@@ -67,9 +73,12 @@ public class WorkReportController extends CommonController {
 			}
 			departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 			//工作报告列表
-			PageList listReport = workReportDAO.findAllAudit(page, departcodes, emcode, pjcode);
+			PageList listReport = workReportDAO.findAllAudit(page, departcodes, emcode, sel_pjcode, sel_empcode, sel_empname);
 			
 			mv.addObject("listReport", listReport);
+			mv.addObject("sel_pjcode", sel_pjcode);
+			mv.addObject("sel_empname", sel_empname);
+			mv.addObject("sel_empcode", sel_empcode);
 		}else if("add".equals(action)){//新增操作
 			//获取登陆用户信息
 			Map mapEm = workReportDAO.findByEmId(emid);
@@ -161,7 +170,7 @@ public class WorkReportController extends CommonController {
 				String updateSql = "update WORKREPORT set FLAG=2,BACKEMPCODE='" + emcode + "',BACKEMPNAME='" + emname + "' where ID='" + check[i] + "'";
 				workReportDAO.update(updateSql);
 			}
-			response.sendRedirect("workreport.do?action=auditlist&page=" + page);
+			response.sendRedirect("workreport.do?action=auditlist&page=" + page + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode, "UTF-8") + "&sel_empcode=" + sel_empcode + "&sel_empname=" + URLEncoder.encode(sel_empname, "UTF-8"));
 			return null;
 		}else if("deny".equals(action)){//审批退回
 			String reportids = ServletRequestUtils.getStringParameter(request, "reportids", "");
@@ -171,7 +180,7 @@ public class WorkReportController extends CommonController {
 				String updateSql = "update WORKREPORT set FLAG=3,BACKBZ='" + backbz + "',BACKEMPCODE='" + emcode + "',BACKEMPNAME='" + emname + "' where ID='" + check[i] + "'";
 				workReportDAO.update(updateSql);
 			}
-			response.sendRedirect("workreport.do?action=auditlist&page=" + page);
+			response.sendRedirect("workreport.do?action=auditlist&page=" + page + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode, "UTF-8") + "&sel_empcode=" + sel_empcode + "&sel_empname=" + URLEncoder.encode(sel_empname, "UTF-8"));
 			return null;
 		}
 		

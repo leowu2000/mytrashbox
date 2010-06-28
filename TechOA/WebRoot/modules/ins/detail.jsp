@@ -3,10 +3,16 @@
 <%@ page import="com.basesoft.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%@ page import="com.basesoft.modules.ins.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 	Ins ins = (Ins)request.getAttribute("ins");
-	List listBakcs = (List)request.getAttribute("listBakcs");
+	List listBacks = (List)request.getAttribute("listBacks");
 	String ins_id = request.getAttribute("ins_id").toString();
+	
+	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+	InsDAO insDAO = (InsDAO)ctx.getBean("insDAO");
+	
+	List listColumn = insDAO.findAllColumn(ins.getId(), "");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -50,26 +56,34 @@ Ext.onReady(function(){
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
   	<br>
+  	<center><h2><%=ins.getTitle() %></h2></center>
     <table width="70%" align="center" vlign="middle" id="the-table">
     	<tr align="left">
-    		<td bgcolor="#E0F1F8" class="b_tr" width="10%">调查标题</td>
-    		<td><%=ins.getTitle() %></td>
-    	</tr>
-    	<tr align="left">
-    		<td bgcolor="#E0F1F8" class="b_tr" width="10%">调查内容</td>
-    		<td><%=ins.getNote() %></td>
-    	</tr>
-    	<tr align="left">
-    		<td bgcolor="#E0F1F8" class="b_tr" width="10%">调查日期</td>
-    		<td><%=ins.getStartdate() %></td>
+    		<td bgcolor="#E0F1F8" class="b_tr" width="10%">调查人</td>
+<%
+		for(int i=0;i<listColumn.size();i++){
+			Map mapColumn = (Map)listColumn.get(i);
+%>    	
+    		<td bgcolor="#E0F1F8" class="b_tr" width="10%"><%=mapColumn.get("COL_NAME") %></td>
+<%
+		}
+%>    		
     	</tr>
 <%
-	for(int i=0;i<listBakcs.size();i++){
-		Map mapBacks = (Map)listBakcs.get(i);
+	for(int i=0;i<listBacks.size();i++){
+		Map mapBacks = (Map)listBacks.get(i);
 %>
 		<tr>
-			<td bgcolor="#E0F1F8" class="b_tr" width="10%"><%=mapBacks.get("EMPNAME")==null?"":mapBacks.get("EMPNAME") %></td>
-			<td><%=mapBacks.get("NOTE")==null?"":mapBacks.get("NOTE") %></td>
+			<td><%=mapBacks.get("EMPNAME")==null?"":mapBacks.get("EMPNAME") %></td>
+<%
+		for(int j=0;j<listColumn.size();j++){
+			Map mapColumn = (Map)listColumn.get(j);
+			Map mapBack_detail = insDAO.findCol_value(mapBacks.get("ID").toString(), mapColumn.get("COL_NAME").toString());
+%>		
+			<td><%=mapBack_detail.get("COL_VALUE")==null?"":mapBack_detail.get("COL_VALUE") %></td>
+<%
+		}
+%>			
 		</tr>
 <%
 	} 

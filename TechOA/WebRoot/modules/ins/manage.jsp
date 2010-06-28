@@ -2,6 +2,8 @@
 <%@ page import="java.net.*"%>
 <%@ page import="com.basesoft.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.modules.ins.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 	PageList pageList = (PageList)request.getAttribute("pageList");
 	List listIns = pageList.getList();
@@ -11,6 +13,9 @@
 	String enddate = request.getAttribute("enddate").toString();
 	String sel_title = request.getAttribute("sel_title").toString();
 	sel_title = URLEncoder.encode(sel_title,"UTF-8");
+	
+	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+	InsDAO insDAO = (InsDAO)ctx.getBean("insDAO");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -32,17 +37,22 @@
 var win;
 var action;
 var url='/ins.do';
+var colCount = 2;
+var colIndex = 4;
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
-	tb.add({text: '完  成',cls: 'x-btn-text-icon xiugai',handler: onCompleteClick});
     if(!win){
         win = new Ext.Window({
         	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
+	        {text:'提交',handler: function(){
+	        		Ext.getDom('dataForm').action = action + "&colCount=" + (colCount - 1); 
+	        		Ext.getDom('dataForm').submit();
+	        	}
+	        },
 	        {text:'关闭',handler: function(){win.hide();}}
 	        ]
         });
@@ -65,21 +75,6 @@ Ext.onReady(function(){
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
 	    		Ext.getDom('listForm').action=url+'?action=delete&sel_title=<%=sel_title %>&startdate=<%=startdate %>&enddate=<%=enddate %>&page=<%=pagenum %>';       
-    	    	Ext.getDom('listForm').submit();
-    	    }
-    	});
-    }
-    
-    function onCompleteClick(btn){
-		var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
-		if(selValue==undefined) {
-			alert('请选择数据项！');
-			return false;
-		}
-		
-		Ext.Msg.confirm('确认','确定完成?',function(btn){
-    	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=complete&sel_title=<%=sel_title %>&startdate=<%=startdate %>&enddate=<%=enddate %>&page=<%=pagenum %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
@@ -110,6 +105,25 @@ function checkAll(){
 		}
 	}
 }
+
+function addCol(){
+	var formTable = document.getElementById('formTable');
+	var addtr = formTable.insertRow(colIndex);
+	var addtd0 = addtr.insertCell(0);
+  	var addtd1 = addtr.insertCell(1);
+  	addtd0.innerHTML="";
+  	addtd1.innerHTML="<input type='text' name='col" + colCount + "' id='col" + colCount + "'>&nbsp;<span onclick='delCol();' style='font-size:10pt;cursor:hand;'><image src='/images/icons/delete.gif'>删除</span>";
+	
+	colIndex = colIndex + 1;
+	colCount = colCount + 1;
+}
+
+function delCol(){
+	var formTable = document.getElementById('formTable');
+	colIndex = colIndex - 1;
+	colCount = colCount - 1;
+	formTable.deleteRow(colIndex);
+}
 //-->
 </script>
   </head>
@@ -124,25 +138,45 @@ function checkAll(){
     		<td style="width:50;"><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
     		<td width="100">调查标题</td>
     		<td width="200">调查内容</td>
-    		<td nowrap="nowrap">调查日期</td>
-    		<td>状态</td>
+    		<td nowrap="nowrap">起始日期</td>
+    		<td nowrap="nowrap">截止日期</td>
     	</tr>
 <%
 	for(int i=0;i<listIns.size();i++){
 		Map mapIns = (Map)listIns.get(i);
-		String status = mapIns.get("STATUS")==null?"":mapIns.get("STATUS").toString();
-		if("1".equals(status)){
-			status = "<font color='green'>调查中</font>";
-		}else if("2".equals(status)){
-			status = "<font color='blue'>调查完毕</font>";
-		}
+		List listColumn = insDAO.findAllColumn(mapIns.get("ID").toString(), "");
+		Date ins_enddate = StringUtil.StringToDate(mapIns.get("ENDDATE")==null?"2010-12-31":mapIns.get("ENDDATE").toString(), "yyyy-MM-dd");
+		int between = StringUtil.getBetweenDays(new Date(), ins_enddate);
 %>
 		<tr>
 			<td><input type="checkbox" name="check" value="<%=mapIns.get("ID") %>" class="ainput"></td>
 			<td><a href="ins.do?action=detail&ins_id=<%=mapIns.get("ID") %>"><%=mapIns.get("TITLE")==null?"":mapIns.get("TITLE") %></a></td>
-			<td><%=mapIns.get("NOTE")==null?"":mapIns.get("NOTE") %></td>
+			<td>
+			  <table id="the-table" style="border:1px solid white;">
+<%
+			for(int j=0;j<listColumn.size();j++){
+				Map mapColumn = (Map)listColumn.get(j);
+%>				
+				<tr>
+				  <td><%=(j + 1) + "、" + mapColumn.get("COL_NAME") %></td>
+				</tr>
+<%
+			}
+%>
+			  </table>
+			</td>
 			<td><%=mapIns.get("STARTDATE")==null?"":mapIns.get("STARTDATE") %></td>
-			<td nowrap="nowrap"><%=status %></td>
+			<%
+			if(between<0){
+%>			
+			<td nowrap="nowrap" style="color:red;" title="已到期"><%=mapIns.get("ENDDATE")==null?"":mapIns.get("ENDDATE") %></td>
+<%
+			}else {
+%>			
+			<td nowrap="nowrap"><%=mapIns.get("ENDDATE")==null?"":mapIns.get("ENDDATE") %></td>
+<%
+			}
+%>
 		</tr>
 <%
 	} 
@@ -154,21 +188,28 @@ function checkAll(){
     <div class="x-window-body" id="dlg-body">
 	        <form id="dataForm" name="dataForm" action="" method="post">
 	        	<input type="hidden" name="id" >
-                <table>
+                <table name="formTable" id="formTable">
                   <tr>
 				    <td>调查标题</td>
 				    <td><input type="text" name="title" id="title" style="width:200"></td>
 				  </tr>	
-				  <tr>
-				    <td>调查内容</td>
-				    <td><textarea name="note" rows="5" style="width:200"></textarea></td>
-				  </tr>
 				  <tr>
 				  	<td>调查人员</td>
 				  	<td><input type="text" id="empnames" name="empnames" style="width:155;" value="请选择...">
 				      <input class="btn" name="selemp" type="button" onclick="changeEmp();" value="选择" style="width:40;">
 					  <input type="hidden" id="empcodes" name="empcodes">
 					</td>
+				  </tr>
+				  <tr>
+				  	<td>截止日期</td>
+				  	<td><input type="text" name="ins_enddate" id="ins_enddate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<%=StringUtil.DateToString(StringUtil.getNextDate(new Date(), 5), "yyyy-MM-dd") %>" style="width:200"></td>
+				  </tr>
+				  <tr>
+				    <td>调查项</td>
+				    <td>
+				      <input type="text" name="col1" id="col1"> 
+				      <span onclick="addCol();" style="font-size:10pt;cursor:hand;"><image src="/images/icons/add.gif">添加</span>
+				    </td>
 				  </tr>
 				</table>
 	        </form>

@@ -2,6 +2,8 @@
 <%@ page import="java.net.*"%>
 <%@ page import="com.basesoft.util.*" %>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.modules.ins.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 	PageList pageList = (PageList)request.getAttribute("pageList");
 	List listIns = pageList.getList();
@@ -11,6 +13,9 @@
 	String enddate = request.getAttribute("enddate").toString();
 	String sel_title = request.getAttribute("sel_title").toString();
 	sel_title = URLEncoder.encode(sel_title,"UTF-8");
+	
+	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+	InsDAO insDAO = (InsDAO)ctx.getBean("insDAO");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -32,6 +37,7 @@
 var win;
 var action;
 var url='/ins.do';
+var colCount = 0;
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
@@ -53,11 +59,37 @@ Ext.onReady(function(){
 			alert('请选择数据项！');
 			return false;
 		}
-    
-    	action = url+'?action=back_add&sel_title=<%=sel_title %>&startdate=<%=startdate %>&enddate=<%=enddate %>&id=' + selValue;
-    	win.setTitle('反馈');
-       	Ext.getDom('dataForm').reset();
-        win.show(btn.dom);
+		var dataTable = document.getElementById('dataTable');
+		for(var i=0;i<colCount;i++){
+			dataTable.deleteRow(0);
+		}
+		colCount = 0;
+    	Ext.Ajax.request({
+			url: url+'?action=back_query&insback_id=' + selValue,
+			method: 'GET',
+			success: function(transport) {
+			    var data = String(transport.responseText).split(",");
+			    document.getElementById('colNames').value = transport.responseText;
+			    var dataTable = document.getElementById('dataTable');
+			    for(var i=0;i<data.length;i++){
+			    	var dataRow1 = dataTable.insertRow(colCount);
+			    	colCount = colCount + 1
+			    	var dataRow2 = dataTable.insertRow(colCount);
+			    	colCount = colCount + 1
+			    	
+			    	var dataCell1 = dataRow1.insertCell(0);
+			    	var dataCell2 = dataRow2.insertCell(0);
+			    	
+			    	dataCell1.innerHTML = (i + 1) + "、" + data[i];
+			    	dataCell2.innerHTML = "<input type='text' name='col" + (i+1) + "' id='col" + (i+1) + "' style='width:282;'>";
+			    }
+			    
+			    
+		    	action = url+'?action=back_add&sel_title=<%=sel_title %>&startdate=<%=startdate %>&enddate=<%=enddate %>&id=' + selValue + "&colCount=" + colCount;
+	    		win.setTitle('填写调查');
+		        win.show(btn.dom);
+		  	}
+		});
     }
     
     function onDeleteClick(btn){
@@ -106,35 +138,76 @@ function checkAll(){
     		<td width="100">调查内容</td>
     		<td width="200">反馈内容</td>
     		<td nowrap="nowrap">反馈日期</td>
-    		<td>状态</td>
+    		<td nowrap="nowrap">截止日期</td>
     	</tr>
 <%
 	for(int i=0;i<listIns.size();i++){
 		Map mapIns = (Map)listIns.get(i);
-		String status = mapIns.get("STATUS")==null?"":mapIns.get("STATUS").toString();
-		if("1".equals(status)){
-			status = "<font color='green'>调查中</font>";
-		}else if("2".equals(status)){
-			status = "<font color='blue'>调查完毕</font>";
+		List listColumn = insDAO.findAllColumn(mapIns.get("INS_ID").toString(), mapIns.get("ID").toString());
+		Date ins_enddate = StringUtil.StringToDate(mapIns.get("ENDDATE")==null?"2010-12-31":mapIns.get("ENDDATE").toString(), "yyyy-MM-dd");
+		int between = StringUtil.getBetweenDays(new Date(), ins_enddate);
+		boolean have_colvalue = false;
+		for(int j=0;j<listColumn.size();j++){
+			Map mapColumn = (Map)listColumn.get(j);
+			if(mapColumn.get("COL_VALUE")!=null){
+				if(!"".equals(mapColumn.get("COL_VALUE").toString())){
+					have_colvalue = true;
+					break;
+				}
+			}
 		}
 %>
 		<tr>
+			<td>
 <%
-		if("<font color='green'>调查中</font>".equals(status)){
-%>		
-			<td><input type="checkbox" name="check" value="<%=mapIns.get("ID") %>" class="ainput"></td>
-<%
-		}else {
+			if(between>=0||!have_colvalue){
 %>			
-			<td>&nbsp;</td>
+			  <input type="checkbox" name="check" value="<%=mapIns.get("ID") %>" class="ainput">
 <%
-		}
-%>
+			}
+%>			  
+			</td>
 			<td><%=mapIns.get("TITLE")==null?"":mapIns.get("TITLE") %></td>
-			<td><%=mapIns.get("INS_NOTE")==null?"":mapIns.get("INS_NOTE") %></td>
-			<td><%=mapIns.get("NOTE")==null?"":mapIns.get("NOTE") %></td>
+			<td>
+			  <table id="the-table" style="border:1px solid white;">
+<%
+			for(int j=0;j<listColumn.size();j++){
+				Map mapColumn = (Map)listColumn.get(j);
+%>				
+				<tr>
+				  <td><%=(j + 1) + "、" + mapColumn.get("COL_NAME") %></td>
+				</tr>
+<%
+			}
+%>
+			  </table>
+			</td>
+			<td>
+			  <table id="the-table" style="border:1px solid white;">
+<%
+			for(int j=0;j<listColumn.size();j++){
+				Map mapColumn = (Map)listColumn.get(j);
+%>				
+				<tr>
+				  <td><%=(j + 1) + "、" + mapColumn.get("COL_VALUE") %></td>
+				</tr>
+<%
+			}
+%>
+			  </table>
+			</td>
 			<td><%=mapIns.get("BACKDATE")==null?"":mapIns.get("BACKDATE") %></td>
-			<td nowrap="nowrap"><%=status %></td>
+<%
+			if(between<0){
+%>			
+			<td nowrap="nowrap" style="color:red;" title="已到期"><%=mapIns.get("ENDDATE")==null?"":mapIns.get("ENDDATE") %></td>
+<%
+			}else {
+%>			
+			<td nowrap="nowrap"><%=mapIns.get("ENDDATE")==null?"":mapIns.get("ENDDATE") %></td>
+<%
+			}
+%>
 		</tr>
 <%
 	} 
@@ -145,11 +218,8 @@ function checkAll(){
     <div class="x-window-header">Dialog</div>
     <div class="x-window-body" id="dlg-body">
 	        <form id="dataForm" name="dataForm" action="" method="post">
-                <table>
-				  <tr>
-				    <td>反馈内容</td>
-				    <td><textarea name="note" rows="5" style="width:200"></textarea></td>
-				  </tr>
+	        	<input type="hidden" name="colNames" id="colNames">
+                <table id="dataTable" name="dataTable">
 				</table>
 	        </form>
     </div>

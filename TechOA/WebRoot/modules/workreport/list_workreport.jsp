@@ -186,6 +186,10 @@ function AJAX_PJTYPE(type){
     }
 }
 
+function changeDate(value){
+	document.getElementById('reportname').value = value + "日工作日志";
+	
+}
 //-->
 </script>
 	</head>
@@ -272,7 +276,7 @@ for(int i=0;i<list.size();i++){
                 <table>
 				  <tr>
 				    <td>日期</td>
-				    <td><input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd") %>" name="datepick" style="width:200"></td>
+				    <td><input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd") %>" name="datepick" style="width:200" onchange="changeDate(this.value);"></td>
 				  </tr>				  
 				  <tr>
 				    <td>名称</td>
