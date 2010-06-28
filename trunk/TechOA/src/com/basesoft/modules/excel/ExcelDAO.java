@@ -182,9 +182,9 @@ public class ExcelDAO extends CommonDAO {
 	 * @param datepick 日期
 	 * @return
 	 */
-	public List getExportData_WORKREPORT(String emcode, String departcodes, WorkReportDAO wrDAO){
+	public List getExportData_WORKREPORT(String emcode, String departcodes, WorkReportDAO wrDAO, String sel_pjcode, String sel_empcode, String sel_empname){
 		
-		List listAudit = wrDAO.findAllAudit(departcodes, emcode);
+		List listAudit = wrDAO.findAllAudit(departcodes, emcode, sel_pjcode, sel_empcode, sel_empname);
 		
 		return listAudit;
 	}

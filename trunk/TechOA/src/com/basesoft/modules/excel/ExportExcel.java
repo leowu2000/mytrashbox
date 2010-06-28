@@ -23,6 +23,7 @@ import jxl.write.WriteException;
 import com.basesoft.modules.employee.Car;
 import com.basesoft.modules.employee.CarDAO;
 import com.basesoft.modules.ins.Ins;
+import com.basesoft.modules.ins.InsDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.workreport.WorkReportDAO;
 import com.basesoft.util.StringUtil;
@@ -749,9 +750,12 @@ public class ExportExcel {
 	 * @throws WriteException
 	 * @throws IndexOutOfBoundsException
 	 */
-	public String exportExcel_INS(Ins ins, List listBack) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+	public String exportExcel_INS(InsDAO insDAO, String ins_id) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		Ins ins = insDAO.findById(ins_id);
+		List listBack = insDAO.findBacksById(ins_id);
+		List listColumn = insDAO.findAllColumn(ins_id, "");
 		String[] str = new String[1];
-		str[0] = "临时调查统计";
+		str[0] = ins.getTitle();
 		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
 		
 		WritableWorkbook wb = readExcel(path);
@@ -759,28 +763,26 @@ public class ExportExcel {
 		
 		//插入标题
 		insertRowData(sheet, 0, str);
-		sheet.mergeCells(0, 0, 1, 0);
+		sheet.mergeCells(0, 0, listColumn.size(), 0);
 		
-		String str1[] = new String[2];
-		String str2[] = new String[2];
-		String str3[] = new String[2];
-		str1[0] = "调查标题";
-		str1[1] = ins.getTitle();
+		String str1[] = new String[listColumn.size() + 1];
+		str1[0] = "调查人";
+		for(int i=1;i<=listColumn.size();i++){
+			Map mapColumn = (Map)listColumn.get(i-1);
+			str1[i] = mapColumn.get("COL_NAME")==null?"":mapColumn.get("COL_NAME").toString();
+		}
 		insertRowData(sheet, 1, str1);
-		str2[0] = "调查内容";
-		str2[1] = ins.getNote();
-		insertRowData(sheet, 2, str2);
-		str3[0] = "调查时间";
-		str3[1] = ins.getStartdate();
-		insertRowData(sheet, 3, str3);
 		
+		String str2[] = new String[listColumn.size() + 1];
 		for(int i=0;i<listBack.size();i++){
-			String str4[] = new String[2];
 			Map mapBack = (Map)listBack.get(i);
-			str4[0] = mapBack.get("EMPNAME")==null?"":mapBack.get("EMPNAME").toString();
-			str4[1] = mapBack.get("NOTE")==null?"":mapBack.get("NOTE").toString();
-			
-			insertRowData(sheet, i + 4, str4);
+			str2[0] = mapBack.get("EMPNAME")==null?"":mapBack.get("EMPNAME").toString();
+			for(int j=1;j<=listColumn.size();j++){
+				Map mapColumn = (Map)listColumn.get(j-1);
+				Map mapColumn_detail = insDAO.findCol_value(mapBack.get("ID").toString(), mapColumn.get("COL_NAME").toString());
+				str2[j] = mapColumn_detail.get("COL_VALUE")==null?"":mapColumn_detail.get("COL_VALUE").toString();
+			}
+			insertRowData(sheet, i + 2, str2);
 		}
 		
 		wb.write();

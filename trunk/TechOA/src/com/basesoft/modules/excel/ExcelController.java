@@ -291,21 +291,25 @@ public class ExcelController extends CommonController {
 				list = excelDAO.getExportData_BCYY(carid, datepick);
 				path = exportExcel.exportExcel_BCYY(list, carid, datepick, carDAO);
 			}else if("WORKREPORT".equals(model)){//工作报告
+				String sel_pjcode = ServletRequestUtils.getStringParameter(request, "sel_pjcode", "");
+				sel_pjcode = URLDecoder.decode(sel_pjcode, "ISO8859-1");
+				sel_pjcode = new String(sel_pjcode.getBytes("ISO8859-1"), "UTF-8");
+				String sel_empname = ServletRequestUtils.getStringParameter(request, "sel_empname", "");
+				sel_empname = URLDecoder.decode(sel_empname, "ISO8859-1");
+				sel_empname = new String(sel_empname.getBytes("ISO8859-1"),"UTF-8");
 				listDepart = roleDAO.findAllUserDepart(emcode);
 				if(listDepart.size() == 0){
 					listDepart = roleDAO.findAllRoleDepart(emrole);
 				}
 				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
-				list = excelDAO.getExportData_WORKREPORT(emcode, departcodes, wrDAO);
+				list = excelDAO.getExportData_WORKREPORT(emcode, departcodes, wrDAO, sel_pjcode, sel_empcode, sel_empname);
 				path = exportExcel.exportExcel_WORKREPORT(list, wrDAO);
 			}else if("PLAN1".equals(model)){//计划
 				list = excelDAO.getExportData_PLAN1(level, type, f_empname, datepick, emcode, sel_empcode, sel_status, sel_note);
 				path = exportExcel.exportExcel_PLAN1(list, planDAO, datepick);
 			}else if("INS".equals(model)){//临时调查表
 				String ins_id = ServletRequestUtils.getStringParameter(request, "ins_id", "");
-				Ins ins = insDAO.findById(ins_id);
-				List listBack = insDAO.findBacksById(ins_id);
-				path = exportExcel.exportExcel_INS(ins, listBack);
+				path = exportExcel.exportExcel_INS(insDAO, ins_id);
 			}
 			
 			

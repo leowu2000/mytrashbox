@@ -1,5 +1,6 @@
 package com.basesoft.modules.ins;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +60,7 @@ public class InsDAO extends CommonDAO {
 	 */
 	public PageList findAllBack(int page, String sel_title, String startdate, String enddate, String emcode){
 		PageList pageList = new PageList();
-		String sql = "select b.*,a.STATUS,a.TITLE,a.NOTE as INS_NOTE,a.STARTDATE from INVESTIGATION a, INS_BACK b where b.INS_ID=a.ID and b.EMPCODE='" + emcode + "' ";
+		String sql = "select b.*,a.STATUS,a.TITLE,a.NOTE as INS_NOTE,a.STARTDATE,a.ENDDATE from INVESTIGATION a, INS_BACK b where b.INS_ID=a.ID and b.EMPCODE='" + emcode + "' ";
 		
 		if(!"".equals(sel_title)){
 			sql = sql + " and a.TITLE like '%" + sel_title + "%'";
@@ -86,6 +87,21 @@ public class InsDAO extends CommonDAO {
 		pageList.setPageInfo(pageInfo);
 		
 		return pageList;
+	}
+	
+	/**
+	 * 获取所有调查字段
+	 * @param ins_id 调查id 
+	 * @param insback_id 调查反馈id
+	 * @return
+	 */
+	public List findAllColumn(String ins_id, String insback_id){
+		PageList pageList = new PageList();
+		String sql = "select * from INS_COLUMN where INS_ID='" + ins_id + "' and INSBACK_ID='" + insback_id + "'";
+		
+		List list = jdbcTemplate.queryForList(sql);
+		
+		return list;
 	}
 	
 	/**
@@ -122,5 +138,40 @@ public class InsDAO extends CommonDAO {
 		List list = jdbcTemplate.queryForList(querySql);
 		
 		return list;
+	}
+	
+	/**
+	 * 获取所有反馈信息
+	 * @param insback_id
+	 * @param col_name 字段名
+	 * @return
+	 */
+	public Map findCol_value(String insback_id, String col_name){
+		Map map = new HashMap();
+		String querySql = "select * from INS_COLUMN where INSBACK_ID='" + insback_id + "' and col_name='" + col_name + "'";
+		
+		List list = jdbcTemplate.queryForList(querySql);
+		if(list.size()>0){
+			map = (Map)list.get(0);
+		}
+		
+		return map;
+	}
+	
+	/**
+	 * 根据反馈id找到反馈信息
+	 * @param insback_id
+	 * @return
+	 */
+	public Map findByInsbackId(String insback_id){
+		Map map = new HashMap();
+		String querySql = "select * from INS_BACK where ID='" + insback_id + "'";
+		
+		List list = jdbcTemplate.queryForList(querySql);
+		if(list.size()>0){
+			map = (Map)list.get(0);
+		}
+		
+		return map;
 	}
 }

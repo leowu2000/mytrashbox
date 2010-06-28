@@ -4,7 +4,6 @@
 Map mapEm = (Map)request.getAttribute("mapEm");
 List listAttach = (List)request.getAttribute("listAttach");
 
-List listChildDepart = (List)request.getAttribute("listChildDepart");
 List listRole = (List)request.getAttribute("listRole");
 List listMajor = (List)request.getAttribute("listMajor");
 List listDegree = (List)request.getAttribute("listDegree");

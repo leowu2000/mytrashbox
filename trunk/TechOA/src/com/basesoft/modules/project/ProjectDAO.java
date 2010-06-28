@@ -20,7 +20,7 @@ public class ProjectDAO extends CommonDAO{
 	 */
 	public List<?> getGstjhz(String start, String end, List listDepart, String pjcodes){
 		List<?> listProject = getProject(pjcodes);
-		String departCodes = getDepartCodes(listDepart);
+		String departCodes = StringUtil.ListToStringAdd(listDepart, ",", "CODE");
 		
 		for(int i=0;i<listProject.size();i++){//循环项目
 			Map mapProject = (Map)listProject.get(i);
@@ -31,35 +31,12 @@ public class ProjectDAO extends CommonDAO{
 			
 			for(int j=0;j<listDepart.size();j++){//循环部门
 				Map mapDepart = (Map)listDepart.get(j);
-				String sql1 = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE='" + mapDepart.get("CODE") + "' and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'"; 
+				//下级部门列表
+				List childDepart = getChildDeparts(mapDepart.get("CODE").toString(), new ArrayList());
+				String departcodes = StringUtil.ListToStringAdd(childDepart, ",", "CODE");;
+				String sql1 = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE in (" + departcodes + ") and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'"; 
 				Map map1 = jdbcTemplate.queryForMap(sql1);
 				float departCount = map1.get("AMOUNT")==null?0:Float.parseFloat(map1.get("AMOUNT").toString());
-				
-				mapProject.put("departCount" + j, departCount);
-			}
-		}
-		
-		return listProject;
-	}
-	
-	/**
-	 * 获取工时统计汇总，不带合计
-	 * @param start
-	 * @param end
-	 * @param listDepart
-	 * @return
-	 */
-	public List<?> getGstjhznoCount(String start, String end, List listDepart, String pjcodes){
-		List<?> listProject = getProject(pjcodes);
-		
-		for(int i=0;i<listProject.size();i++){//循环项目
-			Map mapProject = (Map)listProject.get(i);
-			for(int j=0;j<listDepart.size();j++){//循环部门
-				Map mapDepart = (Map)listDepart.get(j);
-				String sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE='" + mapDepart.get("CODE") + "' and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'";
-				Map map = jdbcTemplate.queryForMap(sql);
-				
-				float departCount = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString()); 
 				
 				mapProject.put("departCount" + j, departCount);
 			}
@@ -81,7 +58,7 @@ public class ProjectDAO extends CommonDAO{
 		//令号列表
 		List listProject = getProject(pjcodes);
 		//下级部门列表
-		List listDepart = getDeparts(depart, new ArrayList());
+		List listDepart = getChildDeparts(depart, new ArrayList());
 		String departcodes = StringUtil.ListToStringAdd(listDepart, ",", "CODE");
 		//合计
 		float[] hj = new float[listPeriod.size()];
@@ -155,7 +132,7 @@ public class ProjectDAO extends CommonDAO{
 		List returnList = new ArrayList();
 		
 		List listProject = getProject(pjcodes);
-		List listDepart = getDeparts(depart, new ArrayList());
+		List listDepart = getChildDeparts(depart, new ArrayList());
 		String departcodes = StringUtil.ListToStringAdd(listDepart, ",", "CODE");
 		//合计
 		float[] hj = new float[listPeriod.size()];
@@ -214,7 +191,7 @@ public class ProjectDAO extends CommonDAO{
 		List returnList = new ArrayList();
 		
 		List listProject = getProject(pjcodes);
-		List listDepart = getDeparts(depart, new ArrayList());
+		List listDepart = getChildDeparts(depart, new ArrayList());
 		String departcodes = StringUtil.ListToStringAdd(listDepart, ",", "CODE");
 		for(int i=0;i<listProject.size();i++){//循环项目
 			Map returnMap = new HashMap();
@@ -288,7 +265,7 @@ public class ProjectDAO extends CommonDAO{
 			Map returnMap = new HashMap();
 			
 			Map mapProject = (Map)listProject.get(i);
-			List listDepart = getDeparts(depart, new ArrayList());
+			List listDepart = getChildDeparts(depart, new ArrayList());
 			String departcodes = StringUtil.ListToStringAdd(listDepart, ",", "CODE");
 			returnMap.put("PJCODE", mapProject.get("NAME"));
 			

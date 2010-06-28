@@ -77,11 +77,16 @@
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('datepick'));
   		
-  		//comboBoxTree.setValue({id:'0',text:'请选择...'});
-  		
   		var datepick = document.getElementById('datepick').value;
   		if(datepick == ''){
-	  	  document.getElementById('datepick').value = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
+  		  var nowDate = '<%=StringUtil.DateToString(new Date(),"yyyy-MM-dd") %>';
+  		  var day = nowDate.substr(nowDate.length-2,2);
+  		  if(Number(day)>=25){
+  		  	nowDate = '<%=StringUtil.DateToString(StringUtil.getNextDate(new Date(), 10),"yyyy-MM") %>';
+  		  }else {
+  		  	nowDate = '<%=StringUtil.DateToString(new Date(),"yyyy-MM") %>';
+  		  }
+	  	  document.getElementById('datepick').value = nowDate;
 	  	  datepick = document.getElementById('datepick').value;
 	  	}
 	    document.getElementById('list_workcheck').src = "/em.do?action=workcheck&depart=" + comboBoxTree.getValue() + "&datepick=" + datepick + "&empcode=<%=empcode %>&method=<%=method %>";

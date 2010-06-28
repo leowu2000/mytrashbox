@@ -33,7 +33,6 @@ public class DepartmentController extends CommonController {
 		if("list".equals(action)){//列表页面
 			mv = new ModelAndView("modules/depart/list_depart");
 			//获取用户所能得到的菜单列表
-			List listDepart = departDAO.getChildDepart(emid);
 			PageList pageList = departDAO.findAll(page);
 			
 			mv.addObject("pageList", pageList);

@@ -48,7 +48,7 @@ public class ProjectController extends CommonController {
 			
 			List listDepart = projectDAO.getDeparts(departcodes);
 			List listGstjhz = projectDAO.getGstjhz(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"), listDepart, pjcodes);
-			List listGstjhznoCount = projectDAO.getGstjhznoCount(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"), listDepart, pjcodes);
+			//List listGstjhznoCount = projectDAO.getGstjhznoCount(StringUtil.DateToString(start,"yyyy-MM-dd"), StringUtil.DateToString(end,"yyyy-MM-dd"), listDepart, pjcodes);
 			
 			ChartUtil.createChart("gstjhz", listGstjhz, path, projectDAO, listDepart, pjcodes, sel_type);
 			

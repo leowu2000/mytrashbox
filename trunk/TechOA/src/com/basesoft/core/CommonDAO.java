@@ -130,32 +130,10 @@ public class CommonDAO {
 	
 	/**
 	 * 得到所有下级部门
-	 * @param emid
-	 * @return
-	 */
-	public List getChildDepart(String emid){
-		List listEm = jdbcTemplate.queryForList("select * from EMPLOYEE where ID='" + emid + "'");
-		Map mapEm = new HashMap();
-		if(listEm.size()>0){
-			mapEm = (Map)listEm.get(0);
-		}
-		String rolecode = mapEm.get("ROLECODE")==null?"":mapEm.get("ROLECODE").toString();
-		String departcode = mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString();
-		if("001".equals(rolecode)||"000".equals(rolecode)){//管理员
-			return jdbcTemplate.queryForList("select * from DEPARTMENT order by ORDERCODE");
-		}else if("002".equals(rolecode)){//领导
-			return getDeparts(departcode, new ArrayList());
-		}else {//普通员工
-			return jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "' order by ORDERCODE");
-		}
-	}
-	
-	/**
-	 * 得到所有下级部门
 	 * @param departcode
 	 * @return
 	 */
-	public List getDeparts(String departcode, List list){
+	public List getChildDeparts(String departcode, List list){
 		List listself = jdbcTemplate.queryForList("select * from DEPARTMENT where CODE='" + departcode + "' order by ORDERCODE");
 		if(listself.size()>0){
 			list.add((Map)listself.get(0));
@@ -165,7 +143,7 @@ public class CommonDAO {
 		if(listChild.size()>0){
 			for(int i=0;i<listChild.size();i++){
 				Map mapChild = (Map)listChild.get(i);
-				List listChilds = getDeparts(mapChild.get("CODE").toString(), list);
+				List listChilds = getChildDeparts(mapChild.get("CODE").toString(), list);
 			}
 		}
 		
@@ -196,29 +174,6 @@ public class CommonDAO {
 		}else {
 			return null;
 		}
-	}
-	
-	/**
-	 * 获取departcode字符串，用于sql中
-	 * @param listDepart 部门list
-	 * @return
-	 */
-	public String getDepartCodes(List listDepart){
-		String departCodes = "";
-		
-		for(int i=0;i<listDepart.size();i++){
-			Map mapDepart = (Map)listDepart.get(i);
-			if("".equals(departCodes)){
-				departCodes = "'" + mapDepart.get("CODE") + "'";
-			}else {
-				departCodes = departCodes + ",'" + mapDepart.get("CODE") + "'";
-			}
-		}
-		
-		if("".equals(departCodes)){
-			departCodes = "''";
-		}
-		return departCodes;
 	}
 	
 	/**

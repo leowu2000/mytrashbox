@@ -1,9 +1,15 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
+<%@ page import="java.net.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%@ page import="com.basesoft.modules.workreport.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
+String sel_pjcode = request.getAttribute("sel_pjcode").toString();
+sel_pjcode = URLEncoder.encode(sel_pjcode,"UTF-8");
+String sel_empcode = request.getAttribute("sel_empcode").toString();
+String sel_empname = request.getAttribute("sel_empname").toString();
+sel_empname = URLEncoder.encode(sel_empname,"UTF-8");
 PageList listReport = (PageList)request.getAttribute("listReport");
 List listProject = (List)request.getAttribute("listProject");
 List listStage = (List)request.getAttribute("listStage");
@@ -51,7 +57,7 @@ Ext.onReady(function(){
 		}
 		Ext.Msg.confirm('确认','确实要通过么？',function(btn){
     		if(btn=='yes'){
-            	Ext.getDom('listForm').action = url+'?action=pass&page=<%=pagenum %>';
+            	Ext.getDom('listForm').action = url+'?action=pass&page=<%=pagenum %>&sel_pjcode=<%=sel_pjcode %>&sel_empcode=<%=sel_empcode %>&sel_empname=<%=sel_empname %>';
             	Ext.getDom('listForm').submit();
     		}
     	});
@@ -76,14 +82,14 @@ Ext.onReady(function(){
 			}
 		}
 		
-    	action = url+'?action=deny&page=<%=pagenum %>&reportids=' + checkedids;
+    	action = url+'?action=deny&page=<%=pagenum %>&reportids=' + checkedids + '&sel_pjcode=<%=sel_pjcode %>&sel_empcode=<%=sel_empcode %>&sel_empname=<%=sel_empname %>';
     	win.setTitle('审核退回');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
     }
     
     function onExportClick(){
-    	window.location.href = "/excel.do?action=export&model=WORKREPORT";
+    	window.location.href = "/excel.do?action=export&model=WORKREPORT&sel_pjcode=<%=sel_pjcode %>&sel_empcode=<%=sel_empcode %>&sel_empname=<%=sel_empname %>";
   	}
 });
 
@@ -109,7 +115,7 @@ function checkAll(){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=listReport.getPageInfo().getHtml("workreport.do?action=auditlist") %>
+<%=listReport.getPageInfo().getHtml("workreport.do?action=auditlist&sel_empname=" + URLEncoder.encode(sel_empname,"UTF-8") + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode,"UTF-8") + "&sel_empcode=" + sel_empcode) %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
                 <td nowrap="nowrap"><input type="checkbox" name="checkall" onclick="checkAll();"><br>选择</td>
