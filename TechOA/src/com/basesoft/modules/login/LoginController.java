@@ -47,56 +47,50 @@ public class LoginController extends CommonController {
 				return mv;
 			}
 			
-			//ip访问限制
-			String ip = "";
-			if (request.getHeader("x-forwarded-for") == null) {
-				ip = request.getRemoteAddr();
-			}else {
-				ip = request.getHeader("x-forwarded-for");
-			}
-			boolean allowedIP = false;
-			List listV_ip = emDAO.jdbcTemplate.queryForList("select * from SYS_VISIT where TYPE='2' and STATUS='1'");
-			if(listV_ip.size() == 0){//未开启
-				allowedIP = true;
-			}else {//已开启，进行判断
-				for(int i=0;i<listV_ip.size();i++){
-					Map mapV_ip = (Map)listV_ip.get(i);
-					String ipSection = mapV_ip.get("V_IP")==null?"":mapV_ip.get("V_IP").toString();
-					if(ipSection.indexOf("-")>0){
-						allowedIP = StringUtil.ipIsValid(ipSection, ip);
-					}else {
-						allowedIP = ip.equals(ipSection);
-					}
-					
-					if(allowedIP){
-						break;
-					}
-				}
-			}
-			if(!allowedIP){
-				errorMessage = "您的IP访问受限，请联系管理员！";
-				mv.addObject("errorMessage", errorMessage);
-				return mv;
-			}
-			
 			List<?> listEm = emDAO.findByLoginId(loginid);
 			if (listEm.size() > 0) {
 				Map mapEm = (Map) listEm.get(0);
 				String dbPassword = mapEm.get("PASSWORD")==null?"":mapEm.get("PASSWORD").toString();
 				//工号访问限制
-				boolean allowedEMP = false;
 				String empcode = mapEm.get("CODE")==null?"":mapEm.get("CODE").toString();
-				List listV_em = emDAO.jdbcTemplate.queryForList("select * from SYS_VISIT where TYPE='1' and STATUS='1'");
-				if(listV_em.size() == 0){//未开启
-					allowedEMP = true;
+				//访问限制
+				String ip = "";
+				if (request.getHeader("x-forwarded-for") == null) {
+					ip = request.getRemoteAddr();
 				}else {
-					listV_em = emDAO.jdbcTemplate.queryForList("select * from SYS_VISIT where V_EMPCODE='" + empcode + "' and TYPE='1' and STATUS='1'");
-					if(listV_em.size()>0){//已开启，进行判断
+					ip = request.getHeader("x-forwarded-for");
+				}
+				boolean allowedIP = false;
+				boolean allowedEMP = false;
+				List listVisit = emDAO.jdbcTemplate.queryForList("select * from SYS_VISIT where V_EMPCODE='" + empcode + "'");
+				if(listVisit.size() == 0){//未配置此工号
+					if(!allowedEMP){
+						errorMessage = "您的工号访问受限，请联系管理员！";
+						mv.addObject("errorMessage", errorMessage);
+						return mv;
+					}
+				}else {//已开启，进行判断
+					listVisit = emDAO.jdbcTemplate.queryForList("select * from SYS_VISIT where V_EMPCODE='" + empcode + "' and STATUS='0'");
+					for(int i=0;i<listVisit.size();i++){
+						Map mapVisit = (Map)listVisit.get(i);
+						String ipSection = mapVisit.get("V_IP")==null?"":mapVisit.get("V_IP").toString();
+						if(ipSection.indexOf("-")>0){
+							allowedIP = StringUtil.ipIsValid(ipSection, ip);
+						}else {
+							allowedIP = ip.equals(ipSection);
+						}
+						
+						if(allowedIP){
+							break;
+						}
+					}
+					if(listVisit.size()>0){
 						allowedEMP = true;
 					}
+					
 				}
-				if(!allowedEMP){
-					errorMessage = "您的工号访问受限，请联系管理员！";
+				if(!allowedIP){
+					errorMessage = "您的IP访问受限，请联系管理员！";
 					mv.addObject("errorMessage", errorMessage);
 					return mv;
 				}

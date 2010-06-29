@@ -15,9 +15,9 @@ public class VisitDAO extends CommonDAO {
 	 * @param type
 	 * @return
 	 */
-	public PageList findAll(int page, String type){
+	public PageList findAll(int page){
 		PageList pageList = new PageList();
-		String sql = "select * from SYS_VISIT where TYPE='" + type + "' order by V_EMPCODE,V_IP";
+		String sql = "select * from SYS_VISIT order by V_EMPCODE,V_IP";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
@@ -41,8 +41,8 @@ public class VisitDAO extends CommonDAO {
 	 * @param type
 	 * @return
 	 */
-	public Visit findById(String id, String type){
-		String querySql = "select * from SYS_VISIT where (V_EMPCODE='" + id + "' or V_IP='" + id + "') and TYPE='" + type + "'";
+	public Visit findById(String id){
+		String querySql = "select * from SYS_VISIT where V_EMPCODE='" + id;
 		List list = jdbcTemplate.queryForList(querySql);
 		Visit visit = new Visit();
 		if(list.size()>0){

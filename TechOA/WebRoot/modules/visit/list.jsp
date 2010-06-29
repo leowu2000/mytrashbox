@@ -8,9 +8,6 @@
 	PageList pageList = (PageList)request.getAttribute("pageList");
 	List listVisit = pageList.getList();
 	int pagenum = pageList.getPageInfo().getCurPage();
-	
-	String type = request.getAttribute("type")==null?"":request.getAttribute("type").toString();
-	
 	String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 	
 	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
@@ -43,17 +40,7 @@ var action;
 var url='/visit.do';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
-<% 
-	if("1".equals(type)){
-%>
-	tb.add({text: '批量导入工号',cls: 'x-btn-text-icon add',handler: onImportEmClick});
-<%
-	}else if("2".equals(type)){
-%>
-	tb.add({text: '批量导入IP',cls: 'x-btn-text-icon import',handler: onImportIPClick});
-<%
-	}
-%>
+	tb.add({text: '批量导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
@@ -80,18 +67,8 @@ Ext.onReady(function(){
         });
     }
     
-    if(!win3){
-        win3 = new Ext.Window({
-        	el:'dlg3',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
-	        buttons: [
-	        {text:'预览',handler: function(){Ext.getDom('dataForm3').action=action; Ext.getDom('dataForm3').submit();}},
-	        {text:'关闭',handler: function(){win3.hide();}}
-	        ]
-        });
-    }
-    
     function onAddClick(btn){
-    	action = url+'?action=add&type=<%=type %>';
+    	action = url+'?action=add';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -104,29 +81,25 @@ Ext.onReady(function(){
 			return false;
 		}
 		Ext.Ajax.request({
-			url: url+'?action=query&id=' + selValue + '&type=<%=type %>',
+			url: url+'?action=query&id=' + selValue,
 			method: 'GET',
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
 			    var type = data.item.type;
-			    if(type == '1'){
-			    	Ext.get('id').set({'value':data.item.v__empcode});
-			    	Ext.get('empcode').set({'value':data.item.v__empcode});
-			    }else if(type == '2'){
-			    	Ext.get('id').set({'value':data.item.v__ip});
-			    	var ips = data.item.v__ip.split('-');
-			    	var ip1 = ips[0];
-			    	var ip2 = ips[1];
-			    	if(String(ip1) == "undefined"){
-			    		ip1 = '';
-			    	}
-			    	if(String(ip2) == "undefined"){
-			    		ip2 = '';
-			    	}
-			    	Ext.get('ip1').set({'value':ip1});
-			    	Ext.get('ip2').set({'value':ip2});
+			    Ext.get('id').set({'value':data.item.v__empcode});
+			    Ext.get('empcode').set({'value':data.item.v__empcode});
+			    var ips = data.item.v__ip.split('-');
+			    var ip1 = ips[0];
+			    var ip2 = ips[1];
+			    if(String(ip1) == "undefined"){
+			    	ip1 = '';
 			    }
-		    	action = url+'?action=update&page=<%=pagenum %>&type=<%=type %>';
+			    if(String(ip2) == "undefined"){
+			    	ip2 = '';
+			    }
+			    Ext.get('ip1').set({'value':ip1});
+			    Ext.get('ip2').set({'value':ip2});
+		    	action = url+'?action=update&page=<%=pagenum %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -142,24 +115,17 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&type=<%=type %>';       
+	    		Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
     }
     
-    function onImportEmClick(btn){
-		action = 'excel.do?action=preview&table=VISIT_EM';
+    function onImportClick(btn){
+		action = 'excel.do?action=preview&table=VISIT';
     	win2.setTitle('导入工号');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
-    }
-    
-    function onImportIPClick(btn){
-		action = 'excel.do?action=preview&table=VISIT_IP';
-    	win3.setTitle('导入IP');
-       	Ext.getDom('dataForm3').reset();
-        win3.show(btn.dom);
     }
     
     function onStartClick(btn){
@@ -220,49 +186,30 @@ function checkAll(){
   <body>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("visit.do?action=list&type=" + type) %>
+<%=pageList.getPageInfo().getHtml("visit.do?action=list") %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
     		<td><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
-<% 
-	if("1".equals(type)){
-%>
 			<td>工号</td>
 			<td>姓名</td>
-<%
-	}else if("2".equals(type)){
-%>
 			<td>IP段</td>
-<%
-	}
-%>
 <%
 	for(int i=0;i<listVisit.size();i++){
 		Map mapVisit = (Map)listVisit.get(i);
+		String v_empcode = mapVisit.get("V_EMPCODE")==null?"":mapVisit.get("V_EMPCODE").toString();
+		String v_emname = visitDAO.findNameByCode("EMPLOYEE", v_empcode);
+		String v_ip = mapVisit.get("V_IP")==null?"":mapVisit.get("V_IP").toString();
 %>
 		<tr>
-<% 
-		if("1".equals(type)){
-			String v_empcode = mapVisit.get("V_EMPCODE")==null?"":mapVisit.get("V_EMPCODE").toString();
-			String v_emname = visitDAO.findNameByCode("EMPLOYEE", v_empcode);
-%>
 			<td><input type="checkbox" name="check" value="<%=v_empcode %>" class="ainput"></td>
 			<td><%=v_empcode %></td>
 			<td><%=v_emname %></td>
-<%
-	}else if("2".equals(type)){
-			String v_ip = mapVisit.get("V_IP")==null?"":mapVisit.get("V_IP").toString();
-%>
-			<td><input type="checkbox" name="check" value="<%=v_ip %>" class="ainput"></td>
 			<td><%=v_ip %></td>
+		</tr>
 <%
 	}
 %>		
-		</tr>
-<%
-	} 
-%>
 	</table>
   </form>
 <div id="dlg" class="x-hidden">
@@ -270,26 +217,18 @@ function checkAll(){
     <div class="x-window-body" id="dlg-body">
 	        <form id="dataForm" name="dataForm" action="" method="post">
 	        	<input type="hidden" name="id">
-	        	<input type="hidden" name="type" value="<%=type %>">
                 <table>
                   <tr>
-<% 
-	if("1".equals(type)){
-%>
 					<td>工号</td>
 				    <td><input type="text" name="empcode" style="width:200"></td>
-<%
-	}else if("2".equals(type)){
-%>
+				  </tr>
+				  <tr>
 					<td>IP</td>
 				    <td><input type="text" name="ip1" style="width:200"></td>
 				  </tr>
 				  <tr>
 				    <td>至</td>
 				    <td><input type="text" name="ip2" style="width:200"></td>
-<%
-	}
-%>   
 				  </tr>            
 				</table>
 	        </form>
@@ -301,33 +240,13 @@ function checkAll(){
     <div class="x-window-body" id="dlg-body">
 	        <form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
 	        	<input type="hidden" name="page" value="<%=pagenum %>">
-	        	<input type="hidden" name="type" value="<%=type %>">
                 <table>
 				  <tr>
 				    <td>选择文件</td>
 				    <td><input type="file" name="file" style="width:200"></td>
 				  </tr>	
 				  <tr>
-				    <td colspan="2"><font color="red">注意：导入将删除掉原工号数据！</font></td>
-				  </tr>	
-				</table>
-			</form>
-	</div>
-</div>  
-
-<div id="dlg3" class="x-hidden">
-    <div class="x-window-header">Dialog</div>
-    <div class="x-window-body" id="dlg-body">
-	        <form id="dataForm3" name="dataForm3" action="" method="post" enctype="multipart/form-data">
-	        	<input type="hidden" name="page" value="<%=pagenum %>">
-	        	<input type="hidden" name="type" value="<%=type %>">
-                <table>
-				  <tr>
-				    <td>选择文件</td>
-				    <td><input type="file" name="file" style="width:200"></td>
-				  </tr>	
-				  <tr>
-				    <td colspan="2"><font color="red">注意：导入将删除掉原IP数据！</font></td>
+				    <td colspan="2"><font color="red">注意：导入将删除掉原数据！</font></td>
 				  </tr>	
 				</table>
 			</form>

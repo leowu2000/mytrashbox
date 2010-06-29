@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<head>
-		<table>GOODS_PRICE</table>
-		<code>GOODS_PRICE</code>
-		<name>物资表</name>
+		<table>GOODS_DICT</table>
+		<code>GOODS_DICT</code>
+		<name>物资优选表</name>
 		<row>2</row>
 		<col>1</col>
 		<type>1</type>
@@ -13,26 +13,26 @@
 	<body>
 		<relation>
 			<id>1</id>
-			<name>编码</name>
+			<name>存货编码</name>
 			<column>CODE</column>
 			<format></format>
 		</relation>
 		<relation>
 			<id>2</id>
-			<name>名称</name>
+			<name>存货名称</name>
 			<column>NAME</column>
 			<format></format>
 		</relation>
 		<relation>
 			<id>3</id>
 			<name>型号规格</name>
-			<column>TYPE</column>
+			<column>SPEC</column>
 			<format></format>
 		</relation>
 		<relation>
 			<id>4</id>
-			<name>单价</name>
-			<column>PRICE</column>
+			<name>优选类型</name>
+			<column>TYPE</column>
 			<format></format>
 		</relation>
 	</body>

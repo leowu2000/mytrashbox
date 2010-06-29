@@ -2,10 +2,11 @@
 <%@ page import="com.basesoft.core.*" %>
 <%
 	PageList pageList = (PageList)request.getAttribute("pageList");
-	List listGoods = pageList.getList();
-	String sel_empcode = request.getAttribute("sel_empcode").toString();
-	
+	List listGoods_dict = pageList.getList();
 	int pagenum = pageList.getPageInfo().getCurPage();
+	
+	String sel_type = request.getAttribute("sel_type").toString();
+	String sel_code = request.getAttribute("sel_code").toString();
 	
 	String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 	errorMessage = new String(errorMessage.getBytes("ISO8859-1"), "UTF-8");
@@ -64,7 +65,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add_price&sel_empcode=<%=sel_empcode %>';
+    	action = url+'?action=add_dict&sel_type=<%=sel_type %>&sel_code=<%=sel_code %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -77,18 +78,17 @@ Ext.onReady(function(){
 			return false;
 		}
 		Ext.Ajax.request({
-			url: url+'?action=query_price&id='+selValue,
+			url: url+'?action=query_dict&id='+selValue,
 			method: 'GET',
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
 				Ext.get('code').set({'value':data.item.code});
 				Ext.get('name').set({'value':data.item.name});
+				Ext.get('spec').set({'value':data.item.spec});
 				Ext.get('type').set({'value':data.item.type});
-				Ext.get('price').set({'value':data.item.price});
 				
-				
-		    	action = url+'?action=update_price&page=<%=pagenum %>&sel_empcode=<%=sel_empcode %>';
+		    	action = url+'?action=update_dict&page=<%=pagenum %>&sel_type=<%=sel_type %>&sel_code=<%=sel_code %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -104,14 +104,14 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=delete_price&page=<%=pagenum %>&sel_empcode=<%=sel_empcode %>';       
+	    		Ext.getDom('listForm').action=url+'?action=delete_dict&page=<%=pagenum %>&sel_type=<%=sel_type %>&sel_code=<%=sel_code %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
     }
     
     function onImportClick(btn){
-		action = 'excel.do?action=preview&table=GOODS_PRICE&sel_empcode=<%=sel_empcode %>';
+		action = 'excel.do?action=preview&table=GOODS_DICT&sel_type=<%=sel_type %>&sel_code=<%=sel_code %>';
     	win2.setTitle('导入excel');
        	Ext.getDom('dataForm2').reset();
         win2.show(btn.dom);
@@ -139,25 +139,33 @@ function checkAll(){
   <body>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("goods.do?action=list_price&sel_empcode=" + sel_empcode) %>
+<%=pageList.getPageInfo().getHtml("goods.do?action=list_dict&sel_type=" + sel_type + "&sel_code=" + sel_code) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
     		<td><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
-    		<td>编码</td>
-    		<td>名称</td>
+    		<td>存货编码</td>
+    		<td>存货名称</td>
     		<td>型号规格</td>
-    		<td>单价</td>
+    		<td>优选类型</td>
 <%
-	for(int i=0;i<listGoods.size();i++){
-		Map mapGoods = (Map)listGoods.get(i);
+	for(int i=0;i<listGoods_dict.size();i++){
+		Map mapGoods_dict = (Map)listGoods_dict.get(i);
+		String type = mapGoods_dict.get("TYPE")==null?"":mapGoods_dict.get("TYPE").toString();
+		if("1".equals(type)){
+			type = "机载另册";
+		}else if("2".equals(type)){
+			type = "地面优选";
+		}else if("3".equals(type)){
+			type = "机载优选";
+		}
 %>
 		<tr>
-			<td><input type="checkbox" name="check" value="<%=mapGoods.get("ID") %>" class="ainput"></td>
-			<td><%=mapGoods.get("CODE") %></td>
-			<td><%=mapGoods.get("NAME") %></td>
-			<td><%=mapGoods.get("TYPE") %></td>
-			<td><%=mapGoods.get("PRICE") %></td>
+			<td><input type="checkbox" name="check" value="<%=mapGoods_dict.get("ID") %>" class="ainput"></td>
+			<td><%=mapGoods_dict.get("CODE")==null?"":mapGoods_dict.get("CODE") %></td>
+			<td><%=mapGoods_dict.get("NAME")==null?"":mapGoods_dict.get("NAME") %></td>
+			<td><%=mapGoods_dict.get("SPEC")==null?"":mapGoods_dict.get("SPEC") %></td>
+			<td><%=type %></td>
 		</tr>
 <%} %>
 	</table>
@@ -169,20 +177,26 @@ function checkAll(){
 	        	<input type="hidden" name="id" >
                 <table>
                   <tr>
-				    <td>编码</td>
+				    <td>存货编码</td>
 				    <td><input type="text" name="code" style="width:200" ></td>
 				  </tr>	
 				  <tr>
-				    <td>名称</td>
+				    <td>存货名称</td>
 				    <td><input type="text" name="name" style="width:200" ></td>
 				  </tr>	
 				  <tr>
 				    <td>型号规格</td>
-				    <td><input type="text" name="type" style="width:200" ></td>
+				    <td><input type="text" name="spec" style="width:200" ></td>
 				  </tr>	
 				  <tr>
-				    <td>单价</td>
-				    <td><input type="text" name="price" style="width:200" ></td>
+				    <td>优选类型</td>
+				    <td>
+				      <select name="type" id="type" style="width:200;">
+  						<option value="1">机载另册</option>
+  						<option value="2">地面优选</option>
+  						<option value="3">机载优选</option>
+  					  </select>
+  					</td>
 				  </tr>
 				</table>
 	        </form>

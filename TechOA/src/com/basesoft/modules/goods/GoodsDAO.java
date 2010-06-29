@@ -45,19 +45,59 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 	/**
 	 * 获取物资列表
 	 * @param page 页码
+	 * @param sel_type 优选类型
+	 * @param sel_code 存货编码
 	 * @return
 	 */
-	public PageList findAll_price(String code, int page){
+	public PageList findAll_dict(int page, String sel_type, String sel_code){
 		PageList pageList = new PageList();
-		String sql = "";
+		String sql = "select * from GOODS_DICT where 1=1 ";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
+		//按优选类型过滤
+		if(!"".equals(sel_type)){
+			sql = sql + " and TYPE='" + sel_type + "'";
+		}
+		//按存货编码过滤
+		if(!"".equals(sel_code)){
+			sql = sql + " and CODE like '" + sel_code + "'";
+		}
 		
-		if(!"".equals(code)){
-			sql = "select * from GOODS_PRICE where CODE like '%" + code + "%' order by PRICE";
-		}else {
-			sql = "select * from GOODS_PRICE order by PRICE";
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+		
+	}
+	
+	/**
+	 * 获取领料申请列表
+	 * @param page 页码
+	 * @param sel_empname 制单人
+	 * @param sel_code 存货编码
+	 * @return
+	 */
+	public PageList findAll_apply(int page, String sel_empname, String sel_code){
+		PageList pageList = new PageList();
+		String sql = "select * from GOODS_APPLY where 1=1 ";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		//按制单人过滤
+		if(!"".equals(sel_empname)){
+			sql = sql + " and ZDR like '%" + sel_empname + "%'";
+		}
+		//按存货编码过滤
+		if(!"".equals(sel_code)){
+			sql = sql + " and CHBM like '" + sel_code + "'";
 		}
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
@@ -115,18 +155,18 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 	 * @param id
 	 * @return
 	 */
-	public Goods_price findById_p(String id){
-		Goods_price goods = new Goods_price();
+	public Goods_dict findById_dict(String id){
+		Goods_dict goods_dict = new Goods_dict();
 		
-		String sql = "select * from GOODS_PRICE where ID='" + id + "'";
+		String sql = "select * from GOODS_DICT where ID='" + id + "'";
 		Map map = jdbcTemplate.queryForMap(sql);
 		
-		goods.setId(map.get("ID").toString());
-		goods.setCode(map.get("CODE")==null?"":map.get("CODE").toString());
-		goods.setName(map.get("NAME")==null?"":map.get("NAME").toString());
-		goods.setType(map.get("TYPE")==null?"":map.get("TYPE").toString());
-		goods.setPrice(map.get("PRICE")==null?0:Float.parseFloat(map.get("PRICE").toString()));
-		return goods;
+		goods_dict.setId(map.get("ID").toString());
+		goods_dict.setCode(map.get("CODE")==null?"":map.get("CODE").toString());
+		goods_dict.setName(map.get("NAME")==null?"":map.get("NAME").toString());
+		goods_dict.setSpec(map.get("SPEC")==null?"":map.get("SPEC").toString());
+		goods_dict.setType(map.get("TYPE")==null?"":map.get("TYPE").toString());
+		return goods_dict;
 	}
 	
 	/**
@@ -210,23 +250,5 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 		}
 		
 		return equal;
-	}
-	
-	/**
-	 * 是否存在编码
-	 * @param code
-	 * @return
-	 */
-	public boolean haveCode(String code){
-		boolean haveCode = false;
-		
-		String sql = "select * from GOODS_PRICE where CODE='" + code + "'";
-		List list = jdbcTemplate.queryForList(sql);
-		
-		if(list.size()>0){
-			haveCode = true;
-		}
-		
-		return haveCode;
 	}
 }
