@@ -9,7 +9,6 @@
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
 String path = request.getAttribute("path").toString();
-String type = request.getAttribute("type").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 EmployeeDAO emDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
@@ -40,11 +39,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'visit.do?action=list&type=<%=type %>';
+    	window.location.href = 'visit.do?action=list';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=visit.do?action=list&table=VISIT_EM&type=<%=type %>';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=visit.do?action=list&table=VISIT';
     	document.getElementById('listForm').submit();
     }
 });
@@ -61,6 +60,7 @@ Ext.onReady(function(){
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
   	  			<td>工号</td>
+  	  			<td>IP</td>
             </tr>
 <%
 		for(int i=0;i<rows.length();i++){
@@ -77,6 +77,7 @@ Ext.onReady(function(){
 			}else {
 %>            	
 				<td>&nbsp;<%=row.optString("EMPCODE") %></td>
+				<td>&nbsp;<%=row.optString("IP") %></td>
 <%
 			}
 		}

@@ -1,11 +1,11 @@
 package com.basesoft.modules.goods;
 
-public class Goods_price {
+public class Goods_dict {
 	String id;
 	String code;
 	String name;
+	String spec;
 	String type;
-	float price;
 	
 	public String getId() {
 		return id;
@@ -39,11 +39,11 @@ public class Goods_price {
 		this.type = type;
 	}
 	
-	public float getPrice() {
-		return price;
+	public String getSpec() {
+		return spec;
 	}
 	
-	public void setPrice(float price) {
-		this.price = price;
+	public void setSpec(String spec) {
+		this.spec = spec;
 	}
 }

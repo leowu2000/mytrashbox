@@ -1,8 +1,9 @@
 package com.basesoft.modules.goods;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
-import com.basesoft.modules.depart.Department;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
@@ -31,6 +31,11 @@ public class GoodsController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
+		String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
+		String sel_code = ServletRequestUtils.getStringParameter(request, "sel_code", "");
+		String sel_empname = ServletRequestUtils.getStringParameter(request, "sel_empname", "");
+		sel_empname = URLDecoder.decode(sel_empname, "ISO8859-1");
+		sel_empname = new String(sel_empname.getBytes("ISO8859-1"),"UTF-8");
 		
 		if("frame_list".equals(action)){//领料frame
 			mv = new ModelAndView("modules/goods/frame_goods");
@@ -135,62 +140,82 @@ public class GoodsController extends CommonController {
 			mv.addObject("pageList", pageList);
 			mv.addObject("empcode", empcode);
 			return mv;
-		}if("frame_list_price".equals(action)){//物资frame
-			mv = new ModelAndView("modules/goods/frame_goods_price");
+		}else if("frame_goodsdict".equals(action)){//物资字典(优选)frame
+			mv = new ModelAndView("modules/goods/frame_goods_dict");
 			return mv;
-		}else if("list_price".equals(action)){
-			mv = new ModelAndView("modules/goods/list_goods_price");
+		}else if("list_goodsdict".equals(action)){//物资优选list
+			mv = new ModelAndView("modules/goods/list_goods_dict");
 			
-			PageList pageList = goodsDAO.findAll_price(sel_empcode, page); 
+			PageList pageList = goodsDAO.findAll_dict(page, sel_type, sel_code);
 			
 			mv.addObject("pageList", pageList);
+			mv.addObject("sel_type", sel_type);
+			mv.addObject("sel_code", sel_code);
 			mv.addObject("errorMessage", errorMessage);
-			mv.addObject("sel_empcode", sel_empcode);
 			return mv;
-		}else if("add_price".equals(action)){
+		}else if("add_dict".equals(action)){
 			String code = ServletRequestUtils.getStringParameter(request, "code", "");
 			String name = ServletRequestUtils.getStringParameter(request, "name", "");
+			String spec = ServletRequestUtils.getStringParameter(request, "spec", "");
 			String type = ServletRequestUtils.getStringParameter(request, "type", "");
-			float price = ServletRequestUtils.getFloatParameter(request, "price", 0);
 			
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			String insertSql = "INSERT INTO GOODS_PRICE VALUES('" + id + "', '" + code + "', '" + name + "', '" + type + "', " + price + ")";
+			String insertSql = "INSERT INTO GOODS_DICT VALUES('" + id + "', '" + code + "', '" + name + "', '" + spec + "', '" + type + "')";
 			
 			goodsDAO.insert(insertSql);
 			
-			response.sendRedirect("goods.do?action=list_price&page=" + page + "&sel_empcode=" + sel_empcode);
-		}else if("delete_price".equals(action)){
+			response.sendRedirect("goods.do?action=list_goodsdict&page=" + page + "&sel_type=" + sel_type + "&sel_code=" + sel_code);
+		}else if("delete_dict".equals(action)){
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
-				String deleteSql = "delete from GOODS_PRICE where ID='" + check[i] + "'";
+				String deleteSql = "delete from GOODS_DICT where ID='" + check[i] + "'";
 				goodsDAO.delete(deleteSql);
 			}
-			
-			response.sendRedirect("goods.do?action=list_price&page=" + page + "&sel_empcode=" + sel_empcode);
-		}else if("query_price".equals(action)){
+			response.sendRedirect("goods.do?action=list_goodsdict&page=" + page + "&sel_type=" + sel_type + "&sel_code=" + sel_code);
+		}else if("query_dict".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
-			Goods_price goods = goodsDAO.findById_p(id);
+			Goods_dict goods_dict = goodsDAO.findById_dict(id);
 			XStream xstream = new XStream(new JettisonMappedXmlDriver());
-			xstream.alias("item", Goods_price.class);
+			xstream.alias("item", Goods_dict.class);
 			response.setHeader("Pragma", "No-cache");
 			response.setHeader("Cache-Control", "no-cache");
 			response.setDateHeader("Expires", 0L);
 			response.setContentType("text/html; charset=UTF-8");
-			response.getWriter().write(xstream.toXML(goods));
+			response.getWriter().write(xstream.toXML(goods_dict));
 			response.getWriter().close();
-		}else if("update_price".equals(action)){
+		}else if("update_dict".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			String code = ServletRequestUtils.getStringParameter(request, "code", "");
 			String name = ServletRequestUtils.getStringParameter(request, "name", "");
+			String spec = ServletRequestUtils.getStringParameter(request, "spec", "");
 			String type = ServletRequestUtils.getStringParameter(request, "type", "");
-			float price = ServletRequestUtils.getFloatParameter(request, "price", 0);
 			
-			String updateSql = "update GOODS_PRICE set CODE='" + code + "', NAME='" + name + "', TYPE='" + type + "', PRICE=" + price + " where ID='" + id + "'";
-			
+			String updateSql = "update GOODS_DICT set CODE='" + code + "', NAME='" + name + "', SPEC='" + spec + "', TYPE='" + type + "' where ID='" + id + "'";
 			goodsDAO.update(updateSql);
 			
-			response.sendRedirect("goods.do?action=list_price&page=" + page + "&sel_empcode=" + sel_empcode);
+			response.sendRedirect("goods.do?action=list_goodsdict&page=" + page + "&sel_type=" + sel_type + "&sel_code=" + sel_code);
+		}else if("frame_goodsapply".equals(action)){//申请领料统计frame
+			mv = new ModelAndView("modules/goods/frame_goods_apply");
+			return mv;
+		}else if("list_goodsapply".equals(action)){//申请领料统计list
+			mv = new ModelAndView("modules/goods/list_goods_apply");
+			
+			PageList pageList = goodsDAO.findAll_apply(page, sel_empname, sel_code);
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("sel_empname", sel_empname);
+			mv.addObject("sel_code", sel_code);
+			mv.addObject("errorMessage", errorMessage);
+			return mv;
+		}else if("delete_apply".equals(action)){
+			String[] check=request.getParameterValues("check");
+			for(int i=0;i<check.length;i++){
+				String deleteSql = "delete from GOODS_APPLY where ID='" + check[i] + "'";
+				goodsDAO.delete(deleteSql);
+			}
+			
+			response.sendRedirect("goods.do?action=list_goodsapply&page=" + page + "&sel_empname=" + URLEncoder.encode(sel_empname,"UTF-8") + "&sel_code=" + sel_code);
 		}
 		
 		return null;

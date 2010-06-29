@@ -54,6 +54,8 @@ public class ExcelController extends CommonController {
 		emname = URLDecoder.decode(emname, "ISO8859-1");
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
+		String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
+		String sel_code = ServletRequestUtils.getStringParameter(request, "sel_code", "");
 		String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 		String redirect = ServletRequestUtils.getStringParameter(request, "redirect", "");
 		String date = ServletRequestUtils.getStringParameter(request, "date", "");
@@ -76,6 +78,9 @@ public class ExcelController extends CommonController {
 		String sel_note = ServletRequestUtils.getStringParameter(request, "sel_note", "");
 		sel_note = URLDecoder.decode(sel_note, "ISO8859-1");
 		sel_note = new String(sel_note.getBytes("ISO8859-1"),"UTF-8");
+		String sel_empname = ServletRequestUtils.getStringParameter(request, "sel_empname", "");
+		sel_empname = URLDecoder.decode(sel_empname, "ISO8859-1");
+		sel_empname = new String(sel_empname.getBytes("ISO8859-1"),"UTF-8");
 		
 		if("preview".equals(action)){//导入预览
 			if("DEPARTMENT".equals(table)){//导入部门
@@ -120,9 +125,14 @@ public class ExcelController extends CommonController {
 			}else if("GOODS".equals(table)){//物资资产
 				mv = new ModelAndView("modules/excel/preview_goods");
 				mv.addObject("sel_empcode", sel_empcode);
-			}else if("GOODS_PRICE".equals(table)){
-				mv = new ModelAndView("modules/excel/preview_goods_price");
-				mv.addObject("sel_empcode", sel_empcode);
+			}else if("GOODS_DICT".equals(table)){
+				mv = new ModelAndView("modules/excel/preview_goods_dict");
+				mv.addObject("sel_type", sel_type);
+				mv.addObject("sel_code", sel_code);
+			}else if("GOODS_APPLY".equals(table)){
+				mv = new ModelAndView("modules/excel/preview_goods_apply");
+				mv.addObject("sel_empname", sel_empname);
+				mv.addObject("sel_code", sel_code);
 			}else if("PLAN".equals(table)){//计划
 				mv = new ModelAndView("modules/excel/preview_plan");
 				mv.addObject("f_level", f_level);
@@ -142,12 +152,8 @@ public class ExcelController extends CommonController {
 			}else if("CAR".equals(table)){//班车
 				mv = new ModelAndView("modules/excel/preview_car");
 				mv.addObject("sel_carcode", sel_carcode);
-			}else if("VISIT_EM".equals(table)){
-				mv = new ModelAndView("modules/excel/preview_visit_em");
-				mv.addObject("type", "1");
-			}else if("VISIT_IP".equals(table)){
-				mv = new ModelAndView("modules/excel/preview_visit_ip");
-				mv.addObject("type", "2");
+			}else if("VISIT".equals(table)){
+				mv = new ModelAndView("modules/excel/preview_visit");
 			}
 			
 			MultipartHttpServletRequest mpRequest = (MultipartHttpServletRequest)request;
@@ -195,8 +201,10 @@ public class ExcelController extends CommonController {
 				errorMessage = excelDAO.insertPos(data);
 			}else if("GOODS".equals(table)){//领料
 				errorMessage = excelDAO.insertGoods(data);
-			}else if("GOODS_PRICE".equals(table)){//物资
-				errorMessage = excelDAO.insertGoods_price(data);
+			}else if("GOODS_DICT".equals(table)){//物资优选
+				errorMessage = excelDAO.insertGoods_dict(data);
+			}else if("GOODS_APPLY".equals(table)){//物资申请
+				errorMessage = excelDAO.insertGoods_apply(data);
 			}else if("PLAN".equals(table)){//计划
 				errorMessage = excelDAO.insertPlan(data, datepick);
 			}else if("ASSETS".equals(table)){//固定资产
@@ -207,17 +215,15 @@ public class ExcelController extends CommonController {
 				errorMessage = excelDAO.insertProject(data);
 			}else if("CAR".equals(table)){//班车信息
 				errorMessage = excelDAO.insertCar(data);
-			}else if("VISIT_EM".equals(table)){//班车信息
-				errorMessage = excelDAO.insertVisit_em(data);
-			}else if("VISIT_IP".equals(table)){//班车信息
-				errorMessage = excelDAO.insertVisit_ip(data);
+			}else if("VISIT".equals(table)){//班车信息
+				errorMessage = excelDAO.insertVisit(data);
 			}
 			
 			if(errorMessage.length()>200){
 				errorMessage = errorMessage.substring(0, 200) + "...";
 			}
 			
-			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp + "&f_level=" + f_level + "&f_type=" + f_type + "&sel_empcode=" + sel_empcode + "&sel_carcode=" + sel_carcode + "&type=" + type);
+			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp + "&f_level=" + f_level + "&f_type=" + f_type + "&sel_empcode=" + sel_empcode + "&sel_carcode=" + sel_carcode + "&type=" + type + "&sel_type=" + sel_type + "&sel_code=" + sel_code + "&sel_empname=" + URLEncoder.encode(sel_empname,"UTF-8"));
 		}else if("export".equals(action)){//excel导出
 			String model = ServletRequestUtils.getStringParameter(request, "model", "");
 			String imagepath = request.getRealPath("\\chart\\");
@@ -294,9 +300,6 @@ public class ExcelController extends CommonController {
 				String sel_pjcode = ServletRequestUtils.getStringParameter(request, "sel_pjcode", "");
 				sel_pjcode = URLDecoder.decode(sel_pjcode, "ISO8859-1");
 				sel_pjcode = new String(sel_pjcode.getBytes("ISO8859-1"), "UTF-8");
-				String sel_empname = ServletRequestUtils.getStringParameter(request, "sel_empname", "");
-				sel_empname = URLDecoder.decode(sel_empname, "ISO8859-1");
-				sel_empname = new String(sel_empname.getBytes("ISO8859-1"),"UTF-8");
 				listDepart = roleDAO.findAllUserDepart(emcode);
 				if(listDepart.size() == 0){
 					listDepart = roleDAO.findAllRoleDepart(emrole);

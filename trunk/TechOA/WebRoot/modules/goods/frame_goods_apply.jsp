@@ -3,7 +3,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>领料Frame</title>
+    <title>领料申请Frame</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -16,13 +16,15 @@
 	<script type="text/javascript">
 	Ext.onReady(function(){
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
-  		tb.add('按编码模糊查询');
-  		tb.add(document.getElementById('sel_empcode'));
+		tb.add('制单人');
+  		tb.add(document.getElementById('sel_empname'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
+  		tb.add('存货编码');
+  		tb.add(document.getElementById('sel_code'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
   		
-  		var sel_empcode = document.getElementById('sel_empcode').value;
-	    document.getElementById('list_manage').src = "/goods.do?action=list_price&sel_empcode=" + sel_empcode;
+	    document.getElementById('list_manage').src = "/goods.do?action=list_goodsapply";
 	});
 	
 	function IFrameResize(){
@@ -30,16 +32,18 @@
 	}
 	
 	function commit(){
-	  var sel_empcode = document.getElementById('sel_empcode').value;
-	  document.getElementById('list_manage').src = "/goods.do?action=list_price&sel_empcode=" + sel_empcode;;
+	  var sel_empname = document.getElementById('sel_empname').value;
+	  var sel_code = document.getElementById('sel_code').value;
+	  document.getElementById('list_manage').src = "/goods.do?action=list_goodsapply&sel_empname=" + encodeURI(sel_empname) + "&sel_code=" + sel_code;
 	}
 	</script>
   </head>
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
-  	<h1>物资</h1>
+  	<h1>领料申请统计</h1>
   	<div id="toolbar"></div>
-	<input type="text" name="sel_empcode" id="sel_empcode" style="width:60;">
+  	<input type="text" name="sel_empname" id="sel_empname" style="width:60;">
+	<input type="text" name="sel_code" id="sel_code" style="width:60;">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
     <iframe name="list_manage" width="100%" frameborder="0" height="500"></iframe>
   </body>
