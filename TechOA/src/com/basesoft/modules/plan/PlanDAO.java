@@ -528,7 +528,7 @@ public class PlanDAO extends CommonDAO {
 	 */
 	public PageList findAllFollows_emp(int page, String emcode, String datepick, String sel_note){
 		PageList pageList = new PageList();
-		String sql = "select * from PLAN where STATUS='3' and EMPCODE like '%" + emcode + "%'";
+		String sql = "select * from PLAN where STATUS='3' or STATUS='4' and EMPCODE like '%" + emcode + "%'";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
@@ -567,7 +567,7 @@ public class PlanDAO extends CommonDAO {
 	 */
 	public PageList findAllFollows_plan(int page, String emcode, String datepick, String sel_note){
 		PageList pageList = new PageList();
-		String sql = "select * from PLAN where STATUS='3' and PLANNERCODE='" + emcode + "' and EMP_NOTE != ''";
+		String sql = "select * from PLAN where STATUS='3' or STATUS='4' and PLANNERCODE='" + emcode + "' and EMP_NOTE!=''";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
@@ -606,7 +606,7 @@ public class PlanDAO extends CommonDAO {
 	 */
 	public PageList findAllFollows_lead(int page, String departcodes, String datepick, String sel_note){
 		PageList pageList = new PageList();
-		String sql = "select * from PLAN where STATUS='3' and EMP_NOTE != ''";
+		String sql = "select * from PLAN where STATUS='3' or STATUS='4' and EMP_NOTE!=''";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
