@@ -75,10 +75,14 @@ public class LoginController extends CommonController {
 						for(int i=0;i<listVisit.size();i++){
 							Map mapVisit = (Map)listVisit.get(i);
 							String ipSection = mapVisit.get("V_IP")==null?"":mapVisit.get("V_IP").toString();
-							if(ipSection.indexOf("-")>0){
-								allowedIP = StringUtil.ipIsValid(ipSection, ip);
+							if("".equals(ipSection)){//如果IP为空，默认可以登录
+								allowedIP = true;
 							}else {
-								allowedIP = ip.equals(ipSection);
+								if(ipSection.indexOf("-")>0){
+									allowedIP = StringUtil.ipIsValid(ipSection, ip);
+								}else {
+									allowedIP = ip.equals(ipSection);
+								}
 							}
 							
 							if(allowedIP){
