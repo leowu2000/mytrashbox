@@ -69,30 +69,30 @@ public class LoginController extends CommonController {
 						mv.addObject("errorMessage", errorMessage);
 						return mv;
 					}
-				}else {//已开启，进行判断
-					listVisit = emDAO.jdbcTemplate.queryForList("select * from SYS_VISIT where V_EMPCODE='" + empcode + "' and STATUS='0'");
-					for(int i=0;i<listVisit.size();i++){
-						Map mapVisit = (Map)listVisit.get(i);
-						String ipSection = mapVisit.get("V_IP")==null?"":mapVisit.get("V_IP").toString();
-						if(ipSection.indexOf("-")>0){
-							allowedIP = StringUtil.ipIsValid(ipSection, ip);
-						}else {
-							allowedIP = ip.equals(ipSection);
+				}else {//已配置工号，判断IP和是否启用
+					listVisit = emDAO.jdbcTemplate.queryForList("select * from SYS_VISIT where V_EMPCODE='" + empcode + "' and STATUS='1'");
+					if(listVisit.size() > 0){//已启用，判断IP
+						for(int i=0;i<listVisit.size();i++){
+							Map mapVisit = (Map)listVisit.get(i);
+							String ipSection = mapVisit.get("V_IP")==null?"":mapVisit.get("V_IP").toString();
+							if(ipSection.indexOf("-")>0){
+								allowedIP = StringUtil.ipIsValid(ipSection, ip);
+							}else {
+								allowedIP = ip.equals(ipSection);
+							}
+							
+							if(allowedIP){
+								break;
+							}
 						}
-						
-						if(allowedIP){
-							break;
-						}
+					}else{//未启用，可以访问
+						allowedIP = true;
 					}
-					if(listVisit.size()>0){
-						allowedEMP = true;
+					if(!allowedIP){
+						errorMessage = "您的IP访问受限，请联系管理员！";
+						mv.addObject("errorMessage", errorMessage);
+						return mv;
 					}
-					
-				}
-				if(!allowedIP){
-					errorMessage = "您的IP访问受限，请联系管理员！";
-					mv.addObject("errorMessage", errorMessage);
-					return mv;
 				}
 				
 				if (password.equals(dbPassword)) {

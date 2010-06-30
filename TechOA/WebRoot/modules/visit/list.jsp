@@ -9,6 +9,7 @@
 	List listVisit = pageList.getList();
 	int pagenum = pageList.getPageInfo().getCurPage();
 	String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
+	String sel_empcode = request.getAttribute("sel_empcode")==null?"":request.getAttribute("sel_empcode").toString();
 	
 	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 	VisitDAO visitDAO = (VisitDAO)ctx.getBean("visitDAO");
@@ -99,7 +100,7 @@ Ext.onReady(function(){
 			    }
 			    Ext.get('ip1').set({'value':ip1});
 			    Ext.get('ip2').set({'value':ip2});
-		    	action = url+'?action=update&page=<%=pagenum %>';
+		    	action = url+'?action=update&page=<%=pagenum %>&sel_empcode=<%=sel_empcode %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -140,6 +141,7 @@ Ext.onReady(function(){
     			xmlHttpReq.send();
     			if(xmlHttpReq.responseText=='true'){
         			alert('已成功开启！');
+        			window.location.href = '/visit.do?action=list';
         			return true;
     			}
     	    }
@@ -158,6 +160,7 @@ Ext.onReady(function(){
     			xmlHttpReq.send();
     			if(xmlHttpReq.responseText=='true'){
         			alert('已成功关闭！');
+        			window.location.href = '/visit.do?action=list';
         			return true;
     			}
     	    }
@@ -194,18 +197,26 @@ function checkAll(){
 			<td>工号</td>
 			<td>姓名</td>
 			<td>IP段</td>
+			<td>状态</td>
 <%
 	for(int i=0;i<listVisit.size();i++){
 		Map mapVisit = (Map)listVisit.get(i);
 		String v_empcode = mapVisit.get("V_EMPCODE")==null?"":mapVisit.get("V_EMPCODE").toString();
 		String v_emname = visitDAO.findNameByCode("EMPLOYEE", v_empcode);
 		String v_ip = mapVisit.get("V_IP")==null?"":mapVisit.get("V_IP").toString();
+		String status = mapVisit.get("STATUS")==null?"":mapVisit.get("STATUS").toString();
+		if("0".equals(status)){
+			status = "<font color='blue'>未开启</font>";
+		}else if("1".equals(status)){
+			status = "<font color='green'>已开启</font>";
+		}
 %>
 		<tr>
 			<td><input type="checkbox" name="check" value="<%=v_empcode %>" class="ainput"></td>
 			<td><%=v_empcode %></td>
 			<td><%=v_emname %></td>
 			<td><%=v_ip %></td>
+			<td><%=status %></td>
 		</tr>
 <%
 	}
