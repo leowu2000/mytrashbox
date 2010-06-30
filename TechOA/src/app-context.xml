@@ -74,4 +74,5 @@
 	<bean id="roleDAO" class="com.basesoft.modules.role.RoleDAO"></bean>
 	<bean id="visitDAO" class="com.basesoft.modules.visit.VisitDAO"></bean>
 	<bean id="insDAO" class="com.basesoft.modules.ins.InsDAO"></bean>
+	<bean id="honorDAO" class="com.basesoft.modules.employee.HonorDAO"></bean>
 </beans>

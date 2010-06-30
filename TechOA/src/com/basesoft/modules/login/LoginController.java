@@ -126,8 +126,19 @@ public class LoginController extends CommonController {
 		} else if ("logout".equals(action)) {
 			mv = new ModelAndView("login");
 			
+			request.getSession().removeAttribute("EMID");
+			request.getSession().removeAttribute("EMROLE");
+			request.getSession().removeAttribute("EMNAME");
+			request.getSession().removeAttribute("EMCODE");
+			request.getSession().removeAttribute("DEPARTCODE");
+			request.getSession().removeAttribute("DEPARTNAME");
 			request.getSession().invalidate();
 			
+			return mv;
+		} else if ("main".equals(action)) {
+			mv = new ModelAndView("main");
+			
+			return mv;
 		}
 		return mv;
 	}

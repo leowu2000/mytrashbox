@@ -287,7 +287,7 @@ function checkAll(){
                 <table>
                   <tr>
 				    <td>工号</td>
-				    <td><input type="text" name="loginid" style="width:200"></td>
+				    <td><input type="text" name="code" style="width:200"></td>
 				  </tr>	
 				  <tr>
 				    <td>密码</td>

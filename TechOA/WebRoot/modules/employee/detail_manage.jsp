@@ -130,7 +130,6 @@ Ext.onReady(function(){
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
-				Ext.get('loginid').set({'value':data.item.loginid});
 				Ext.get('rolecode').set({'value':data.item.rolecode});
 				comboxWithTree.setValue(data.item.departname);
 				Ext.get('empname').set({'value':data.item.name});
@@ -144,6 +143,7 @@ Ext.onReady(function(){
 				Ext.get('major').set({'value':data.item.majorcode});
 				Ext.get('degree').set({'value':data.item.degreecode});
 				Ext.get('pro').set({'value':data.item.procode});
+				Ext.get('idcard').set({'value':data.item.idcard});
 		    	action = url+'?action=update&manage=manage&empcode=<%=mapEm.get("CODE") %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
@@ -223,6 +223,12 @@ if("search".equals(method)){
     		<td bgcolor="#E0F1F8"  class="b_tr">职称</td>
     		<td>&nbsp;<%=mapEm.get("PRO")==null?"":mapEm.get("PRO") %></td>
     	</tr>
+    	<tr align="center" height="30">
+    		<td bgcolor="#E0F1F8"  class="b_tr">身份证号</td>
+    		<td>&nbsp;<%=mapEm.get("IDCARD")==null?"":mapEm.get("IDCARD") %></td>
+    		<td bgcolor="#E0F1F8"  class="b_tr"></td>
+    		<td>&nbsp;</td>
+    	</tr>
 <%
 	if("007".equals(rolecode)||"002".equals(rolecode)){
  %>    	
@@ -301,10 +307,6 @@ if("search".equals(method)){
 	        <form id="dataForm" name="dataForm" action="" method="post">
 	        <input type="hidden" name="id" >
                 <table>
-                  <tr>
-				    <td>登录名</td>
-				    <td><input type="text" name="loginid" style="width:200"></td>
-				  </tr>	
 				  <tr>
 				    <td>角色</td>
 				    <td><select name="rolecode" style="width:200">
@@ -321,6 +323,10 @@ if("search".equals(method)){
 				   <tr>
 				    <td>姓名</td>
 				    <td><input type="text" name="empname" style="width:200"></td>
+				  </tr>	
+				  <tr>
+				    <td>身份证号</td>
+				    <td><input type="text" name="idcard" style="width:200"></td>
 				  </tr>	
 				  <tr id="departtr" name="departtr">
 				    <td>部门</td>

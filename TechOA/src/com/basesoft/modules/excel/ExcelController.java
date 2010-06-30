@@ -105,6 +105,16 @@ public class ExcelController extends CommonController {
 				mv.addObject("seldepart", seldepart);
 				mv.addObject("emname", emname);
 				mv.addObject("sel_empcode", sel_empcode);
+			}else if("EMPLOYEE_IDCARD".equals(table)){//导入人员详细
+				mv = new ModelAndView("modules/excel/preview_employee_idcard");
+				mv.addObject("seldepart", seldepart);
+				mv.addObject("emname", emname);
+				mv.addObject("sel_empcode", sel_empcode);
+			}else if("EMPLOYEE_HONOR".equals(table)){//导入人员详细
+				mv = new ModelAndView("modules/excel/preview_employee_honor");
+				mv.addObject("seldepart", seldepart);
+				mv.addObject("emname", emname);
+				mv.addObject("sel_empcode", sel_empcode);
 			}else if("EMP_FINANCIAL".equals(table)){//导入人员财务信息
 				mv = new ModelAndView("modules/excel/preview_finance");
 				mv.addObject("seldepart", seldepart);
@@ -189,10 +199,14 @@ public class ExcelController extends CommonController {
 				errorMessage = excelDAO.insertEmployee(data);
 			}else if("EMPLOYEE_DETAIL".equals(table)){//导入人员详细
 				errorMessage = excelDAO.insertEmployee_detail(data);
-			}else if("EMPLOYEE_MOBILE".equals(table)){//导入人员
+			}else if("EMPLOYEE_MOBILE".equals(table)){//导入人员电话
 				errorMessage = excelDAO.insertEmployee_Mobile(data);
-			}else if("EMPLOYEE_ADDRESS".equals(table)){//导入人员
+			}else if("EMPLOYEE_ADDRESS".equals(table)){//导入人员家庭住址
 				errorMessage = excelDAO.insertEmployee_Address(data);
+			}else if("EMPLOYEE_IDCARD".equals(table)){//导入人员身份证号
+				errorMessage = excelDAO.insertEmployee_Idcard(data);
+			}else if("EMPLOYEE_HONOR".equals(table)){//导入人员身份证号
+				errorMessage = excelDAO.insertEmployee_Honor(data);
 			}else if("EMP_FINANCIAL".equals(table)){//导入人员财务信息
 				errorMessage = excelDAO.insertFinance(data, date);
 			}else if("EMP_CARD".equals(table)){//导入人员一卡通信息
