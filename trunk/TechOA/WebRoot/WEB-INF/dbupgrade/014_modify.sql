@@ -176,5 +176,3 @@ comment on column GOODS_APPLY.ZDR is
 
 comment on column GOODS_APPLY.ZDSJ is
 '制单时间';
-
-update menu set menuurl='visit.do?action=list' where menucode='016';

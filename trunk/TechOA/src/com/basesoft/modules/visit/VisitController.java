@@ -20,11 +20,16 @@ public class VisitController extends CommonController {
 			HttpServletResponse response, ModelAndView mv) throws Exception {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
 		
-		if("list".equals(action)){
+		if("frame".equals(action)){
+			mv = new ModelAndView("modules/visit/frame");
+			return mv;
+		}else if("list".equals(action)){
 			mv = new ModelAndView("modules/visit/list");
-			PageList pageList = visitDAO.findAll(page);
+			PageList pageList = visitDAO.findAll(page, sel_empcode);
 			mv.addObject("pageList", pageList);
+			mv.addObject("sel_empcode", sel_empcode);
 			return mv;
 		}else if("add".equals(action)){//添加访问控制,默认关闭
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
@@ -61,15 +66,15 @@ public class VisitController extends CommonController {
 			}
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
-			String updateSql = "update SYS_VISIT set V_EMPCODE='" + empcode + "', V_IP='" + ip + "' where V_EMPCODE='" + id;
+			String updateSql = "update SYS_VISIT set V_EMPCODE='" + empcode + "', V_IP='" + ip + "' where V_EMPCODE='" + id + "'";
 			visitDAO.update(updateSql);
-			response.sendRedirect("/visit.do?action=list&page=" + page);
+			response.sendRedirect("/visit.do?action=list&page=" + page + "&sel_empcode=" + sel_empcode);
 			return null;
 		}else if("delete".equals(action)){//删除
 			String[] check=request.getParameterValues("check");
 			//循环按code删除
 			for(int i=0;i<check.length;i++){
-				String deleteSql = "delete from SYS_VISIT where V_EMPCODE='" + check[i];
+				String deleteSql = "delete from SYS_VISIT where V_EMPCODE='" + check[i] + "'";
 				visitDAO.delete(deleteSql);
 			}
 			
@@ -99,7 +104,6 @@ public class VisitController extends CommonController {
 			return null;
 		}
 		
-		// TODO Auto-generated method stub
 		return null;
 	}
 

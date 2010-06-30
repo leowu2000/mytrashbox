@@ -16,8 +16,10 @@
 	<script type="text/javascript">
 	Ext.onReady(function(){
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
-  		tb.add('选择分类');
-  		tb.add(document.getElementById('seltype'));
+  		tb.add('按工号模糊查询');
+  		tb.add(document.getElementById('sel_empcode'));
+  		tb.add('&nbsp;&nbsp;&nbsp;');
+  		tb.add(document.getElementById('search'));
 	});
 	
 	function IFrameResize(){
@@ -25,9 +27,9 @@
 	}
 	
 	function commit(){
-	  var type = document.getElementById('seltype').value;
+	  var sel_empcode = document.getElementById('sel_empcode').value;
 	  
-	  document.getElementById('list_manage').src = "/visit.do?action=list&type=" + type;
+	  document.getElementById('list_manage').src = "/visit.do?action=list&sel_empcode=" + sel_empcode;
 	}
 	</script>
   </head>
@@ -35,10 +37,8 @@
   <body onload="commit();IFrameResize();" onresize="IFrameResize();">
   	<h1>系统访问管理</h1>
   	<div id="toolbar"></div>
-	<select name="seltype" onchange="commit();">
-		<option value="1">工号</option>
-		<option value="2">IP</option>
-	</select>
+  	<input type="text" style="width:60;" name="sel_empcode" id="sel_empcode">
+  	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
     <iframe name="list_manage" width="100%" frameborder="0" height="500"></iframe>
   </body>
 </html>
