@@ -97,7 +97,13 @@ for(int i=0;i<listPlan.size();i++){
 %>
             <tr align="LEFT">
                 <td width="40">
+<%
+				if("3".equals(mapPlan.get("STATUS").toString())){
+%>                
                 	<input type="checkbox" name="check" value="<%=mapPlan.get("ID") %>">
+<%
+				}
+%>                	
                 </td>
                 <td><%=plantype %>--<%=plantype2 %></td>
                 <td><%=pjname %></td>
