@@ -99,8 +99,8 @@ Ext.onReady(function(){
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
-				Ext.get('loginid').set({'value':data.item.loginid});
 				Ext.get('empname').set({'value':data.item.name});
+				Ext.get('idcard').set({'value':data.item.idcard});
 				Ext.get('email').set({'value':data.item.email});
 				Ext.get('stcphone').set({'value':data.item.stcphone});
 				Ext.get('mobphone').set({'value':data.item.mobphone});
@@ -170,9 +170,8 @@ Ext.onReady(function(){
     	<tr align="center" height="30">
     		<td bgcolor="#E0F1F8"  class="b_tr">职称</td>
     		<td>&nbsp;<%=mapEm.get("PRO")==null?"":mapEm.get("PRO") %></td>
-    		<td bgcolor="#E0F1F8"  class="b_tr"></td>
-    		<td>&nbsp;</td>
-    	</tr>
+    		<td bgcolor="#E0F1F8"  class="b_tr">身份证号</td>
+    		<td>&nbsp;<%=mapEm.get("IDCARD")==null?"":mapEm.get("IDCARD") %></td>
     </table>
     </form>
     
@@ -215,13 +214,13 @@ Ext.onReady(function(){
 	        <form id="dataForm" name="dataForm" action="" method="post">
 	        <input type="hidden" name="id" >
                 <table>
-                  <tr>
-				    <td>登录名</td>
-				    <td><input type="text" name="loginid" style="width:200"></td>
-				  </tr>	
 				  <tr>
 				    <td>姓名</td>
 				    <td><input type="text" name="empname" style="width:200"></td>
+				  </tr>
+				  <tr>
+				    <td>身份证号</td>
+				    <td><input type="text" name="idcard" style="width:200"></td>
 				  </tr>	
 				  <tr>
 				    <td>电子邮件</td>

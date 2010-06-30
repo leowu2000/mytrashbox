@@ -271,6 +271,7 @@ public class ExcelDAO extends CommonDAO {
 			String mz = row.optString("MZ");
 			String csrq = row.optString("CSRQ");
 			String xl = row.optString("XL");
+			xl = findCodeByName("DICT", xl);
 			String xzzw = row.optString("XZZW");
 			String jszc = row.optString("JSZC");
 			String rzsj = row.optString("RZSJ");
@@ -340,6 +341,82 @@ public class ExcelDAO extends CommonDAO {
 			}else {
 				errorMessage = getErrorMessage3(errorMessage, i);
 			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 员工身份证号入库
+	 * @param data 员工信息
+	 * @return
+	 */
+	public String insertEmployee_Idcard(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			
+			Map map = findByCode("EMPLOYEE", row.optString("CODE"));
+			if(map.get("CODE")!=null){//关联的上员工信息，则存入身份证号码
+				String idcard = row.optString("IDCARD");
+				
+				String updateSql = "update EMPLOYEE set IDCARD='" + idcard + "' where ID='" + map.get("ID") + "'";
+				
+				try{
+					update(updateSql);
+				}catch(Exception e){
+					System.out.println(e);
+					errorMessage = getErrorMessage(errorMessage, i);
+					continue;
+				}
+			}else {
+				errorMessage = getErrorMessage3(errorMessage, i);
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 员工身份证号入库
+	 * @param data 员工信息
+	 * @return
+	 */
+	public String insertEmployee_Honor(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			String empcode = row.optString("CODE");
+			int h_year = row.optInt("H_YEAR");
+			String h_name = row.optString("H_NAME");
+			String h_des = row.optString("H_DES");
+			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			
+			String insertSql = "insert into EMP_HONOR values('" + uuid + "', '" + empcode + "', " + h_year + ", '" + h_name + "', '" + h_des + "')";
+			
+			try{
+				insert(insertSql);
+			}catch(Exception e){
+				e.printStackTrace();
+				errorMessage = getErrorMessage(errorMessage, i);
+				continue;
+			}	
 		}
 		
 		if("".equals(errorMessage)){

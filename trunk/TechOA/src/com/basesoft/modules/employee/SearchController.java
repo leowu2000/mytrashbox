@@ -1,5 +1,6 @@
 package com.basesoft.modules.employee;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,10 @@ public class SearchController extends CommonController {
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
+		String h_year = ServletRequestUtils.getStringParameter(request, "h_year", "");
+		String h_name = ServletRequestUtils.getStringParameter(request, "h_name", "");
+		h_name = URLDecoder.decode(h_name, "ISO8859-1");
+		h_name = new String(h_name.getBytes("ISO8859-1"),"UTF-8");
 		
 		if("frame_search".equals(action)){//综合查询frame
 			mv = new ModelAndView("modules/employee/search/frame_search");
@@ -50,12 +55,14 @@ public class SearchController extends CommonController {
 				departcodes = "'" + seldepart + "'";
 			}
 			
-			PageList pageList = searchDAO.findAll(seldepart, emname, sel_empcode, page, departcodes);
+			PageList pageList = searchDAO.findAll(seldepart, emname, sel_empcode, page, departcodes, h_year, h_name);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
 			mv.addObject("sel_empcode", sel_empcode);
+			mv.addObject("h_year", h_year);
+			mv.addObject("h_name", h_name);
 			return mv;
 		}else if("self_search".equals(action)){//个人信息综合查询
 			mv = new ModelAndView("modules/employee/search/self_search");
@@ -64,7 +71,7 @@ public class SearchController extends CommonController {
 			
 			String departcode = "'" + em.getDepartcode() + "'";
 			
-			PageList pageList = searchDAO.findAll(em.getDepartcode(), em.getName(), sel_empcode, 1, departcode);
+			PageList pageList = searchDAO.findAll(em.getDepartcode(), em.getName(), sel_empcode, 1, departcode, h_year, h_name);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("em", em);

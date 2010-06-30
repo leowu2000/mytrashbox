@@ -45,6 +45,10 @@ public class EmployeeController extends CommonController {
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
+		String h_year = ServletRequestUtils.getStringParameter(request, "h_year", "");
+		String h_name = ServletRequestUtils.getStringParameter(request, "h_name", "");
+		h_name = URLDecoder.decode(h_name, "ISO8859-1");
+		h_name = new String(h_name.getBytes("ISO8859-1"),"UTF-8");
 		
 		String returnUrl_infolist = "em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&page=" + page + "&sel_empcode=" + sel_empcode;
 		if("frame_infolist".equals(action)){//人员frame
@@ -67,7 +71,7 @@ public class EmployeeController extends CommonController {
 			}
 			
 			//获取部门下员工列表
-			PageList pageList = emDAO.findAll(seldepart, emname, sel_empcode, page, departcodes);
+			PageList pageList = emDAO.findAll(seldepart, emname, sel_empcode, page, departcodes, h_year, h_name);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
@@ -77,7 +81,7 @@ public class EmployeeController extends CommonController {
 			mv.addObject("errorMessage", errorMessage);
 		}else if("add".equals(action)){//新用户添加操作
 			//接收页面参数
-			String loginid = ServletRequestUtils.getStringParameter(request, "loginid", "");
+			String code = ServletRequestUtils.getStringParameter(request, "code", "");
 			String rolecode = ServletRequestUtils.getStringParameter(request, "rolecode", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			String empname = ServletRequestUtils.getStringParameter(request, "empname", "");
@@ -85,7 +89,7 @@ public class EmployeeController extends CommonController {
 			//生成id和code
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			emDAO.insert("insert into EMPLOYEE values('" + id + "','" + loginid + "','1','" + loginid + "','" + rolecode + "','" + empname + "','" + depart + "','','','','','','','','','','','','','')");
+			emDAO.insert("insert into EMPLOYEE values('" + id + "','" + code + "','1','" + code + "','" + rolecode + "','" + empname + "','" + depart + "','','','','','','','','','','','','','')");
 			
 			response.sendRedirect(returnUrl_infolist);
 			return null;
@@ -179,12 +183,14 @@ public class EmployeeController extends CommonController {
 			}else {
 				departcodes = "'" + seldepart + "'";
 			}
-			PageList pageList = emDAO.findAll(seldepart, emname, sel_empcode, page, departcodes);
+			PageList pageList = emDAO.findAll(seldepart, emname, sel_empcode, page, departcodes, h_year, h_name);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
 			mv.addObject("emname", emname);
 			mv.addObject("sel_empcode", sel_empcode);
+			mv.addObject("h_year", h_year);
+			mv.addObject("h_name", h_name);
 			mv.addObject("errorMessage", errorMessage);
 		}else if("manage".equals(action)){//人事管理详细信息
 			mv = new ModelAndView("modules/employee/detail_manage");
@@ -294,7 +300,6 @@ public class EmployeeController extends CommonController {
 		}else if("update".equals(action)){//员工信息更新操作
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
-			String loginid = ServletRequestUtils.getStringParameter(request, "loginid", "");
 			String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
 			String empname = ServletRequestUtils.getStringParameter(request, "empname", "");
 			String rolecode = ServletRequestUtils.getStringParameter(request, "rolecode", "");
@@ -311,8 +316,9 @@ public class EmployeeController extends CommonController {
 			String major = ServletRequestUtils.getStringParameter(request, "major", "");
 			String degree = ServletRequestUtils.getStringParameter(request, "degree", "");
 			String pro = ServletRequestUtils.getStringParameter(request, "pro", "");
+			String idcard = ServletRequestUtils.getStringParameter(request, "idcard", "");
 			
-			emDAO.update("update EMPLOYEE set LOGINID='" + loginid + "',ROLECODE='" + rolecode + "',NAME='" + empname + "',DEPARTCODE='" + depart + "',MAINJOB='" + mainjob + "',SECJOB='" + secjob + "',LEVEL='" + level + "',EMAIL='" + email + "',BLOG='" + blog + "',SELFWEB='" + selfweb + "',STCPHONE='" + stcphone + "',MOBPHONE='" + mobphone + "',ADDRESS='" + address + "',POST='" + post + "',MAJORCODE='" + major + "',DEGREECODE='" + degree + "',PROCODE='" + pro + "' where ID='" + id + "'");
+			emDAO.update("update EMPLOYEE set ROLECODE='" + rolecode + "',NAME='" + empname + "',DEPARTCODE='" + depart + "',MAINJOB='" + mainjob + "',SECJOB='" + secjob + "',LEVEL='" + level + "',EMAIL='" + email + "',BLOG='" + blog + "',SELFWEB='" + selfweb + "',STCPHONE='" + stcphone + "',MOBPHONE='" + mobphone + "',ADDRESS='" + address + "',POST='" + post + "',MAJORCODE='" + major + "',DEGREECODE='" + degree + "',PROCODE='" + pro + "', IDCARD='" + idcard + "' where ID='" + id + "'");
 			
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", ""); 
 			response.sendRedirect("em.do?action=manage&empcode="+empcode);
@@ -320,7 +326,6 @@ public class EmployeeController extends CommonController {
 		}else if("update_self".equals(action)){//员工信息更新操作
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
-			String loginid = ServletRequestUtils.getStringParameter(request, "loginid", "");
 			String empname = ServletRequestUtils.getStringParameter(request, "empname", "");
 			String email = ServletRequestUtils.getStringParameter(request, "email", "");
 			String blog = ServletRequestUtils.getStringParameter(request, "blog", "");
@@ -329,8 +334,9 @@ public class EmployeeController extends CommonController {
 			String mobphone = ServletRequestUtils.getStringParameter(request, "mobphone", "");
 			String address = ServletRequestUtils.getStringParameter(request, "address", "");
 			String post = ServletRequestUtils.getStringParameter(request, "post", "");
+			String idcard = ServletRequestUtils.getStringParameter(request, "idcard", "");
 			
-			emDAO.update("update EMPLOYEE set LOGINID='" + loginid + "',NAME='" + empname + "',EMAIL='" + email + "',BLOG='" + blog + "',SELFWEB='" + selfweb + "',STCPHONE='" + stcphone + "',MOBPHONE='" + mobphone + "',ADDRESS='" + address + "',POST='" + post + "' where ID='" + id + "'");
+			emDAO.update("update EMPLOYEE set NAME='" + empname + "',EMAIL='" + email + "',BLOG='" + blog + "',SELFWEB='" + selfweb + "',STCPHONE='" + stcphone + "',MOBPHONE='" + mobphone + "',ADDRESS='" + address + "',POST='" + post + "', IDCARD='" + idcard + "' where ID='" + id + "'");
 			
 			response.sendRedirect("em.do?action=manage_self");
 			return null;

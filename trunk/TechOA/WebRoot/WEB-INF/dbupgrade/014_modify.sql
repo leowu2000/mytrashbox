@@ -176,3 +176,37 @@ comment on column GOODS_APPLY.ZDR is
 
 comment on column GOODS_APPLY.ZDSJ is
 '制单时间';
+
+ALTER TABLE EMPLOYEE ADD COLUMN IDCARD VARCHAR(20);
+
+/*==============================================================*/
+/* Table: EMP_HONOR                                             */
+/*==============================================================*/
+create table EMP_HONOR  (
+   ID                   VARCHAR(32)                     not null,
+   EMPCODE              VARCHAR(20),
+   H_YEAR               INTEGER,
+   H_NAME               VARCHAR(200),
+   H_DESCRIBE           VARCHAR(1000),
+   constraint PK_EMP_HONOR primary key (ID)
+);
+
+comment on table EMP_HONOR is
+'员工荣誉表';
+
+comment on column EMP_HONOR.ID is
+'ID';
+
+comment on column EMP_HONOR.EMPCODE is
+'工号';
+
+comment on column EMP_HONOR.H_YEAR is
+'荣誉年份';
+
+comment on column EMP_HONOR.H_NAME is
+'荣誉名称';
+
+comment on column EMP_HONOR.H_DESCRIBE is
+'荣誉描述';
+
+

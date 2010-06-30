@@ -29,7 +29,7 @@ public class EmployeeDAO extends CommonDAO{
 	 * @return
 	 */
 	public List<?> findByLoginId(String loginid){
-		return jdbcTemplate.queryForList("select * from EMPLOYEE where LOGINID='" + loginid + "' or CODE='" + loginid + "'");
+		return jdbcTemplate.queryForList("select * from EMPLOYEE where CODE='" + loginid + "'");
 	}
 	
 	/**
@@ -40,29 +40,27 @@ public class EmployeeDAO extends CommonDAO{
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String departcode, String emname, String empcode, int page, String departcodes){
+	public PageList findAll(String departcode, String emname, String empcode, int page, String departcodes, String h_year, String h_name){
 		PageList pageList = new PageList();
-		String sql = "";
+		String sql = "select * from EMPLOYEE where ROLECODE!='000' ";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		if("0".equals(departcode)){//全部部门
-			if("".equals(emname)){//没有名字过滤
-				sql = "select * from EMPLOYEE where ROLECODE!='000'";
-			}else {
-				sql = "select * from EMPLOYEE where ROLECODE!='000' and NAME like '%" + emname + "%'";
-			}
-		}else {
-			if("".equals(emname)){
-				sql = "select * from EMPLOYEE where ROLECODE!='000' and DEPARTCODE in (" + departcodes + ")";
-			}else {
-				sql = "select * from EMPLOYEE where ROLECODE!='000' and DEPARTCODE in (" + departcodes + ") and NAME like '%" + emname + "%'";
-			}
+		if(!"0".equals(departcode)){//部门
+			sql = sql + " and DEPARTCODE in (" + departcodes + ")";
 		}
-		
-		if(!"".equals(empcode)){
+		if(!"".equals(emname)){//姓名
+			sql = sql + " and NAME like '%" + emname + "%'";
+		}
+		if(!"".equals(empcode)){//工号
 			sql = sql + " and CODE like '%" + empcode + "%'";
+		}
+		if(!"".equals(h_year)){//荣誉年份
+			sql = sql + " and CODE in (select EMPCODE from EMP_HONOR where H_YEAR=" + h_year + ")";
+		}
+		if(!"".equals(h_name)){//荣誉名称
+			sql = sql + " and CODE in (select EMPCODE from EMP_HONOR where H_NAME like '%" + h_name + "%')";
 		}
 		sql = sql + " order by DEPARTCODE,NAME";
 		
@@ -279,6 +277,7 @@ public class EmployeeDAO extends CommonDAO{
 		em.setMajorcode(mapEm.get("MAJORCODE")==null?"":mapEm.get("MAJORCODE").toString());
 		em.setDegreecode(mapEm.get("DEGREECODE")==null?"":mapEm.get("DEGREECODE").toString());
 		em.setProcode(mapEm.get("PROCODE")==null?"":mapEm.get("PROCODE").toString());
+		em.setIdcard(mapEm.get("IDCARD")==null?"":mapEm.get("IDCARD").toString());
 		
 		String departname = findNameByCode("DEPARTMENT", mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString());
 		em.setDepartname(departname);

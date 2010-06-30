@@ -113,7 +113,7 @@ function MM_swapImage() { //v3.0
 }
 
 function index(){
-	document.getElementById('main').src = "";
+	document.getElementById('main').src = "/login.do?action=main";
 }
 //-->
 </script>
@@ -135,7 +135,7 @@ function index(){
 				<div id="tree-div"></div>
 			</div>
 
-			<iframe id="main" name="main" frameborder="0" width="100%" height="100%"></iframe>
+			<iframe id="main" name="main" frameborder="0" width="100%" height="100%" src="/login.do?action=main"></iframe>
 
 			<div id="south">
 			<div style="text-align: left;color: black;background-color: #E0EAFF;width: 100%;padding: 2px;font: 12px;">版权所有   中国电子科技集团第十四研究所   Copyright 2010-2011</div>

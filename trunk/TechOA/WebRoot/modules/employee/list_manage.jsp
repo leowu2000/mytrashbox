@@ -12,9 +12,13 @@ String seldepart = request.getAttribute("seldepart").toString();
 String emname = request.getAttribute("emname").toString();
 emname = URLEncoder.encode(emname,"UTF-8");
 String sel_empcode = request.getAttribute("sel_empcode").toString();
+String h_year = request.getAttribute("h_year").toString();
+String h_name = request.getAttribute("h_name").toString();
+h_name = URLEncoder.encode(h_name,"UTF-8");
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
+HonorDAO honorDAO = (HonorDAO)ctx.getBean("honorDAO");
 
 String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 %>
@@ -43,7 +47,9 @@ String errorMessage = request.getAttribute("errorMessage")==null?"":request.getA
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
 		tb.add({text: '手机号码导入',cls: 'x-btn-text-icon import',handler: onImportMobileClick});
 		tb.add({text: '家庭住址导入',cls: 'x-btn-text-icon import',handler: onImportAddressClick});
+		tb.add({text: '身份证号导入',cls: 'x-btn-text-icon import',handler: onImportIdcardClick});
 		tb.add({text: '人员详细信息导入',cls: 'x-btn-text-icon import',handler: onImportDetailClick});
+		tb.add({text: '荣誉导入',cls: 'x-btn-text-icon import',handler: onImportHonorClick});
 		
 		if(!win){
         	win = new Ext.Window({
@@ -71,7 +77,21 @@ String errorMessage = request.getAttribute("errorMessage")==null?"":request.getA
     	
     	function onImportDetailClick(btn){
 			action = 'excel.do?action=preview&table=EMPLOYEE_DETAIL&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
-    		win.setTitle('家庭住址导入');
+    		win.setTitle('详细信息导入');
+       		Ext.getDom('dataForm').reset();
+        	win.show(btn.dom);
+    	}
+    	
+    	function onImportIdcardClick(btn){
+			action = 'excel.do?action=preview&table=EMPLOYEE_IDCARD&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
+    		win.setTitle('身份证号导入');
+       		Ext.getDom('dataForm').reset();
+        	win.show(btn.dom);
+    	}
+    	
+    	function onImportHonorClick(btn){
+			action = 'excel.do?action=preview&table=EMPLOYEE_HONOR&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
+    		win.setTitle('荣誉导入');
        		Ext.getDom('dataForm').reset();
         	win.show(btn.dom);
     	}
@@ -90,10 +110,10 @@ String errorMessage = request.getAttribute("errorMessage")==null?"":request.getA
     		<td>姓名</td>
     		<td>部门</td>
     		<td>职务</td>
-    		<td>描述</td>
     		<td>专业</td>
     		<td>学历</td>
     		<td>职称</td>
+    		<td>荣誉</td>
     	</tr>
 <%
     for(int i=0;i<listEm.size();i++){
@@ -118,16 +138,18 @@ String errorMessage = request.getAttribute("errorMessage")==null?"":request.getA
     	if(mapEm.get("PROCODE")!=null){
     		proname = employeeDAO.findNameByCode("DICT",mapEm.get("PROCODE").toString());
     	}
+    	
+    	String honor = honorDAO.getHonor(mapEm.get("CODE").toString(), h_year, h_name);
 %>    	
 		<tr align="center">
-			<td>&nbsp;<a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>"><%=mapEm.get("CODE")==null?"":mapEm.get("CODE") %></a></td>
-			<td>&nbsp;<a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>"><%=mapEm.get("NAME")==null?"":mapEm.get("NAME") %></a></td>
-			<td>&nbsp;<%=departname %></td>
-			<td>&nbsp;<%=mapEm.get("LEVEL")==null?"":mapEm.get("LEVEL") %></td>
-			<td>&nbsp;<%=mapEm.get("DESCRIBE")==null?"":mapEm.get("DESCRIBE") %></td>
-			<td>&nbsp;<%=majorname %></td>
-			<td>&nbsp;<%=degreename %></td>
-			<td>&nbsp;<%=proname %></td>
+			<td><a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>"><%=mapEm.get("CODE")==null?"":mapEm.get("CODE") %></a></td>
+			<td><a href="em.do?action=manage&empcode=<%=mapEm.get("CODE") %>"><%=mapEm.get("NAME")==null?"":mapEm.get("NAME") %></a></td>
+			<td><%=departname %></td>
+			<td><%=mapEm.get("LEVEL")==null?"":mapEm.get("LEVEL") %></td>
+			<td><%=majorname %></td>
+			<td><%=degreename %></td>
+			<td><%=proname %></td>
+			<td><%=honor %></td>
 		</tr>
 <%  } %>
     </table>

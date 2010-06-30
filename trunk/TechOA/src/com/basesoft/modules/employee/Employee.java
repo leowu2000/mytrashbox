@@ -38,6 +38,7 @@ public class Employee {
 	public String gwsx;
 	public String gj;
 	public String zj;
+	public String idcard;
 
 	public String getId() {
 		return id;
@@ -325,6 +326,14 @@ public class Employee {
 
 	public void setP_depart2(String p_depart2) {
 		this.p_depart2 = p_depart2;
+	}
+
+	public String getIdcard() {
+		return idcard;
+	}
+
+	public void setIdcard(String idcard) {
+		this.idcard = idcard;
 	}
 
 }

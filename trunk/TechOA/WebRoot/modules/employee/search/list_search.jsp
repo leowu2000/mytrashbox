@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@	page import="java.net.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%@ page import="com.basesoft.modules.employee.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
@@ -9,9 +10,13 @@ List listEm = pageList.getList();
 String seldepart = request.getAttribute("seldepart").toString();
 String emname = request.getAttribute("emname").toString();
 String sel_empcode = request.getAttribute("sel_empcode").toString();
+String h_year = request.getAttribute("h_year").toString();
+String h_name = request.getAttribute("h_name").toString();
+h_name = URLEncoder.encode(h_name,"UTF-8");
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
+HonorDAO honorDAO = (HonorDAO)ctx.getBean("honorDAO");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -48,6 +53,7 @@ EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
     		<td>班车刷卡信息</td>
     		<td>物资资产<br>领用信息</td>
     		<td>固定资产<br>领用信息</td>
+    		<td>荣誉</td>
     		
     	</tr>
 <%
@@ -58,6 +64,7 @@ EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
     	if(mapEm.get("DEPARTCODE")!=null){
     		departname = employeeDAO.findNameByCode("DEPARTMENT",mapEm.get("DEPARTCODE").toString());
     	}
+    	String honor = honorDAO.getHonor(mapEm.get("CODE").toString(), h_year, h_name);
 %>    	
 		<tr align="center">
 			<td>&nbsp;<%=mapEm.get("CODE")==null?"":mapEm.get("CODE") %></td>
@@ -72,6 +79,7 @@ EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
     		<td>&nbsp;<a href="pos.do?action=list_manage&seldepart=<%=mapEm.get("DEPARTCODE") %>&emname=<%=mapEm.get("NAME") %>&method=search"><image src="../../../images/icons/tag_red.png" border="0"></a></td>
     		<td>&nbsp;<a href="goods.do?action=sellend&empcode=<%=mapEm.get("CODE") %>"><image src="../../../images/icons/tag_blue.png" border="0"></a></td>
     		<td>&nbsp;<a href="assets.do?action=sellend&empcode=<%=mapEm.get("CODE") %>"><image src="../../../images/icons/tag_orange.png" border="0"></a></td>
+    		<td><%=honor %></td>
 		</tr>
 <%  } %>
     </table>
