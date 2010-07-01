@@ -215,7 +215,7 @@ function changeDate(value){
                 <td nowrap="nowrap">分系统</td>
                 <td nowrap="nowrap">投入阶段</td>
                 <td nowrap="nowrap">投入工时</td>
-                <td nowrap="nowrap">备注</td>
+                <td nowrap="nowrap" style="width:200">备注</td>
                 <td nowrap="nowrap">状态</td>
                 <td nowrap="nowrap">反馈</td>
                 <td nowrap="nowrap">处理人</td>
@@ -252,7 +252,7 @@ for(int i=0;i<list.size();i++){
 	}
 %>                
                 <td nowrap="nowrap"><%=map.get("STARTDATE")==null?"":map.get("STARTDATE") %></td>
-                <td><%=map.get("NAME") %></td>
+                <td style="width:60"><%=map.get("NAME") %></td>
                 <td><%=pjname %></td>
                 <td><%=pjname_d %></td>
                 <td><%=stagename %></td>   

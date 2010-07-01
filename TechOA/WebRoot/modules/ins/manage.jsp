@@ -46,7 +46,7 @@ Ext.onReady(function(){
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
     if(!win){
         win = new Ext.Window({
-        	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+        	el:'dlg',width:600,buttonAlign:'center',closeAction:'hide',autoScroll:'true',height:350,
 	        buttons: [
 	        {text:'提交',handler: function(){
 	        		Ext.getDom('dataForm').action = action + "&colCount=" + (colCount - 1); 
@@ -112,7 +112,7 @@ function addCol(){
 	var addtd0 = addtr.insertCell(0);
   	var addtd1 = addtr.insertCell(1);
   	addtd0.innerHTML="";
-  	addtd1.innerHTML="<input type='text' name='col" + colCount + "' id='col" + colCount + "'>&nbsp;<span onclick='delCol();' style='font-size:10pt;cursor:hand;'><image src='/images/icons/delete.gif'>删除</span>";
+  	addtd1.innerHTML="<input type='text' name='col" + colCount + "' id='col" + colCount + "' style='width:450'>&nbsp;<span onclick='delCol();' style='font-size:10pt;cursor:hand;'><image src='/images/icons/delete.gif'>删除</span>";
 	
 	colIndex = colIndex + 1;
 	colCount = colCount + 1;
@@ -207,7 +207,7 @@ function delCol(){
 				  <tr>
 				    <td>调查项</td>
 				    <td>
-				      <input type="text" name="col1" id="col1"> 
+				      <input type="text" name="col1" id="col1" style="width:450"> 
 				      <span onclick="addCol();" style="font-size:10pt;cursor:hand;"><image src="/images/icons/add.gif">添加</span>
 				    </td>
 				  </tr>

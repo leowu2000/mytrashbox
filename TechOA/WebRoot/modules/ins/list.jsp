@@ -45,7 +45,7 @@ Ext.onReady(function(){
 	tb.add({text: '清  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
     if(!win){
         win = new Ext.Window({
-        	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+        	el:'dlg',width:600,buttonAlign:'center',closeAction:'hide',autoScroll:'true',height:350,
 	        buttons: [
 	        {text:'提交',handler: function(){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}},
 	        {text:'关闭',handler: function(){win.hide();}}
@@ -71,7 +71,7 @@ Ext.onReady(function(){
 			    var data = String(transport.responseText).split(",");
 			    document.getElementById('colNames').value = transport.responseText;
 			    var dataTable = document.getElementById('dataTable');
-			    for(var i=0;i<data.length;i++){
+			    for(var i=0;i<30;i++){
 			    	var dataRow1 = dataTable.insertRow(colCount);
 			    	colCount = colCount + 1
 			    	var dataRow2 = dataTable.insertRow(colCount);
@@ -81,7 +81,7 @@ Ext.onReady(function(){
 			    	var dataCell2 = dataRow2.insertCell(0);
 			    	
 			    	dataCell1.innerHTML = (i + 1) + "、" + data[i];
-			    	dataCell2.innerHTML = "<input type='text' name='col" + (i+1) + "' id='col" + (i+1) + "' style='width:282;'>";
+			    	dataCell2.innerHTML = "<input type='text' name='col" + (i+1) + "' id='col" + (i+1) + "' style='width:560;'>";
 			    }
 			    
 			    
