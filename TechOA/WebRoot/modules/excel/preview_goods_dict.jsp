@@ -9,8 +9,6 @@
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
 String path = request.getAttribute("path").toString();
-String sel_type = request.getAttribute("sel_type").toString();
-String sel_code = request.getAttribute("sel_code").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 GoodsDAO goodsDAO = (GoodsDAO)ctx.getBean("goodsDAO");
@@ -41,11 +39,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'goods.do?action=list_goodsdict&sel_type=<%=sel_type %>&sel_code=<%=sel_code %>';
+    	window.location.href = 'goods.do?action=list_goodsdict';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=goods.do?action=list_goodsdict&table=GOODS_DICT&sel_type=<%=sel_type %>&sel_code=<%=sel_code %>';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=goods.do?action=list_goodsdict&table=GOODS_DICT';
     	document.getElementById('listForm').submit();
     }
 });

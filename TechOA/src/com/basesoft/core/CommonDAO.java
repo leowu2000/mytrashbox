@@ -100,6 +100,23 @@ public class CommonDAO {
 	}
 	
 	/**
+	 * 获取字典项code
+	 * @param name
+	 * @param type
+	 * @return
+	 */
+	public String getDictCode(String name, String type){
+		List list = jdbcTemplate.queryForList("select * from DICT where NAME='" + name + "' and TYPE='" + type + "'");
+		if(list.size() == 1){
+			Map map = (Map)list.get(0);
+			String s = map.get("CODE").toString();
+			return s;
+		}else {
+			return "";
+		}
+	}
+	
+	/**
 	 * 根据code码得到对应的名称
 	 * @param tablename 数据库表名
 	 * @param code 编码

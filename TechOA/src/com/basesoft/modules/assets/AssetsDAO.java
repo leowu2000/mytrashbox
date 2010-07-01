@@ -1,6 +1,8 @@
 package com.basesoft.modules.assets;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.basesoft.core.CommonDAO;
 import com.basesoft.core.PageInfo;
@@ -103,6 +105,72 @@ public class AssetsDAO extends CommonDAO {
 	public PageList findSelLend(String empcode, int page){
 		PageList pageList = new PageList();
 		String sql = "select * from ASSETS where EMPCODE='" + empcode + "' order by LENDDATE desc";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
+	
+	/**
+	 * 找出分页信息设备
+	 * @param sel_code 固定资产编码
+	 * @param sel_type 资产属性
+	 * @param sel_status 设备状态
+	 * @param page 页码
+	 * @return
+	 */
+	public PageList findAllInfoEquip(int page, String sel_code, String sel_type, String sel_status){
+		PageList pageList = new PageList();
+		String sql = "select * from ASSETS_INFO where 1=1 ";
+		
+		if(!"".equals(sel_code)){//按资产编号
+			sql = sql + " and CODE like '%" + sel_code + "%'";
+		}
+		if(!"".equals(sel_type)){//按资产属性
+			sql = sql + " and TYPE='" + sel_type + "'";
+		}
+		if(!"".equals(sel_status)){//按设备状态
+			sql = sql + " and SBZT='" + sel_status + "'";
+		}
+		sql = sql + " order by TRSYRQ desc";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
+	
+	/**
+	 * 找出分页信息设备维修历史记录
+	 * @param i_id 设备id
+	 * @param page 页码
+	 * @return
+	 */
+	public PageList findAllInfoEquip_Repair(int page, String i_id){
+		PageList pageList = new PageList();
+		String sql = "select * from ASSETS_INFO_REPAIR where I_ID='" + i_id + "' order by R_DATE";
+		
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;

@@ -1085,6 +1085,158 @@ public class ExcelDAO extends CommonDAO {
 	}
 	
 	/**
+	 * 信息设备入库
+	 * @param data 
+	 * @return
+	 */
+	public String insertAssets_infoequip(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			Map map = findByCode("ASSETS_INFO", row.optString("CODE"));
+			if(map.get("CODE")==null){
+				String name = row.optString("NAME");
+				String type = row.optString("TYPE");
+				type = getDictCode(type, "8");
+				String code = row.optString("CODE");
+				String mjjbh = row.optString("MJJBH");
+				String xhgg = row.optString("XHGG");
+				String yz = row.optString("YZ");
+				String sybm = row.optString("SYBM");
+				String sydd = row.optString("SYDD");
+				String sbbgr = row.optString("SBBGR");
+				String trsyrq = row.optString("TRSYRQ");
+				if("".equals(trsyrq)){
+					trsyrq = null;
+				}else {
+					trsyrq = "'" + trsyrq + "'";
+				}
+				String sbzt = row.optString("SBZT");
+				sbzt = getDictCode(sbzt, "9");
+				String czxtazrq = row.optString("CZXTAZRQ");
+				if("".equals(czxtazrq)){
+					czxtazrq = null;
+				}else {
+					czxtazrq = "'" + czxtazrq + "'";
+				}
+				String ktjklx = row.optString("KTJKLX");
+				String yt = row.optString("YT");
+				String ip = row.optString("IP");
+				String mac = row.optString("MAC");
+				String ypxh = row.optString("YPXH");
+				String ypxlh = row.optString("YPXLH");
+				//生成32位uuid
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				
+				String insertSql = "insert into ASSETS_INFO values('" + uuid + "', '" + name + "', '" + type + "', '" + code + "', '" + mjjbh + "', '" + xhgg + "', '" + yz + "', '" + sybm + "', '" + sydd + "', '" + sbbgr + "', " + trsyrq + ", '" + sbzt + "', " + czxtazrq + ", '" + ktjklx + "', '" + yt + "', '" + ip + "', '" + mac + "', '" + ypxh + "', '" + ypxlh + "')";
+				
+				try{
+					insert(insertSql);
+				}catch(Exception e){
+					System.out.println(e);
+					errorMessage = getErrorMessage(errorMessage, i);
+					continue;
+				}
+			}else {
+				errorMessage = getErrorMessage2(errorMessage, i);
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 信息设备维修入库
+	 * @param data 
+	 * @return
+	 */
+	public String insertAssets_infoequip_repair(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			Map map = findByCode("ASSETS", row.optString("CODE"));
+			if(map.get("CODE")==null){
+				String code = row.optString("CODE");
+				String name = row.optString("NAME");
+				String model = row.optString("MODEL");
+				String buydate = row.optString("BUYDATE");
+				if("".equals(buydate)){
+					buydate = null;
+				}else {
+					buydate = "'" + buydate + "'";
+				}
+				String producedate = row.optString("PRODUCEDATE");
+				if("".equals(producedate)){
+					producedate = null;
+				}else {
+					producedate = "'" + producedate + "'";
+				}
+				int life = row.optInt("LIFE");
+				double buycost = "".equals(row.optString("BUYCOST"))?0:row.optDouble("BUYCOST");
+				String status = row.optString("STATUS");
+				if("库中".equals(status)){
+					status = "1";
+				}else if("借出".equals(status)){
+					status = "2";
+				}else if("损坏".equals(status)){
+					status = "3";
+				}
+				String empname = row.optString("EMPNAME");
+				String lenddate = row.optString("LENDDATE");
+				if("".equals(lenddate)){
+					lenddate = null;
+				}else {
+					lenddate = "'" + lenddate + "'";
+				}
+				String checkdate = row.optString("CHECKDATE");
+				if("".equals(checkdate)){
+					checkdate = null;
+				}else {
+					checkdate = "'" + checkdate + "'";
+				}
+				int checkyear = row.optInt("CHECKYEAR");
+				
+				//根据领用人姓名找出责任人信息
+				String empcode = findCodeByName("EMPLOYEE", empname);
+				Map mapEmp = findByCode("EMPLOYEE", empcode);
+				String departcode = mapEmp.get("DEPARTCODE")==null?"":mapEmp.get("DEPARTCODE").toString();
+				//生成32位uuid
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				
+				String insertSql = "insert into ASSETS values('" + uuid + "','" + code + "','" + name + "','" + model + "'," + buydate + "," + producedate + "," + buycost + ",0," + life + ",'" + status + "','" + departcode + "','" + empcode + "'," + lenddate + "," + checkdate + "," + checkyear + ")";
+				
+				try{
+					insert(insertSql);
+				}catch(Exception e){
+					System.out.println(e);
+					errorMessage = getErrorMessage(errorMessage, i);
+					continue;
+				}
+			}else {
+				errorMessage = getErrorMessage2(errorMessage, i);
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
 	 * 考勤入库
 	 * @param data
 	 * @param date
