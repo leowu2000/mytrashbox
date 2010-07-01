@@ -9,7 +9,6 @@
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
 String path = request.getAttribute("path").toString();
-String sel_carcode = request.getAttribute("sel_carcode").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 CarDAO carDAO = (CarDAO)ctx.getBean("carDAO");
@@ -40,11 +39,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'car.do?action=list_manage&sel_carcode=<%=sel_carcode %>';
+    	window.location.href = 'car.do?action=list_manage';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=car.do?action=list_manage&table=CAR&sel_carcode=<%=sel_carcode %>';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=car.do?action=list_manage&table=CAR';
     	document.getElementById('listForm').submit();
     }
 });

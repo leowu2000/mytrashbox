@@ -45,7 +45,6 @@ public class ExcelController extends CommonController {
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
-		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		String table = ServletRequestUtils.getStringParameter(request, "table", "");
@@ -54,13 +53,9 @@ public class ExcelController extends CommonController {
 		emname = URLDecoder.decode(emname, "ISO8859-1");
 		emname = new String(emname.getBytes("ISO8859-1"),"UTF-8");
 		String sel_empcode = ServletRequestUtils.getStringParameter(request, "sel_empcode", "");
-		String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
-		String sel_code = ServletRequestUtils.getStringParameter(request, "sel_code", "");
 		String datepick = ServletRequestUtils.getStringParameter(request, "datepick", "");
 		String redirect = ServletRequestUtils.getStringParameter(request, "redirect", "");
 		String date = ServletRequestUtils.getStringParameter(request, "date", "");
-		String f_pjcode = ServletRequestUtils.getStringParameter(request, "f_pjcode", "");
-		String f_stagecode = ServletRequestUtils.getStringParameter(request, "f_stagecode", "");
 		String f_empname = ServletRequestUtils.getStringParameter(request, "f_empname", "");
 		f_empname = URLDecoder.decode(f_empname, "ISO8859-1");
 		f_empname = new String(f_empname.getBytes("ISO8859-1"),"UTF-8");
@@ -68,9 +63,7 @@ public class ExcelController extends CommonController {
 		String f_type = ServletRequestUtils.getStringParameter(request, "f_type", "");
 		String level = ServletRequestUtils.getStringParameter(request, "level", "");
 		String type = ServletRequestUtils.getStringParameter(request, "type", "");
-		String status = ServletRequestUtils.getStringParameter(request, "status", "");
 		String depart = ServletRequestUtils.getStringParameter(request, "depart", "");
-		String emp = ServletRequestUtils.getStringParameter(request, "emp", "");
 		String errorMessage = "";
 		String carid = ServletRequestUtils.getStringParameter(request, "carid", "");
 		String sel_carcode = ServletRequestUtils.getStringParameter(request, "sel_carcode", "");
@@ -87,74 +80,36 @@ public class ExcelController extends CommonController {
 				mv = new ModelAndView("modules/excel/preview_depart");
 			}else if("EMPLOYEE".equals(table)){//导入人员
 				mv = new ModelAndView("modules/excel/preview_employee");
-				mv.addObject("seldepart", seldepart);
-				mv.addObject("emname", emname);
-				mv.addObject("sel_empcode", sel_empcode);
 			}else if("EMPLOYEE_DETAIL".equals(table)){//导入人员详细
 				mv = new ModelAndView("modules/excel/preview_employee_detail");
-				mv.addObject("seldepart", seldepart);
-				mv.addObject("emname", emname);
-				mv.addObject("sel_empcode", sel_empcode);
 			}else if("EMPLOYEE_MOBILE".equals(table)){//导入人员手机号码
 				mv = new ModelAndView("modules/excel/preview_employee_mobile");
-				mv.addObject("seldepart", seldepart);
-				mv.addObject("emname", emname);
-				mv.addObject("sel_empcode", sel_empcode);
 			}else if("EMPLOYEE_ADDRESS".equals(table)){//导入人员家庭住址
 				mv = new ModelAndView("modules/excel/preview_employee_address");
-				mv.addObject("seldepart", seldepart);
-				mv.addObject("emname", emname);
-				mv.addObject("sel_empcode", sel_empcode);
 			}else if("EMPLOYEE_IDCARD".equals(table)){//导入人员详细
 				mv = new ModelAndView("modules/excel/preview_employee_idcard");
-				mv.addObject("seldepart", seldepart);
-				mv.addObject("emname", emname);
-				mv.addObject("sel_empcode", sel_empcode);
 			}else if("EMPLOYEE_HONOR".equals(table)){//导入人员详细
 				mv = new ModelAndView("modules/excel/preview_employee_honor");
-				mv.addObject("seldepart", seldepart);
-				mv.addObject("emname", emname);
-				mv.addObject("sel_empcode", sel_empcode);
 			}else if("EMP_FINANCIAL".equals(table)){//导入人员财务信息
 				mv = new ModelAndView("modules/excel/preview_finance");
-				mv.addObject("seldepart", seldepart);
-				mv.addObject("emname", emname);
-				mv.addObject("datepick", datepick);
-				mv.addObject("date", date);
-				mv.addObject("sel_empcode", sel_empcode);
 			}else if("EMP_CARD".equals(table)){//导入人员一卡通信息
 				mv = new ModelAndView("modules/excel/preview_card");
-				mv.addObject("seldepart", seldepart);
-				mv.addObject("emname", emname);
 			}else if("EMP_POS".equals(table)){//导入班车打卡信息
 				mv = new ModelAndView("modules/excel/preview_pos");
-				mv.addObject("seldepart", seldepart);
-				mv.addObject("emname", emname);
-				mv.addObject("datepick", datepick);
-				mv.addObject("sel_empcode", sel_empcode);
 			}else if("GOODS".equals(table)){//物资资产
 				mv = new ModelAndView("modules/excel/preview_goods");
-				mv.addObject("sel_empcode", sel_empcode);
 			}else if("GOODS_DICT".equals(table)){
 				mv = new ModelAndView("modules/excel/preview_goods_dict");
-				mv.addObject("sel_type", sel_type);
-				mv.addObject("sel_code", sel_code);
 			}else if("GOODS_APPLY".equals(table)){
 				mv = new ModelAndView("modules/excel/preview_goods_apply");
-				mv.addObject("sel_empname", sel_empname);
-				mv.addObject("sel_code", sel_code);
 			}else if("PLAN".equals(table)){//计划
 				mv = new ModelAndView("modules/excel/preview_plan");
-				mv.addObject("f_level", f_level);
-				mv.addObject("f_type", f_type);
-				mv.addObject("f_empname", f_empname);
-				mv.addObject("datepick", datepick);
-				mv.addObject("sel_empcode", sel_empcode);
 			}else if("ASSETS".equals(table)){//固定资产
 				mv = new ModelAndView("modules/excel/preview_assets");
-				mv.addObject("status", status);
-				mv.addObject("depart", depart);
-				mv.addObject("emp", emp);
+			}else if("ASSETS_INFO".equals(table)){//信息设备管理
+				mv = new ModelAndView("modules/excel/preview_assets_infoequip");
+			}else if("ASSETS_INFO_REPAIR".equals(table)){//信息设备维修记录
+				mv = new ModelAndView("modules/excel/preview_assets_infoequip_repair");
 			}else if("WORKCHECK".equals(table)){//考勤
 				mv = new ModelAndView("modules/excel/preview_workcheck");
 			}else if("PROJECT".equals(table)){//工作令
@@ -223,6 +178,10 @@ public class ExcelController extends CommonController {
 				errorMessage = excelDAO.insertPlan(data, datepick);
 			}else if("ASSETS".equals(table)){//固定资产
 				errorMessage = excelDAO.insertAssets(data);
+			}else if("ASSETS_INFO".equals(table)){//信息设备
+				errorMessage = excelDAO.insertAssets_infoequip(data);
+			}else if("ASSETS_INFO_REPAIR".equals(table)){//信息设备维修
+				errorMessage = excelDAO.insertAssets_infoequip_repair(data);
 			}else if("WORKCHECK".equals(table)){//考勤
 				errorMessage = excelDAO.insertWorkcheck(data, date);
 			}else if("PROJECT".equals(table)){//工作令
@@ -237,7 +196,7 @@ public class ExcelController extends CommonController {
 				errorMessage = errorMessage.substring(0, 200) + "...";
 			}
 			
-			response.sendRedirect(redirect + "&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&datepick=" + datepick + "&page=" + page + "&errorMessage=" + URLEncoder.encode(errorMessage,"UTF-8") + "&f_pjcode=" + f_pjcode + "&f_stagecode=" + f_stagecode + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&status=" + status + "&depart=" + depart + "&emp=" + emp + "&f_level=" + f_level + "&f_type=" + f_type + "&sel_empcode=" + sel_empcode + "&sel_carcode=" + sel_carcode + "&type=" + type + "&sel_type=" + sel_type + "&sel_code=" + sel_code + "&sel_empname=" + URLEncoder.encode(sel_empname,"UTF-8"));
+			response.sendRedirect(redirect + "&errorMessage=" + URLEncoder.encode(errorMessage, "UTF-8"));
 		}else if("export".equals(action)){//excel导出
 			String model = ServletRequestUtils.getStringParameter(request, "model", "");
 			String imagepath = request.getRealPath("\\chart\\");

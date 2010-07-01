@@ -214,6 +214,146 @@ public class AssetsController extends CommonController {
 			mv.addObject("empcode", empcode);
 			mv.addObject("empname", empname);
 			mv.addObject("departname", departname);
+		}else if("frame_info_equip".equals(action)){//信息设备管理frame
+			mv = new ModelAndView("modules/assets/frame_info_equip");
+			List listType = assetsDAO.getDICTByType("8");
+			List listStatus = assetsDAO.getDICTByType("9");
+			mv.addObject("listType", listType);
+			mv.addObject("listStatus", listStatus);
+			return mv;
+		}else if("list_info_equip".equals(action)){//信息设备管理list
+			mv = new ModelAndView("modules/assets/list_info_equip");
+			String sel_code = ServletRequestUtils.getStringParameter(request, "sel_code", "");
+			String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
+			String sel_status = ServletRequestUtils.getStringParameter(request, "sel_status", "");
+			List listType = assetsDAO.getDICTByType("8");
+			List listStatus = assetsDAO.getDICTByType("9");
+			
+			PageList pageList = assetsDAO.findAllInfoEquip(page, sel_code, sel_type, sel_status);
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("sel_code", sel_code);
+			mv.addObject("sel_type", sel_type);
+			mv.addObject("sel_status", sel_status);
+			mv.addObject("listType", listType);
+			mv.addObject("listStatus", listStatus);
+			mv.addObject("errorMessage", errorMessage);
+			return mv;
+		}else if("add_infoequip".equals(action)){
+			String name = ServletRequestUtils.getStringParameter(request, "name", "");
+			String type = ServletRequestUtils.getStringParameter(request, "type", "");
+			String code = ServletRequestUtils.getStringParameter(request, "code", "");
+			String mjjbh = ServletRequestUtils.getStringParameter(request, "mjjbh", "");
+			String xhgg = ServletRequestUtils.getStringParameter(request, "xhgg", "");
+			String yz = ServletRequestUtils.getStringParameter(request, "yz", "");
+			String sybm = ServletRequestUtils.getStringParameter(request, "sybm", "");
+			String sydd = ServletRequestUtils.getStringParameter(request, "sydd", "");
+			String sbbgr = ServletRequestUtils.getStringParameter(request, "sbbgr", "");
+			String trsyrq = ServletRequestUtils.getStringParameter(request, "trsyrq", "");
+			if("".equals(trsyrq)){
+				trsyrq = null;
+			}else {
+				trsyrq = "'" + trsyrq + "'";
+			}
+			String sbzt = ServletRequestUtils.getStringParameter(request, "sbzt", "");
+			String czxtazrq = ServletRequestUtils.getStringParameter(request, "czxtazrq", "");
+			if("".equals(czxtazrq)){
+				czxtazrq = null;
+			}else {
+				czxtazrq = "'" + czxtazrq + "'";
+			}
+			String ktjklx = ServletRequestUtils.getStringParameter(request, "ktjklx", "");
+			String yt = ServletRequestUtils.getStringParameter(request, "yt", "");
+			String ip = ServletRequestUtils.getStringParameter(request, "ip", "");
+			String mac = ServletRequestUtils.getStringParameter(request, "mac", "");
+			String ypxh = ServletRequestUtils.getStringParameter(request, "ypxh", "");
+			String ypxlh = ServletRequestUtils.getStringParameter(request, "ypxlh", "");
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			
+			String insertSql = "insert into ASSETS_INFO values('" + id + "', '" + name + "', '" + type + "', '" + code + "', '" + mjjbh + "', '" + xhgg + "', '" + yz + "', '" + sybm + "', '" + sydd + "', '" + sbbgr + "', " + trsyrq + ", '" + sbzt + "', " + czxtazrq + ", '" + ktjklx + "', '" + yt + "', '" + ip + "', '" + mac + "', '" + ypxh + "', '" + ypxlh + "')";
+			assetsDAO.insert(insertSql);
+			response.sendRedirect("assets.do?action=list_info_equip");
+			return null;
+		}else if("delete_infoequip".equals(action)){
+			String sel_code = ServletRequestUtils.getStringParameter(request, "sel_code", "");
+			String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
+			String sel_status = ServletRequestUtils.getStringParameter(request, "sel_status", "");
+			String[] check=request.getParameterValues("check");
+			//循环按id删除
+			for(int i=0;i<check.length;i++){
+				String deleteSql1 = "delete from ASSETS_INFO_REPAIR where I_ID='" + check[i] + "'";
+				String deleteSql2 = "delete from ASSETS_INFO where ID='" + check[i] + "'";
+				assetsDAO.delete(deleteSql1);
+				assetsDAO.delete(deleteSql2);
+			}
+			
+			response.sendRedirect("assets.do?action=list_info_equip&page=" + page + "&sel_code=" + sel_code + "&sel_type=" + sel_type + "&sel_status=" + sel_status);
+			return null;
+		}else if("infoequip_repair".equals(action)){//信息设备维修记录
+			mv = new ModelAndView("modules/assets/list_infoequip_repair");
+			String i_id = ServletRequestUtils.getStringParameter(request, "i_id", "");
+			String i_code = ServletRequestUtils.getStringParameter(request, "i_code", "");
+			String sel_code = ServletRequestUtils.getStringParameter(request, "sel_code", "");
+			String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
+			String sel_status = ServletRequestUtils.getStringParameter(request, "sel_status", "");
+			int i_page = ServletRequestUtils.getIntParameter(request, "i_page", 1);
+			PageList pageList = assetsDAO.findAllInfoEquip_Repair(page, i_id);
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("i_id", i_id);
+			mv.addObject("i_code", i_code);
+			mv.addObject("sel_code", sel_code);
+			mv.addObject("sel_type", sel_type);
+			mv.addObject("sel_status", sel_status);
+			mv.addObject("i_page", i_page);
+			mv.addObject("errorMessage", errorMessage);
+			return mv;
+		}else if("add_infoequip_repair".equals(action)){
+			String sel_code = ServletRequestUtils.getStringParameter(request, "sel_code", "");
+			String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
+			String sel_status = ServletRequestUtils.getStringParameter(request, "sel_status", "");
+			String i_id = ServletRequestUtils.getStringParameter(request, "i_id", "");
+			String i_code = ServletRequestUtils.getStringParameter(request, "i_code", "");
+			int i_page = ServletRequestUtils.getIntParameter(request, "i_page", 1);
+			String r_date = ServletRequestUtils.getStringParameter(request, "r_date", "");
+			float r_cost = ServletRequestUtils.getFloatParameter(request, "r_cost", 0);
+			String r_reason = ServletRequestUtils.getStringParameter(request, "r_reason", "");
+			String r_note = ServletRequestUtils.getStringParameter(request, "r_note", "");
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			
+			String insertSql = "insert into ASSETS_INFO_REPAIR values('" + id + "', '" + i_id + "', '" + i_code + "', " + r_cost + ", '" + r_date + "', '" + r_reason + "', '" + r_note + "')";
+			assetsDAO.insert(insertSql);
+			response.sendRedirect("assets.do?action=infoequip_repair&i_id=" + i_id + "&i_code=" + i_code + "&i_page=" + i_page + "&sel_code=" + sel_code + "&sel_type=" + sel_type + "&sel_status=" + sel_status);
+			return null;
+		}else if("delete_infoequip_repair".equals(action)){
+			String i_id = ServletRequestUtils.getStringParameter(request, "i_id", "");
+			String i_code = ServletRequestUtils.getStringParameter(request, "i_code", "");
+			int i_page = ServletRequestUtils.getIntParameter(request, "i_page", 1);
+			String sel_code = ServletRequestUtils.getStringParameter(request, "sel_code", "");
+			String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
+			String sel_status = ServletRequestUtils.getStringParameter(request, "sel_status", "");
+			String[] check=request.getParameterValues("check");
+			//循环按id删除
+			for(int i=0;i<check.length;i++){
+				String deleteSql = "delete from ASSETS_INFO_REPAIR where ID='" + check[i] + "'";
+				assetsDAO.delete(deleteSql);
+			}
+			
+			response.sendRedirect("assets.do?action=infoequip_repair&i_id=" + i_id + "&i_code=" + i_code + "&i_page=" + i_page + "&sel_code=" + sel_code + "&sel_type=" + sel_type + "&sel_status=" + sel_status);
+			return null;
+		}else if("haveInfoEquipCode".equals(action)){//判断编码是否已存在
+			String haveInfoEquipCode = "false";
+			String code = ServletRequestUtils.getStringParameter(request, "code", "");
+			Map map = assetsDAO.findByCode("ASSETS_INFO", code);
+			if(map.get("CODE")!=null){
+				haveInfoEquipCode= "true";
+			}
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=UTF-8");
+			response.getWriter().write(haveInfoEquipCode);
+			response.getWriter().close();
 		}
 		
 		return mv;

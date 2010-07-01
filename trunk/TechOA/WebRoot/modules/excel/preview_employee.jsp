@@ -6,10 +6,6 @@
 <%@ page import="com.basesoft.modules.employee.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
-String seldepart = request.getAttribute("seldepart").toString();
-String emname = request.getAttribute("emname").toString();
-String sel_empcode = request.getAttribute("sel_empcode").toString();
-
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
 String path = request.getAttribute("path").toString();
@@ -43,11 +39,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'em.do?action=infolist&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
+    	window.location.href = 'em.do?action=infolist';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=em.do?action=infolist&table=EMPLOYEE&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=em.do?action=infolist&table=EMPLOYEE';
     	document.getElementById('listForm').submit();
     }
 });

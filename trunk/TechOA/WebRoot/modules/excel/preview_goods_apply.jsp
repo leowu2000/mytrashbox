@@ -10,9 +10,6 @@
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
 String path = request.getAttribute("path").toString();
-String sel_empname = request.getAttribute("sel_empname").toString();
-sel_empname = URLEncoder.encode(sel_empname, "UTF-8");
-String sel_code = request.getAttribute("sel_code").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 GoodsDAO goodsDAO = (GoodsDAO)ctx.getBean("goodsDAO");
@@ -43,11 +40,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'goods.do?action=list_goodsapply&sel_empname=<%=sel_empname %>&sel_code=<%=sel_code %>';
+    	window.location.href = 'goods.do?action=list_goodsapply';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=goods.do?action=list_goodsapply&table=GOODS_APPLY&sel_empname=<%=sel_empname %>&sel_code=<%=sel_code %>';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=goods.do?action=list_goodsapply&table=GOODS_APPLY';
     	document.getElementById('listForm').submit();
     }
 });
