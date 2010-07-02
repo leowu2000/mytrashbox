@@ -55,7 +55,7 @@ public class SearchController extends CommonController {
 				departcodes = "'" + seldepart + "'";
 			}
 			
-			PageList pageList = searchDAO.findAll(seldepart, emname, sel_empcode, page, departcodes, h_year, h_name);
+			PageList pageList = searchDAO.findAll(departcodes, emname, sel_empcode, page, h_year, h_name);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
@@ -71,7 +71,7 @@ public class SearchController extends CommonController {
 			
 			String departcode = "'" + em.getDepartcode() + "'";
 			
-			PageList pageList = searchDAO.findAll(em.getDepartcode(), em.getName(), sel_empcode, 1, departcode, h_year, h_name);
+			PageList pageList = searchDAO.findAll(departcode, em.getName(), sel_empcode, 1, h_year, h_name);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("em", em);

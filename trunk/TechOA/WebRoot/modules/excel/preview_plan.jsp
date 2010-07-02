@@ -39,11 +39,11 @@ Ext.onReady(function(){
 	tb.add({text: '保存入库',cls: 'x-btn-text-icon import',handler: onImportClick});
 	
 	function onBackClick(btn){
-    	window.location.href = 'plan.do?action=list';
+    	window.location.href = 'plan.do?action=list_planner';
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=plan.do?action=list&table=PLAN';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=plan.do?action=list_planner&table=PLAN';
     	document.getElementById('listForm').submit();
     }
 });
@@ -113,8 +113,9 @@ Ext.onReady(function(){
 %>
 				<td>&nbsp;<%=row.optString("DEPARTNAME") %></td>
 <%
+			String departcode = planDAO.findCodeByName("DEPARTMENT", row.optString("DEPARTNAME").trim());
 			String empname = row.optString("EMPNAME")==null?"":row.optString("EMPNAME").trim();
-			String[] splitechars = {" ", ",", "，", "、", "等"};
+			String[] splitechars = {",", "，", "、", " ", "等"};
 			String[] empnames =	StringUtil.splite(empname, splitechars);
 %>            	
             	<td>
@@ -122,7 +123,7 @@ Ext.onReady(function(){
             			<tr>
             			<%
             				for(int j=0;j<empnames.length;j++){
-            					String empcode = planDAO.findCodeByName("EMPLOYEE", empnames[j]);
+            					String empcode = planDAO.findEMPCodeByName(empnames[j], departcode);
             					if("".equals(empcode)){//无法识别
             			%>
             				<td bgcolor="#FF0088" title="系统无法识别此员工！">&nbsp;<%=empnames[j] %></td>

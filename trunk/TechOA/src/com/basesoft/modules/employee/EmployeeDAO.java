@@ -40,14 +40,14 @@ public class EmployeeDAO extends CommonDAO{
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String departcode, String emname, String empcode, int page, String departcodes, String h_year, String h_name){
+	public PageList findAll(String departcodes, String emname, String empcode, int page, String h_year, String h_name){
 		PageList pageList = new PageList();
 		String sql = "select * from EMPLOYEE where ROLECODE!='000' ";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		if(!"0".equals(departcode)){//部门
+		if(!"''".equals(departcodes)&&!"'0'".equals(departcodes)){//部门
 			sql = sql + " and DEPARTCODE in (" + departcodes + ")";
 		}
 		if(!"".equals(emname)){//姓名

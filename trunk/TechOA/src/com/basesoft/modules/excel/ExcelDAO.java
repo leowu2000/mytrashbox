@@ -937,29 +937,12 @@ public class ExcelDAO extends CommonDAO {
 				
 				String empname = row.optString("EMPNAME")==null?"":row.optString("EMPNAME").trim();
 				
-				String[] splitechars = {" ", ",", "，", "、", "等"};
+				String[] splitechars = {",", "，", "、", " ", "等"};
 				String[] empnames =	StringUtil.splite(empname, splitechars);
 					
-//				if(empname.indexOf(" ")>0){//以各种符号分隔的责任人
-//					empnames = empname.split(" ");
-//				}else if(empname.indexOf(",")>0){
-//					empnames = empname.split(",");
-//				}else if(empname.indexOf("、")>0){
-//					empnames = empname.split("、");
-//				}else if(empname.indexOf("，")>0){
-//					empnames = empname.split("，");
-//				}else {
-//					empnames[0] = empname;
-//				}
 				boolean flag = false;
 				for(int j=0;j<empnames.length;j++){
-//					String empname_1 = empnames[j].replaceAll(" ", "").replaceAll(",", "").replaceAll("，", "").replaceAll("、", "");
-//					if("".equals(empname_1)){
-//						continue;
-//					}
-					
-					
-					String empcode = planDAO.findCodeByName("EMPLOYEE", empnames[j]);
+					String empcode = planDAO.findEMPCodeByName(empnames[j], departcode);
 					//enpname入库字段
 					if("".equals(empnameSql)){
 						empnameSql = empnames[j];

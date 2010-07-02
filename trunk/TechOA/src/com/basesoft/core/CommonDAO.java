@@ -87,16 +87,45 @@ public class CommonDAO {
 	 * @return
 	 */
 	public String findCodeByName(String tablename, String name){
+		String s = "";
 		List list = jdbcTemplate.queryForList("select CODE from " + tablename + " where NAME='" + name + "'");
 		if(list.size() == 1){
 			Map map = (Map)list.get(0);
-			String s = map.get("CODE").toString();
-			return s;
+			s = map.get("CODE").toString();
 		}else if(list.size()>1){
-			return "-1";
+			s = "-1";
 		}else {
-			return "";
+			s = "";
 		}
+		if("".equals(s)){//直接匹配不上的时候模糊匹配
+			list = jdbcTemplate.queryForList("select CODE from " + tablename + " where NAME  like '%" + name + "%'");
+			if(list.size() > 0){
+				Map map = (Map)list.get(0);
+				s = map.get("CODE").toString();
+			}
+		}
+		
+		return s;
+	}
+	
+	/**
+	 * 识别人名，避免重名情况
+	 * @param name
+	 * @param departcode
+	 * @return 工号
+	 */
+	public String findEMPCodeByName(String name, String departcode){
+		String code = "";
+		String querySql = "select CODE from EMPLOYEE where NAME='" + name + "'";
+		if(!"".equals(departcode)){
+			querySql = querySql + " and DEPARTCODE='" + departcode + "'";
+		}
+		List list = jdbcTemplate.queryForList(querySql);
+		if(list.size() == 1){
+			Map map = (Map)list.get(0);
+			code = map.get("CODE")==null?"":map.get("CODE").toString();
+		}
+		return code;
 	}
 	
 	/**
