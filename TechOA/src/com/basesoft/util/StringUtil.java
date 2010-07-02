@@ -293,6 +293,9 @@ public class StringUtil {
 	 */
 	public static String[] splite(String s, String[] splitechars){
 		for(String ch:splitechars){
+			if(s.indexOf(ch)>0&&!" ".equals(ch)){
+				s.replaceAll(" ","");
+			}
 			s = s.replaceAll(ch,"@");
 		}
 		String r[]=s.split("@");

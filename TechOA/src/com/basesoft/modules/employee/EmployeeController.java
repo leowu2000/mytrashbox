@@ -51,27 +51,18 @@ public class EmployeeController extends CommonController {
 		h_name = new String(h_name.getBytes("ISO8859-1"),"UTF-8");
 		
 		String returnUrl_infolist = "em.do?action=infolist&manage=manage&seldepart=" + seldepart + "&emname=" + URLEncoder.encode(emname,"UTF-8") + "&page=" + page + "&sel_empcode=" + sel_empcode;
-		if("frame_infolist".equals(action)){//人员frame
+		if("frame_infolist".equals(action)){//用户管理frame
 			mv = new ModelAndView("modules/employee/frame_info");
-		}else if("infolist".equals(action)){//人员基本信息
+		}else if("infolist".equals(action)){//用户管理list
 			mv = new ModelAndView("modules/employee/list_info");
 			
 			List listRole = emDAO.getRoleList();
 
 			List listDepart = new ArrayList();
-			String departcodes = ""; 
-			if("-1".equals(seldepart)){//需要进行数据权限的过滤
-				listDepart = roleDAO.findAllUserDepart(emcode);
-				if(listDepart.size() == 0){
-					listDepart = roleDAO.findAllRoleDepart(emrole);
-				}
-				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
-			}else {
-				departcodes = "'" + seldepart + "'";
-			}
+			String departcodes = "'" + seldepart + "'";
 			
 			//获取部门下员工列表
-			PageList pageList = emDAO.findAll(seldepart, emname, sel_empcode, page, departcodes, h_year, h_name);
+			PageList pageList = emDAO.findAll(departcodes, emname, sel_empcode, page, h_year, h_name);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);
@@ -173,6 +164,9 @@ public class EmployeeController extends CommonController {
 			mv = new ModelAndView("modules/employee/list_manage");
 			
 			List listDepart = new ArrayList();
+			if("".equals(seldepart)){//为空的话默认-1
+				seldepart = "-1";
+			}
 			String departcodes = ""; 
 			if("-1".equals(seldepart)){//需要进行数据权限的过滤
 				listDepart = roleDAO.findAllUserDepart(emcode);
@@ -183,7 +177,7 @@ public class EmployeeController extends CommonController {
 			}else {
 				departcodes = "'" + seldepart + "'";
 			}
-			PageList pageList = emDAO.findAll(seldepart, emname, sel_empcode, page, departcodes, h_year, h_name);
+			PageList pageList = emDAO.findAll(departcodes, emname, sel_empcode, page, h_year, h_name);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("seldepart", seldepart);

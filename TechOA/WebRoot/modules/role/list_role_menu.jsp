@@ -43,7 +43,7 @@ Ext.onReady(function(){
 		        Ext.getDom('dataForm').action=action; 
 	    	    Ext.getDom('dataForm').submit();
 	        }},
-	        {text:'关闭',handler: function(){win.hide();}}
+	        {text:'关闭',handler: function(){win.hide();document.getElementById("menusel").style.display="none";}}
 	        ]
         });
     }

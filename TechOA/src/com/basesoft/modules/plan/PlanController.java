@@ -320,7 +320,7 @@ public class PlanController extends CommonController {
 			String deleteSql = "delete from PLAN";
 			planDAO.delete(deleteSql);
 			
-			response.sendRedirect("plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode);
+			response.sendRedirect(returnUrl);
 		}else if("confirm".equals(action)){//确认
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){

@@ -73,7 +73,7 @@ Ext.onReady(function(){
 
     if(!win){
         win = new Ext.Window({
-        	el:'dlg',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+        	el:'dlg',width:315,buttonAlign:'center',closeAction:'hide',autoScroll:'true',height:350,
 	        buttons: [
 	        {text:'提交',handler: function(){if(validate()){Ext.getDom('dataForm').action=action; Ext.getDom('dataForm').submit();}}},
 	        {text:'关闭',handler: function(){win.hide();document.getElementById("empsel").style.display="none";}}
