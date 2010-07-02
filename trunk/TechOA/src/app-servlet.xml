@@ -34,6 +34,10 @@
 				/role.do=RoleController
 				/visit.do=VisitController
 				/ins.do=InsController
+				/contract.do=ContractController
+				/c_apply.do=ContractController_Apply
+				/c_budget.do=ContractController_Budget
+				/c_pay.do=ContractController_Pay
 			</value>
 		</property>
 	</bean>
@@ -80,5 +84,9 @@
 	<bean name="RoleController" class="com.basesoft.modules.role.RoleController"></bean>
 	<bean name="VisitController" class="com.basesoft.modules.visit.VisitController"></bean>
 	<bean name="InsController" class="com.basesoft.modules.ins.InsController"></bean>
+	<bean name="ContractController" class="com.basesoft.modules.contract.ContractController"></bean>
+	<bean name="ContractController_Apply" class="com.basesoft.modules.contract.ContractController_Apply"></bean>
+	<bean name="ContractController_Budget" class="com.basesoft.modules.contract.ContractController_Budget"></bean>
+	<bean name="ContractController_Pay" class="com.basesoft.modules.contract.ContractController_Pay"></bean>
 </beans>
 

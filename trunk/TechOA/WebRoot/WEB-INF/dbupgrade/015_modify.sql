@@ -130,3 +130,9 @@ INSERT INTO DICT VALUES('900001','在用','9');
 INSERT INTO DICT VALUES('900002','维修','9');
 INSERT INTO DICT VALUES('900003','待报废','9');
 INSERT INTO DICT VALUES('900004','外场','9');
+
+update menu set menuurl='contract.do?action=frame_contract' where menucode='111';
+update menu set menuurl='c_apply.do?action=frame_apply' where menucode='112';
+update menu set menuurl='c_budget.do?action=frame_budget' where menucode='113';
+update menu set menuurl='c_pay.do?action=frame_pay' where menucode='114';
+delete from menu where menucode in ('120', '121');
