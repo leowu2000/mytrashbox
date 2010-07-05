@@ -12,12 +12,13 @@ public class Contract_Apply {
 	String sfxt;
 	String mj;
 	String sfzj;
-	Date enddate;
+	String enddate;
 	int wxsl;
 	String departcode;
 	String departname;
 	String empcode;
 	String empname;
+	String empphone;
 	String contractid;
 	
 	public String getId() {
@@ -84,11 +85,11 @@ public class Contract_Apply {
 		this.sfzj = sfzj;
 	}
 
-	public Date getEnddate() {
+	public String getEnddate() {
 		return enddate;
 	}
 
-	public void setEnddate(Date enddate) {
+	public void setEnddate(String enddate) {
 		this.enddate = enddate;
 	}
 
@@ -138,5 +139,13 @@ public class Contract_Apply {
 
 	public void setContractid(String contractid) {
 		this.contractid = contractid;
+	}
+
+	public String getEmpphone() {
+		return empphone;
+	}
+
+	public void setEmpphone(String empphone) {
+		this.empphone = empphone;
 	}
 }

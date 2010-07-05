@@ -41,7 +41,7 @@
 	  var sel_code = document.getElementById('sel_code').value;
 	  var sel_pjcode = document.getElementById('sel_pjcode').value;
 	  
-	  document.getElementById('list_info').src = "/c_apply.do?action=list_apply&sel_code=" + sel_code + "&sel_code=" + sel_code;
+	  document.getElementById('list_info').src = "/c_apply.do?action=list_apply&sel_code=" + sel_code + "&sel_pjcode=" + sel_pjcode;
 	  
 	}
 	

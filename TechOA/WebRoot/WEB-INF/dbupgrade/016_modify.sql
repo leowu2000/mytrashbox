@@ -16,6 +16,7 @@ create table CONTRACT_APPLY  (
    DEPARTNAME           VARCHAR(20),
    EMPCODE              VARCHAR(20),
    EMPNAME              VARCHAR(20),
+   EMPPHONE             VARCHAR(20),
    CONTRACTID           VARCHAR(32),
    constraint PK_CONTRACT_APPLY primary key (ID)
 );
@@ -64,6 +65,9 @@ comment on column CONTRACT_APPLY.EMPCODE is
 
 comment on column CONTRACT_APPLY.EMPNAME is
 '项目申报人姓名';
+
+comment on column CONTRACT_APPLY.EMPPHONE is
+'电话';
 
 comment on column CONTRACT_APPLY.CONTRACTID is
 '合同编号';
