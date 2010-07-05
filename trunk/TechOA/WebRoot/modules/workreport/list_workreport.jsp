@@ -183,6 +183,10 @@ function AJAX_PJTYPE(type){
         	width:203,
         	maxHeight:300
 		});
+		pjcombo.on("select",function (){
+			var pjcode = document.getElementById('pjcode').value;
+			AJAX_PJ(pjcode);
+		});
     }
 }
 
