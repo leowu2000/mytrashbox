@@ -1,5 +1,6 @@
 package com.basesoft.modules.login;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +12,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.Constants;
+import com.basesoft.core.PageList;
 import com.basesoft.modules.employee.EmployeeDAO;
+import com.basesoft.modules.plan.PlanDAO;
+import com.basesoft.modules.role.RoleDAO;
 import com.basesoft.util.StringUtil;
 
 /**
@@ -22,6 +26,8 @@ import com.basesoft.util.StringUtil;
 public class LoginController extends CommonController {
 
 	EmployeeDAO emDAO;
+	RoleDAO roleDAO;
+	PlanDAO planDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -137,7 +143,72 @@ public class LoginController extends CommonController {
 			return mv;
 		} else if ("main".equals(action)) {
 			mv = new ModelAndView("main");
+			String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
+			String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
+			String menuString = roleDAO.getMenus(emrole).get("menucodes")==null?"":roleDAO.getMenus(emrole).get("menucodes").toString();
+			boolean haveworkcheck = false;
+			boolean haveplanfollow_emp = false;
+			boolean haveplanfollow_lead = false;
+			boolean haveplanfollow_plan = false;
+			boolean haveplanfeedback = false;
+			String departcodes = ""; 
+			List listDepart = roleDAO.findAllUserDepart(emcode);
+			if(listDepart.size() == 0){
+				listDepart = roleDAO.findAllRoleDepart(emrole);
+			}
+			if(listDepart.size()>0){
+				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+			}
 			
+			if(menuString.indexOf("071")>-1){//考勤
+				haveworkcheck = true;
+				String start = "";
+				String end = StringUtil.DateToString(new Date(), "yyyy-MM") + "-25";
+				
+				String nowDate = StringUtil.DateToString(new Date(), "yyyy-MM-dd");
+				if(Integer.parseInt(end.split("-")[2])>=25){
+					end = StringUtil.DateToString(StringUtil.getNextDate(new Date(), 10), "yyyy-MM") + "-25";
+				}
+				
+				if("01".equals(end.split("-")[1])){
+					start = (Integer.parseInt(end.split("-")[0])-1) + "-12-25";
+				}else {
+					start = end.split("-")[0] + "-" + (Integer.parseInt(end.split("-")[1])-1) + "-25";
+				}
+				
+				List listWorkCheck = emDAO.findWorkCheck(start, end, "", "", emcode, departcodes);
+				List<Date> listDate = StringUtil.getDateList(start,end);
+				
+				mv.addObject("listWorkCheck", listWorkCheck);
+				mv.addObject("listDate", listDate);
+			}
+			if(menuString.indexOf("087")>-1){//员工计划跟踪
+				haveplanfollow_emp = true;
+				PageList pageList = planDAO.findAllFollows_emp(1, emcode, StringUtil.DateToString(new Date(), "yyyy-MM"), "");
+				List listPlanfollow = pageList.getList();
+				mv.addObject("listPlanfollow", listPlanfollow);
+			}else if(menuString.indexOf("089")>-1){//领导、组长的计划跟踪
+				haveplanfollow_lead = true;
+				PageList pageList = planDAO.findAllFollows_lead(1, departcodes, StringUtil.DateToString(new Date(), "yyyy-MM"), "");
+				List listPlanfollow = pageList.getList();
+				mv.addObject("listPlanfollow", listPlanfollow);
+			}else if(menuString.indexOf("088")>-1){//计划员的计划跟踪
+				haveplanfollow_plan = true;
+				PageList pageList = planDAO.findAllFollows_plan(1, emcode, StringUtil.DateToString(new Date(), "yyyy-MM"), "");
+				List listPlanfollow = pageList.getList();
+				mv.addObject("listPlanfollow", listPlanfollow);
+			}
+			if(menuString.indexOf("083")>-1){//计划反馈
+				haveplanfeedback = true;
+				PageList pageList = planDAO.findAllResult(emcode, 1);
+				List listFeedback = pageList.getList();
+				mv.addObject("listFeedback", listFeedback);
+			}
+			mv.addObject("haveworkcheck", haveworkcheck);
+			mv.addObject("haveplanfollow_emp", haveplanfollow_emp);
+			mv.addObject("haveplanfollow_lead", haveplanfollow_lead);
+			mv.addObject("haveplanfeedback", haveplanfeedback);
+			mv.addObject("haveplanfollow_plan", haveplanfollow_plan);
 			return mv;
 		}
 		return mv;
@@ -145,5 +216,13 @@ public class LoginController extends CommonController {
 
 	public void setEmployeeDAO(EmployeeDAO emDAO){
 		this.emDAO = emDAO;
+	}
+	
+	public void setRoleDAO(RoleDAO roleDAO){
+		this.roleDAO = roleDAO;
+	}
+	
+	public void setPlanDAO(PlanDAO planDAO){
+		this.planDAO = planDAO;
 	}
 }
