@@ -44,6 +44,9 @@ public class WorkReportDAO extends CommonDAO {
 	 * @return
 	 */
 	public PageList findAllAudit(int page, String departcodes, String emcode, String sel_pjcode, String sel_empcode, String sel_empname){
+		if("".equals(departcodes)){
+			departcodes = "''";
+		}
 		String sql = "select * from WORKREPORT where DEPARTCODE in (" + departcodes + ") and EMPCODE!='" + emcode + "' and (flag=1 or flag=2)";
 		if(!"".equals(sel_pjcode)){
 			sql = sql + " and PJCODE='" + sel_pjcode + "'";

@@ -610,7 +610,9 @@ public class PlanDAO extends CommonDAO {
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
-		
+		if("".equals(departcodes)){
+			departcodes = "''";
+		}
 		String empcodeSql = "select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
 		String empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
 		sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (" + empcodeSql + ")" +
