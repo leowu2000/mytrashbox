@@ -190,64 +190,6 @@ public class EmployeeDAO extends CommonDAO{
 	}
 	
 	/**
-	 * 获取登陆用户的菜单列表
-	 * @param rolecode 角色code
-	 * @return
-	 */
-	public String getMenu(String rolecode){
-		StringBuffer sb = new StringBuffer();
-		
-		//获取功能列表中的菜单功能项
-		List listMenu = jdbcTemplate.queryForList("select * from FUNCTION where FUNCCODE in (select FUNCCODE from FUNCROLE where ROLECODE='" + rolecode + "') and STATUS='1' and FUNCTYPE='1' order by ORDERCODE");
-		
-		for(int i=0;i<listMenu.size();i++){
-			Map mapMenu = (Map)listMenu.get(i);
-			
-			if(i==0){
-				sb.append("{text:'")
-				  .append(mapMenu.get("FUNCNAME"))
-				  .append("',id:'")
-				  .append(i)
-				  .append("',hrefTarget:'main',icon:'images/icons/")
-				  .append(i+1)
-				  .append(".png',href:'")
-				  .append(mapMenu.get("FUNCURL"))
-				  .append("',leaf:true}");
-			}else {
-				sb.append(",{text:'")
-				  .append(mapMenu.get("FUNCNAME"))
-				  .append("',id:'")
-				  .append(i)
-				  .append("',hrefTarget:'main',icon:'images/icons/")
-				  .append(i+1)
-				  .append(".png',href:'")
-				  .append(mapMenu.get("FUNCURL"))
-				  .append("',leaf:true}");
-			}
-		}
-		
-		if(listMenu.size()>0){
-			sb.append(",{text:'")
-			  .append("退出")
-			  .append("',id:'")
-			  .append(listMenu.size())
-			  .append("',icon:'images/icons/close.png',href:'")
-			  .append("login.do?action=logout")
-			  .append("',leaf:true}");
-		}else {
-			sb.append("{text:'")
-			  .append("退出")
-			  .append("',id:'")
-			  .append(listMenu.size())
-			  .append("',icon:'images/icons/close.png',href:'")
-			  .append("login.do?action=logout")
-			  .append("',leaf:true}");
-		}
-		
-		return sb.toString();
-	}
-	
-	/**
 	 * 根据id获取实例
 	 * @param id 员工id
 	 * @return
