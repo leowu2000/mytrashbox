@@ -16,6 +16,7 @@ import com.basesoft.core.PageList;
 import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.role.RoleDAO;
+import com.basesoft.modules.workreport.WorkReportDAO;
 import com.basesoft.util.StringUtil;
 
 /**
@@ -28,6 +29,7 @@ public class LoginController extends CommonController {
 	EmployeeDAO emDAO;
 	RoleDAO roleDAO;
 	PlanDAO planDAO;
+	WorkReportDAO workreportDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -151,6 +153,7 @@ public class LoginController extends CommonController {
 			boolean haveplanfollow_lead = false;
 			boolean haveplanfollow_plan = false;
 			boolean haveplanfeedback = false;
+			boolean haveworkreport = false;
 			String departcodes = ""; 
 			List listDepart = roleDAO.findAllUserDepart(emcode);
 			if(listDepart.size() == 0){
@@ -160,7 +163,7 @@ public class LoginController extends CommonController {
 				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 			}
 			
-			if(menuString.indexOf("071")>-1){//考勤
+			if(menuString.indexOf("071")>-1||menuString.indexOf("101")>-1){//考勤
 				haveworkcheck = true;
 				String start = "";
 				String end = StringUtil.DateToString(new Date(), "yyyy-MM") + "-25";
@@ -204,11 +207,18 @@ public class LoginController extends CommonController {
 				List listFeedback = pageList.getList();
 				mv.addObject("listFeedback", listFeedback);
 			}
+			if(menuString.indexOf("022")>-1){//审核工作报告
+				haveworkreport = true;
+				PageList pageList = workreportDAO.findAllAudit(1, departcodes, emcode, "", "", "");
+				List listReport = pageList.getList();
+				mv.addObject("listReport", listReport);
+			}
 			mv.addObject("haveworkcheck", haveworkcheck);
 			mv.addObject("haveplanfollow_emp", haveplanfollow_emp);
 			mv.addObject("haveplanfollow_lead", haveplanfollow_lead);
-			mv.addObject("haveplanfeedback", haveplanfeedback);
 			mv.addObject("haveplanfollow_plan", haveplanfollow_plan);
+			mv.addObject("haveplanfeedback", haveplanfeedback);
+			mv.addObject("haveworkreport", haveworkreport);
 			return mv;
 		}
 		return mv;
@@ -224,5 +234,9 @@ public class LoginController extends CommonController {
 	
 	public void setPlanDAO(PlanDAO planDAO){
 		this.planDAO = planDAO;
+	}
+	
+	public void setWorkReportDAO(WorkReportDAO workreportDAO){
+		this.workreportDAO = workreportDAO;
 	}
 }

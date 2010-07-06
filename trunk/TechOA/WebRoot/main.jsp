@@ -10,10 +10,12 @@ String haveplanfollow_emp = request.getAttribute("haveplanfollow_emp").toString(
 String haveplanfollow_lead = request.getAttribute("haveplanfollow_lead").toString();
 String haveplanfollow_plan = request.getAttribute("haveplanfollow_plan").toString();
 String haveplanfeedback = request.getAttribute("haveplanfeedback").toString();
+String haveworkreport = request.getAttribute("haveworkreport").toString();
 List listDate = new ArrayList();
 List listWorkCheck = new ArrayList();
 List listPlanfollow = new ArrayList();
 List listFeedback= new ArrayList();
+List listReport= new ArrayList();
 if("true".equals(haveworkcheck)){
 	listDate = (List)request.getAttribute("listDate");
 	listWorkCheck = (List)request.getAttribute("listWorkCheck");
@@ -24,7 +26,9 @@ if("true".equals(haveplanfollow_emp)||"true".equals(haveplanfollow_lead)||"true"
 if("true".equals(haveplanfeedback)){
 	listFeedback = (List)request.getAttribute("listFeedback");
 }
-
+if("true".equals(haveworkreport)){
+	listReport = (List)request.getAttribute("listReport");
+}
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 HolidayDAO holidayDAO = (HolidayDAO)ctx.getBean("holidayDAO");
 PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
@@ -223,6 +227,56 @@ for(int i=0;i<count;i++){
                 <td><font color="red"><%=mapPlan.get("EMP_NOTE")==null?"":mapPlan.get("EMP_NOTE") %></font></td>
                 <td><font color="blue"><%=mapPlan.get("PLAN_NOTE")==null?"":mapPlan.get("PLAN_NOTE") %></font></td>
                 <td><font color="blue"><%=mapPlan.get("TEAM_NOTE")==null?"":mapPlan.get("TEAM_NOTE") %></font></td>
+            </tr>
+<%} %>            
+</table>
+<%
+}
+if("true".equals(haveworkreport)){
+%>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;工作报告：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="workreport.do?action=frame_audit">更多>></a></span>
+<table cellspacing="0" id="the-table" width="98%" align="center">
+            <tr align="center" bgcolor="#E0F1F8" class="b_tr">
+                <td nowrap="nowrap">上报人</td>
+                <td nowrap="nowrap">日  期</td>              
+                <td nowrap="nowrap">名  称</td>
+                <td nowrap="nowrap">工作令号</td>
+                <td nowrap="nowrap">分系统</td>
+                <td nowrap="nowrap">投入阶段</td>
+                <td nowrap="nowrap">投入工时</td>
+                <td nowrap="nowrap">备注</td>
+                <td nowrap="nowrap">状态</td>
+                <td nowrap="nowrap">反馈</td>
+                <td nowrap="nowrap">处理人</td>
+            </tr>
+<%
+int count = listReport.size()>5?5:listReport.size();
+for(int i=0;i<listReport.size();i++){
+	Map map = (Map)listReport.get(i);
+	String flag = map.get("FLAG").toString();
+	if("1".equals(flag)){
+		flag = "<font color='red'>待审批</font>";
+	}else if("2".equals(flag)){
+		flag = "<font color='green'>已通过</font>";
+	}
+	
+	String empname = planDAO.findNameByCode("EMPLOYEE", map.get("EMPCODE").toString());
+	String pjname = planDAO.findNameByCode("PROJECT", map.get("PJCODE").toString());
+	String pjname_d = planDAO.findNameByCode("PROJECT_D", map.get("PJCODE_D").toString());
+	String stagename = planDAO.findNameByCode("DICT", map.get("STAGECODE").toString());
+%>
+            <tr align="LEFT">
+                <td><%=empname %></td>
+                <td nowrap="nowrap"><%=map.get("STARTDATE") %></td>
+                <td><%=map.get("NAME") %></td>
+                <td><%=pjname %></td>
+                <td><%=pjname_d %></td>
+                <td><%=stagename %></td>   
+                <td><%=map.get("AMOUNT") %></td>
+                <td><%=map.get("BZ") %></td>
+                <td nowrap="nowrap"><%=flag %></td>
+                <td><%=map.get("BACKBZ")==null?"":map.get("BACKBZ") %></td>
+                <td><%=map.get("BACKEMPNAME")==null?"":map.get("BACKEMPNAME") %></td>
             </tr>
 <%} %>            
 </table>
