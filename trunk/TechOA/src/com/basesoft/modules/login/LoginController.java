@@ -163,7 +163,7 @@ public class LoginController extends CommonController {
 				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 			}
 			
-			if(menuString.indexOf("071")>-1||menuString.indexOf("101")>-1){//考勤
+			if(menuString.indexOf("071")>-1||menuString.indexOf("031")>-1){//考勤
 				haveworkcheck = true;
 				String start = "";
 				String end = StringUtil.DateToString(new Date(), "yyyy-MM") + "-25";
