@@ -104,7 +104,7 @@ public class PlanDAO extends CommonDAO {
 			sql = sql + " and ASSESS='" + level + "'";
 		}
 		if(!"0".equals(type)&&!"".equals(type)){//全部类别
-			sql = sql + "' and TYPE='" + type + "'";
+			sql = sql + " and TYPE='" + type + "'";
 		}
 		if(!"".equals(empname)){//全部人员
 			sql = sql + " and EMPNAME like '%" + empname + "%'";
@@ -158,7 +158,7 @@ public class PlanDAO extends CommonDAO {
 			sql = sql + " and ASSESS='" + level + "'";
 		}
 		if(!"0".equals(type)){//全部类别
-			sql = sql + "' and TYPE='" + type + "'";
+			sql = sql + " and TYPE='" + type + "'";
 		}
 		if(!"".equals(empname)){//全部人员
 			sql = sql + " and EMPNAME like '%" + empname + "%'";
@@ -213,7 +213,7 @@ public class PlanDAO extends CommonDAO {
 			sql = sql + " and ASSESS='" + level + "'";
 		}
 		if(!"0".equals(type)){
-			sql = sql + "' and TYPE='" + type + "'";
+			sql = sql + " and TYPE='" + type + "'";
 		}
 		if(!"".equals(empname)){
 			sql = sql + " and EMPNAME like '%" + empname + "%'";
@@ -283,7 +283,7 @@ public class PlanDAO extends CommonDAO {
 			sql = sql + " and ASSESS='" + level + "'";
 		}
 		if(!"0".equals(type)){
-			sql = sql + "' and TYPE='" + type + "'";
+			sql = sql + " and TYPE='" + type + "'";
 		}
 		if(!"".equals(empname)){
 			sql = sql + " and EMPNAME like '%" + empname + "%'";
@@ -334,7 +334,7 @@ public class PlanDAO extends CommonDAO {
 			sql = sql + " and ASSESS='" + level + "'";
 		}
 		if(!"0".equals(type)){
-			sql = sql + "' and TYPE='" + type + "'";
+			sql = sql + " and TYPE='" + type + "'";
 		}
 		if(!"".equals(empname)){
 			sql = sql + " and EMPNAME like '%" + empname + "%'";

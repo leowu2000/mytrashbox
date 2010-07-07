@@ -149,6 +149,7 @@ public class LoginController extends CommonController {
 			String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 			String menuString = roleDAO.getMenus(emrole).get("menucodes")==null?"":roleDAO.getMenus(emrole).get("menucodes").toString();
 			boolean haveworkcheck = false;
+			boolean haveworkcheck_lead = false;
 			boolean haveplanfollow_emp = false;
 			boolean haveplanfollow_lead = false;
 			boolean haveplanfollow_plan = false;
@@ -163,7 +164,7 @@ public class LoginController extends CommonController {
 				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 			}
 			
-			if(menuString.indexOf("071")>-1||menuString.indexOf("031")>-1){//考勤
+			if(menuString.indexOf("071")>-1){//考勤
 				haveworkcheck = true;
 				String start = "";
 				String end = StringUtil.DateToString(new Date(), "yyyy-MM") + "-25";
@@ -184,6 +185,11 @@ public class LoginController extends CommonController {
 				
 				mv.addObject("listWorkCheck", listWorkCheck);
 				mv.addObject("listDate", listDate);
+			}else if(menuString.indexOf("031")>-1){//领导查看各部门考勤结果统计
+				haveworkcheck_lead = true;
+				List listCheckResult = emDAO.getDICTByType("4");
+				mv.addObject("listDepart", listDepart);
+				mv.addObject("listCheckResult", listCheckResult);
 			}
 			if(menuString.indexOf("087")>-1){//员工计划跟踪
 				haveplanfollow_emp = true;
@@ -214,6 +220,7 @@ public class LoginController extends CommonController {
 				mv.addObject("listReport", listReport);
 			}
 			mv.addObject("haveworkcheck", haveworkcheck);
+			mv.addObject("haveworkcheck_lead", haveworkcheck_lead);
 			mv.addObject("haveplanfollow_emp", haveplanfollow_emp);
 			mv.addObject("haveplanfollow_lead", haveplanfollow_lead);
 			mv.addObject("haveplanfollow_plan", haveplanfollow_plan);

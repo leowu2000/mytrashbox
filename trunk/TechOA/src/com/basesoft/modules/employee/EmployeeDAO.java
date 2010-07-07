@@ -133,11 +133,28 @@ public class EmployeeDAO extends CommonDAO{
 				}
 			}
 			//给出迟到,早退,病假,事假,旷工的一个月的小结
-			returnMap.put("cd", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400002'").get("AMOUNT"));
-			returnMap.put("zt", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400003'").get("AMOUNT"));
-			returnMap.put("bj", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400004'").get("AMOUNT"));
-			returnMap.put("sj", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400005'").get("AMOUNT"));
-			returnMap.put("kg", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400006'").get("AMOUNT"));
+			String queryCount = "select sum(EMPTYHOURS) as AMOUNT,CHECKRESULT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' group by CHECKRESULT";
+			List listCount = jdbcTemplate.queryForList(queryCount);
+			for(int i=0;i<listCount.size();i++){
+				Map mapCount = (Map)listCount.get(i);
+				String checkresult = mapCount.get("CHECKRESULT")==null?"":mapCount.get("CHECKRESULT").toString();
+				if("400002".equals(checkresult)){
+					returnMap.put("cd", mapCount.get("AMOUNT"));
+				}else if("400003".equals(checkresult)){
+					returnMap.put("zt", mapCount.get("AMOUNT"));
+				}else if("400004".equals(checkresult)){
+					returnMap.put("bj", mapCount.get("AMOUNT"));
+				}else if("400005".equals(checkresult)){
+					returnMap.put("sj", mapCount.get("AMOUNT"));
+				}else if("400006".equals(checkresult)){
+					returnMap.put("kg", mapCount.get("AMOUNT"));
+				}
+			}
+//			returnMap.put("cd", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400002'").get("AMOUNT"));
+//			returnMap.put("zt", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400003'").get("AMOUNT"));
+//			returnMap.put("bj", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400004'").get("AMOUNT"));
+//			returnMap.put("sj", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400005'").get("AMOUNT"));
+//			returnMap.put("kg", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400006'").get("AMOUNT"));
 			
 			returnList.add(returnMap);
 		}else {//领导和管理员看整个部门的
@@ -149,12 +166,12 @@ public class EmployeeDAO extends CommonDAO{
 			}
 			for(int i=0;i<listEmployee.size();i++){//循环部门中的雇员
 				Map returnMap = new HashMap();
-				Map mapEmployee = (Map)listEmployee.get(i);
-				returnMap.put("NAME", mapEmployee.get("NAME"));
-				returnMap.put("EMPCODE", mapEmployee.get("CODE"));
+				Map mapEm = (Map)listEmployee.get(i);
+				returnMap.put("NAME", mapEm.get("NAME"));
+				returnMap.put("EMPCODE", mapEm.get("CODE"));
 				for(int j=0;j<listDate.size();j++){//循环日期,给出这一个月的考勤记录，没有的放空
 					Date date = listDate.get(j);
-					List l = jdbcTemplate.queryForList("select * from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE='" + StringUtil.DateToString(date, "yyyy-MM-dd") + "'");
+					List l = jdbcTemplate.queryForList("select * from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE='" + StringUtil.DateToString(date, "yyyy-MM-dd") + "'");
 					if(l.size()>0){
 						Map m = (Map)l.get(0);
 						String resultname = findNameByCode("DICT", m.get("CHECKRESULT").toString());
@@ -165,17 +182,52 @@ public class EmployeeDAO extends CommonDAO{
 				}
 				
 				//给出迟到,早退,病假,事假,旷工的一个月的小结
-				returnMap.put("cd", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400002'").get("AMOUNT"));
-				returnMap.put("zt", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400003'").get("AMOUNT"));
-				returnMap.put("bj", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400004'").get("AMOUNT"));
-				returnMap.put("sj", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400005'").get("AMOUNT"));
-				returnMap.put("kg", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400006'").get("AMOUNT"));
+				String queryCount = "select sum(EMPTYHOURS) as AMOUNT,CHECKRESULT from WORKCHECK where EMPCODE='" + mapEm.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' group by CHECKRESULT";
+				List listCount = jdbcTemplate.queryForList(queryCount);
+				for(int j=0;j<listCount.size();j++){
+					Map mapCount = (Map)listCount.get(j);
+					String checkresult = mapCount.get("CHECKRESULT")==null?"":mapCount.get("CHECKRESULT").toString();
+					if("400002".equals(checkresult)){
+						returnMap.put("cd", mapCount.get("AMOUNT"));
+					}else if("400003".equals(checkresult)){
+						returnMap.put("zt", mapCount.get("AMOUNT"));
+					}else if("400004".equals(checkresult)){
+						returnMap.put("bj", mapCount.get("AMOUNT"));
+					}else if("400005".equals(checkresult)){
+						returnMap.put("sj", mapCount.get("AMOUNT"));
+					}else if("400006".equals(checkresult)){
+						returnMap.put("kg", mapCount.get("AMOUNT"));
+					}
+				}
+//				returnMap.put("cd", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400002'").get("AMOUNT"));
+//				returnMap.put("zt", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400003'").get("AMOUNT"));
+//				returnMap.put("bj", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400004'").get("AMOUNT"));
+//				returnMap.put("sj", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400005'").get("AMOUNT"));
+//				returnMap.put("kg", jdbcTemplate.queryForMap("select sum(EMPTYHOURS) as AMOUNT from WORKCHECK where EMPCODE='" + mapEmployee.get("CODE") + "' and CHECKDATE>='" + start + "' and CHECKDATE<='" + end + "' and CHECKRESULT='400006'").get("AMOUNT"));
 			
 				returnList.add(returnMap);
 			}
 		}
 		
 		return returnList;
+	}
+	
+	/**
+	 * 获取考勤的统计
+	 * @param departcodes 部门编码
+	 * @param checkresult 考勤编码
+	 * @return
+	 */
+	public int findWorkCheck_lead(String departcode, String checkresult){
+		int r = 0;
+		String querySql = "select count(EMPCODE) as AMOUNT from WORKCHECK where EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE='" + departcode + "') and CHECKDATE='" + StringUtil.DateToString(new Date(), "yyyy-MM-dd") + "' and CHECKRESULT='" + checkresult + "'";
+		
+		List listWorkCheck = jdbcTemplate.queryForList(querySql);
+		if(listWorkCheck.size()>0){
+			Map mapWorkCheck = (Map)listWorkCheck.get(0);
+			r = mapWorkCheck.get("AMOUNT")==null?0:Integer.parseInt(mapWorkCheck.get("AMOUNT").toString());
+		}
+		return r;
 	}
 	
 	/**

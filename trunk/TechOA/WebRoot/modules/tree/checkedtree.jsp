@@ -93,7 +93,7 @@
 	<%
 		if(!"".equals(id)&&!"null".equals(id)&&id!=null){
 	%>
-		parent.window.location.href = "/plan.do?action=changeMultiEMP&empcodes=" + codevalue + "&id=<%=id %>&&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&isplanner=false&sel_note=<%=sel_note %>";
+		parent.window.location.href = "/plan.do?action=changeMultiEMP&empcodes=" + codevalue + "&id=<%=id %>&&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&isplanner=<%=isplanner %>&sel_note=<%=sel_note %>";
 	<%
 		}else {
 	%>
