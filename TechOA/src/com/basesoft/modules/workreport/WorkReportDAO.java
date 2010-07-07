@@ -47,7 +47,7 @@ public class WorkReportDAO extends CommonDAO {
 		if("".equals(departcodes)){
 			departcodes = "''";
 		}
-		String sql = "select * from WORKREPORT where DEPARTCODE in (" + departcodes + ") and EMPCODE!='" + emcode + "' and (flag=1 or flag=2)";
+		String sql = "select * from WORKREPORT where EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE in ( " + departcodes + ")) and EMPCODE!='" + emcode + "' and (flag=1 or flag=2)";
 		if(!"".equals(sel_pjcode)){
 			sql = sql + " and PJCODE='" + sel_pjcode + "'";
 		}
@@ -88,7 +88,7 @@ public class WorkReportDAO extends CommonDAO {
 	 * @return
 	 */
 	public List findAllAudit(String departcodes, String emcode, String sel_pjcode, String sel_empcode, String sel_empname){
-		String sql = "select * from WORKREPORT where DEPARTCODE in (" + departcodes + ") and EMPCODE!='" + emcode + "' and (flag=1 or flag=2) ";
+		String sql = "select * from WORKREPORT where EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE in ( " + departcodes + ")) and EMPCODE!='" + emcode + "' and (flag=1 or flag=2) ";
 		if(!"".equals(sel_pjcode)){
 			sql = sql + " and PJCODE='" + sel_pjcode + "'";
 		}

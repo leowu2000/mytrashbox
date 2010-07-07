@@ -210,9 +210,9 @@ function AJAX_PJ(pjcode){
 		Map mapBudget = (Map)listBudget.get(i);
 		List listAttach = contractDAO.getAttachs("CONTRACT_BUDGET", "ID", mapBudget.get("ID").toString(), "2");
 		String type = "";
-		if(applycode.indexOf("KW")>0){
+		if(applycode.indexOf("KW")>-1){
 			type = "科研外协";
-		}else if(applycode.indexOf("KD")>0){
+		}else if(applycode.indexOf("KD")>-1){
 			type = "定制器材";
 		}
 %>

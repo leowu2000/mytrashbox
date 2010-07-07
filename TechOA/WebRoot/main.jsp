@@ -6,6 +6,7 @@
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 String haveworkcheck = request.getAttribute("haveworkcheck").toString();
+String haveworkcheck_lead = request.getAttribute("haveworkcheck_lead").toString();
 String haveplanfollow_emp = request.getAttribute("haveplanfollow_emp").toString();
 String haveplanfollow_lead = request.getAttribute("haveplanfollow_lead").toString();
 String haveplanfollow_plan = request.getAttribute("haveplanfollow_plan").toString();
@@ -16,9 +17,14 @@ List listWorkCheck = new ArrayList();
 List listPlanfollow = new ArrayList();
 List listFeedback= new ArrayList();
 List listReport= new ArrayList();
+List listDepart = new ArrayList();
+List listCheckResult = new ArrayList();
 if("true".equals(haveworkcheck)){
 	listDate = (List)request.getAttribute("listDate");
 	listWorkCheck = (List)request.getAttribute("listWorkCheck");
+}else if("true".equals(haveworkcheck_lead)){
+	listDepart = (List)request.getAttribute("listDepart");
+	listCheckResult = (List)request.getAttribute("listCheckResult");
 }
 if("true".equals(haveplanfollow_emp)||"true".equals(haveplanfollow_lead)||"true".equals(haveplanfollow_plan)){
 	listPlanfollow = (List)request.getAttribute("listPlanfollow");
@@ -32,6 +38,7 @@ if("true".equals(haveworkreport)){
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 HolidayDAO holidayDAO = (HolidayDAO)ctx.getBean("holidayDAO");
 PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
+EmployeeDAO emDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -111,6 +118,44 @@ if("true".equals(haveworkcheck)){
 			<td><%=mapWorkCheck.get("bj")==null?"0":mapWorkCheck.get("bj") %></td>
 			<td><%=mapWorkCheck.get("sj")==null?"0":mapWorkCheck.get("sj") %></td>
 			<td><%=mapWorkCheck.get("kg")==null?"0":mapWorkCheck.get("kg") %></td>
+		</tr>
+<%
+	}
+%>
+</table>
+<%
+}else if("true".equals(haveworkcheck_lead)){
+	
+%>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;日期：<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd") %></span>
+<table width="98%" align="center" vlign="middle" id="the-table">
+    	<tr align="center"  bgcolor="#E0F1F8" class="b_tr">
+    	<td>部门\考勤项</td>
+<%
+	for(int i=0;i<listCheckResult.size();i++){
+		Map mapCheckResult = (Map)listCheckResult.get(i);
+%>
+			<td><%=mapCheckResult.get("NAME") %></td>
+<%	
+	}
+%>
+    	</tr>
+<%
+	for(int i=0;i<listDepart.size();i++){
+		Map mapDepart = (Map)listDepart.get(i);
+%>    	
+		<tr align="center">
+			<td nowrap="nowrap"><%=mapDepart.get("DEPARTNAME") %></td>
+<%
+		for(int j=0;j<listCheckResult.size();j++){
+			Map mapCheckResult = (Map)listCheckResult.get(j);
+			String checkresult = mapCheckResult.get("CODE")==null?"":mapCheckResult.get("CODE").toString();
+			String departcode = mapDepart.get("DEPARTCODE")==null?"":mapDepart.get("DEPARTCODE").toString();
+%>			
+			<td nowrap="nowrap">&nbsp;<%=emDAO.findWorkCheck_lead(departcode, checkresult) %></td>
+<%
+		} 
+%>
 		</tr>
 <%
 	}
@@ -251,7 +296,7 @@ if("true".equals(haveworkreport)){
             </tr>
 <%
 int count = listReport.size()>5?5:listReport.size();
-for(int i=0;i<listReport.size();i++){
+for(int i=0;i<count;i++){
 	Map map = (Map)listReport.get(i);
 	String flag = map.get("FLAG").toString();
 	if("1".equals(flag)){

@@ -97,7 +97,7 @@ public class CommonDAO {
 		}else {
 			s = "";
 		}
-		if("".equals(s)){//直接匹配不上的时候模糊匹配
+		if("".equals(s)&&!"".equals(name)){//直接匹配不上的时候模糊匹配
 			list = jdbcTemplate.queryForList("select CODE from " + tablename + " where NAME  like '%" + name + "%'");
 			if(list.size() > 0){
 				Map map = (Map)list.get(0);
@@ -109,6 +109,30 @@ public class CommonDAO {
 	}
 	
 	/**
+	 * 根据名称获取最上级部门编码
+	 * @param name 部门名称
+	 * @return
+	 */
+	public String findDepartcodeByName(String name){
+		String s = "";
+		List list = jdbcTemplate.queryForList("select * from DEPARTMENT where NAME  like '%" + name + "%' order by LEVEL");
+		if(list.size() > 0){
+			Map map = (Map)list.get(0);
+			String parent = map.get("PARENT")==null?"":map.get("PARENT").toString();
+			String code = map.get("CODE")==null?"":map.get("CODE").toString();
+			if("0".equals(parent)||"".equals(parent)){
+				s = code;
+			}else {
+				String parentname = findNameByCode("DEPARTMENT", parent);
+				s = findDepartcodeByName(parentname);
+			}
+		}
+		
+		return s;
+	}
+
+	
+	/**
 	 * 识别人名，避免重名情况
 	 * @param name
 	 * @param departcode
@@ -118,7 +142,7 @@ public class CommonDAO {
 		String code = "";
 		String querySql = "select CODE from EMPLOYEE where NAME='" + name + "'";
 		if(!"".equals(departcode)){
-			querySql = querySql + " and DEPARTCODE='" + departcode + "'";
+			querySql = querySql + " and DEPARTCODE in (select CODE from DEPARTMENT where DEPARTCODE='" + departcode + "' or PARENT='" + departcode + "' or ALLPARENTS like '%" + departcode + "%')";
 		}
 		List list = jdbcTemplate.queryForList(querySql);
 		if(list.size() == 1){

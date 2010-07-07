@@ -138,7 +138,7 @@ Ext.onReady(function(){
     
     function validate(){
     	var depart = document.getElementById('depart').value;
-    	var empcode = document.getElementById('loginid').value
+    	var empcode = document.getElementById('code').value
     	
     	if(depart=='0'){
     		alert('请选择部门!');
