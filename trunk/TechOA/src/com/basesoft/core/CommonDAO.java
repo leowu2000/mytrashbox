@@ -113,19 +113,12 @@ public class CommonDAO {
 	 * @param name 部门名称
 	 * @return
 	 */
-	public String findParentDepart(String name){
+	public String findDepartcodeByName(String name){
 		String s = "";
-		List list = jdbcTemplate.queryForList("select * from DEPARTMENT where NAME  like '%" + name + "%' order by LEVEL");
+		List list = jdbcTemplate.queryForList("select CODE from DEPARTMENT where NAME  like '%" + name + "%' order by LEVEL");
 		if(list.size() > 0){
 			Map map = (Map)list.get(0);
-			String parent = map.get("PARENT")==null?"":map.get("PARENT").toString();
-			String code = map.get("CODE")==null?"":map.get("CODE").toString();
-			if("0".equals(parent)||"".equals(parent)){
-				s = code;
-			}else {
-				String parentname = findNameByCode("DEPARTMENT", parent);
-				s = findParentDepart(parentname);
-			}
+			s = map.get("CODE").toString();
 		}
 		
 		return s;
@@ -145,10 +138,10 @@ public class CommonDAO {
 			querySql = querySql + " and DEPARTCODE in (select CODE from DEPARTMENT where DEPARTCODE='" + departcode + "' or PARENT='" + departcode + "' or ALLPARENTS like '%" + departcode + "%')";
 		}
 		List list = jdbcTemplate.queryForList(querySql);
-		if(list.size() == 1){//如果部门匹配的出来，则选用
+		if(list.size() == 1){//如果匹配的出来，则选用
 			Map map = (Map)list.get(0);
 			code = map.get("CODE")==null?"":map.get("CODE").toString();
-		}else if(list.size() == 0){//部门没有匹配出来，则沿用原来的
+		}else if(list.size() == 0){//没有匹配出来，则沿用原来的
 			querySql = "select CODE from EMPLOYEE where NAME='" + name + "'";
 			list = jdbcTemplate.queryForList(querySql);
 			if(list.size() == 0){
