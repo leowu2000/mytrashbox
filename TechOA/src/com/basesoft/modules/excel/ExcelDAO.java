@@ -925,8 +925,7 @@ public class ExcelDAO extends CommonDAO {
 				String leader_room = row.optString("LEADER_ROOM");
 				String leader_section = row.optString("LEADER_SECTION");
 				//根据部门名称找出部门编码
-				String departcode = findCodeByName("DEPARTMENT", departname);
-				String parentdepart = findParentDepart(departname);
+				String departcode = findDepartcodeByName(departname);
 				//根据计划员姓名找出计划员编码
 				String plannercode = findCodeByName("EMPLOYEE", plannername);
 				//生成32位uuid
@@ -943,7 +942,7 @@ public class ExcelDAO extends CommonDAO {
 					
 				boolean flag = false;
 				for(int j=0;j<empnames.length;j++){
-					String empcode = planDAO.findEMPCodeByName(empnames[j], parentdepart);
+					String empcode = planDAO.findEMPCodeByName(empnames[j], departcode);
 					//enpname入库字段
 					if("".equals(empnameSql)){
 						empnameSql = empnames[j];
