@@ -114,6 +114,7 @@ Ext.onReady(function(){
 				<td>&nbsp;<%=row.optString("DEPARTNAME") %></td>
 <%
 			String departcode = planDAO.findCodeByName("DEPARTMENT", row.optString("DEPARTNAME").trim());
+			String parentdepart = planDAO.findParentDepart(row.optString("DEPARTNAME").trim());
 			String empname = row.optString("EMPNAME")==null?"":row.optString("EMPNAME").trim();
 			String[] splitechars = {",", "，", "、", " ", "等"};
 			String[] empnames =	StringUtil.splite(empname, splitechars);
@@ -123,7 +124,7 @@ Ext.onReady(function(){
             			<tr>
             			<%
             				for(int j=0;j<empnames.length;j++){
-            					String empcode = planDAO.findEMPCodeByName(empnames[j], departcode);
+            					String empcode = planDAO.findEMPCodeByName(empnames[j], parentdepart);
             					if("".equals(empcode)){//无法识别
             			%>
             				<td bgcolor="#FF0088" title="系统无法识别此员工！">&nbsp;<%=empnames[j] %></td>

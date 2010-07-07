@@ -926,7 +926,7 @@ public class ExcelDAO extends CommonDAO {
 				String leader_section = row.optString("LEADER_SECTION");
 				//根据部门名称找出部门编码
 				String departcode = findCodeByName("DEPARTMENT", departname);
-				String parentdepart = findDepartcodeByName(departname);
+				String parentdepart = findParentDepart(departname);
 				//根据计划员姓名找出计划员编码
 				String plannercode = findCodeByName("EMPLOYEE", plannername);
 				//生成32位uuid
