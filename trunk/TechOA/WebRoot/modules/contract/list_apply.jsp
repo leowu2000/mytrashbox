@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page import="java.net.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%@ page import="com.basesoft.modules.contract.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
@@ -11,6 +12,7 @@
 	
 	String sel_code = request.getAttribute("sel_code").toString();
 	String sel_pjcode = request.getAttribute("sel_pjcode").toString();
+	sel_pjcode = URLEncoder.encode(sel_pjcode,"UTF-8");
 	
 	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 	ContractDAO contractDAO = (ContractDAO)ctx.getBean("contractDAO");
@@ -127,7 +129,7 @@ Ext.onReady(function(){
 			alert('请选择数据项！');
 			return false;
 		}
-    	action = url+'?action=addattach&id=' + selValue + '&sel_code=<%=sel_code %>&sel_pjcode=<%=sel_pjcode %>';
+    	action = url+'?action=addattach&id=' + selValue + '&page=<%=pagenum %>&sel_code=<%=sel_code %>&sel_pjcode=<%=sel_pjcode %>';
     	win1.setTitle('添加附件');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
@@ -157,6 +159,7 @@ Ext.onReady(function(){
 				Ext.get('wxsl').set({'value':data.item.wxsl});
 				comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
 				document.getElementById('tr_jfgs').style.display = 'none';
+				Ext.get('empphone').set({'value':data.item.empphone});
 				
 		    	action = url+'?action=update&page=<%=pagenum %>&sel_code=<%=sel_code %>&sel_pjcode=<%=sel_pjcode %>';
 	    		win.setTitle('修改');
@@ -216,11 +219,11 @@ function AJAX_PJ(pjcode){
   <body>
   <div id="toolbar"></div>
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("c_apply.do?action=list_apply&sel_code=" + sel_code + "&sel_pjcode=" + sel_pjcode) %>
+<%=pageList.getPageInfo().getHtml("c_apply.do?action=list_apply&sel_code=" + sel_code + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode, "UTF-8")) %>
   	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
-    		<td><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
+    		<td><input type="checkbox" name="checkall" onclick="checkAll();"><br>选择</td>
     		<td>产品令号</td>
     		<td>分系统</td>
     		<td>编号</td>

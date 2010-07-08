@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
+import com.basesoft.core.PageList;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
@@ -25,7 +26,21 @@ public class ContractController_Budget extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String applycode = ServletRequestUtils.getStringParameter(request, "applycode", "");
 		
-		if("list_budget".equals(action)){
+		if("frame_budget_collect".equals(action)){//预算汇总
+			mv = new ModelAndView("modules/contract/frame_budget_collect");
+			
+			return mv;
+		}else if("list_budget_collect".equals(action)){//预算汇总
+			mv = new ModelAndView("modules/contract/list_budget_collect");
+			String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
+			String sel_applycode = ServletRequestUtils.getStringParameter(request, "sel_applycode", "");
+			PageList pageList = contractDAO.findAllBudget(page, sel_type, sel_applycode);
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("sel_type", sel_type);
+			mv.addObject("sel_applycode", sel_applycode);
+			return mv;
+		}else if("list_budget".equals(action)){
 			mv = new ModelAndView("modules/contract/list_budget");
 			List listBudget = contractDAO.findAllBudget(applycode);
 			
@@ -106,6 +121,12 @@ public class ContractController_Budget extends CommonController {
 			response.getOutputStream().flush();
 			response.getOutputStream().close();
 			return null;
+		}else if("addcontractcode".equals(action)){//添加/修改合同编号
+			String id = ServletRequestUtils.getStringParameter(request, "id", ""); 
+			String contractcode = ServletRequestUtils.getStringParameter(request, "contractcode", "");
+			String updateSql = "update CONTRACT_BUDGET set CONTRACTCODE='" + contractcode + "' where ID='" + id + "'";
+			contractDAO.update(updateSql);
+			response.sendRedirect("c_budget.do?action=list_budget&applycode=" + applycode);
 		}
 		return null;
 	}

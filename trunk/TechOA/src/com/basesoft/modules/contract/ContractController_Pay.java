@@ -16,6 +16,13 @@ public class ContractController_Pay extends CommonController {
 			HttpServletResponse response, ModelAndView mv) throws Exception {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String contractcode = ServletRequestUtils.getStringParameter(request, "contractcode", "");
+		
+		if("list_pay".equals(action)){
+			mv = new ModelAndView("modules/contract/list_pay");
+			
+			return mv;
+		}
 		
 		return null;
 	}

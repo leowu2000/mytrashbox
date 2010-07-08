@@ -29,6 +29,7 @@
 <!--
 var win;
 var win1;
+var win2;
 var action;
 var url='/c_budget.do';
 Ext.onReady(function(){
@@ -73,6 +74,7 @@ Ext.onReady(function(){
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: '补充合同编号',cls: 'x-btn-text-icon update',handler: onContractCodeClick});
 	tb.add({text: '添加/修改附件',cls: 'x-btn-text-icon add',handler: onAddFileClick});
 
     if(!win){
@@ -91,6 +93,16 @@ Ext.onReady(function(){
 	        buttons: [
 	        {text:'提交',handler: function(){Ext.getDom('dataForm1').action=action; Ext.getDom('dataForm1').submit();}},
 	        {text:'关闭',handler: function(){win1.hide();}}
+	        ]
+        });
+    }
+    
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
 	        ]
         });
     }
@@ -130,6 +142,7 @@ Ext.onReady(function(){
 			success: function(transport) {
 			    var data = eval('('+transport.responseText+')');
 			    Ext.get('id').set({'value':data.item.id});
+			    Ext.get('code').set({'value':data.item.code});
 				Ext.get('funds').set({'value':data.item.funds});
 				comboBoxTree.setValue({id:data.item.empcode,text:data.item.empname});
 				
@@ -153,6 +166,18 @@ Ext.onReady(function(){
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
+    }
+    
+    function onContractCodeClick(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+    	action = url+'?action=addcontractcode&id=' + selValue + '&applycode=<%=applycode %>';
+    	win2.setTitle('添加/修改合同编号');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
     }
 });
 
@@ -193,7 +218,7 @@ function AJAX_PJ(pjcode){
 <form id="listForm" name="listForm" action="" method="post">
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
-    		<td><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
+    		<td><input type="checkbox" name="checkall" onclick="checkAll();"><br>选择</td>
     		<td>项目类别</td>
     		<td>项目编号</td>
     		<td>预算单号</td>
@@ -227,7 +252,7 @@ function AJAX_PJ(pjcode){
 			<td><%=mapApply.get("SFXT") %></td>
 			<td><%=mapApply.get("EMPNAME")==null?"":mapApply.get("EMPNAME") %></td>
 			<td><%=mapBudget.get("FUNDS") %></td>
-			<td><%=mapBudget.get("CONTRACTID") %></td>
+			<td><%=mapBudget.get("CONTRACTCODE")==null?"":mapBudget.get("CONTRACTCODE") %></td>
 			<td>
 <%
 			for(int j=0;j<listAttach.size();j++){
@@ -273,6 +298,20 @@ function AJAX_PJ(pjcode){
                   <tr>
                   	<td>附件</td>
                   	<td><input type="file" name="file" style="width:230"></td>
+                  </tr>
+                </table>
+            </form>
+    </div>
+</div>
+
+<div id="dlg2" class="x-hidden">
+    <div class="x-window-header">Dialog</div>
+    <div class="x-window-body" id="dlg-body">
+	        <form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
+                <table>
+                  <tr>
+                  	<td>合同编号</td>
+                  	<td><input type="text" name="contractcode" style="width:200"></td>
                   </tr>
                 </table>
             </form>

@@ -8,7 +8,7 @@ public class Contract_Budget {
 	String empcode;
 	String empname;
 	String funds;
-	String contractid;
+	String contractcode;
 	
 	public String getId() {
 		return id;
@@ -58,11 +58,11 @@ public class Contract_Budget {
 		this.funds = funds;
 	}
 
-	public String getContractid() {
-		return contractid;
+	public String getContractcode() {
+		return contractcode;
 	}
 
-	public void setContractid(String contractid) {
-		this.contractid = contractid;
+	public void setContractcode(String contractcode) {
+		this.contractcode = contractcode;
 	}
 }
