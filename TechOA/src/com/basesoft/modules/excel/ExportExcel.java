@@ -20,6 +20,7 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 
+import com.basesoft.modules.contract.ContractDAO;
 import com.basesoft.modules.employee.Car;
 import com.basesoft.modules.employee.CarDAO;
 import com.basesoft.modules.ins.Ins;
@@ -782,6 +783,72 @@ public class ExportExcel {
 				Map mapColumn_detail = insDAO.findCol_value(mapBack.get("ID").toString(), mapColumn.get("COL_NAME").toString());
 				str2[j] = mapColumn_detail.get("COL_VALUE")==null?"":mapColumn_detail.get("COL_VALUE").toString();
 			}
+			insertRowData(sheet, i + 2, str2);
+		}
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
+	 * 临时调查统计写成一个excel文件，返回这个文件的路径
+	 * @param ins
+	 * @param listBack
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_CONTRACT_BUDGET(String sel_type, String sel_applycode, ContractDAO contractDAO) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		List listContract_budget = contractDAO.findAllBudget(sel_type, sel_applycode);
+		String[] str = new String[1];
+		str[0] = "科研外协和定制器材预算汇总表";
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, 9, 0);
+		
+		String str1[] = new String[10];
+		str1[0] = "项目类别";
+		str1[1] = "项目编号";
+		str1[2] = "预算单号";
+		str1[3] = "项目名称";
+		str1[4] = "申报单位";
+		str1[5] = "产品令号";
+		str1[6] = "分系统";
+		str1[7] = "提出人";
+		str1[8] = "经费估算";
+		str1[9] = "合同编号";
+		insertRowData(sheet, 1, str1);
+		
+		String str2[] = new String[10];
+		for(int i=0;i<listContract_budget.size();i++){
+			Map mapBudget = (Map)listContract_budget.get(i);
+			String applycode = mapBudget.get("APPLYCODE")==null?"":mapBudget.get("APPLYCODE").toString();
+			Map mapApply = contractDAO.findByCode("CONTRACT_APPLY", applycode);
+			String type = "";
+			if(applycode.indexOf("KW")>-1){
+				type = "科研外协";
+			}else if(applycode.indexOf("KD")>-1){
+				type = "定制器材";
+			}
+			str2[0] = type;
+			str2[1] = applycode;
+			str2[2] = mapBudget.get("CODE")==null?"":mapBudget.get("CODE").toString();
+			str2[3] = mapApply.get("NAME")==null?"":mapApply.get("NAME").toString();
+			str2[4] = mapApply.get("DEPARTNAME")==null?"":mapApply.get("DEPARTNAME").toString();
+			str2[5] = mapApply.get("PJCODE")==null?"":mapApply.get("PJCODE").toString();
+			str2[6] = mapApply.get("SFXT")==null?"":mapApply.get("SFXT").toString();
+			str2[7] = mapBudget.get("EMPNAME")==null?"":mapBudget.get("EMPNAME").toString();
+			str2[8] = mapBudget.get("FUNDS")==null?"":mapBudget.get("FUNDS").toString();
+			str2[9] = mapBudget.get("CONTRACTCODE")==null?"":mapBudget.get("CONTRACTCODE").toString();
+			
 			insertRowData(sheet, i + 2, str2);
 		}
 		

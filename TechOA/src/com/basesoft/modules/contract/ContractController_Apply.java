@@ -1,5 +1,7 @@
 package com.basesoft.modules.contract;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +29,8 @@ public class ContractController_Apply extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String sel_code = ServletRequestUtils.getStringParameter(request, "sel_code", "");
 		String sel_pjcode = ServletRequestUtils.getStringParameter(request, "sel_pjcode", "");
+		sel_pjcode = URLDecoder.decode(sel_pjcode, "ISO8859-1");
+		sel_pjcode = new String(sel_pjcode.getBytes("ISO8859-1"),"UTF-8");
 		
 		if("frame_apply".equals(action)){
 			mv = new ModelAndView("modules/contract/frame_apply");
@@ -75,7 +79,7 @@ public class ContractController_Apply extends CommonController {
 			contractDAO.insert(insertSql1);
 			contractDAO.insert(insertSql2);
 			
-			response.sendRedirect("c_apply.do?action=list_apply&sel_code=" + sel_code + "&sel_pjcode=" + sel_pjcode);
+			response.sendRedirect("c_apply.do?action=list_apply&sel_code=" + sel_code + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode,"UTF-8"));
 			return null;
 		}else if("delete".equals(action)){
 			String[] check=request.getParameterValues("check");
@@ -87,7 +91,7 @@ public class ContractController_Apply extends CommonController {
 				String deleteSql2 = "delete from CONTRACT_APPLY where ID='" + check[i] + "'";
 				contractDAO.delete(deleteSql2);
 			}
-			response.sendRedirect("c_apply.do?action=list_apply&sel_code=" + sel_code + "&sel_pjcode=" + sel_pjcode);
+			response.sendRedirect("c_apply.do?action=list_apply&page=" + page + "&sel_code=" + sel_code + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode,"UTF-8"));
 			return null;
 		}else if("query".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
@@ -129,7 +133,7 @@ public class ContractController_Apply extends CommonController {
 			String updateSql = "update CONTRACT_APPLY set PJCODE='" + pjcode + "', SFXT='" + sfxt + "', CODE='" + code + "', NAME='" + name + "', LEVEL='" + level + "', MJ='" + mj + "', WXSL=" + wxsl + ", SFZJ='" + sfzj + "', ENDDATE=" + enddate + ", DEPARTCODE='" + departcode + "', DEPARTNAME='" + departname + "', EMPCODE='" + empcode + "', EMPNAME='" + empname + "', EMPPHONE='" + empphone + "' where ID='" + id + "'";
 			contractDAO.update(updateSql);
 			
-			response.sendRedirect("c_apply.do?action=list_apply&sel_code=" + sel_code + "&sel_pjcode=" + sel_pjcode);
+			response.sendRedirect("c_apply.do?action=list_apply&page=" + page + "&sel_code=" + sel_code + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode,"UTF-8"));
 			return null;
 		}else if("addattach".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", ""); 
@@ -143,7 +147,7 @@ public class ContractController_Apply extends CommonController {
 				}
 			}
 			
-			response.sendRedirect("c_apply.do?action=list_apply&sel_code=" + sel_code + "&sel_pjcode=" + sel_pjcode);
+			response.sendRedirect("c_apply.do?action=list_apply&page=" + page + "&sel_code=" + sel_code + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode,"UTF-8"));
 			return null;
 		}else if("download".equals(action)){//下载附件
 			String id = ServletRequestUtils.getStringParameter(request, "id", ""); 

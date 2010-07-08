@@ -6,7 +6,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>立项申报管理</title>
+    <title>合同管理</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -18,7 +18,7 @@
 	<script type="text/javascript">
 	Ext.onReady(function(){
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
-  		tb.add('项目编号：');
+  		tb.add('合同编号：');
   		tb.add(document.getElementById('sel_code'));
   		tb.add('工作令号：');
   		tb.add(document.getElementById('sel_pjcode'));
@@ -44,7 +44,7 @@
 	  var sel_code = document.getElementById('sel_code').value;
 	  var sel_pjcode = document.getElementById('sel_pjcode').value;
 	  
-	  document.getElementById('list_info').src = "/c_apply.do?action=list_apply&sel_code=" + sel_code + "&sel_pjcode=" + sel_pjcode;
+	  document.getElementById('list_info').src = "/contract.do?action=list_contract&sel_code=" + sel_code + "&sel_pjcode=" + sel_pjcode;
 	  
 	}
 	
@@ -55,7 +55,7 @@
   </head>
   
   <body onload="commit();IFrameResize();" onresize="IFrameResize();">
-	<h1>立项申报管理</h1>
+	<h1>合同管理</h1>
   	<div id="toolbar"></div>
   	<input type="text" style="width:60;" name="sel_code" id="sel_code">
   	<select name="sel_pjcode" id="sel_pjcode" onchange="commit();">

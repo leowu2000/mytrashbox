@@ -20,10 +20,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
+import com.basesoft.modules.contract.ContractDAO;
 import com.basesoft.modules.employee.CarDAO;
 import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.excel.config.Config;
-import com.basesoft.modules.ins.Ins;
 import com.basesoft.modules.ins.InsDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.role.RoleDAO;
@@ -40,6 +40,7 @@ public class ExcelController extends CommonController {
 	RoleDAO roleDAO;
 	WorkReportDAO wrDAO;
 	InsDAO insDAO;
+	ContractDAO contractDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -286,6 +287,10 @@ public class ExcelController extends CommonController {
 			}else if("INS".equals(model)){//临时调查表
 				String ins_id = ServletRequestUtils.getStringParameter(request, "ins_id", "");
 				path = exportExcel.exportExcel_INS(insDAO, ins_id);
+			}else if("CONTRACT_BUDGET".equals(model)){//预算汇总
+				String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
+				String sel_applycode = ServletRequestUtils.getStringParameter(request, "sel_applycode", "");
+				path = exportExcel.exportExcel_CONTRACT_BUDGET(sel_type, sel_applycode, contractDAO);
 			}
 			
 			
@@ -352,5 +357,9 @@ public class ExcelController extends CommonController {
 	
 	public void setInsDAO(InsDAO insDAO){
 		this.insDAO = insDAO;
+	}
+	
+	public void setContractDAO(ContractDAO contractDAO){
+		this.contractDAO = contractDAO;
 	}
 }
