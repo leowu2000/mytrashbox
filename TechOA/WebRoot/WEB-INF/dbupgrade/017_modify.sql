@@ -1,4 +1,5 @@
-update MENU set MENUNAME='预算汇总',MENUURL='c_budget.do?action=frame_budget_collect' where MENUCODE='113';
+update MENU set MENUNAME='预算申请汇总',MENUURL='c_budget.do?action=frame_budget_collect' where MENUCODE='113';
+update MENU set MENUNAME='下月付款申请汇总',MENUURL='c_pay.do?action=frame_pay_collect' where MENUCODE='114';
 
 ALTER TABLE CONTRACT_BUDGET RENAME COLUMN CONTRACTID TO CONTRACTCODE;
 

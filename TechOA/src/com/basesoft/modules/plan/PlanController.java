@@ -461,8 +461,18 @@ public class PlanController extends CommonController {
 			response.sendRedirect("plan.do?action=feedback&page=" + page);
 		}else if("changeMultiEMP".equals(action)){//去除重名
 			String empcodes = ServletRequestUtils.getStringParameter(request, "empcodes", "");
+			String[] empcode = empcodes.split(",");
+			String empnames = "";
+			for(int i=0;i<empcode.length;i++){
+				String empname = planDAO.findNameByCode("EMPLOYEE", empcode[i]);
+				if("".equals(empnames)){
+					empnames = empname;
+				}else {
+					empnames = empnames + "," + empname;
+				}
+			}
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
-			planDAO.update("update PLAN set EMPCODE='" + empcodes + "' where ID='" + id + "'");
+			planDAO.update("update PLAN set EMPCODE='" + empcodes + "', EMPNAME='" + empnames + "' where ID='" + id + "'");
 			
 			response.sendRedirect(returnUrl);
 		}else if("frame_follow_emp".equals(action)){//运行情况跟踪frame(员工)
