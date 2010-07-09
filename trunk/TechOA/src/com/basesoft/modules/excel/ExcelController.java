@@ -48,6 +48,7 @@ public class ExcelController extends CommonController {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
+		String emdepart = request.getSession().getAttribute("DEPARTCODE")==null?"":request.getSession().getAttribute("DEPARTCODE").toString();
 		String table = ServletRequestUtils.getStringParameter(request, "table", "");
 		String seldepart = ServletRequestUtils.getStringParameter(request, "seldepart", "");
 		String emname = ServletRequestUtils.getStringParameter(request, "emname", "");
@@ -176,7 +177,7 @@ public class ExcelController extends CommonController {
 			}else if("GOODS_APPLY".equals(table)){//物资申请
 				errorMessage = excelDAO.insertGoods_apply(data);
 			}else if("PLAN".equals(table)){//计划
-				errorMessage = excelDAO.insertPlan(data, datepick);
+				errorMessage = excelDAO.insertPlan(data, datepick, emdepart);
 			}else if("ASSETS".equals(table)){//固定资产
 				errorMessage = excelDAO.insertAssets(data);
 			}else if("ASSETS_INFO".equals(table)){//信息设备

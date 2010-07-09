@@ -144,7 +144,7 @@ public class CommonDAO {
 		}else if(list.size() == 0){//没有匹配出来，则沿用原来的
 			querySql = "select CODE from EMPLOYEE where NAME='" + name + "'";
 			list = jdbcTemplate.queryForList(querySql);
-			if(list.size() == 0){
+			if(list.size() == 1){
 				Map map = (Map)list.get(0);
 				code = map.get("CODE")==null?"":map.get("CODE").toString();
 			}
