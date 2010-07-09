@@ -874,7 +874,7 @@ public class ExcelDAO extends CommonDAO {
 	 * @param data 
 	 * @return
 	 */
-	public String insertPlan(JSONObject data, String datepick) throws Exception{
+	public String insertPlan(JSONObject data, String datepick, String plannerdepart) throws Exception{
 		String errorMessage = "";
 		
 		//循环数据行
@@ -927,7 +927,7 @@ public class ExcelDAO extends CommonDAO {
 				//根据部门名称找出部门编码
 				String departcode = findDepartcodeByName(departname);
 				//根据计划员姓名找出计划员编码
-				String plannercode = findCodeByName("EMPLOYEE", plannername);
+				String plannercode = findEMPCodeByName(plannername, plannerdepart);
 				//生成32位uuid
 				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 				
