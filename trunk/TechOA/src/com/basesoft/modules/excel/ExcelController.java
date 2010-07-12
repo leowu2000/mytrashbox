@@ -292,6 +292,9 @@ public class ExcelController extends CommonController {
 				String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
 				String sel_applycode = ServletRequestUtils.getStringParameter(request, "sel_applycode", "");
 				path = exportExcel.exportExcel_CONTRACT_BUDGET(sel_type, sel_applycode, contractDAO);
+			}else if("CONTRACT_PAY".equals(model)){//预算汇总
+				String sel_contractcode = ServletRequestUtils.getStringParameter(request, "sel_applycode", "");
+				path = exportExcel.exportExcel_CONTRACT_PAY(datepick, sel_contractcode, contractDAO);
 			}
 			
 			

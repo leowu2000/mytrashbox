@@ -61,7 +61,7 @@ public class ContractController_Budget extends CommonController {
 			String[] check=request.getParameterValues("check");
 			//循环按id删除
 			for(int i=0;i<check.length;i++){
-				String deleteSql = "delete from CONTRACT_BUDGET where APPLYCODE='" + check[i] + "'";
+				String deleteSql = "delete from CONTRACT_BUDGET where ID='" + check[i] + "'";
 				contractDAO.delete(deleteSql);
 			}
 			response.sendRedirect("c_budget.do?action=list_budget&applycode=" + applycode);

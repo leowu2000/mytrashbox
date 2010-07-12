@@ -793,7 +793,7 @@ public class ExportExcel {
 	}
 	
 	/**
-	 * 临时调查统计写成一个excel文件，返回这个文件的路径
+	 * 预算申请汇总写成一个excel文件，返回这个文件的路径
 	 * @param ins
 	 * @param listBack
 	 * @throws IOException
@@ -848,6 +848,80 @@ public class ExportExcel {
 			str2[7] = mapBudget.get("EMPNAME")==null?"":mapBudget.get("EMPNAME").toString();
 			str2[8] = mapBudget.get("FUNDS")==null?"":mapBudget.get("FUNDS").toString();
 			str2[9] = mapBudget.get("CONTRACTCODE")==null?"":mapBudget.get("CONTRACTCODE").toString();
+			
+			insertRowData(sheet, i + 2, str2);
+		}
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
+	 * 付款申请汇总写成一个excel文件，返回这个文件的路径
+	 * @param ins
+	 * @param listBack
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_CONTRACT_PAY(String datepick, String sel_contractcode, ContractDAO contractDAO) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		List listContract_pay = contractDAO.findAllPay(datepick, sel_contractcode);
+		String[] str = new String[1];
+		str[0] = datepick + " 科研外协和定制器材付款申请报表";
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, 10, 0);
+		
+		String str1[] = new String[11];
+		str1[0] = "类别";
+		str1[1] = "合同编号";
+		str1[2] = "合同标的";
+		str1[3] = "收款单位";
+		str1[4] = "工作令号";
+		str1[5] = "分系统";
+		str1[6] = "合同总额";
+		str1[7] = "已付合同款";
+		str1[8] = "申请付款金额";
+		str1[9] = "归档号(物资编码)";
+		str1[10] = "分管所领导";
+		insertRowData(sheet, 1, str1);
+		
+		String str2[] = new String[11];
+		for(int i=0;i<listContract_pay.size();i++){
+			Map mapPay = (Map)listContract_pay.get(i);
+			String contractcode = mapPay.get("CONTRACTCODE")==null?"":mapPay.get("CONTRACTCODE").toString();
+			Map mapContract = contractDAO.findByCode("CONTRACT", contractcode);
+			List listBudget = contractDAO.findBudgetByContractcode(contractcode);
+			String type = "";
+			if(listBudget.size()>0){
+				Map mapBudget = (Map)listBudget.get(0);
+				String applycode = mapBudget.get("APPLYCODE")==null?"":mapBudget.get("APPLYCODE").toString();
+				if(applycode.indexOf("KW")>-1){
+					type = "科研外协";
+				}else if(applycode.indexOf("KD")>-1){
+					type = "定制器材";
+				}
+			}
+			double alreadypay = contractDAO.getAlreadyPay(contractcode);
+			str2[0] = type;
+			str2[1] = contractcode;
+			str2[2] = mapContract.get("SUBJECT")==null?"":mapContract.get("SUBJECT").toString();
+			str2[3] = mapPay.get("BDEPART")==null?"":mapPay.get("BDEPART").toString();
+			str2[4] = mapPay.get("PJCODE")==null?"":mapPay.get("PJCODE").toString();
+			str2[5] = mapPay.get("PJCODE_D")==null?"":mapPay.get("PJCODE_D").toString();
+			str2[6] = mapContract.get("AMOUNT")==null?"":mapContract.get("AMOUNT").toString();
+			str2[7] = String.valueOf(alreadypay);
+			str2[8] = mapPay.get("PAY")==null?"":mapPay.get("PAY").toString();
+			str2[9] = mapPay.get("GOODSCODE")==null?"":mapPay.get("GOODSCODE").toString();
+			str2[10] = mapPay.get("LEADER_STATION")==null?"":mapPay.get("LEADER_STATION").toString();
 			
 			insertRowData(sheet, i + 2, str2);
 		}

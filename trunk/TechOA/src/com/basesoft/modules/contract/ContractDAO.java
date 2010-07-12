@@ -1,5 +1,6 @@
 package com.basesoft.modules.contract;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -90,6 +91,17 @@ public class ContractDAO extends CommonDAO {
 	}
 	
 	/**
+	 * 获取付款申请
+	 * @param contractcode 合同编号
+	 * @return
+	 */
+	public List findAllPay(String contractcode){
+		String querySql = "select * from CONTRACT_PAY where CONTRACTCODE='" + contractcode + "' order by PAYDATE desc,PAY desc";
+		
+		return jdbcTemplate.queryForList(querySql);
+	}
+	
+	/**
 	 * 获取预算汇总
 	 * @param applycode 项目编号
 	 * @return
@@ -137,6 +149,63 @@ public class ContractDAO extends CommonDAO {
 			sql = sql + " and APPLYCODE like '%" + sel_applycode + "%'";
 		}
 		sql = sql + " order by APPLYCODE,FUNDS desc";
+		List list = jdbcTemplate.queryForList(sql);
+		
+		return list;
+	}
+	
+	/**
+	 * 获取预算汇总
+	 * @param applycode 项目编号
+	 * @return
+	 */
+	public PageList findAllPay(int page, String datepick, String sel_contractcode){
+		PageList pageList = new PageList();
+		String sql = "select * from CONTRACT_PAY where 1=1";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		if(!"".equals(datepick)){
+			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+			Date enddate = StringUtil.getEndOfMonth(startdate);
+			sql = sql + " and PAYDATE>='" + startdate + "' and PAYDATE<='" + enddate + "'";
+		}
+		if(!"".equals(sel_contractcode)){
+			sql = sql + " and CONTRACTCODE like '%" + sel_contractcode + "%'";
+		}
+		sql = sql + " order by CONTRACTCODE,PAYDATE desc";
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
+	
+	/**
+	 * 获取预算汇总
+	 * @param applycode 项目编号
+	 * @return
+	 */
+	public List findAllPay(String datepick, String sel_contractcode){
+		String sql = "select * from CONTRACT_PAY where 1=1";
+
+		if(!"".equals(datepick)){
+			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
+			Date enddate = StringUtil.getEndOfMonth(startdate);
+			sql = sql + " and PAYDATE>='" + startdate + "' and PAYDATE<='" + enddate + "'";
+		}
+		if(!"".equals(sel_contractcode)){
+			sql = sql + " and CONTRACTCODE like '%" + sel_contractcode + "%'";
+		}
+		sql = sql + " order by CONTRACTCODE,PAYDATE desc";
+		
 		List list = jdbcTemplate.queryForList(sql);
 		
 		return list;
@@ -214,5 +283,58 @@ public class ContractDAO extends CommonDAO {
 			c_budget.setFunds(map.get("FUNDS")==null?"":map.get("FUNDS").toString());
 		}
 		return c_budget;
+	}
+	
+	/**
+	 * 根据id获取实例
+	 * @param id
+	 * @return
+	 */
+	public Contract_Pay findPayById(String id){
+		Contract_Pay c_pay = new Contract_Pay();
+		String querySql = "select * from CONTRACT_PAY where ID='" + id + "'";
+		List list = jdbcTemplate.queryForList(querySql);
+		if(list.size()>0){
+			Map map = (Map)list.get(0);
+			c_pay.setId(id);
+			c_pay.setContractcode(map.get("CONTRACTCODE")==null?"":map.get("CONTRACTCODE").toString());
+			c_pay.setBdepart(map.get("BDEPART")==null?"":map.get("BDEPART").toString());
+			c_pay.setPjcode(map.get("PJCODE")==null?"":map.get("PJCODE").toString());
+			c_pay.setPjcode_d(map.get("PJCODE_D")==null?"":map.get("PJCODE_D").toString());
+			c_pay.setPay(map.get("PAY")==null?"":map.get("PAY").toString());
+			c_pay.setGoodscode(map.get("GOODSCODE")==null?"":map.get("GOODSCODE").toString());
+			c_pay.setLeader_station(map.get("LEADER_STATION")==null?"":map.get("LEADER_STATION").toString());
+			c_pay.setPay(map.get("PAY")==null?"":map.get("PAY").toString());
+		}
+		return c_pay;
+	}
+	
+	/**
+	 * 根据和合同编号找出对应的预算单  
+	 * @param contractcode
+	 * @return
+	 */
+	public List findBudgetByContractcode(String contractcode){
+		String querySql = "select * from CONTRACT_BUDGET where CONTRACTCODE='" + contractcode + "' ";
+		
+		return jdbcTemplate.queryForList(querySql);
+	}
+	
+	/**
+	 * 已付合同款
+	 * @param contractcode
+	 * @return
+	 */
+	public double getAlreadyPay(String contractcode){
+		double alreadypay = 0.00;
+		String querySql = "select sum(PAY) as ALREADYPAY from CONTRACT_PAY where CONTRACTCODE='" + contractcode + "'";
+		
+		List list = jdbcTemplate.queryForList(querySql);
+		if(list.size()>0){
+			Map map = (Map)list.get(0);
+			alreadypay = map.get("ALREADYPAY")==null?0.00:Double.parseDouble(map.get("ALREADYPAY").toString());
+		}
+		
+		return alreadypay;
 	}
 }
