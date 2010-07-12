@@ -109,6 +109,7 @@ public class TreeController extends CommonController {
 			String sel_status = ServletRequestUtils.getStringParameter(request, "sel_status", "");
 			String sel_note = ServletRequestUtils.getStringParameter(request, "sel_note", "");
 			sel_note = new String(sel_note.getBytes("ISO8859-1"),"UTF-8");
+			String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
 			String page = ServletRequestUtils.getStringParameter(request, "page", "");
 			mv = new ModelAndView("/modules/tree/checkedtree");
 			mv.addObject("id", id);
@@ -119,6 +120,7 @@ public class TreeController extends CommonController {
 			mv.addObject("f_type", f_type);
 			mv.addObject("sel_status", sel_status);
 			mv.addObject("sel_note", sel_note);
+			mv.addObject("sel_type", sel_type);
 			mv.addObject("isplanner", isplanner);
 			mv.addObject("pagenum", page);
 			

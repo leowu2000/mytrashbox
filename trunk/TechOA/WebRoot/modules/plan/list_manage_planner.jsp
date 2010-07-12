@@ -407,7 +407,7 @@ function changeEmp(){
 }
 
 function changeEmp1(value){
-    	document.getElementById('treeForm').action = "tree.do?action=multiemp1_init&id=" + value + "&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&isplanner=true";
+    	document.getElementById('treeForm').action = "tree.do?action=multiemp1_init&id=" + value + "&sel_type=<%=sel_type %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&isplanner=true";
     	document.getElementById('treeForm').submit();
     
     	document.getElementById("empsel").style.top="100px";
