@@ -21,85 +21,35 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAll(String level, String type, String empname, String datepick, int page, String sel_empcode, String departcodes, String sel_status, String sel_note){
+	public PageList findAll(int page, String sel_type, String level, String type, String empname, String datepick, String emcode, String sel_empcode, String sel_status, String sel_note, String departcodes){
 		PageList pageList = new PageList();
 		String sql = "select * from PLAN where 1=1";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
-		if(!"0".equals(level)){//全部级别
-			sql = sql + " and ASSESS='" + level + "'";
-		}
-		if(!"0".equals(type)){//全部类别
-			sql = sql + " and TYPE='" + type + "'";
-		}
-		if(!"".equals(empname)){//全部人员
-			sql = sql + " and EMPNAME like '%" + empname + "%'";
-		}
-		String empcodeSql = "select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
-		String empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
-		sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',1) in (" + empnameSql + ")" +
-					" or SPLIT_PART(EMPCODE,',',2) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',2) in (" + empnameSql + ")" +
-					" or SPLIT_PART(EMPCODE,',',3) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',3) in (" + empnameSql + ")" +
-					" or SPLIT_PART(EMPCODE,',',4) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',4) in (" + empnameSql + ")" +
-					" or SPLIT_PART(EMPCODE,',',5) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',5) in (" + empnameSql + ")" +
-					" or SPLIT_PART(EMPCODE,',',6) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',6) in (" + empnameSql + ")" +
-					" or SPLIT_PART(EMPCODE,',',7) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',7) in (" + empnameSql + "))";
-		//按状态查询
-		if(!"0".equals(sel_status)){
-			sql = sql + " and STATUS='" + sel_status + "'";
-		}
-		//按工号
-		if(!"".equals(sel_empcode)){
-			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
-		}
-		//按内容
-		if(!"".equals(sel_note)){
-			sql = sql + " and NOTE like '%" + sel_note + "%'";
+		
+		if("self".equals(sel_type)){//自己所管辖的计划
+			String emname = findNameByCode("EMPLOYEE", emcode);
+			sql = sql + " and (PLANNERCODE='" + emcode + "' or PLANNERNAME='" + emname + "' or LEADER_ROOM='" + emname + "' or LEADER_SECTION='" + emname + "' or LEADER_STATION='" + emname + "')";
+		}else if("all".equals(sel_type)){
+			String empcodeSql = "select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+			String empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+			sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',1) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',2) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',2) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',3) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',3) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',4) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',4) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',5) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',5) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',6) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',6) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',7) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',7) in (" + empnameSql + "))";
 		}
 		
-		if("".equals(datepick)){
-			sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc,STATUS";
-		}else {
-			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
-			Date enddate = StringUtil.getEndOfMonth(startdate);
-			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' order by TYPE,TYPE2,ORDERCODE,ENDDATE desc";
-		}
-		
-		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
-		String sqlCount = "select count(*) from (" + sql + ")" + "";
-		
-		List list = jdbcTemplate.queryForList(sqlData);
-		int count = jdbcTemplate.queryForInt(sqlCount);
-		
-		pageList.setList(list);
-		PageInfo pageInfo = new PageInfo(page, count);
-		pageList.setPageInfo(pageInfo);
-		
-		return pageList;
-	}
-	
-	/**
-	 * 按照检索条件找出所有符合条件的计划
-	 * @param level 考核级别
-	 * @param type 计划类别
-	 * @param emname 人员名字
-	 * @param page 页码
-	 * @return
-	 */
-	public PageList findAll_planner(String level, String type, String empname, String datepick, int page, String emrole, String emcode, String emdepart, String sel_empcode, String sel_status, String sel_note){
-		PageList pageList = new PageList();
-		String sql = "select * from PLAN where 1=1";
-		int pagesize = 20;
-		int start = pagesize*(page - 1) + 1;
-		int end = pagesize*page;
 		if(!"0".equals(level)&&!"".equals(level)){//全部级别
 			sql = sql + " and ASSESS='" + level + "'";
 		}
@@ -110,7 +60,6 @@ public class PlanDAO extends CommonDAO {
 			sql = sql + " and EMPNAME like '%" + empname + "%'";
 		}
 		
-		sql = sql + " and PLANNERCODE='" + emcode + "'";
 		//按状态查询
 		if(!"0".equals(sel_status)&&!"".equals(type)){
 			sql = sql + " and STATUS='" + sel_status + "'";
@@ -152,20 +101,42 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public List findAll_planner(String level, String type, String empname, String datepick, String emcode, String sel_empcode, String sel_status, String sel_note){
+	public List findAll(String sel_type, String level, String type, String empname, String datepick, String emcode, String sel_empcode, String sel_status, String sel_note, String departcodes){
 		String sql = "select * from PLAN where 1=1";
-		if(!"0".equals(level)){//全部级别
+		if("self".equals(sel_type)){//自己所管辖的计划
+			String emname = findNameByCode("EMPLOYEE", emcode);
+			sql = sql + " and (PLANNERCODE='" + emcode + "' or PLANNERNAME='" + emname + "' or LEADER_ROOM='" + emname + "' or LEADER_SECTION='" + emname + "' or LEADER_STATION='" + emname + "')";
+		}else if("all".equals(sel_type)){
+			String empcodeSql = "select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+			String empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+			sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',1) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',2) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',2) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',3) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',3) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',4) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',4) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',5) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',5) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',6) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',6) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',7) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',7) in (" + empnameSql + "))";
+		}
+		
+		if(!"0".equals(level)&&!"".equals(level)){//全部级别
 			sql = sql + " and ASSESS='" + level + "'";
 		}
-		if(!"0".equals(type)){//全部类别
+		if(!"0".equals(type)&&!"".equals(type)){//全部类别
 			sql = sql + " and TYPE='" + type + "'";
 		}
 		if(!"".equals(empname)){//全部人员
 			sql = sql + " and EMPNAME like '%" + empname + "%'";
 		}
-		sql = sql + " and PLANNERCODE='" + emcode + "'";
+		
 		//按状态查询
-		if(!"0".equals(sel_status)){
+		if(!"0".equals(sel_status)&&!"".equals(type)){
 			sql = sql + " and STATUS='" + sel_status + "'";
 		}
 		if(!"".equals(sel_empcode)){
@@ -197,13 +168,34 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllRemind(String level, String type, String datepick, String empname, String empcode, String departcodes, int page, String sel_note){
+	public PageList findAllRemind(int page, String sel_type, String level, String type, String datepick, String empname, String empcode, String emcode, String sel_note, String departcodes){
 		PageList pageList = new PageList();
 		String sql = "select * from PLAN where STATUS!='4'";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
+		if("self".equals(sel_type)){
+			String emname = findNameByCode("EMPLOYEE", emcode);
+			sql = sql + " and (PLANNERCODE='" + emcode + "' or PLANNERNAME='" + emname + "' or LEADER_ROOM='" + emname + "' or LEADER_SECTION='" + emname + "' or LEADER_STATION='" + emname + "')";
+		}else if("all".equals(sel_type)){
+			String empcodeSql = "select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+			String empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+			sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',1) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',2) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',2) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',3) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',3) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',4) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',4) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',5) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',5) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',6) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',6) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',7) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',7) in (" + empnameSql + "))";
+		}
 		if(!"".equals(datepick)){
 			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 			Date enddate = StringUtil.getEndOfMonth(startdate);
@@ -219,22 +211,6 @@ public class PlanDAO extends CommonDAO {
 			sql = sql + " and EMPNAME like '%" + empname + "%'";
 		}
 		
-		String empcodeSql = "select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
-		String empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
-		sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',1) in (" + empnameSql + ")" +
-					" or SPLIT_PART(EMPCODE,',',2) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',2) in (" + empnameSql + ")" +
-					" or SPLIT_PART(EMPCODE,',',3) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',3) in (" + empnameSql + ")" +
-					" or SPLIT_PART(EMPCODE,',',4) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',4) in (" + empnameSql + ")" +
-					" or SPLIT_PART(EMPCODE,',',5) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',5) in (" + empnameSql + ")" +
-					" or SPLIT_PART(EMPCODE,',',6) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',6) in (" + empnameSql + ")" +
-					" or SPLIT_PART(EMPCODE,',',7) in (" + empcodeSql + ")" +
-					" or SPLIT_PART(EMPNAME,',',7) in (" + empnameSql + "))";
 		//按工号
 		if(!"".equals(empcode)){
 			sql = sql + " and EMPCODE like '%" + empcode + "%'";
@@ -267,64 +243,30 @@ public class PlanDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllRemind_planner(String level, String type, String datepick, String empname, String empcode,String emcode, int page, String sel_note){
-		PageList pageList = new PageList();
-		String sql = "select * from PLAN where STATUS!='4'";
-		int pagesize = 20;
-		int start = pagesize*(page - 1) + 1;
-		int end = pagesize*page;
-		
-		if(!"".equals(datepick)){
-			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
-			Date enddate = StringUtil.getEndOfMonth(startdate);
-			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "' ";
-		}
-		if(!"0".equals(level)){
-			sql = sql + " and ASSESS='" + level + "'";
-		}
-		if(!"0".equals(type)){
-			sql = sql + " and TYPE='" + type + "'";
-		}
-		if(!"".equals(empname)){
-			sql = sql + " and EMPNAME like '%" + empname + "%'";
-		}
-		
-		sql = sql + " and PLANNERCODE='" + emcode + "'";
-		//按工号
-		if(!"".equals(empcode)){
-			sql = sql + " and EMPCODE like '%" + empcode + "%'";
-		}
-		//按内容
-		if(!"".equals(sel_note)){
-			sql = sql + " and NOTE like '%" + sel_note + "%'";
-		}
-		
-		sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc,STATUS";
-		
- 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
-		String sqlCount = "select count(*) from (" + sql + ")" + "";
-		
-		List list = jdbcTemplate.queryForList(sqlData);
-		int count = jdbcTemplate.queryForInt(sqlCount);
-		
-		pageList.setList(list);
-		PageInfo pageInfo = new PageInfo(page, count);
-		pageList.setPageInfo(pageInfo);
-		
-		return pageList;
-	}
-	
-	/**
-	 * 获取计划提醒列表
-	 * @param pjcode 工作令号
-	 * @param datepick 年月
-	 * @param empname 责任人名称
-	 * @param page 页码
-	 * @return
-	 */
-	public List findAllRemind(String level, String type, String datepick, String empname, String sel_empcode, String sel_note, String emcode){
+	public List findAllRemind(String sel_type, String level, String type, String datepick, String empname, String empcode, String emcode, String sel_note, String departcodes){
 		String sql = "select a.*,b.* from PLAN a, (select sum(AMOUNT) as AMOUNT from WORKREPORT c,PLAN d where c.PJCODE=d.PJCODE and c.PJCODE_D=d.PJCODE_D and c.STAGECODE=d.STAGECODE and c.STARTDATE>=d.STARTDATE and c.STARTDATE<=d.ENDDATE) b where STATUS!='4'";
 		
+		if("self".equals(sel_type)){
+			String emname = findNameByCode("EMPLOYEE", emcode);
+			sql = sql + " and (PLANNERCODE='" + emcode + "' or PLANNERNAME='" + emname + "' or LEADER_ROOM='" + emname + "' or LEADER_SECTION='" + emname + "' or LEADER_STATION='" + emname + "')";
+		}else if("all".equals(sel_type)){
+			String empcodeSql = "select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+			String empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+			sql = sql + " and ( SPLIT_PART(EMPCODE,',',1) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',1) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',2) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',2) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',3) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',3) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',4) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',4) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',5) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',5) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',6) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',6) in (" + empnameSql + ")" +
+						" or SPLIT_PART(EMPCODE,',',7) in (" + empcodeSql + ")" +
+						" or SPLIT_PART(EMPNAME,',',7) in (" + empnameSql + "))";
+		}
 		if(!"".equals(datepick)){
 			Date startdate = StringUtil.StringToDate(datepick + "-01","yyyy-MM-dd");
 			Date enddate = StringUtil.getEndOfMonth(startdate);
@@ -339,10 +281,10 @@ public class PlanDAO extends CommonDAO {
 		if(!"".equals(empname)){
 			sql = sql + " and EMPNAME like '%" + empname + "%'";
 		}
-		sql = sql + " and PLANNERCODE='" + emcode + "'";
+		
 		//按工号
-		if(!"".equals(sel_empcode)){
-			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
+		if(!"".equals(empcode)){
+			sql = sql + " and EMPCODE like '%" + empcode + "%'";
 		}
 		//按内容
 		if(!"".equals(sel_note)){

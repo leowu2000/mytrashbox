@@ -20,6 +20,8 @@
 	<script type="text/javascript">
 	Ext.onReady(function(){
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
+		tb.add('查看');
+  		tb.add(document.getElementById('sel_type'));
   		tb.add('级别');
   		tb.add(document.getElementById('sellevel'));
   		tb.add('级别');
@@ -44,7 +46,8 @@
 	  		var empname = document.getElementById('empname').value;
 	  		var sel_empcode = document.getElementById('sel_empcode').value;
   	  		var sel_note = document.getElementById('sel_note').value;
-    		window.location.href = "/excel.do?action=export&model=PLAN&f_level=" + level + "&f_type=" + type + "&datepick=" + datepick + "&f_empname=" + encodeURI(empname) + "&sel_empcode=" + sel_empcode + "&isplanner=true&sel_note=" + encodeURI(sel_note);
+  	  		var sel_type = document.getElementById('sel_type').value;
+    		window.location.href = "/excel.do?action=export&model=PLAN&sel_type=" + sel_type + "&f_level=" + level + "&f_type=" + type + "&datepick=" + datepick + "&f_empname=" + encodeURI(empname) + "&sel_empcode=" + sel_empcode + "&isplanner=true&sel_note=" + encodeURI(sel_note);
   		}
 	});
 	
@@ -59,8 +62,9 @@
   	  var sel_note = document.getElementById('sel_note').value;
 	  var datepick = document.getElementById('datepick').value;
 	  var empname = document.getElementById('empname').value;
+	  var sel_type = document.getElementById('sel_type').value;
 	  
-	  document.getElementById('list_remind').src = "/plan.do?action=remind_list&f_level=" + level + "&f_type=" + type + "&datepick=" + datepick + "&f_empname=" + encodeURI(empname) + "&sel_empcode=" + sel_empcode + "&isplanner=true&sel_note=" + encodeURI(sel_note);
+	  document.getElementById('list_remind').src = "/plan.do?action=remind_list&sel_type=" + sel_type + "&f_level=" + level + "&f_type=" + type + "&datepick=" + datepick + "&f_empname=" + encodeURI(empname) + "&sel_empcode=" + sel_empcode + "&isplanner=true&sel_note=" + encodeURI(sel_note);
 	}
 	</script>
   </head>
@@ -86,10 +90,14 @@
 		<option value="<%=mapType.get("CODE") %>"><%=mapType.get("NAME") %></option>
 <%	} %>					
 	</select>
-	<input type="text" name="empname" style="width:60;">
-	<input type="text" name="sel_empcode" id="sel_empcode" style="width:60;">
-	<input type="text" name="sel_note" id="sel_note" style="width:60;">
+	<input type="text" name="empname" style="width:45;">
+	<input type="text" name="sel_empcode" id="sel_empcode" style="width:45;">
+	<input type="text" name="sel_note" id="sel_note" style="width:45;">
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" name="datepick" onchange="commit();" style="width: 50" value="<%=StringUtil.DateToString(new Date(), "yyyy-MM") %>">
+	<select name="sel_type" id="sel_type" onchange="commit();" >
+		<option value="self">所管计划</option>
+		<option value="all">所有计划</option>
+	</select>
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
     <iframe name="list_remind" width="100%" frameborder="0" height="500"></iframe>
   </body>
