@@ -102,8 +102,8 @@ public class ExcelDAO extends CommonDAO {
 	 * @param f_empname 姓名模糊检索
 	 * @return
 	 */
-	public List getExportData_PLAN(String f_level, String f_type, String datepick, String f_empname, String sel_empcode, String sel_note, String emcode){
-		return planDAO.findAllRemind(f_level, f_type, datepick, f_empname, sel_empcode, sel_note, emcode);
+	public List getExportData_PLAN(String sel_type, String f_level, String f_type, String datepick, String f_empname, String sel_empcode, String sel_note, String emcode, String departcodes){
+		return planDAO.findAllRemind(sel_type, f_level, f_type, datepick, f_empname, sel_empcode, emcode, sel_note, departcodes);
 	}
 	
 	/**
@@ -116,8 +116,8 @@ public class ExcelDAO extends CommonDAO {
 	 * @param sel_status 状态
 	 * @return
 	 */
-	public List getExportData_PLAN1(String level, String type, String f_empname, String datepick, String emcode, String sel_empcode, String sel_status, String sel_note){
-		return planDAO.findAll_planner(level, type, f_empname, datepick, emcode, sel_empcode, sel_status, sel_note);
+	public List getExportData_PLAN1(String sel_type, String level, String type, String f_empname, String datepick, String emcode, String sel_empcode, String sel_status, String sel_note, String departcodes){
+		return planDAO.findAll(sel_type, level, type, f_empname, datepick, emcode, sel_empcode, sel_status, sel_note, departcodes);
 	}
 	
 	/**

@@ -76,6 +76,7 @@ public class ExcelController extends CommonController {
 		String sel_empname = ServletRequestUtils.getStringParameter(request, "sel_empname", "");
 		sel_empname = URLDecoder.decode(sel_empname, "ISO8859-1");
 		sel_empname = new String(sel_empname.getBytes("ISO8859-1"),"UTF-8");
+		String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
 		
 		if("preview".equals(action)){//导入预览
 			if("DEPARTMENT".equals(table)){//导入部门
@@ -251,8 +252,11 @@ public class ExcelController extends CommonController {
 				list = emDAO.getYgtrfx(empcodes, startdate, enddate, selproject);
 				path = exportExcel.exportExcel_YGTRFX(list, imagepath, selpjname);
 			}else if("PLAN".equals(model)){//计划
-				list = excelDAO.getExportData_PLAN(f_level, f_type, datepick, f_empname, sel_empcode, sel_note, emcode);
+				list = excelDAO.getExportData_PLAN(sel_type, f_level, f_type, datepick, f_empname, sel_empcode, sel_note, emcode, departcodes);
 				path = exportExcel.exportExcel_PLAN(list, planDAO, datepick);
+			}else if("PLAN1".equals(model)){//计划
+				list = excelDAO.getExportData_PLAN1(sel_type, level, type, f_empname, datepick, emcode, sel_empcode, sel_status, sel_note, departcodes);
+				path = exportExcel.exportExcel_PLAN1(list, planDAO, datepick);
 			}else if("JBF".equals(model)){//加班费
 				list = excelDAO.getExportData_JBF(datepick, emname, departcodes);
 				path = exportExcel.exportExcel_JBF(list, datepick);
@@ -282,14 +286,10 @@ public class ExcelController extends CommonController {
 				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 				list = excelDAO.getExportData_WORKREPORT(emcode, departcodes, wrDAO, sel_pjcode, sel_empcode, sel_empname);
 				path = exportExcel.exportExcel_WORKREPORT(list, wrDAO);
-			}else if("PLAN1".equals(model)){//计划
-				list = excelDAO.getExportData_PLAN1(level, type, f_empname, datepick, emcode, sel_empcode, sel_status, sel_note);
-				path = exportExcel.exportExcel_PLAN1(list, planDAO, datepick);
 			}else if("INS".equals(model)){//临时调查表
 				String ins_id = ServletRequestUtils.getStringParameter(request, "ins_id", "");
 				path = exportExcel.exportExcel_INS(insDAO, ins_id);
 			}else if("CONTRACT_BUDGET".equals(model)){//预算汇总
-				String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
 				String sel_applycode = ServletRequestUtils.getStringParameter(request, "sel_applycode", "");
 				path = exportExcel.exportExcel_CONTRACT_BUDGET(sel_type, sel_applycode, contractDAO);
 			}else if("CONTRACT_PAY".equals(model)){//预算汇总

@@ -49,12 +49,13 @@ public class PlanController extends CommonController {
 		String sel_note = ServletRequestUtils.getStringParameter(request, "sel_note", "");
 		sel_note = URLDecoder.decode(sel_note, "ISO8859-1");
 		sel_note = new String(sel_note.getBytes("ISO8859-1"),"UTF-8");
+		String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
 		
 		String returnUrl = "";
 		if("false".equals(isplanner)){
-			returnUrl = "plan.do?action=list&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode + "&sel_status=" + sel_status+ "&sel_note=" + URLEncoder.encode(sel_note,"UTF-8"); 
+			returnUrl = "plan.do?action=list&sel_type=" + sel_type + "&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode + "&sel_status=" + sel_status+ "&sel_note=" + URLEncoder.encode(sel_note,"UTF-8"); 
 		}else {
-			returnUrl = "plan.do?action=list_planner&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode + "&sel_status=" + sel_status+ "&sel_note=" + URLEncoder.encode(sel_note,"UTF-8"); 
+			returnUrl = "plan.do?action=list_planner&sel_type=" + sel_type + "&f_level=" + f_level + "&f_type=" + f_type + "&f_empname=" + URLEncoder.encode(f_empname,"UTF-8") + "&page=" + page + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode + "&sel_status=" + sel_status+ "&sel_note=" + URLEncoder.encode(sel_note,"UTF-8"); 
 		}
 		
 		if("list_frame".equals(action)){//计划管理frame
@@ -76,7 +77,7 @@ public class PlanController extends CommonController {
 			}
 			departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 			
-			PageList pageList = planDAO.findAll(f_level, f_type, f_empname, datepick, page, sel_empcode, departcodes, sel_status, sel_note);
+			PageList pageList = planDAO.findAll(page, sel_type, f_level, f_type, f_empname, datepick, emcode, sel_empcode, sel_status, sel_note, departcodes);
 			List listPersent = planDAO.getListPersent();
 			
 			List listLevel = planDAO.getLevel();
@@ -99,6 +100,7 @@ public class PlanController extends CommonController {
 			mv.addObject("sel_empcode", sel_empcode);
 			mv.addObject("sel_status", sel_status);
 			mv.addObject("sel_note", sel_note);
+			mv.addObject("sel_type", sel_type);
 			return mv;
 		}if("list_frame_planner".equals(action)){//计划员专用计划管理frame
 			mv = new ModelAndView("modules/plan/frame_manage_planner");
@@ -111,8 +113,14 @@ public class PlanController extends CommonController {
 			return mv;
 		}else if("list_planner".equals(action)){//计划员专用计划管理list
 			mv = new ModelAndView("modules/plan/list_manage_planner");
+			String departcodes = ""; 
+			List listDepart = roleDAO.findAllUserDepart(emcode);
+			if(listDepart.size() == 0){
+				listDepart = roleDAO.findAllRoleDepart(emrole);
+			}
+			departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 			
-			PageList pageList = planDAO.findAll_planner(f_level, f_type, f_empname, datepick, page, emrole, emcode, emdepart, sel_empcode, sel_status, sel_note);
+			PageList pageList = planDAO.findAll(page, sel_type, f_level, f_type, f_empname, datepick, emcode, sel_empcode, sel_status, sel_note, departcodes);
 			List listPersent = planDAO.getListPersent();
 			
 			List listLevel = planDAO.getLevel();
@@ -135,6 +143,7 @@ public class PlanController extends CommonController {
 			mv.addObject("sel_empcode", sel_empcode);
 			mv.addObject("sel_status", sel_status);
 			mv.addObject("sel_note", sel_note);
+			mv.addObject("sel_type", sel_type);
 			return mv;
 		}else if("AJAX_TYPE".equals(action)){//工作令号选择ajax
 			StringBuffer sb = new StringBuffer();
@@ -317,7 +326,12 @@ public class PlanController extends CommonController {
 			
 			response.sendRedirect(returnUrl);
 		}else if("deleteall".equals(action)){//删除全部
-			String deleteSql = "delete from PLAN";
+			String deleteSql = "delete from PLAN ";
+			if(!"".equals(datepick)){
+				Date start = StringUtil.StringToDate(datepick + "01", "yyyy-MM-dd");
+				Date end = StringUtil.getEndOfMonth(start);
+				deleteSql = "delete from PLAN where ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
+			}
 			planDAO.delete(deleteSql);
 			
 			response.sendRedirect(returnUrl);
@@ -388,19 +402,14 @@ public class PlanController extends CommonController {
 		}else if("remind_list".equals(action)){//计划提醒列表
 			mv = new ModelAndView("modules/plan/list_remind");
 			PageList pageList = new PageList();
-			if("false".equals(isplanner)){
-				//根据登陆用户的数据权限过滤
-				String departcodes = ""; 
-				List listDepart = roleDAO.findAllUserDepart(emcode);
-				if(listDepart.size() == 0){
-					listDepart = roleDAO.findAllRoleDepart(emrole);
-				}
-				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
-				pageList = planDAO.findAllRemind(f_level, f_type, datepick, f_empname, sel_empcode, departcodes, page, sel_note);
-			}else {
-				pageList = planDAO.findAllRemind_planner(f_level, f_type, datepick, f_empname, sel_empcode, emcode, page, sel_note);
+			String departcodes = ""; 
+			List listDepart = roleDAO.findAllUserDepart(emcode);
+			if(listDepart.size() == 0){
+				listDepart = roleDAO.findAllRoleDepart(emrole);
 			}
-						
+			departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+			pageList = planDAO.findAllRemind(page, sel_type, f_level, f_type, datepick, f_empname, sel_empcode, emcode, sel_note, departcodes);		
+			
 			mv.addObject("pageList", pageList);
 			mv.addObject("f_level", f_level);
 			mv.addObject("f_type", f_type);
@@ -408,6 +417,7 @@ public class PlanController extends CommonController {
 			mv.addObject("f_empname", f_empname);
 			mv.addObject("sel_empcode", sel_empcode);
 			mv.addObject("sel_note", sel_note);
+			mv.addObject("sel_type", sel_type);
 			return mv;
 		}else if("remind_frame_planner".equals(action)){//计划员专用计划提醒frame
 			mv = new ModelAndView("modules/plan/frame_remind_planner");

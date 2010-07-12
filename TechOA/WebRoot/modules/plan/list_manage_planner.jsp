@@ -24,6 +24,7 @@ String datepick = request.getAttribute("datepick").toString();
 String sel_status = request.getAttribute("sel_status").toString();
 String sel_note = request.getAttribute("sel_note").toString();
 sel_note = URLEncoder.encode(sel_note,"UTF-8");
+String sel_type = request.getAttribute("sel_type").toString();
 
 String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 errorMessage = new String(errorMessage.getBytes("ISO8859-1"), "UTF-8");
@@ -66,7 +67,7 @@ Ext.onReady(function(){
 	tb.add({text: '完成',cls: 'x-btn-text-icon save',handler: onCompleteClick});
 	tb.add({text: '删除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
 	tb.add({text: '任务分解',cls: 'x-btn-text-icon add',handler: onApartClick});
-	tb.add({text: '删除全部',cls: 'x-btn-text-icon delete',handler: onDeleteAllClick});
+	tb.add({text: '删除本月',cls: 'x-btn-text-icon delete',handler: onDeleteAllClick});
 	tb.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 	tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
 	tb.add({text: '设置完成情况百分比',cls: 'x-btn-text-icon xiugai',handler: onSetClick});
@@ -123,7 +124,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';
+    	action = url+'?action=add&sel_type=<%=sel_type %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';
     	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
        	Ext.get('pjcode').set({'disabled':''});
@@ -172,7 +173,7 @@ Ext.onReady(function(){
 				Ext.get('leader_room').set({'value':data.item.leader__room});
 				Ext.get('pjcode_d').set({'disabled':'disabled'});
 				
-		    	action = url+'?action=update&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';
+		    	action = url+'?action=update&page=<%=pagenum %>&sel_type=<%=sel_type %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';
 	    		win.setTitle('修改');
 		        win.show(btn.dom);
 		  	}
@@ -188,7 +189,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=delete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';       
+      			Ext.getDom('listForm').action=url+'?action=delete&sel_type=<%=sel_type %>&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -197,7 +198,7 @@ Ext.onReady(function(){
     function onDeleteAllClick(btn){
 		Ext.Msg.confirm('确认','确定删除以往所有的计划信息?',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=deleteall&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';       
+      			Ext.getDom('listForm').action=url+'?action=deleteall&sel_type=<%=sel_type %>&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -212,7 +213,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','注意，标记确认后不可进行反馈',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=confirm&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';       
+      			Ext.getDom('listForm').action=url+'?action=confirm&page=<%=pagenum %>&sel_type=<%=sel_type %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -227,7 +228,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确实要退回给责任人继续反馈？',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=sendback&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';       
+      			Ext.getDom('listForm').action=url+'?action=sendback&page=<%=pagenum %>&sel_type=<%=sel_type %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -242,7 +243,7 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','注意，标记完成后不可进行修改',function(btn){
     		if(btn=='yes'){
-      			Ext.getDom('listForm').action=url+'?action=complete&page=<%=pagenum %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';       
+      			Ext.getDom('listForm').action=url+'?action=complete&page=<%=pagenum %>&sel_type=<%=sel_type %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';       
       			Ext.getDom('listForm').submit();
        		}
     	});
@@ -256,7 +257,7 @@ Ext.onReady(function(){
     }
     
     function onSetClick(btn){
-		action = url + '?action=setpersent&f_level=<%=level %>&f_type=<%=type %>&page=<%=pagenum %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';
+		action = url + '?action=setpersent&f_level=<%=level %>&sel_type=<%=sel_type %>&f_type=<%=type %>&page=<%=pagenum %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&sel_note=<%=sel_note %>';
     	win3.setTitle('设置完成情况百分比');
         win3.show(btn.dom);
     }
@@ -295,7 +296,7 @@ Ext.onReady(function(){
 				Ext.get('leader_section').set({'value':data.item.leader__section});
 				Ext.get('leader_room').set({'value':data.item.leader__room});
 				
-		    	action = url+'?action=add&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&sel_note=<%=sel_note %>';
+		    	action = url+'?action=add&sel_type=<%=sel_type %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&sel_note=<%=sel_note %>';
 	    		win.setTitle('分解');
 		        win.show(btn.dom);
 		  	}
@@ -340,6 +341,7 @@ Ext.onReady(function(){
 	});  
 	
 	function onExportClick(){
+		var sel_type = '<%=sel_type %>';
 		var level = '<%=level %>';
 		var type = '<%=type %>';
 		var f_empname = '<%=f_empname %>';
@@ -347,7 +349,7 @@ Ext.onReady(function(){
 		var datepick = '<%=datepick %>';
 		var sel_status = '<%=sel_status %>';
 		var sel_note = '<%=sel_note %>';
-    	window.location.href = "/excel.do?action=export&model=PLAN1&level=" + level + "&type=" + type + "&f_empname=" + encodeURI(f_empname) + "&sel_empcode=" + sel_empcode + "&datepick=" + datepick + "&sel_status=" + sel_status + "&sel_note=" + encodeURI(sel_note);
+    	window.location.href = "/excel.do?action=export&model=PLAN1&sel_type=" + sel_type + "&level=" + level + "&type=" + type + "&f_empname=" + encodeURI(f_empname) + "&sel_empcode=" + sel_empcode + "&datepick=" + datepick + "&sel_status=" + sel_status + "&sel_note=" + encodeURI(sel_note);
   	}
 });
 
@@ -435,7 +437,7 @@ function checkAll(){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("plan.do?action=list_planner&f_level=" + level + "&f_type=" + type + "&f_empname=" + URLEncoder.encode(f_empname, "UTF-8") + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode + "&sel_status=" + sel_status + "&sel_note=" + URLEncoder.encode(sel_note, "UTF-8")) %>
+<%=pageList.getPageInfo().getHtml("plan.do?action=list_planner&sel_type=" + sel_type + "&f_level=" + level + "&f_type=" + type + "&f_empname=" + URLEncoder.encode(f_empname, "UTF-8") + "&datepick=" + datepick + "&sel_empcode=" + sel_empcode + "&sel_status=" + sel_status + "&sel_note=" + URLEncoder.encode(sel_note, "UTF-8")) %>
 	<table width="1024" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
                 <td nowrap="nowrap"><input type="checkbox" name="checkall" onclick="checkAll();"><br>选择</td>
