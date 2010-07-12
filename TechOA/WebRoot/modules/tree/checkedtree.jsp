@@ -22,6 +22,7 @@
 	String datepick = request.getAttribute("datepick")==null?"":request.getAttribute("datepick").toString();
 	String sel_status = request.getAttribute("sel_status")==null?"":request.getAttribute("sel_status").toString();
 	String isplanner = request.getAttribute("isplanner")==null?"":request.getAttribute("isplanner").toString();
+	String sel_type = request.getAttribute("isplanner")==null?"":request.getAttribute("sel_type").toString();
 %>
 <script type="text/javascript">
 
@@ -93,7 +94,7 @@
 	<%
 		if(!"".equals(id)&&!"null".equals(id)&&id!=null){
 	%>
-		parent.window.location.href = "/plan.do?action=changeMultiEMP&empcodes=" + codevalue + "&id=<%=id %>&&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&isplanner=<%=isplanner %>&sel_note=<%=sel_note %>";
+		parent.window.location.href = "/plan.do?action=changeMultiEMP&empcodes=" + codevalue + "&id=<%=id %>&sel_type=<%=sel_type %>&f_level=<%=level %>&f_type=<%=type %>&f_empname=<%=f_empname %>&datepick=<%=datepick %>&sel_empcode=<%=sel_empcode %>&sel_status=<%=sel_status %>&page=<%=pagenum %>&isplanner=<%=isplanner %>&sel_note=<%=sel_note %>";
 	<%
 		}else {
 	%>
