@@ -58,6 +58,7 @@ Ext.onReady(function(){
     		<td>提出人</td>
     		<td>经费估算</td>
     		<td>合同编号</td>
+    	</tr>
 <%
 	for(int i=0;i<listBudget.size();i++){
 		Map mapBudget = (Map)listBudget.get(i);

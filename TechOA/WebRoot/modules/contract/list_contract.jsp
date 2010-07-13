@@ -167,6 +167,7 @@ function checkAll(){
     		<td>第二阶段付款</td>
     		<td>第三阶段付款</td>
     		<td>状态</td>
+    	</tr>
 <%
 	for(int i=0;i<listContract.size();i++){
 		Map mapContract = (Map)listContract.get(i);

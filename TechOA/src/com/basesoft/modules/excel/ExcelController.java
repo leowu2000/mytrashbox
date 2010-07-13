@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -76,6 +77,9 @@ public class ExcelController extends CommonController {
 		String sel_empname = ServletRequestUtils.getStringParameter(request, "sel_empname", "");
 		sel_empname = URLDecoder.decode(sel_empname, "ISO8859-1");
 		sel_empname = new String(sel_empname.getBytes("ISO8859-1"),"UTF-8");
+		String sel_pjcode = ServletRequestUtils.getStringParameter(request, "sel_pjcode", "");
+		sel_pjcode = URLDecoder.decode(sel_pjcode, "ISO8859-1");
+		sel_pjcode = new String(sel_pjcode.getBytes("ISO8859-1"), "UTF-8");
 		String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
 		
 		if("preview".equals(action)){//导入预览
@@ -122,6 +126,10 @@ public class ExcelController extends CommonController {
 				mv.addObject("sel_carcode", sel_carcode);
 			}else if("VISIT".equals(table)){
 				mv = new ModelAndView("modules/excel/preview_visit");
+			}else if("BUDGET_CONTRACT".equals(table)){//预计合同表
+				mv = new ModelAndView("modules/excel/preview_budget_contract");
+				String import_year = ServletRequestUtils.getStringParameter(request, "import_year", "");
+				mv.addObject("import_year", import_year);
 			}
 			
 			MultipartHttpServletRequest mpRequest = (MultipartHttpServletRequest)request;
@@ -193,6 +201,12 @@ public class ExcelController extends CommonController {
 				errorMessage = excelDAO.insertCar(data);
 			}else if("VISIT".equals(table)){//班车信息
 				errorMessage = excelDAO.insertVisit(data);
+			}else if("BUDGET_CONTRACT".equals(table)){//预计合同表
+				int import_year = ServletRequestUtils.getIntParameter(request, "import_year", 0);
+				if(import_year == 0){
+					import_year = Integer.parseInt(StringUtil.DateToString(new Date(), "yyyy"));
+				}
+				errorMessage = excelDAO.insertBudget_contract(data, import_year);
 			}
 			
 			if(errorMessage.length()>200){
@@ -276,9 +290,6 @@ public class ExcelController extends CommonController {
 				list = excelDAO.getExportData_BCYY(carid, datepick);
 				path = exportExcel.exportExcel_BCYY(list, carid, datepick, carDAO);
 			}else if("WORKREPORT".equals(model)){//工作报告
-				String sel_pjcode = ServletRequestUtils.getStringParameter(request, "sel_pjcode", "");
-				sel_pjcode = URLDecoder.decode(sel_pjcode, "ISO8859-1");
-				sel_pjcode = new String(sel_pjcode.getBytes("ISO8859-1"), "UTF-8");
 				listDepart = roleDAO.findAllUserDepart(emcode);
 				if(listDepart.size() == 0){
 					listDepart = roleDAO.findAllRoleDepart(emrole);

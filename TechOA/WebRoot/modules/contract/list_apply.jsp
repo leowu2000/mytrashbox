@@ -237,6 +237,7 @@ function AJAX_PJ(pjcode){
     		<td>申报人</td>
     		<td>电话</td>
     		<td>附件</td>
+    	</tr>
 <%
 	for(int i=0;i<listApply.size();i++){
 		Map mapApply = (Map)listApply.get(i);

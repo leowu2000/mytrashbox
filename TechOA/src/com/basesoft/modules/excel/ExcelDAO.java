@@ -233,7 +233,7 @@ public class ExcelDAO extends CommonDAO {
 				try{
 					insert(insertSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
@@ -334,7 +334,7 @@ public class ExcelDAO extends CommonDAO {
 				try{
 					update(updateSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
@@ -373,7 +373,7 @@ public class ExcelDAO extends CommonDAO {
 				try{
 					update(updateSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
@@ -449,7 +449,7 @@ public class ExcelDAO extends CommonDAO {
 				try{
 					update(updateSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
@@ -504,7 +504,7 @@ public class ExcelDAO extends CommonDAO {
 			try{
 				insert(insertSql);
 			}catch(Exception e){
-				System.out.println(e);
+				e.printStackTrace();
 				errorMessage = getErrorMessage(errorMessage, i);
 				continue;
 			}
@@ -557,7 +557,7 @@ public class ExcelDAO extends CommonDAO {
 				try{
 					insert(insertSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
@@ -605,7 +605,7 @@ public class ExcelDAO extends CommonDAO {
 			try{
 				insert(insertSql);
 			}catch(Exception e){
-				System.out.println(e);
+				e.printStackTrace();
 				errorMessage = getErrorMessage(errorMessage, i);
 				continue;
 			}
@@ -643,7 +643,7 @@ public class ExcelDAO extends CommonDAO {
 					try{
 						insert(insertSql);
 					}catch(Exception e){
-						System.out.println(e);
+						e.printStackTrace();
 						errorMessage = getErrorMessage(errorMessage, i);
 						continue;
 					}
@@ -680,7 +680,7 @@ public class ExcelDAO extends CommonDAO {
 					try{
 						insert(insertSql);
 					}catch(Exception e){
-						System.out.println(e);
+						e.printStackTrace();
 						errorMessage = getErrorMessage(errorMessage, j);
 						continue;
 					}
@@ -797,7 +797,7 @@ public class ExcelDAO extends CommonDAO {
 				try{
 					insert(insertSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
@@ -856,7 +856,7 @@ public class ExcelDAO extends CommonDAO {
 				try{
 					insert(insertSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
@@ -1051,7 +1051,7 @@ public class ExcelDAO extends CommonDAO {
 				try{
 					insert(insertSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
@@ -1120,7 +1120,7 @@ public class ExcelDAO extends CommonDAO {
 				try{
 					insert(insertSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
@@ -1203,7 +1203,7 @@ public class ExcelDAO extends CommonDAO {
 				try{
 					insert(insertSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
@@ -1259,7 +1259,7 @@ public class ExcelDAO extends CommonDAO {
 			try{
 				insert(insertSql);
 			}catch(Exception e){
-				System.out.println(e);
+				e.printStackTrace();
 				errorMessage = getErrorMessage(errorMessage, i);
 				continue;
 			}
@@ -1321,7 +1321,7 @@ public class ExcelDAO extends CommonDAO {
 				try{
 					insert(insertSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
@@ -1368,7 +1368,7 @@ public class ExcelDAO extends CommonDAO {
 				try{
 					insert(insertSql);
 				}catch(Exception e){
-					System.out.println(e);
+					e.printStackTrace();
 					errorMessage = getErrorMessage(errorMessage, i);
 					continue;
 				}
@@ -1407,7 +1407,55 @@ public class ExcelDAO extends CommonDAO {
 			try{
 				insert(insertSql);
 			}catch(Exception e){
-				System.out.println(e);
+				e.printStackTrace();
+				errorMessage = getErrorMessage(errorMessage, i);
+				continue;
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 访问工号信息入库
+	 * @param data
+	 * @return
+	 */
+	public String insertBudget_contract(JSONObject data, int year) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			int ordercode = row.optInt("ORDERCODE");
+			String name = row.optString("NAME");
+			String pjcode = row.optString("PJCODE");
+			String leader_station = row.optString("LEADER_STATION");
+			String leader_top = row.optString("LEADER_TOP");
+			String leader_section = row.optString("LEADER_SECTION");
+			String manager = row.optString("MANAGER");
+			String confirm = row.optString("CONFIRM");
+			String funds = "".equals(row.optString("FUNDS"))?"0":row.optString("FUNDS");
+			String funds1 = "".equals(row.optString("FUNDS1"))?"0":row.optString("FUNDS1");
+			String funds2 = "".equals(row.optString("FUNDS2"))?"0":row.optString("FUNDS2");
+			String funds3 = "".equals(row.optString("FUNDS3"))?"0":row.optString("FUNDS3");
+			String funds4 = "".equals(row.optString("FUNDS4"))?"0":row.optString("FUNDS4");
+			String note = row.optString("NOTE");
+			
+			String insertSql = "insert into BUDGET_CONTRACT values('" + id + "', " + year + ", " + ordercode + ", '" + name + "', '" + pjcode + "', '" + leader_station + "', '" + leader_top + "', '" + leader_section + "', '" + manager + "', '" + confirm + "', " + funds + ", " + funds1 + ", " + funds2 + ", " + funds3 + ", " + funds4 + ", '" + note + "')";
+			
+			try{
+				insert(insertSql);
+			}catch(Exception e){
+				e.printStackTrace();
 				errorMessage = getErrorMessage(errorMessage, i);
 				continue;
 			}
