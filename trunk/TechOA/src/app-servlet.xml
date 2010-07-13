@@ -38,6 +38,10 @@
 				/c_apply.do=ContractController_Apply
 				/c_budget.do=ContractController_Budget
 				/c_pay.do=ContractController_Pay
+				/b_contract.do=BudgetController_contract
+				/b_credited.do=BudgetController_credited
+				/b_increase.do=BudgetController_increase
+				/b_remain.do=BudgetController_remain
 			</value>
 		</property>
 	</bean>
@@ -88,5 +92,9 @@
 	<bean name="ContractController_Apply" class="com.basesoft.modules.contract.ContractController_Apply"></bean>
 	<bean name="ContractController_Budget" class="com.basesoft.modules.contract.ContractController_Budget"></bean>
 	<bean name="ContractController_Pay" class="com.basesoft.modules.contract.ContractController_Pay"></bean>
+	<bean name="BudgetController_contract" class="com.basesoft.modules.budget.BudgetController_contract"></bean>
+	<bean name="BudgetController_credited" class="com.basesoft.modules.budget.BudgetController_credited"></bean>
+	<bean name="BudgetController_increase" class="com.basesoft.modules.budget.BudgetController_increase"></bean>
+	<bean name="BudgetController_remain" class="com.basesoft.modules.budget.BudgetController_remain"></bean>
 </beans>
 

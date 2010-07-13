@@ -230,6 +230,7 @@ function AJAX_PJ(pjcode){
     		<td>经费估算</td>
     		<td>合同编号</td>
     		<td>附件</td>
+    	</tr>
 <%
 	for(int i=0;i<listBudget.size();i++){
 		Map mapBudget = (Map)listBudget.get(i);

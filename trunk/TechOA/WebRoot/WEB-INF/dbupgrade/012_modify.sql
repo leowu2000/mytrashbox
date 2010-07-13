@@ -34,7 +34,15 @@ comment on column SYS_VISIT.STATUS is
 '状态(0未启用;1启用)';
 
 INSERT INTO SYS_VISIT VALUES('0000000','','1','0');
-INSERT INTO SYS_VISIT VALUES('','127.0.0.1','2','0');
+INSERT INTO SYS_VISIT VALUES('0000001','','1','0');
+INSERT INTO SYS_VISIT VALUES('0000002','','1','0');
+INSERT INTO SYS_VISIT VALUES('0000003','','1','0');
+INSERT INTO SYS_VISIT VALUES('0000004','','1','0');
+INSERT INTO SYS_VISIT VALUES('0000005','','1','0');
+INSERT INTO SYS_VISIT VALUES('0000006','','1','0');
+INSERT INTO SYS_VISIT VALUES('0000007','','1','0');
+INSERT INTO SYS_VISIT VALUES('0000008','','1','0');
+INSERT INTO SYS_VISIT VALUES('0000009','','1','0');
 
 /*==============================================================*/
 /* Table: INVESTIGATION                                         */
