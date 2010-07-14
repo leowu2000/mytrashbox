@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<head>
-		<table>BUDGET_CONTRACT</table>
-		<code>BUDGET_CONTRACT</code>
-		<name>预计合同表</name>
+		<table>BUDGET_REMAIN</table>
+		<code>BUDGET_REMAIN</code>
+		<name>所留预算表</name>
 		<row>3</row>
 		<col>1</col>
 		<type>1</type>
@@ -31,68 +31,50 @@
 		</relation>
 		<relation>
 			<id>4</id>
+			<name>令号所留</name>
+			<column>REMAIN_PJ</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>5</id>
+			<name>年所留</name>
+			<column>REMAIN_YEAR</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>6</id>
+			<name>分承包</name>
+			<column>REMAIN_YEAR1</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>7</id>
+			<name>其他</name>
+			<column>REMAIN_YEAR2</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>8</id>
 			<name>分管所领导</name>
 			<column>LEADER_STATION</column>
 			<format></format>
 		</relation>
 		<relation>
-			<id>5</id>
+			<id>9</id>
 			<name>分管首席</name>
 			<column>LEADER_TOP</column>
 			<format></format>
 		</relation>
 		<relation>
-			<id>6</id>
+			<id>10</id>
 			<name>分管处领导</name>
 			<column>LEADER_SECTION</column>
 			<format></format>
 		</relation>
 		<relation>
-			<id>7</id>
+			<id>11</id>
 			<name>项目主管</name>
 			<column>MANAGER</column>
-			<format></format>
-		</relation>
-		<relation>
-			<id>8</id>
-			<name>基本确定</name>
-			<column>CONFIRM</column>
-			<format></format>
-		</relation>
-		<relation>
-			<id>9</id>
-			<name>金额</name>
-			<column>FUNDS</column>
-			<format></format>
-		</relation>
-		<relation>
-			<id>10</id>
-			<name>1季度</name>
-			<column>FUNDS1</column>
-			<format></format>
-		</relation>
-		<relation>
-			<id>11</id>
-			<name>2季度</name>
-			<column>FUNDS2</column>
-			<format></format>
-		</relation>
-		<relation>
-			<id>12</id>
-			<name>3季度</name>
-			<column>FUNDS3</column>
-			<format></format>
-		</relation>
-		<relation>
-			<id>13</id>
-			<name>4季度</name>
-			<column>FUNDS4</column>
-			<format></format>
-		</relation>
-		<relation>
-			<id>14</id>
-			<name>说明</name>
-			<column>NOTE</column>
 			<format></format>
 		</relation>
 	</body>

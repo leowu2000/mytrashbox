@@ -1421,7 +1421,7 @@ public class ExcelDAO extends CommonDAO {
 	}
 	
 	/**
-	 * 访问工号信息入库
+	 * 预计合同表信息入库
 	 * @param data
 	 * @return
 	 */
@@ -1451,6 +1451,161 @@ public class ExcelDAO extends CommonDAO {
 			String note = row.optString("NOTE");
 			
 			String insertSql = "insert into BUDGET_CONTRACT values('" + id + "', " + year + ", " + ordercode + ", '" + name + "', '" + pjcode + "', '" + leader_station + "', '" + leader_top + "', '" + leader_section + "', '" + manager + "', '" + confirm + "', " + funds + ", " + funds1 + ", " + funds2 + ", " + funds3 + ", " + funds4 + ", '" + note + "')";
+			
+			try{
+				insert(insertSql);
+			}catch(Exception e){
+				e.printStackTrace();
+				errorMessage = getErrorMessage(errorMessage, i);
+				continue;
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 预计到款表信息入库
+	 * @param data
+	 * @return
+	 */
+	public String insertBudget_credited(JSONObject data, int year) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			int ordercode = row.optInt("ORDERCODE");
+			String name = row.optString("NAME");
+			String pjcode = row.optString("PJCODE");
+			String leader_station = row.optString("LEADER_STATION");
+			String leader_top = row.optString("LEADER_TOP");
+			String leader_section = row.optString("LEADER_SECTION");
+			String manager = row.optString("MANAGER");
+			String confirm = row.optString("CONFIRM");
+			String _try = row.optString("TRY");
+			String funds = "".equals(row.optString("FUNDS"))?"0":row.optString("FUNDS");
+			String funds1 = "".equals(row.optString("FUNDS1"))?"0":row.optString("FUNDS1");
+			String funds1_a = "".equals(row.optString("FUNDS1_A"))?"0":row.optString("FUNDS1_A");
+			String funds2 = "".equals(row.optString("FUNDS2"))?"0":row.optString("FUNDS2");
+			String funds2_a = "".equals(row.optString("FUNDS2_A"))?"0":row.optString("FUNDS2_A");
+			String funds3 = "".equals(row.optString("FUNDS3"))?"0":row.optString("FUNDS3");
+			String funds3_a = "".equals(row.optString("FUNDS3_A"))?"0":row.optString("FUNDS3_A");
+			String funds4 = "".equals(row.optString("FUNDS4"))?"0":row.optString("FUNDS4");
+			String funds4_a = "".equals(row.optString("FUNDS4_A"))?"0":row.optString("FUNDS4_A");
+			String note = row.optString("NOTE");
+			
+			String insertSql = "insert into BUDGET_CREDITED values('" + id + "', " + year + ", " + ordercode + ", '" + name + "', '" + pjcode + "', '" + leader_station + "', '" + leader_top + "', '" + leader_section + "', '" + manager + "', '" + confirm + "', '" + _try + "', " + funds + ", " + funds1 + ", " + funds1_a + ", " + funds2 + ", " + funds2_a + ", " + funds3 + ", " + funds3_a + ", " + funds4 + ", " + funds4_a + ", '" + note + "')";
+			
+			try{
+				insert(insertSql);
+			}catch(Exception e){
+				e.printStackTrace();
+				errorMessage = getErrorMessage(errorMessage, i);
+				continue;
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 *增量预算表信息入库
+	 * @param data
+	 * @return
+	 */
+	public String insertBudget_increase(JSONObject data, int year) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			int ordercode = row.optInt("ORDERCODE");
+			String name = row.optString("NAME");
+			String leader_station = row.optString("LEADER_STATION");
+			String leader_top = row.optString("LEADER_TOP");
+			String budget_funds = "".equals(row.optString("BUDGET_FUNDS"))?"0":row.optString("BUDGET_FUNDS");
+			String type = row.optString("TYPE");
+			int amount = row.optInt("AMOUNT");
+			String plan_node = row.optString("PLAN_NODE");
+			String budget_increase = "".equals(row.optString("BUDGET_INCREASE"))?"0":row.optString("BUDGET_INCREASE");
+			String funds1 = "".equals(row.optString("FUNDS1"))?"0":row.optString("FUNDS1");
+			String funds2 = "".equals(row.optString("FUNDS2"))?"0":row.optString("FUNDS2");
+			String funds3 = "".equals(row.optString("FUNDS3"))?"0":row.optString("FUNDS3");
+			String funds4 = "".equals(row.optString("FUNDS4"))?"0":row.optString("FUNDS4");
+			String prefunds = "".equals(row.optString("PREFUNDS"))?"0":row.optString("PREFUNDS");
+			String depart1 = "".equals(row.optString("DEPART1"))?"0":row.optString("DEPART1");
+			String depart2 = "".equals(row.optString("DEPART2"))?"0":row.optString("DEPART2");
+			String depart3 = "".equals(row.optString("DEPART3"))?"0":row.optString("DEPART3");
+			String depart4 = "".equals(row.optString("DEPART4"))?"0":row.optString("DEPART4");
+			String depart5 = "".equals(row.optString("DEPART5"))?"0":row.optString("DEPART5");
+			String depart6 = "".equals(row.optString("DEPART6"))?"0":row.optString("DEPART6");
+			String depart9 = "".equals(row.optString("DEPART9"))?"0":row.optString("DEPART9");
+			String depart10 = "".equals(row.optString("DEPART10"))?"0":row.optString("DEPART10");
+			String manager = row.optString("MANAGER");
+			
+			String insertSql = "insert into BUDGET_INCREASE values('" + id + "', " + year + ", " + ordercode + ", '" + name + "', '" + leader_station + "', '" + leader_top + "', " + budget_funds + ", '" + type + "', " + amount + ", '" + plan_node + "', " + budget_increase + ", " + funds1 + ", " + funds2 + ", " + funds3 + ", " + funds4 + ", " + prefunds + ", " + depart1 + ", " + depart2 + ", " + depart3 + ", " + depart4 + ", " + depart5 + ", " + depart6 + ", " + depart9 + ", " + depart10 + ", '" + manager + "')";
+			
+			try{
+				insert(insertSql);
+			}catch(Exception e){
+				e.printStackTrace();
+				errorMessage = getErrorMessage(errorMessage, i);
+				continue;
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + rows.length() + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 所留预算信息入库
+	 * @param data
+	 * @return
+	 */
+	public String insertBudget_remain(JSONObject data, int year) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			int ordercode = row.optInt("ORDERCODE");
+			String name = row.optString("NAME");
+			String pjcode = row.optString("PJCODE");
+			String remain_pj = "".equals(row.optString("REMAIN_PJ"))?"0":row.optString("REMAIN_PJ");
+			String remain_year = "".equals(row.optString("REMAIN_YEAR"))?"0":row.optString("REMAIN_YEAR");
+			String remain_year1 = "".equals(row.optString("REMAIN_YEAR1"))?"0":row.optString("REMAIN_YEAR1");
+			String remain_year2 = "".equals(row.optString("REMAIN_YEAR2"))?"0":row.optString("REMAIN_YEAR2");
+			String leader_station = row.optString("LEADER_STATION");
+			String leader_top = row.optString("LEADER_TOP");
+			String leader_section = row.optString("LEADER_SECTION");
+			String manager = row.optString("MANAGER");
+			
+			String insertSql = "insert into BUDGET_REMAIN values('" + id + "', " + year + ", " + ordercode + ", '" + name + "', '" + pjcode + "', " + remain_pj + ", " + remain_year + ", " + remain_year1 + ", " + remain_year2 + ", '" + leader_station + "', '" + leader_top + "', '" + leader_section + "', '" + manager + "')";
 			
 			try{
 				insert(insertSql);

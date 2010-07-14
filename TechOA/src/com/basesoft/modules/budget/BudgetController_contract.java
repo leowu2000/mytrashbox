@@ -109,6 +109,9 @@ public class BudgetController_contract extends CommonController {
 		}else if("update".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			int year = ServletRequestUtils.getIntParameter(request, "year", 0);
+			if(year == 0){
+				year = Integer.parseInt(StringUtil.DateToString(new Date(), "yyyy"));
+			}
 			int ordercode = ServletRequestUtils.getIntParameter(request, "ordercode", 0);
 			String name = ServletRequestUtils.getStringParameter(request, "name", "");
 			String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
@@ -124,7 +127,7 @@ public class BudgetController_contract extends CommonController {
 			float funds4 = ServletRequestUtils.getFloatParameter(request, "funds4", 0);
 			String note = ServletRequestUtils.getStringParameter(request, "note", "");
 			
-			String updateSql = "update BUDGET_CONTRACT set YEAR=" + year + ", ORDERCODE=" + ordercode + ", NAME='" + name + "', PJCODE='" + pjcode + "', LEADER_STATION='" + leader_station + "', LEADER_TOP='" + leader_top + "', LEADER_SECTION='" + leader_section + "', MANAGER='" + manager + "', CONFIRM='" + confirm + "', FUNDS=" + funds + ", FUNDS1=" + funds1 + ", FUNDS2=" + funds2 + ", FUNDS3=" + funds3 + ", FUNDS4=" + funds3 + ", NOTE='" + note + "' where ID='" + id + "'";
+			String updateSql = "update BUDGET_CONTRACT set YEAR=" + year + ", ORDERCODE=" + ordercode + ", NAME='" + name + "', PJCODE='" + pjcode + "', LEADER_STATION='" + leader_station + "', LEADER_TOP='" + leader_top + "', LEADER_SECTION='" + leader_section + "', MANAGER='" + manager + "', CONFIRM='" + confirm + "', FUNDS=" + funds + ", FUNDS1=" + funds1 + ", FUNDS2=" + funds2 + ", FUNDS3=" + funds3 + ", FUNDS4=" + funds4 + ", NOTE='" + note + "' where ID='" + id + "'";
 			budgetDAO.update(updateSql);
 			response.sendRedirect(returnUrl);
 			return null;

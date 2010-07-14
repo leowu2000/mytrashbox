@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<head>
-		<table>BUDGET_CONTRACT</table>
-		<code>BUDGET_CONTRACT</code>
-		<name>预计合同表</name>
+		<table>BUDGET_CREDITED</table>
+		<code>BUDGET_CREDITED</code>
+		<name>预计到款表</name>
 		<row>3</row>
 		<col>1</col>
 		<type>1</type>
@@ -61,36 +61,66 @@
 		</relation>
 		<relation>
 			<id>9</id>
+			<name>争取</name>
+			<column>TRY</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>10</id>
 			<name>金额</name>
 			<column>FUNDS</column>
 			<format></format>
 		</relation>
 		<relation>
-			<id>10</id>
+			<id>11</id>
 			<name>1季度</name>
 			<column>FUNDS1</column>
 			<format></format>
 		</relation>
 		<relation>
-			<id>11</id>
+			<id>12</id>
+			<name>1季度已到款</name>
+			<column>FUNDS1_A</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>13</id>
 			<name>2季度</name>
 			<column>FUNDS2</column>
 			<format></format>
 		</relation>
 		<relation>
-			<id>12</id>
+			<id>14</id>
+			<name>2季度已到款</name>
+			<column>FUNDS2_A</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>15</id>
 			<name>3季度</name>
 			<column>FUNDS3</column>
 			<format></format>
 		</relation>
 		<relation>
-			<id>13</id>
+			<id>16</id>
+			<name>3季度已到款</name>
+			<column>FUNDS3_A</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>17</id>
 			<name>4季度</name>
 			<column>FUNDS4</column>
 			<format></format>
 		</relation>
 		<relation>
-			<id>14</id>
+			<id>18</id>
+			<name>4季度已到款</name>
+			<column>FUNDS4_A</column>
+			<format></format>
+		</relation>
+		<relation>
+			<id>19</id>
 			<name>说明</name>
 			<column>NOTE</column>
 			<format></format>

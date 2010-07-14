@@ -198,13 +198,13 @@ create table BUDGET_INCREASE  (
    FUNDS3               NUMERIC(14,2),
    FUNDS4               NUMERIC(14,2),
    PREFUNDS             NUMERIC(14,2),
+   DEPART1              NUMERIC(14,2),
+   DEPART2              NUMERIC(14,2),
    DEPART3              NUMERIC(14,2),
+   DEPART4              NUMERIC(14,2),
    DEPART5              NUMERIC(14,2),
    DEPART6              NUMERIC(14,2),
-   DEPART4              NUMERIC(14,2),
-   DEPART2              NUMERIC(14,2),
    DEPART9              NUMERIC(14,2),
-   DEPART1              NUMERIC(14,2),
    DEPART10             NUMERIC(14,2),
    MANAGER              VARCHAR(200),
    constraint PK_BUDGET_INCREASE primary key (ID)
@@ -261,8 +261,17 @@ comment on column BUDGET_INCREASE.FUNDS4 is
 comment on column BUDGET_INCREASE.PREFUNDS is
 '预投';
 
+comment on column BUDGET_INCREASE.DEPART1 is
+'一部';
+
+comment on column BUDGET_INCREASE.DEPART2 is
+'二部';
+
 comment on column BUDGET_INCREASE.DEPART3 is
 '三部';
+
+comment on column BUDGET_INCREASE.DEPART4 is
+'四部';
 
 comment on column BUDGET_INCREASE.DEPART5 is
 '五部';
@@ -270,17 +279,8 @@ comment on column BUDGET_INCREASE.DEPART5 is
 comment on column BUDGET_INCREASE.DEPART6 is
 '六部';
 
-comment on column BUDGET_INCREASE.DEPART4 is
-'四部';
-
-comment on column BUDGET_INCREASE.DEPART2 is
-'二部';
-
 comment on column BUDGET_INCREASE.DEPART9 is
 '九部';
-
-comment on column BUDGET_INCREASE.DEPART1 is
-'一部';
 
 comment on column BUDGET_INCREASE.DEPART10 is
 '装备部';
@@ -298,9 +298,9 @@ create table BUDGET_REMAIN  (
    NAME                 VARCHAR(200),
    PJCODE               VARCHAR(200),
    REMAIN_PJ            NUMERIC(14,2),
-   REMAIN_10YEAR        NUMERIC(14,2),
-   REMAIN_10YEAR1       NUMERIC(14,2),
-   REMAIN_10YEAR2       NUMERIC(14,2),
+   REMAIN_YEAR          NUMERIC(14,2),
+   REMAIN_YEAR1         NUMERIC(14,2),
+   REMAIN_YEAR2         NUMERIC(14,2),
    LEADER_STATION       VARCHAR(200),
    LEADER_TOP           VARCHAR(200),
    LEADER_SECTION       VARCHAR(200),
@@ -329,13 +329,13 @@ comment on column BUDGET_REMAIN.PJCODE is
 comment on column BUDGET_REMAIN.REMAIN_PJ is
 '令号所留';
 
-comment on column BUDGET_REMAIN.REMAIN_10YEAR is
-'十年所留';
+comment on column BUDGET_REMAIN.REMAIN_YEAR is
+'年所留';
 
-comment on column BUDGET_REMAIN.REMAIN_10YEAR1 is
+comment on column BUDGET_REMAIN.REMAIN_YEAR1 is
 '其中分承包';
 
-comment on column BUDGET_REMAIN.REMAIN_10YEAR2 is
+comment on column BUDGET_REMAIN.REMAIN_YEAR2 is
 '其中其他';
 
 comment on column BUDGET_REMAIN.LEADER_STATION is
