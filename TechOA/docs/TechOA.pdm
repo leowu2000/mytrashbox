@@ -10186,24 +10186,24 @@ TableComment 0 Microsoft Sans Serif,8,N</a:FontList>
 </o:Column>
 <o:Column Id="o585">
 <a:ObjectID>AB8DD73C-CBD8-4706-A41F-A9AA0496ACD9</a:ObjectID>
-<a:Name>REMAIN_10YEAR</a:Name>
-<a:Code>REMAIN_10YEAR</a:Code>
+<a:Name>REMAIN_YEAR</a:Name>
+<a:Code>REMAIN_YEAR</a:Code>
 <a:CreationDate>1278990942</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1278990942</a:ModificationDate>
+<a:ModificationDate>1279091199</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
-<a:Comment>十年所留</a:Comment>
+<a:Comment>年所留</a:Comment>
 <a:DataType>NUMERIC(14,2)</a:DataType>
 <a:Length>14</a:Length>
 <a:Precision>2</a:Precision>
 </o:Column>
 <o:Column Id="o586">
 <a:ObjectID>877C4188-0155-43DF-A269-4BBFD4489C39</a:ObjectID>
-<a:Name>REMAIN_10YEAR1</a:Name>
-<a:Code>REMAIN_10YEAR1</a:Code>
+<a:Name>REMAIN_YEAR1</a:Name>
+<a:Code>REMAIN_YEAR1</a:Code>
 <a:CreationDate>1278990942</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1278990942</a:ModificationDate>
+<a:ModificationDate>1279091199</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>其中分承包</a:Comment>
 <a:DataType>NUMERIC(14,2)</a:DataType>
@@ -10212,11 +10212,11 @@ TableComment 0 Microsoft Sans Serif,8,N</a:FontList>
 </o:Column>
 <o:Column Id="o587">
 <a:ObjectID>852A79BC-620C-4152-9A52-7FF7EE269317</a:ObjectID>
-<a:Name>REMAIN_10YEAR2</a:Name>
-<a:Code>REMAIN_10YEAR2</a:Code>
+<a:Name>REMAIN_YEAR2</a:Name>
+<a:Code>REMAIN_YEAR2</a:Code>
 <a:CreationDate>1278990942</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1278990942</a:ModificationDate>
+<a:ModificationDate>1279091199</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>其中其他</a:Comment>
 <a:DataType>NUMERIC(14,2)</a:DataType>
