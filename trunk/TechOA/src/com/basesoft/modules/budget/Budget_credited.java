@@ -15,13 +15,13 @@ public class Budget_credited {
 	String _try;
 	String funds;
 	String funds1;
-	String funds1_A;
+	String funds1_a;
 	String funds2;
-	String funds2_A;
+	String funds2_a;
 	String funds3;
-	String funds3_A;
+	String funds3_a;
 	String funds4;
-	String funds4_A;
+	String funds4_a;
 	String note;
 	
 	public String getId() {
@@ -128,12 +128,12 @@ public class Budget_credited {
 		this.funds1 = funds1;
 	}
 
-	public String getFunds1_A() {
-		return funds1_A;
+	public String getFunds1_a() {
+		return funds1_a;
 	}
 
-	public void setFunds1_A(String funds1_A) {
-		this.funds1_A = funds1_A;
+	public void setFunds1_a(String funds1_a) {
+		this.funds1_a = funds1_a;
 	}
 
 	public String getFunds2() {
@@ -144,12 +144,12 @@ public class Budget_credited {
 		this.funds2 = funds2;
 	}
 
-	public String getFunds2_A() {
-		return funds2_A;
+	public String getFunds2_a() {
+		return funds2_a;
 	}
 
-	public void setFunds2_A(String funds2_A) {
-		this.funds2_A = funds2_A;
+	public void setFunds2_a(String funds2_a) {
+		this.funds2_a = funds2_a;
 	}
 
 	public String getFunds3() {
@@ -160,12 +160,12 @@ public class Budget_credited {
 		this.funds3 = funds3;
 	}
 
-	public String getFunds3_A() {
-		return funds3_A;
+	public String getFunds3_a() {
+		return funds3_a;
 	}
 
-	public void setFunds3_A(String funds3_A) {
-		this.funds3_A = funds3_A;
+	public void setFunds3_a(String funds3_a) {
+		this.funds3_a = funds3_a;
 	}
 
 	public String getFunds4() {
@@ -176,12 +176,12 @@ public class Budget_credited {
 		this.funds4 = funds4;
 	}
 
-	public String getFunds4_A() {
-		return funds4_A;
+	public String getFunds4_a() {
+		return funds4_a;
 	}
 
-	public void setFunds4_A(String funds4_A) {
-		this.funds4_A = funds4_A;
+	public void setFunds4_a(String funds4_a) {
+		this.funds4_a = funds4_a;
 	}
 
 	public String getNote() {

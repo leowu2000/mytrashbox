@@ -42,14 +42,14 @@ public class BudgetController_credited extends CommonController {
 		String returnUrl = "b_credited.do?action=list&sel_year=" + sel_year + "&sel_name=" + URLEncoder.encode(sel_name, "UTF-8") + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode, "UTF-8") + "&sel_empname=" + URLEncoder.encode(sel_empname, "UTF-8");
 		
 		if("frame".equals(action)){
-			mv = new ModelAndView("modules/budget/frame_budget_credicted");
+			mv = new ModelAndView("modules/budget/frame_budget_credited");
 			List listPj = budgetDAO.getProject();
 			mv.addObject("listPj", listPj);
 			return mv;
 		}else if("list".equals(action)){
-			mv = new ModelAndView("modules/budget/list_budget_credicted");
+			mv = new ModelAndView("modules/budget/list_budget_credited");
 			
-			PageList pageList = budgetDAO.findAll_Contract(page, sel_year, sel_name, sel_pjcode, sel_empname);
+			PageList pageList = budgetDAO.findAll_Credited(page, sel_year, sel_name, sel_pjcode, sel_empname);
 			List listPj = budgetDAO.getProject();
 			mv.addObject("pageList", pageList);
 			mv.addObject("listPj", listPj);
@@ -72,15 +72,20 @@ public class BudgetController_credited extends CommonController {
 			String leader_section = ServletRequestUtils.getStringParameter(request, "leader_section", "");
 			String manager = ServletRequestUtils.getStringParameter(request, "manager", "");
 			String confirm = ServletRequestUtils.getStringParameter(request, "confirm", "");
+			String _try = ServletRequestUtils.getStringParameter(request, "_try", "");
 			float funds = ServletRequestUtils.getFloatParameter(request, "funds", 0);
 			float funds1 = ServletRequestUtils.getFloatParameter(request, "funds1", 0);
+			float funds1_a = ServletRequestUtils.getFloatParameter(request, "funds1_a", 0);
 			float funds2 = ServletRequestUtils.getFloatParameter(request, "funds2", 0);
+			float funds2_a = ServletRequestUtils.getFloatParameter(request, "funds2_a", 0);
 			float funds3 = ServletRequestUtils.getFloatParameter(request, "funds3", 0);
+			float funds3_a = ServletRequestUtils.getFloatParameter(request, "funds3_a", 0);
 			float funds4 = ServletRequestUtils.getFloatParameter(request, "funds4", 0);
+			float funds4_a = ServletRequestUtils.getFloatParameter(request, "funds4_a", 0);
 			String note = ServletRequestUtils.getStringParameter(request, "note", "");
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			
-			String insertSql = "insert into BUDGET_CONTRACT values('" + id + "', " + year + ", " + ordercode + ", '" + name + "', '" + pjcode + "', '" + leader_station + "', '" + leader_top + "', '" + leader_section + "', '" + manager + "', '" + confirm + "', " + funds + ", " + funds1 + ", " + funds2 + ", " + funds3 + ", " + funds4 + ", '" + note + "')";
+			String insertSql = "insert into BUDGET_CREDITED values('" + id + "', " + year + ", " + ordercode + ", '" + name + "', '" + pjcode + "', '" + leader_station + "', '" + leader_top + "', '" + leader_section + "', '" + manager + "', '" + _try + "', '" + confirm + "', " + funds + ", " + funds1 + ", " + funds1_a + ", " + funds2 + ", " + funds2_a + ", " + funds3 + ", " + funds3_a + ", " + funds4 + ", " + funds4_a + ", '" + note + "')";
 			budgetDAO.insert(insertSql);
 			
 			response.sendRedirect(returnUrl);
@@ -89,26 +94,29 @@ public class BudgetController_credited extends CommonController {
 			String[] check=request.getParameterValues("check");
 			//循环按id删除
 			for(int i=0;i<check.length;i++){
-				String deleteSql = "delete from BUDGET_CONTRACT where ID='" + check[i] + "'";
+				String deleteSql = "delete from BUDGET_CREDITED where ID='" + check[i] + "'";
 				budgetDAO.delete(deleteSql);
 			}
 			response.sendRedirect(returnUrl);
 			return null;
 		}else if("query".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
-			Budget_contract b_contract = budgetDAO.findBudgetContractById(id);
+			Budget_credited b_credited = budgetDAO.findBudgetCreditedById(id);
 			XStream xstream = new XStream(new JettisonMappedXmlDriver());
-			xstream.alias("item", Budget_contract.class);
+			xstream.alias("item", Budget_credited.class);
 			response.setHeader("Pragma", "No-cache");
 			response.setHeader("Cache-Control", "no-cache");
 			response.setDateHeader("Expires", 0L);
 			response.setContentType("text/html; charset=UTF-8");
-			response.getWriter().write(xstream.toXML(b_contract));
+			response.getWriter().write(xstream.toXML(b_credited));
 			response.getWriter().close();
 			return null;
 		}else if("update".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			int year = ServletRequestUtils.getIntParameter(request, "year", 0);
+			if(year == 0){
+				year = Integer.parseInt(StringUtil.DateToString(new Date(), "yyyy"));
+			}
 			int ordercode = ServletRequestUtils.getIntParameter(request, "ordercode", 0);
 			String name = ServletRequestUtils.getStringParameter(request, "name", "");
 			String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
@@ -117,14 +125,19 @@ public class BudgetController_credited extends CommonController {
 			String leader_section = ServletRequestUtils.getStringParameter(request, "leader_section", "");
 			String manager = ServletRequestUtils.getStringParameter(request, "manager", "");
 			String confirm = ServletRequestUtils.getStringParameter(request, "confirm", "");
+			String _try = ServletRequestUtils.getStringParameter(request, "_try", "");
 			float funds = ServletRequestUtils.getFloatParameter(request, "funds", 0);
 			float funds1 = ServletRequestUtils.getFloatParameter(request, "funds1", 0);
+			float funds1_a = ServletRequestUtils.getFloatParameter(request, "funds1_a", 0);
 			float funds2 = ServletRequestUtils.getFloatParameter(request, "funds2", 0);
+			float funds2_a = ServletRequestUtils.getFloatParameter(request, "funds2_a", 0);
 			float funds3 = ServletRequestUtils.getFloatParameter(request, "funds3", 0);
+			float funds3_a = ServletRequestUtils.getFloatParameter(request, "funds3_a", 0);
 			float funds4 = ServletRequestUtils.getFloatParameter(request, "funds4", 0);
+			float funds4_a = ServletRequestUtils.getFloatParameter(request, "funds4_a", 0);
 			String note = ServletRequestUtils.getStringParameter(request, "note", "");
 			
-			String updateSql = "update BUDGET_CONTRACT set YEAR=" + year + ", ORDERCODE=" + ordercode + ", NAME='" + name + "', PJCODE='" + pjcode + "', LEADER_STATION='" + leader_station + "', LEADER_TOP='" + leader_top + "', LEADER_SECTION='" + leader_section + "', MANAGER='" + manager + "', CONFIRM='" + confirm + "', FUNDS=" + funds + ", FUNDS1=" + funds1 + ", FUNDS2=" + funds2 + ", FUNDS3=" + funds3 + ", FUNDS4=" + funds3 + ", NOTE='" + note + "' where ID='" + id + "'";
+			String updateSql = "update BUDGET_CREDITED set YEAR=" + year + ", ORDERCODE=" + ordercode + ", NAME='" + name + "', PJCODE='" + pjcode + "', LEADER_STATION='" + leader_station + "', LEADER_TOP='" + leader_top + "', LEADER_SECTION='" + leader_section + "', MANAGER='" + manager + "', TRY='" + _try + "', CONFIRM='" + confirm + "', FUNDS=" + funds + ", FUNDS1=" + funds1 + ", FUNDS1_A=" + funds1_a + ", FUNDS2=" + funds2 + ", FUNDS2_A=" + funds2_a + ", FUNDS3=" + funds3 + ", FUNDS3_A=" + funds3_a + ", FUNDS4=" + funds4 + ", FUNDS4_A=" + funds4_a + ", NOTE='" + note + "' where ID='" + id + "'";
 			budgetDAO.update(updateSql);
 			response.sendRedirect(returnUrl);
 			return null;

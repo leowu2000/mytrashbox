@@ -130,6 +130,18 @@ public class ExcelController extends CommonController {
 				mv = new ModelAndView("modules/excel/preview_budget_contract");
 				String import_year = ServletRequestUtils.getStringParameter(request, "import_year", "");
 				mv.addObject("import_year", import_year);
+			}else if("BUDGET_CREDITED".equals(table)){//预计到款表
+				mv = new ModelAndView("modules/excel/preview_budget_credited");
+				String import_year = ServletRequestUtils.getStringParameter(request, "import_year", "");
+				mv.addObject("import_year", import_year);
+			}else if("BUDGET_INCREASE".equals(table)){//增量预算表
+				mv = new ModelAndView("modules/excel/preview_budget_increase");
+				String import_year = ServletRequestUtils.getStringParameter(request, "import_year", "");
+				mv.addObject("import_year", import_year);
+			}else if("BUDGET_REMAIN".equals(table)){//所留预算表
+				mv = new ModelAndView("modules/excel/preview_budget_remain");
+				String import_year = ServletRequestUtils.getStringParameter(request, "import_year", "");
+				mv.addObject("import_year", import_year);
 			}
 			
 			MultipartHttpServletRequest mpRequest = (MultipartHttpServletRequest)request;
@@ -207,6 +219,24 @@ public class ExcelController extends CommonController {
 					import_year = Integer.parseInt(StringUtil.DateToString(new Date(), "yyyy"));
 				}
 				errorMessage = excelDAO.insertBudget_contract(data, import_year);
+			}else if("BUDGET_CREDITED".equals(table)){//预计到款表
+				int import_year = ServletRequestUtils.getIntParameter(request, "import_year", 0);
+				if(import_year == 0){
+					import_year = Integer.parseInt(StringUtil.DateToString(new Date(), "yyyy"));
+				}
+				errorMessage = excelDAO.insertBudget_credited(data, import_year);
+			}else if("BUDGET_INCREASE".equals(table)){//增量预算表
+				int import_year = ServletRequestUtils.getIntParameter(request, "import_year", 0);
+				if(import_year == 0){
+					import_year = Integer.parseInt(StringUtil.DateToString(new Date(), "yyyy"));
+				}
+				errorMessage = excelDAO.insertBudget_increase(data, import_year);
+			}else if("BUDGET_REMAIN".equals(table)){//所留预算表
+				int import_year = ServletRequestUtils.getIntParameter(request, "import_year", 0);
+				if(import_year == 0){
+					import_year = Integer.parseInt(StringUtil.DateToString(new Date(), "yyyy"));
+				}
+				errorMessage = excelDAO.insertBudget_remain(data, import_year);
 			}
 			
 			if(errorMessage.length()>200){
