@@ -289,6 +289,58 @@ public class ExportExcel {
 	}
 	
 	/**
+	 * 员工投入分析excel文件，返回这个文件的路径
+	 * @param list 数据列表
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WriteException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public String exportExcel_YGJBTJ(List<Map<String, String>> list, String imagepath) throws IOException, BiffException, WriteException, IndexOutOfBoundsException {
+		String[] str = new String[1];
+		str[0] = "员工加班统计";
+		String path = java.net.URLDecoder.decode(ExportExcel.class.getResource("").getPath().substring(1)) + str[0] + ".xls";;
+		
+		WritableWorkbook wb = readExcel(path);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		//插入标题
+		insertRowData(sheet, 0, str);
+		sheet.mergeCells(0, 0, 5, 0);
+		
+		//插入第一行表头
+		String[] str1 = new String[6];
+		str1[0] = "姓名";
+		str1[1] = "部门";
+		str1[2] = "职位";
+		str1[3] = "学历";
+		str1[4] = "职称";
+		str1[5] = "加班工时";
+		insertRowData(sheet, 1, str1);
+		
+		for (int i = 0; i < list.size(); i++) {
+			String[] str2 = new String[6];
+			Map<String, String> map = (Map<String, String>) list.get(i);
+			str2[0] = map.get("NAME");
+			str2[1] = map.get("DEPARTNAME");
+			str2[2] = map.get("LEVEL");
+			str2[3] = map.get("DEGREENAME");
+			str2[4] = map.get("PRONAME");
+			str2[5] = String.valueOf(map.get("AMOUNT"));
+			
+			insertRowData(sheet, i + 2, str2);
+		}
+		//导出图片
+		WritableImage ri=new WritableImage(0, list.size() + 3, 10, list.size() + 15,new File(imagepath));   
+		sheet.addImage(ri); 
+		
+		wb.write();
+		wb.close();
+		
+		return path;
+	}
+	
+	/**
 	 * 计划考核统计表写成一个excel文件，返回这个文件的路径
 	 * @param list 数据列表
 	 * @param planDAO
@@ -700,10 +752,10 @@ public class ExportExcel {
 		
 		//插入标题
 		insertRowData(sheet, 0, str);
-		sheet.mergeCells(0, 0, 7, 0);
+		sheet.mergeCells(0, 0, 8, 0);
 		
 		//插入表头
-		String str1[] = new String[8];
+		String str1[] = new String[9];
 		str1[0] = "上报人";
 		str1[1] = "日期";
 		str1[2] = "名称";
@@ -711,12 +763,13 @@ public class ExportExcel {
 		str1[4] = "分系统";
 		str1[5] = "投入阶段";
 		str1[6] = "投入工时";
-		str1[7] = "备注";
+		str1[7] = "加班工时";
+		str1[8] = "备注";
 		
 		insertRowData(sheet, 1, str1);
 		
 		for (int i = 0; i < list.size(); i++) {
-			String[] str2 = new String[8];
+			String[] str2 = new String[9];
 			Map<String, String> map = (Map<String, String>) list.get(i);
 		
 			String empname = wrDAO.findNameByCode("EMPLOYEE", map.get("EMPCODE").toString());
@@ -731,7 +784,8 @@ public class ExportExcel {
 			str2[4] = pjname_d;
 			str2[5] = stagename;
 			str2[6] = map.get("AMOUNT")==null?"0":String.valueOf(map.get("AMOUNT"));
-			str2[7] = map.get("BZ")==null?"":map.get("BZ");
+			str2[7] = map.get("OVER_AMOUNT")==null?"0":String.valueOf(map.get("OVER_AMOUNT"));
+			str2[8] = map.get("BZ")==null?"":map.get("BZ");
             
             insertRowData(sheet, i + 2, str2);
 		}

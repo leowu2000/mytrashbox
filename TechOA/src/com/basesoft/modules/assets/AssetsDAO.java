@@ -68,15 +68,15 @@ public class AssetsDAO extends CommonDAO {
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		if(!"0".equals(status)&&!"".equals(status)){//选择了状态
+		if(!"".equals(status)){//选择了状态
 			sql = "select * from ASSETS where STATUS='" + status + "'";
 			if("2".equals(status)){//借出
-				if(!"0".equals(depart)){//选择了部门
+				if(!"".equals(depart)){//选择了部门
 					sql = sql + " and DEPARTCODE='" + depart + "'";
 				}
 				
-				if(!"0".equals(emp)){//选择了员工
-					sql = sql + " and EMPCODE='" + emp +"'";
+				if(!"".equals(emp)){//选择了员工
+					sql = sql + " and EMPCODE like '%" + emp +"%'";
 				}
 			}
 		}

@@ -80,6 +80,23 @@ public class ChartUtil {
 		return path;
 	}
 	
+	/**
+	 * 生成员工投入分析统计图
+	 * @param listData
+	 * @param selpjname
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
+	public static String createChartYgjbtj(List listData, String selpjname, String path, String sel_type) throws Exception{
+		path = path + "\\ygjbtj.png";
+		String title = "员工加班统计";
+		CategoryDataset dataset = createDatasetYgtrfx(listData, selpjname);  
+		JFreeChart freeChart = createChart(dataset, title, sel_type);   
+		saveAsFile(freeChart, path, 700, 350);   
+		return path;
+	}
+	
 	 /** 
      * 工时统计汇总
 	 * @param pjDAO

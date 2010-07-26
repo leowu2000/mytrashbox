@@ -40,9 +40,11 @@ public class AssetsController extends CommonController {
 			//获得部门列表和人员列表
 			List listAssetsDepart = assetsDAO.getAssetDepart(status);
 			List listAssetsEmp = assetsDAO.getAssetEmpByDepart(depart, status);
+			List listStatus = assetsDAO.findDICT("ASSETS", "STATUS", "");
 			
 			mv.addObject("listAssetsEmp", listAssetsEmp);
 			mv.addObject("listAssetsDepart", listAssetsDepart);
+			mv.addObject("listStatus", listStatus);
 			mv.addObject("depart", depart);
 			mv.addObject("status", status);
 			mv.addObject("manage", manage);

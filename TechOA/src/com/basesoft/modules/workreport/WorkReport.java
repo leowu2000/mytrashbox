@@ -12,6 +12,7 @@ public class WorkReport {
 	public String pjcode_d;
 	public String stagecode;
 	public float amount;
+	public float over_amount;
 	public String bz;
 	public int flag;
 	public String departcode;
@@ -110,5 +111,13 @@ public class WorkReport {
 
 	public void setPjcode_d(String pjcode_d) {
 		this.pjcode_d = pjcode_d;
+	}
+
+	public float getOver_amount() {
+		return over_amount;
+	}
+
+	public void setOver_amount(float over_amount) {
+		this.over_amount = over_amount;
 	}
 }

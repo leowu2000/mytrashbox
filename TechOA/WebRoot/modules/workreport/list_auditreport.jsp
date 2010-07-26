@@ -5,6 +5,8 @@
 <%@ page import="com.basesoft.modules.workreport.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
+String sel_status = request.getAttribute("sel_status").toString();
+String sel_date = request.getAttribute("sel_date").toString();
 String sel_pjcode = request.getAttribute("sel_pjcode").toString();
 sel_pjcode = URLEncoder.encode(sel_pjcode,"UTF-8");
 String sel_empcode = request.getAttribute("sel_empcode").toString();
@@ -57,7 +59,7 @@ Ext.onReady(function(){
 		}
 		Ext.Msg.confirm('确认','确实要通过么？',function(btn){
     		if(btn=='yes'){
-            	Ext.getDom('listForm').action = url+'?action=pass&page=<%=pagenum %>&sel_pjcode=<%=sel_pjcode %>&sel_empcode=<%=sel_empcode %>&sel_empname=<%=sel_empname %>';
+            	Ext.getDom('listForm').action = url+'?action=pass&page=<%=pagenum %>&sel_pjcode=<%=sel_pjcode %>&sel_empcode=<%=sel_empcode %>&sel_empname=<%=sel_empname %>&sel_status=<%=sel_status %>&sel_date=<%=sel_date %>';
             	Ext.getDom('listForm').submit();
     		}
     	});
@@ -82,14 +84,14 @@ Ext.onReady(function(){
 			}
 		}
 		
-    	action = url+'?action=deny&page=<%=pagenum %>&reportids=' + checkedids + '&sel_pjcode=<%=sel_pjcode %>&sel_empcode=<%=sel_empcode %>&sel_empname=<%=sel_empname %>';
+    	action = url+'?action=deny&page=<%=pagenum %>&reportids=' + checkedids + '&sel_pjcode=<%=sel_pjcode %>&sel_empcode=<%=sel_empcode %>&sel_empname=<%=sel_empname %>&sel_status=<%=sel_status %>&sel_date=<%=sel_date %>';
     	win.setTitle('审核退回');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
     }
     
     function onExportClick(){
-    	window.location.href = "/excel.do?action=export&model=WORKREPORT&sel_pjcode=<%=sel_pjcode %>&sel_empcode=<%=sel_empcode %>&sel_empname=<%=sel_empname %>";
+    	window.location.href = "/excel.do?action=export&model=WORKREPORT&sel_pjcode=<%=sel_pjcode %>&sel_empcode=<%=sel_empcode %>&sel_empname=<%=sel_empname %>&sel_status=<%=sel_status %>&sel_date=<%=sel_date %>";
   	}
 });
 
@@ -126,6 +128,7 @@ function checkAll(){
                 <td nowrap="nowrap">分系统</td>
                 <td nowrap="nowrap">投入阶段</td>
                 <td nowrap="nowrap">投入工时</td>
+                <td nowrap="nowrap">加班工时</td>
                 <td nowrap="nowrap">备注</td>
                 <td nowrap="nowrap">状态</td>
                 <td nowrap="nowrap">反馈</td>
@@ -157,6 +160,7 @@ for(int i=0;i<list.size();i++){
                 <td><%=pjname_d %></td>
                 <td><%=stagename %></td>   
                 <td><%=map.get("AMOUNT") %></td>
+                <td><%=map.get("OVER_AMOUNT")==null?"":map.get("OVER_AMOUNT") %></td>
                 <td><%=map.get("BZ") %></td>
                 <td nowrap="nowrap"><%=flag %></td>
                 <td><%=map.get("BACKBZ")==null?"":map.get("BACKBZ") %></td>

@@ -520,6 +520,23 @@ public class EmployeeController extends CommonController {
 			
 			mv.addObject("listYgtrfx", listYgtrfx);
 			mv.addObject("selpjname", selpjname);
+		}else if("frame_ygjbtj".equals(action)){//员工加班统计frame
+			mv = new ModelAndView("modules/pj/frame_ygjbtj");
+			return mv;
+		}else if("list_ygjbtj".equals(action)){//员工加班统计
+			mv = new ModelAndView("modules/pj/list_ygjbtj");
+			
+			String empcodes = ServletRequestUtils.getStringParameter(request, "empcodes", "");
+			String startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
+			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
+			String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "1");
+			
+			List listYgjbtj = emDAO.getYgjbtj(empcodes, startdate, enddate);
+			String selpjname = "合计";
+			
+			ChartUtil.createChartYgjbtj(listYgjbtj, selpjname, path, sel_type);
+			
+			mv.addObject("listYgjbtj", listYgjbtj);
 		}
 		
 		return mv;

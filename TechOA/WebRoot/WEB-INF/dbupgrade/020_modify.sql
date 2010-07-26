@@ -1,0 +1,5 @@
+ALTER TABLE WORKREPORT ADD AMOUNT_OVER NUMERIC(5,1);
+
+INSERT INTO MENU VALUES('035','员工加班统计','1','em.do?action=frame_ygjbtj',17,'1','003','3.png');
+
+INSERT INTO USER_MENU VALUES('002','035','1');

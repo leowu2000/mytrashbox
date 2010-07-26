@@ -222,18 +222,16 @@ for(int i=0;i<listProject.size();i++){
 	}
 	
 	//获得项目经理名称
-	String managername = projectDAO.findNameByCode("EMPLOYEE", mapProject.get("MANAGER").toString());
-	//获得参与人员名称
-	String members = projectDAO.findNamesByCodes("EMPLOYEE",mapProject.get("MEMBER").toString());
+	String manager = mapProject.get("MANAGER")==null?"":mapProject.get("MANAGER").toString();
+	String managername = "".equals(projectDAO.findNameByCode("EMPLOYEE", manager))?manager:projectDAO.findNameByCode("EMPLOYEE", manager);
+	
 %>
             <tr align="center">
                 <td><input type="checkbox" name="check" value="<%=mapProject.get("ID") %>" class="ainput"></td>
-                <td>&nbsp;<a href="/pj_d.do?action=list&pjcode=<%=mapProject.get("CODE") %>&page=<%=pagenum %>"><%=mapProject.get("NAME") %></a></td>
+                <td>&nbsp;<a href="/pj_d.do?action=list&pjcode=<%=mapProject.get("CODE") %>&page=<%=pagenum %>"><%=mapProject.get("CODE") %></a></td>
                 <td>&nbsp;<%=status %></td>
                 <td>&nbsp;<%=managername %></td>
-                <!-- <td>&nbsp;<%=members %></td> -->
                 <td>&nbsp;<%=mapProject.get("PLANEDWORKLOAD")==null?0:mapProject.get("PLANEDWORKLOAD") %></td>
-                <!-- <td>&nbsp;<%=mapProject.get("NOWWORKLOAD") %></td> -->
                 <td>&nbsp;<%=mapProject.get("STARTDATE")==null?"":mapProject.get("STARTDATE") %></td>
                 <td>&nbsp;<%=mapProject.get("ENDDATE")==null?"":mapProject.get("ENDDATE") %></td>
                 <td>&nbsp;<%=mapProject.get("NOTE")%></td>

@@ -18,25 +18,21 @@ public class FinanceDAO extends EmployeeDAO {
 	 * @return
 	 */
 	public PageList findAll(String emname, String datepick, String sel_empcode, int page, String departcodes){
-		PageList pageList = new PageList();
-		String sql = "";
-		int pagesize = 20;
-		int start = pagesize*(page - 1) + 1;
-		int end = pagesize*page;
-		
 		if("".equals(datepick)){
 			datepick = StringUtil.DateToString(new Date(), "yyyy-MM-dd");
 		}
 		
 		Date startdate = StringUtil.StringToDate(datepick + "-01", "yyyy-MM-dd"); 
 		Date enddate = StringUtil.getEndOfMonth(startdate);
+		PageList pageList = new PageList();
+		String sql = "select * from EMP_FINANCIAL where (DEPARTCODE in (" + departcodes + ")  or DEPARTNAME in (select NAME from DEPARTMENT where CODE in (" + departcodes + "))) and RQ>='" + startdate + "' and RQ<='" + enddate + "'";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
 		
-		if("".equals(emname)){
-			sql = "select * from EMP_FINANCIAL where DEPARTCODE in (" + departcodes + ") and RQ>='" + startdate + "' and RQ<='" + enddate + "'";
-		}else {
-			sql = "select * from EMP_FINANCIAL where DEPARTCODE in (" + departcodes + ") and EMPNAME like '%" + emname + "%' and RQ>='" + startdate + "' and RQ<='" + enddate + "'";
+		if(!"".equals(emname)){
+			sql = " and EMPNAME like '%" + emname + "%' ";
 		}
-		
 		if(!"".equals(sel_empcode)){
 			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
 		}

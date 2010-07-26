@@ -34,6 +34,8 @@ public class WorkReportController extends CommonController {
 		String emname = request.getSession().getAttribute("EMNAME")==null?"":request.getSession().getAttribute("EMNAME").toString();
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		String sel_status = ServletRequestUtils.getStringParameter(request, "sel_status", "");
+		String sel_date = ServletRequestUtils.getStringParameter(request, "sel_date", "");
 		String sel_pjcode = ServletRequestUtils.getStringParameter(request, "sel_pjcode", "");
 		sel_pjcode = URLDecoder.decode(sel_pjcode, "ISO8859-1");
 		sel_pjcode = new String(sel_pjcode.getBytes("ISO8859-1"), "UTF-8");
@@ -73,12 +75,14 @@ public class WorkReportController extends CommonController {
 			}
 			departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 			//工作报告列表
-			PageList listReport = workReportDAO.findAllAudit(page, departcodes, emcode, sel_pjcode, sel_empcode, sel_empname);
+			PageList listReport = workReportDAO.findAllAudit(page, departcodes, emcode, sel_pjcode, sel_empcode, sel_empname, sel_status, sel_date);
 			
 			mv.addObject("listReport", listReport);
 			mv.addObject("sel_pjcode", sel_pjcode);
 			mv.addObject("sel_empname", sel_empname);
 			mv.addObject("sel_empcode", sel_empcode);
+			mv.addObject("sel_status", sel_status);
+			mv.addObject("sel_date", sel_date);
 		}else if("add".equals(action)){//新增操作
 			//获取登陆用户信息
 			Map mapEm = workReportDAO.findByEmId(emid);
@@ -89,6 +93,7 @@ public class WorkReportController extends CommonController {
 			String pjcode_d = ServletRequestUtils.getStringParameter(request, "pjcode_d", "");
 			String stage = ServletRequestUtils.getStringParameter(request, "stage", "");
 			String amount = ServletRequestUtils.getStringParameter(request, "amount", "");
+			String over_amount = ServletRequestUtils.getStringParameter(request, "over_amount", "");
 			String bz = ServletRequestUtils.getStringParameter(request, "bz", "");
 			//生成uuid
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
@@ -102,8 +107,11 @@ public class WorkReportController extends CommonController {
 			if("".equals(amount)){
 				amount = "0";
 			}
+			if("".equals(over_amount)){
+				over_amount = "0";
+			}
 			
-			String insertSql = "insert into WORKREPORT values('" + uuid + "','" + reportname + "','" + emcode + "'," + datepick + "," + datepick + ",'" + pjcode + "','" + pjcode_d + "','" + stage + "'," + amount + ",'" + bz + "',0,'" + mapEm.get("DEPARTCODE") + "')";
+			String insertSql = "insert into WORKREPORT values('" + uuid + "','" + reportname + "','" + emcode + "'," + datepick + "," + datepick + ",'" + pjcode + "','" + pjcode_d + "','" + stage + "'," + amount + ",'" + bz + "',0,'" + mapEm.get("DEPARTCODE") + "', " + over_amount + ")";
 			
 			workReportDAO.insert(insertSql);
 			
@@ -129,6 +137,7 @@ public class WorkReportController extends CommonController {
 			String pjcode_d = ServletRequestUtils.getStringParameter(request, "pjcode_d", "");
 			String stage = ServletRequestUtils.getStringParameter(request, "stage", "");
 			String amount = ServletRequestUtils.getStringParameter(request, "amount", "");
+			String over_amount = ServletRequestUtils.getStringParameter(request, "over_amount", "");
 			String bz = ServletRequestUtils.getStringParameter(request, "bz", "");
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			
@@ -141,8 +150,11 @@ public class WorkReportController extends CommonController {
 			if("".equals(amount)){
 				amount = "0";
 			}
+			if("".equals(over_amount)){
+				over_amount = "0";
+			}
 			
-			String updateSql = "update WORKREPORT set STARTDATE=" + datepick + ",ENDDATE=" + datepick + ",NAME='" + reportname + "',PJCODE='" + pjcode + "',PJCODE_D='" + pjcode_d + "',STAGECODE='" + stage + "',AMOUNT=" + amount + ",bz='" + bz + "' where ID='" + id + "'";
+			String updateSql = "update WORKREPORT set STARTDATE=" + datepick + ",ENDDATE=" + datepick + ",NAME='" + reportname + "',PJCODE='" + pjcode + "',PJCODE_D='" + pjcode_d + "',STAGECODE='" + stage + "',AMOUNT=" + amount + ", OVER_AMOUNT=" + over_amount + ",bz='" + bz + "' where ID='" + id + "'";
 		
 			workReportDAO.update(updateSql);
 			
@@ -170,7 +182,7 @@ public class WorkReportController extends CommonController {
 				String updateSql = "update WORKREPORT set FLAG=2,BACKEMPCODE='" + emcode + "',BACKEMPNAME='" + emname + "' where ID='" + check[i] + "'";
 				workReportDAO.update(updateSql);
 			}
-			response.sendRedirect("workreport.do?action=auditlist&page=" + page + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode, "UTF-8") + "&sel_empcode=" + sel_empcode + "&sel_empname=" + URLEncoder.encode(sel_empname, "UTF-8"));
+			response.sendRedirect("workreport.do?action=auditlist&page=" + page + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode, "UTF-8") + "&sel_empcode=" + sel_empcode + "&sel_empname=" + URLEncoder.encode(sel_empname, "UTF-8") + "&sel_status=" + sel_status + "&sel_date=" + sel_date);
 			return null;
 		}else if("deny".equals(action)){//审批退回
 			String reportids = ServletRequestUtils.getStringParameter(request, "reportids", "");
@@ -180,7 +192,7 @@ public class WorkReportController extends CommonController {
 				String updateSql = "update WORKREPORT set FLAG=3,BACKBZ='" + backbz + "',BACKEMPCODE='" + emcode + "',BACKEMPNAME='" + emname + "' where ID='" + check[i] + "'";
 				workReportDAO.update(updateSql);
 			}
-			response.sendRedirect("workreport.do?action=auditlist&page=" + page + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode, "UTF-8") + "&sel_empcode=" + sel_empcode + "&sel_empname=" + URLEncoder.encode(sel_empname, "UTF-8"));
+			response.sendRedirect("workreport.do?action=auditlist&page=" + page + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode, "UTF-8") + "&sel_empcode=" + sel_empcode + "&sel_empname=" + URLEncoder.encode(sel_empname, "UTF-8") + "&sel_status=" + sel_status + "&sel_date=" + sel_date);
 			return null;
 		}
 		

@@ -349,4 +349,24 @@ public class StringUtil {
         return ips <= ipt && ipt <= ipe;   
     }   
 
+	public static String changeNumToDate(String s){
+        String rtn= "1900-01-01";
+        try{
+         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+         java.util.Date date1 = new java.util.Date();
+         date1 = format.parse("1900-01-01");
+         long i1 = date1.getTime();
+
+         //这里要减去2，(Long.parseLong(s)-2) 不然日期会提前2天，具体原因不清楚，
+         //估计和java计时是从1970-01-01开始有关
+         //而excel里面的计算是从1900-01-01开始
+         i1= i1/1000+( (Long.parseLong(s)-2)*24*3600);
+         date1.setTime(i1*1000);
+         rtn=format.format(date1);
+        }catch(Exception e){
+         rtn= "1900-01-01";
+        }
+        return rtn;
+        
+       }
 }

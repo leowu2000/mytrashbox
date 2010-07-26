@@ -142,12 +142,15 @@ public class GoodsController extends CommonController {
 			return mv;
 		}else if("frame_goodsdict".equals(action)){//物资字典(优选)frame
 			mv = new ModelAndView("modules/goods/frame_goods_dict");
+			List listType = goodsDAO.findDICT("GOODS_DICT", "TYPE", "");
+			mv.addObject("listType", listType);
 			return mv;
 		}else if("list_goodsdict".equals(action)){//物资优选list
 			mv = new ModelAndView("modules/goods/list_goods_dict");
 			
 			PageList pageList = goodsDAO.findAll_dict(page, sel_type, sel_code);
-			
+			List listType = goodsDAO.findDICT("GOODS_DICT", "TYPE", "");
+			mv.addObject("listType", listType);
 			mv.addObject("pageList", pageList);
 			mv.addObject("sel_type", sel_type);
 			mv.addObject("sel_code", sel_code);

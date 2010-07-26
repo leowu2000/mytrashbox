@@ -238,6 +238,47 @@ public class TreeController extends CommonController {
 			response.setContentType("text/html; charset=GBK");
 			response.getWriter().write(sb.toString());
 			response.getWriter().close();
+		}else if("multicolumn".equals(action)){//多选字段
+			String sel_table = ServletRequestUtils.getStringParameter(request, "sel_table", "");
+			List<CheckBoxTree> checkBoxTreeList = treeDAO.getMultiColumnTree(sel_table);
+			//循环转换为json格式
+			StringBuffer sb = new StringBuffer();
+			sb.append("[");
+			for (int i = 0; i < checkBoxTreeList.size(); i++) {
+				if (i != 0) {
+					sb.append(",");
+				}
+				sb.append(checkBoxTreeList.get(i).toJSONString());
+			}
+			sb.append("]");
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=GBK");
+			response.getWriter().write(sb.toString());
+			response.getWriter().close();
+		}else if("multicolumn1".equals(action)){//多选字段
+			String sel_table = ServletRequestUtils.getStringParameter(request, "sel_table", "");
+			String sel_columns = ServletRequestUtils.getStringParameter(request, "sel_columns", "");
+			List<CheckBoxTree> checkBoxTreeList = treeDAO.getMultiColumnTree1(sel_table, sel_columns);
+			//循环转换为json格式
+			StringBuffer sb = new StringBuffer();
+			sb.append("[");
+			for (int i = 0; i < checkBoxTreeList.size(); i++) {
+				if (i != 0) {
+					sb.append(",");
+				}
+				sb.append(checkBoxTreeList.get(i).toJSONString());
+			}
+			sb.append("]");
+			
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0L);
+			response.setContentType("text/html; charset=GBK");
+			response.getWriter().write(sb.toString());
+			response.getWriter().close();
 		}
 		
 		return null;
