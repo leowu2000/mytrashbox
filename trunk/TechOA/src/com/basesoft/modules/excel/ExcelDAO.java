@@ -182,9 +182,9 @@ public class ExcelDAO extends CommonDAO {
 	 * @param datepick 日期
 	 * @return
 	 */
-	public List getExportData_WORKREPORT(String emcode, String departcodes, WorkReportDAO wrDAO, String sel_pjcode, String sel_empcode, String sel_empname){
+	public List getExportData_WORKREPORT(String emcode, String departcodes, WorkReportDAO wrDAO, String sel_pjcode, String sel_empcode, String sel_empname, String sel_status, String sel_date){
 		
-		List listAudit = wrDAO.findAllAudit(departcodes, emcode, sel_pjcode, sel_empcode, sel_empname);
+		List listAudit = wrDAO.findAllAudit(departcodes, emcode, sel_pjcode, sel_empcode, sel_empname, sel_status, sel_date);
 		
 		return listAudit;
 	}
@@ -781,13 +781,7 @@ public class ExcelDAO extends CommonDAO {
 			String name = row.optString("NAME");
 			String spec = row.optString("SPEC");
 			String type = row.optString("TYPE");
-			if("机载另册".equals(type)){
-				type = "1";
-			}else if("地面优选".equals(type)){
-				type = "2";
-			}else if("机载优选".equals(type)){
-				type = "3";
-			}
+			type = getDictCode(type, "");
 				
 			//生成32位uuid
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");

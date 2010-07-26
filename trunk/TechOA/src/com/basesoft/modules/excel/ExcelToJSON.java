@@ -9,6 +9,7 @@ import java.io.InputStream;
 import jxl.Cell;
 import jxl.CellType;
 import jxl.DateCell;
+import jxl.NumberCell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -147,16 +148,22 @@ public class ExcelToJSON {
 	private static String getCellContents(Cell cell, String format) {
 		
 		String ret = "";
-		
-		if (cell.getType() == CellType.DATE) {
-			
-			DateCell dateCell = (DateCell) cell;
-			ret = StringUtil.DateToString(dateCell.getDate(), format);
+		if("yyyy-MM-dd".equals(format)||"yyyy-MM-dd hh24:mi:ss".equals(format)){
+			if(cell.getType() == CellType.DATE){
+				DateCell dateCell = (DateCell) cell;
+				ret = StringUtil.DateToString(dateCell.getDate(), format);
+			}else if(cell.getType() == CellType.LABEL){
+				ret = cell.getContents();
+			}else if(cell.getType() == CellType.NUMBER){
+				NumberCell numCell = (NumberCell) cell;
+				Double num = numCell.getValue();
+				ret = StringUtil.changeNumToDate(String.valueOf(num.intValue()));
+			}else {
+				ret = StringUtil.changeNumToDate(cell.getContents());
+			}
 		} else {
-			
 			ret = cell.getContents();
 		}
-		
 		
 		return ret;
 	}

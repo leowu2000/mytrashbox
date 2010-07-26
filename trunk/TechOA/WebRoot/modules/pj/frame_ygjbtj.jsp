@@ -5,7 +5,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>员工投入分析</title>
+    <title>员工加班统计</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -25,23 +25,10 @@
   		tb.add(document.getElementById('startdate'));
   		tb.add('到');
   		tb.add(document.getElementById('enddate'));
-  		tb.add('选择令号');
-  		tb.add(document.getElementById('selproject'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add({text: 'excel导出',cls: 'x-btn-text-icon export',handler: onExportClick});
-  		
-  		var pjcombo = new Ext.form.ComboBox({
-        	typeAhead: true,
-        	triggerAction: 'all',
-        	emptyText:'',
-        	mode: 'local',
-        	selectOnFocus:true,
-        	transform:'selproject',
-        	width:203,
-        	maxHeight:300
-		});
   		
   		function onExportClick(){
   			var empcodes = document.getElementById('empcodes').value;
@@ -51,13 +38,12 @@
 	  		}
 	  		var startdate = document.getElementById('startdate').value;
 	  		var enddate = document.getElementById('enddate').value;
-	  		var selproject = document.getElementById('selproject').value;
-    		window.location.href = "/excel.do?action=export&model=YGTRFX&empcodes=" + empcodes + "&startdate=" + startdate + "&enddate=" + enddate + "&selproject=" + encodeURI(selproject);
+    		window.location.href = "/excel.do?action=export&model=YGJBTJ&empcodes=" + empcodes + "&startdate=" + startdate + "&enddate=" + enddate;
   		}
 	});
 	
 	function IFrameResize(){
-	  document.getElementById("list_ygtrfx").height = document.body.offsetHeight - document.getElementById("list_ygtrfx").offsetTop-10;
+	  document.getElementById("list_ygjbtj").height = document.body.offsetHeight - document.getElementById("list_ygjbtj").offsetTop-10;
 	}
 	
 	function changeEmp(){
@@ -78,37 +64,21 @@
 	  }
 	  var startdate = document.getElementById('startdate').value;
 	  var enddate = document.getElementById('enddate').value;
-	  var selproject = document.getElementById('selproject').value;
 	  
-	  document.getElementById('list_ygtrfx').src = "/em.do?action=list_ygtrfx&empcodes=" + empcodes + "&startdate=" + startdate + "&enddate=" + enddate + "&selproject=" + encodeURI(selproject);
+	  document.getElementById('list_ygjbtj').src = "/em.do?action=list_ygjbtj&empcodes=" + empcodes + "&startdate=" + startdate + "&enddate=" + enddate;
 	}
 	</script>
   </head>
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
-  	<h1>员工投入分析</h1>
+  	<h1>员工加班统计</h1>
   	<div id="toolbar"></div>
 	<input type="text" id="empnames" name="empnames" style="width:120;" value="请选择..." disabled="disabled"><input class="btn" name="selemp" type="button" onclick="changeEmp();" value="选择">
 	<input type="hidden" id="empcodes" name="empcodes">
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="startdate" style="width: 70">
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="enddate" style="width: 70">
-	<select name="selproject" id="selproject" style="width:210">
-		<option value="0">合计</option>
-<%
-	for(int i=0;i<listProject.size();i++){
-		Map mapProject = (Map)listProject.get(i);
-		String name = mapProject.get("NAME")==null?"":mapProject.get("NAME").toString();
-		if(name.length()>15){
-			name = name.substring(0,14) + "...";
-		}
-%>		
-		<option value="<%=mapProject.get("CODE") %>"><%=name %></option>
-<%
-	}
-%>
-	</select>
 	<input type="button" class="btn" value="分析" name="search" onclick="commit();">
-    <iframe name="list_ygtrfx" width="100%" frameborder="0" height="500"></iframe>
+    <iframe name="list_ygjbtj" width="100%" frameborder="0" height="500"></iframe>
     
     <form id="treeForm" name="treeForm" method="POST" target="checkedtree">
 		<input type="hidden" id="checkedEmp" name="checkedEmp">

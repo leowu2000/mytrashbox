@@ -354,7 +354,7 @@ public class EmployeeDAO extends CommonDAO{
 			String majorname = findNameByCode("DICT", mapYgtrfx.get("MAJORCODE")==null?"":mapYgtrfx.get("MAJORCODE").toString());
 			String departname = findNameByCode("DEPARTMENT", mapYgtrfx.get("DEPARTCODE")==null?"":mapYgtrfx.get("DEPARTCODE").toString());
 			
-			sql = "select sum(AMOUNT) as AMOUNT from WORKREPORT where EMPCODE='" + empcode[i] + "' and FLAG=2";
+			sql = "select sum(AMOUNT)+sum(OVER_AMOUNT) as AMOUNT from WORKREPORT where EMPCODE='" + empcode[i] + "' and FLAG=2";
 			if(!"0".equals(selproject)){
 				sql = sql + " and PJCODE='" + selproject + "'";
 			}
@@ -376,5 +376,45 @@ public class EmployeeDAO extends CommonDAO{
 			listYgtrfx.add(mapYgtrfx);
 		}
 		return listYgtrfx;
+	}
+	
+	/**
+	 * 获取员工加班统计结果列表
+	 * @param empcodes 选择的员工
+	 * @param startdate 起始日期
+	 * @param enddate 截止日期
+	 * @return
+	 */
+	public List getYgjbtj(String empcodes, String startdate, String enddate){
+		List listYgjbtj = new ArrayList();
+		String sql = "";
+		
+		String[] empcode = empcodes.split(",");
+		for(int i=0;i<empcode.length;i++){
+			Map mapYgjbtj = findByCode("EMPLOYEE", empcode[i]);
+			String degreename = findNameByCode("DICT", mapYgjbtj.get("DEGREECODE")==null?"":mapYgjbtj.get("DEGREECODE").toString());
+			String proname = findNameByCode("DICT", mapYgjbtj.get("PROCODE")==null?"":mapYgjbtj.get("PROCODE").toString());
+			String majorname = findNameByCode("DICT", mapYgjbtj.get("MAJORCODE")==null?"":mapYgjbtj.get("MAJORCODE").toString());
+			String departname = findNameByCode("DEPARTMENT", mapYgjbtj.get("DEPARTCODE")==null?"":mapYgjbtj.get("DEPARTCODE").toString());
+			
+			sql = "select sum(OVER_AMOUNT) as AMOUNT from WORKREPORT where EMPCODE='" + empcode[i] + "' and FLAG=2";
+			if(!"".equals(startdate)){
+				sql = sql + " and STARTDATE>='" + startdate + "'";
+			}
+			if(!"".equals(enddate)){
+				sql = sql + " and STARTDATE<='" + enddate + "'";
+			}
+			
+			Map map = jdbcTemplate.queryForMap(sql);
+			
+			float amount = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
+			mapYgjbtj.put("AMOUNT", amount);
+			mapYgjbtj.put("MAJORNAME", majorname);
+			mapYgjbtj.put("DEGREENAME", degreename);
+			mapYgjbtj.put("PRONAME", proname);
+			mapYgjbtj.put("DEPARTNAME", departname);
+			listYgjbtj.add(mapYgjbtj);
+		}
+		return listYgjbtj;
 	}
 }

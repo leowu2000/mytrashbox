@@ -10,25 +10,17 @@ public class PosDAO extends CardDAO {
 
 	public PageList findAll(String emname, String datepick, String sel_empcode, int page, String departcodes){
 		PageList pageList = new PageList();
-		String sql = "";
+		String sql = "select * from EMP_POS where (DEPARTCODE in (" + departcodes + ") or DEPARTNAME in (select NAME from DEPARTMENT where CODE in (" + departcodes + ")))";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		if("".equals(datepick)){
-			if("".equals(emname)){//按所选单位
-				sql = "select * from EMP_POS where DEPARTCODE in (" + departcodes + ")";
-			}else {//按所选单位并名字模糊查询
-				sql = "select * from EMP_POS where DEPARTCODE in (" + departcodes + ") and EMPNAME like '%" + emname + "%'";
-			}
-		}else {
-			if("".equals(emname)){//按所选时间所选单位
-				sql = "select * from EMP_POS where DEPARTCODE in (" + departcodes + ") and SWIPETIME like '%" + datepick + "%'";
-			}else {//按所选时间、所选单位并按名字模糊查询
-				sql = "select * from EMP_POS where DEPARTCODE in (" + departcodes + ") and SWIPETIME like '%" + datepick + "%' and EMPNAME like '%" + emname + "%'";
-			}
+		if(!"".equals(datepick)){
+			sql = sql + " and SWIPETIME like '%" + datepick + "%'";
 		}	
-		
+		if(!"".equals(emname)){//按所选单位
+			sql = sql + " and EMPNAME like '%" + emname + "%'";
+		}
 		if(!"".equals(sel_empcode)){
 			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
 		}

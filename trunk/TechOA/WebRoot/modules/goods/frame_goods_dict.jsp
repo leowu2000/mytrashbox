@@ -1,5 +1,8 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.basesoft.util.*" %>
+<%
+List listType = (List)request.getAttribute("listType");
+%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -44,9 +47,14 @@
   	<div id="toolbar"></div>
   	<select name="sel_type" id="sel_type" onchange="commit();">
   		<option value="">全部</option>
-  		<option value="1">机载另册</option>
-  		<option value="2">地面优选</option>
-  		<option value="3">机载优选</option>
+<%
+	for(int i=0;i<listType.size();i++){
+		Map mapType = (Map)listType.get(i); 
+%>				      
+  		<option value="<%=mapType.get("CODE") %>"><%=mapType.get("NAME") %></option>
+<%
+	}
+%>  		
   	</select>
 	<input type="text" name="sel_code" id="sel_code" style="width:60;">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();">

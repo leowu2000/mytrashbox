@@ -90,6 +90,7 @@ Ext.onReady(function(){
 				document.getElementById('pjcode_d').disabled = '';
 				Ext.get('stage').set({'value':data.item.stagecode});
 				Ext.get('amount').set({'value':data.item.amount});
+				Ext.get('over_amount').set({'value':data.item.over__amount});
 				Ext.get('bz').set({'value':data.item.bz});
 		    	action = url+'?action=update';
 	    		win.setTitle('修改');
@@ -219,6 +220,7 @@ function changeDate(value){
                 <td nowrap="nowrap">分系统</td>
                 <td nowrap="nowrap">投入阶段</td>
                 <td nowrap="nowrap">投入工时</td>
+                <td nowrap="nowrap">加班工时</td>
                 <td nowrap="nowrap" style="width:200">备注</td>
                 <td nowrap="nowrap">状态</td>
                 <td nowrap="nowrap">反馈</td>
@@ -261,6 +263,7 @@ for(int i=0;i<list.size();i++){
                 <td><%=pjname_d %></td>
                 <td><%=stagename %></td>   
                 <td><%=map.get("AMOUNT") %></td>
+                <td><%=map.get("OVER_AMOUNT")==null?"":map.get("OVER_AMOUNT") %></td>
                 <td><%=map.get("BZ") %></td>
                 <td nowrap="nowrap"><%=flag %></td>
                 <td><%=map.get("BACKBZ")==null?"":map.get("BACKBZ") %></td>
@@ -318,6 +321,22 @@ for(int i=0;i<list.size();i++){
 				    <td>投入工时</td>
 				    <td>
 				      <select name="amount" id="amount" style="width:200">
+<%
+					for(float i=0;i<=23;i++){
+%>				      
+ 						<option value="<%=i + 0.5 %>"><%=i + 0.5 %></option>
+ 						<option value="<%=i + 1.0 %>"><%=i + 1.0 %></option>
+<%
+					}
+%>
+				      </select>
+				    </td>
+				  </tr>
+				  <tr>
+				    <td>加班工时</td>
+				    <td>
+				      <select name="over_amount" id="over_amount" style="width:200">
+				      	<option value="0">0</option>
 <%
 					for(float i=0;i<=23;i++){
 %>				      

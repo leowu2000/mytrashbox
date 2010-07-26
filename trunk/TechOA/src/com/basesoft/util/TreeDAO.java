@@ -306,4 +306,46 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 			
 		return treeList;
 	}
+	
+	/**
+	 * 获取字段树
+	 * @param table 表名 
+	 * @return
+	 */
+	public List<CheckBoxTree> getMultiColumnTree(String table) {
+		List<CheckBoxTree> treeList = new ArrayList<CheckBoxTree>();
+		
+		List listCol = jdbcTemplate.queryForList("select * from DICT_COL where TB_NAME='" + table + "'");
+		for(int i=0;i<listCol.size();i++){
+			Map mapCol = (Map)listCol.get(i);
+			CheckBoxTree leaf = new CheckBoxTree();
+			leaf.setId(mapCol.get("COL_NAME").toString());
+			leaf.setText(mapCol.get("COL_COMMENT").toString());
+			leaf.setLeaf(true);
+			treeList.add(leaf);
+		}
+			
+		return treeList;
+	}
+	
+	/**
+	 * 获取字段树
+	 * @param table 表名 
+	 * @return
+	 */
+	public List<CheckBoxTree> getMultiColumnTree1(String table, String columns) {
+		List<CheckBoxTree> treeList = new ArrayList<CheckBoxTree>();
+		String columsSql = StringUtil.ListToStringAdd(columns.split(","), ",");
+		List listCol = jdbcTemplate.queryForList("select * from DICT_COL where TB_NAME='" + table + "' and COL_NAME in (" + columsSql + ")");
+		for(int i=0;i<listCol.size();i++){
+			Map mapCol = (Map)listCol.get(i);
+			CheckBoxTree leaf = new CheckBoxTree();
+			leaf.setId(mapCol.get("COL_NAME").toString());
+			leaf.setText(mapCol.get("COL_COMMENT").toString());
+			leaf.setLeaf(true);
+			treeList.add(leaf);
+		}
+			
+		return treeList;
+	}
 }

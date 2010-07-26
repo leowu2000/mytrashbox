@@ -81,6 +81,7 @@ public class ExcelController extends CommonController {
 		sel_pjcode = URLDecoder.decode(sel_pjcode, "ISO8859-1");
 		sel_pjcode = new String(sel_pjcode.getBytes("ISO8859-1"), "UTF-8");
 		String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "");
+		String sel_date = ServletRequestUtils.getStringParameter(request, "sel_date", "");
 		
 		if("preview".equals(action)){//导入预览
 			if("DEPARTMENT".equals(table)){//导入部门
@@ -295,6 +296,13 @@ public class ExcelController extends CommonController {
 				}
 				list = emDAO.getYgtrfx(empcodes, startdate, enddate, selproject);
 				path = exportExcel.exportExcel_YGTRFX(list, imagepath, selpjname);
+			}else if("YGJBTJ".equals(model)){//员工加班统计
+				imagepath = imagepath + "\\ygjbtj.png";
+				String empcodes = ServletRequestUtils.getStringParameter(request, "empcodes", "");
+				String startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
+				String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
+				list = emDAO.getYgjbtj(empcodes, startdate, enddate);
+				path = exportExcel.exportExcel_YGJBTJ(list, imagepath);
 			}else if("PLAN".equals(model)){//计划
 				list = excelDAO.getExportData_PLAN(sel_type, f_level, f_type, datepick, f_empname, sel_empcode, sel_note, emcode, departcodes);
 				path = exportExcel.exportExcel_PLAN(list, planDAO, datepick);
@@ -325,7 +333,7 @@ public class ExcelController extends CommonController {
 					listDepart = roleDAO.findAllRoleDepart(emrole);
 				}
 				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
-				list = excelDAO.getExportData_WORKREPORT(emcode, departcodes, wrDAO, sel_pjcode, sel_empcode, sel_empname);
+				list = excelDAO.getExportData_WORKREPORT(emcode, departcodes, wrDAO, sel_pjcode, sel_empcode, sel_empname, sel_status, sel_date);
 				path = exportExcel.exportExcel_WORKREPORT(list, wrDAO);
 			}else if("INS".equals(model)){//临时调查表
 				String ins_id = ServletRequestUtils.getStringParameter(request, "ins_id", "");
@@ -356,17 +364,6 @@ public class ExcelController extends CommonController {
 			response.getOutputStream().flush();
 			response.getOutputStream().close();
 			return null;
-		}else if("custom".equals(action)){//自定义导入
-			mv = new ModelAndView("modules/excel/custom");
-			List listTable = tableSelectDAO.getTables();
-			
-			mv.addObject("listTable", listTable);
-			return mv;
-		}else if("custom_preview".equals(action)){//自定义导入预览
-			mv = new ModelAndView("modules/excel/custom_preview");
-			String sel_table = ServletRequestUtils.getStringParameter(request, "sel_table", "");
-			String colnames = ServletRequestUtils.getStringParameter(request, "colnames", "");
-			
 		}
 		
 		return null;

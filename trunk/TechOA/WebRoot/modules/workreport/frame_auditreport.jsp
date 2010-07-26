@@ -19,13 +19,17 @@
 	<script type="text/javascript">
 	Ext.onReady(function(){
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
+  		tb.add('状态');
+  		tb.add(document.getElementById('sel_status'));
+  		tb.add('日期');
+  		tb.add(document.getElementById('sel_date'));
   		tb.add('令号');
   		tb.add(document.getElementById('sel_pjcode'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('按工号模糊查询');
+  		tb.add('工号');
   		tb.add(document.getElementById('sel_empcode'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
-  		tb.add('按名字模糊查询');
+  		tb.add('姓名');
   		tb.add(document.getElementById('sel_empname'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
@@ -51,11 +55,13 @@
 	}
 	
 	function commit(){
+	  var sel_status = document.getElementById('sel_status').value;
+	  var sel_date = document.getElementById('sel_date').value;
 	  var sel_pjcode = document.getElementById('sel_pjcode').value;
 	  var sel_empcode = document.getElementById('sel_empcode').value;
 	  var sel_empname = document.getElementById('sel_empname').value;
 	  
-	  document.getElementById('list_manage').src = "/workreport.do?action=auditlist&sel_pjcode=" + encodeURI(sel_pjcode) + "&sel_empcode=" + sel_empcode + "&sel_empname=" + encodeURI(sel_empname);
+	  document.getElementById('list_manage').src = "/workreport.do?action=auditlist&sel_pjcode=" + encodeURI(sel_pjcode) + "&sel_empcode=" + sel_empcode + "&sel_empname=" + encodeURI(sel_empname) + "&sel_status=" + sel_status + "&sel_date=" + sel_date;
 	}
 	</script>
   </head>
@@ -78,6 +84,12 @@
 	}
 %>
 	</select>
+	<select name="sel_status" id="sel_Status" onchange="commit();">
+		<option value="">全部</option>
+		<option value="1">待审批</option>
+		<option value="2">已通过</option>
+	</select>
+	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="sel_date" style="width: 50" onchange="commit();" value="">
 	<input type="text" name="sel_empcode" id="sel_empcode" style="width:60;">
 	<input type="text" name="sel_empname" id="sel_empname" style="width:60;">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();">

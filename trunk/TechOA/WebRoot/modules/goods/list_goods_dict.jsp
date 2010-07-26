@@ -1,6 +1,9 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.basesoft.core.*" %>
+<%@ page import="com.basesoft.modules.goods.*" %>
+<%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
+	List listType = (List)request.getAttribute("listType");
 	PageList pageList = (PageList)request.getAttribute("pageList");
 	List listGoods_dict = pageList.getList();
 	int pagenum = pageList.getPageInfo().getCurPage();
@@ -10,6 +13,9 @@
 	
 	String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 	errorMessage = new String(errorMessage.getBytes("ISO8859-1"), "UTF-8");
+	
+	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+	GoodsDAO goodsDAO = (GoodsDAO)ctx.getBean("goodsDAO");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -152,13 +158,7 @@ function checkAll(){
 	for(int i=0;i<listGoods_dict.size();i++){
 		Map mapGoods_dict = (Map)listGoods_dict.get(i);
 		String type = mapGoods_dict.get("TYPE")==null?"":mapGoods_dict.get("TYPE").toString();
-		if("1".equals(type)){
-			type = "机载另册";
-		}else if("2".equals(type)){
-			type = "地面优选";
-		}else if("3".equals(type)){
-			type = "机载优选";
-		}
+		type = goodsDAO.getDictName(type, "GOODS_DICT", "TYPE", "");
 %>
 		<tr>
 			<td><input type="checkbox" name="check" value="<%=mapGoods_dict.get("ID") %>" class="ainput"></td>
@@ -192,9 +192,14 @@ function checkAll(){
 				    <td>优选类型</td>
 				    <td>
 				      <select name="type" id="type" style="width:200;">
-  						<option value="1">机载另册</option>
-  						<option value="2">地面优选</option>
-  						<option value="3">机载优选</option>
+<%
+					  for(int i=0;i<listType.size();i++){
+						  Map mapType = (Map)listType.get(i); 
+%>				      
+  						<option value="<%=mapType.get("CODE") %>"><%=mapType.get("NAME") %></option>
+<%
+					  }
+%>  						
   					  </select>
   					</td>
 				  </tr>

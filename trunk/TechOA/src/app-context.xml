@@ -45,10 +45,12 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+
 	<!-- 需要由spring注入的bean定义 -->
     <bean id="dbUpgrade" class="com.basesoft.util.DBUpgrade"/>
-
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"/>
 	<bean id="employeeDAO" class="com.basesoft.modules.employee.EmployeeDAO"></bean>
 	<bean id="projectDAO" class="com.basesoft.modules.project.ProjectDAO"></bean>
 	<bean id="workReportDAO" class="com.basesoft.modules.workreport.WorkReportDAO"></bean>
@@ -77,4 +79,5 @@
 	<bean id="honorDAO" class="com.basesoft.modules.employee.HonorDAO"></bean>
 	<bean id="contractDAO" class="com.basesoft.modules.contract.ContractDAO"></bean>
 	<bean id="budgetDAO" class="com.basesoft.modules.budget.BudgetDAO"></bean>
+	<bean id="customImportDAO" class="com.basesoft.modules.excel.CustomImportDAO"></bean>
 </beans>

@@ -170,6 +170,33 @@ public class CommonDAO {
 	}
 	
 	/**
+	 * 获取字典项code
+	 * @param name
+	 * @param type
+	 * @return
+	 */
+	public String getDictName(String code, String table, String column, String type){
+		String sql = "select * from DICT where CODE='" + code + "'";
+		if(!"".equals(type)){
+			sql = sql + " and TYPE='" + type + "'";
+		}
+		if(!"".equals(table)){
+			sql = sql + " and CONN_TABLE='" + table + "'";
+		}
+		if(!"".equals(column)){
+			sql = sql + " and CONN_COLUMN='" + column + "'";
+		}
+		List list = jdbcTemplate.queryForList(sql);
+		if(list.size() == 1){
+			Map map = (Map)list.get(0);
+			String s = map.get("NAME").toString();
+			return s;
+		}else {
+			return "";
+		}
+	}
+	
+	/**
 	 * 根据code码得到对应的名称
 	 * @param tablename 数据库表名
 	 * @param code 编码
@@ -253,6 +280,29 @@ public class CommonDAO {
 	 */
 	public List<?> getDICTByType(String type){
 		return jdbcTemplate.queryForList("select * from DICT where TYPE='" + type + "' and CODE!='' order by CODE");
+	}
+	
+	/**
+	 * 获取字典数据
+	 * @param table 表 
+	 * @param column 字段
+	 * @param type 类型
+	 * @return
+	 */
+	public List<?> findDICT(String table, String column, String type){
+		String sql = "select * from DICT where CODE!=''";
+		if(!"".equals(type)){
+			sql = sql + " and TYPE='" + type + "'";
+		}
+		if(!"".equals(table)){
+			sql = sql + " and CONN_TABLE='" + table + "'";
+		}
+		if(!"".equals(column)){
+			sql = sql + " and CONN_COLUMN='" + column + "'";
+		}
+		sql = sql + " order by CODE";
+		
+		return jdbcTemplate.queryForList(sql);
 	}
 	
 	/**

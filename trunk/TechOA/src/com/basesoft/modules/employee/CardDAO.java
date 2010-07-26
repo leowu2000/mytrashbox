@@ -17,15 +17,13 @@ public class CardDAO extends EmployeeDAO {
 	 */
 	public PageList findAll(String emname, String sel_empcode, int page, String departcodes){
 		PageList pageList = new PageList();
-		String sql = "";
+		String sql = "select * from EMP_CARD where (DEPARTCODE in (" + departcodes + ")  or DEPARTNAME in (select NAME from DEPARTMENT where CODE in (" + departcodes + ")))";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
 		
-		if("".equals(emname)){//所有人员
-			sql = "select * from EMP_CARD where DEPARTCODE in (" + departcodes + ")";
-		}else {//按名字模糊检索
-			sql = "select * from EMP_CARD where DEPARTCODE in (" + departcodes + ") and EMPNAME like '%" + emname + "%'";
+		if(!"".equals(emname)){//所有人员
+			sql = " and EMPNAME like '%" + emname + "%'";
 		}
 		
 		if(!"".equals(sel_empcode)){

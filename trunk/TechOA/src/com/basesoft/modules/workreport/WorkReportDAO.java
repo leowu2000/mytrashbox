@@ -43,11 +43,17 @@ public class WorkReportDAO extends CommonDAO {
 	 * @param page 页码
 	 * @return
 	 */
-	public PageList findAllAudit(int page, String departcodes, String emcode, String sel_pjcode, String sel_empcode, String sel_empname){
+	public PageList findAllAudit(int page, String departcodes, String emcode, String sel_pjcode, String sel_empcode, String sel_empname, String sel_status, String sel_date){
 		if("".equals(departcodes)){
 			departcodes = "''";
 		}
 		String sql = "select * from WORKREPORT where EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE in ( " + departcodes + ")) and EMPCODE!='" + emcode + "' and (flag=1 or flag=2)";
+		if(!"".equals(sel_status)){
+			sql = sql + " and FLAG=" + sel_status;
+		}
+		if(!"".equals(sel_date)){
+			sql = sql + " and STARTDATE='" + sel_date + "'";
+		}
 		if(!"".equals(sel_pjcode)){
 			sql = sql + " and PJCODE='" + sel_pjcode + "'";
 		}
@@ -87,8 +93,14 @@ public class WorkReportDAO extends CommonDAO {
 	 * @param emcode 
 	 * @return
 	 */
-	public List findAllAudit(String departcodes, String emcode, String sel_pjcode, String sel_empcode, String sel_empname){
+	public List findAllAudit(String departcodes, String emcode, String sel_pjcode, String sel_empcode, String sel_empname, String sel_status, String sel_date){
 		String sql = "select * from WORKREPORT where EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE in ( " + departcodes + ")) and EMPCODE!='" + emcode + "' and (flag=1 or flag=2) ";
+		if(!"".equals(sel_status)){
+			sql = sql + " and FLAG=" + sel_status;
+		}
+		if(!"".equals(sel_date)){
+			sql = sql + " and STARTDATE='" + sel_date + "'";
+		}
 		if(!"".equals(sel_pjcode)){
 			sql = sql + " and PJCODE='" + sel_pjcode + "'";
 		}
@@ -128,6 +140,7 @@ public class WorkReportDAO extends CommonDAO {
 		workReport.setStagecode(map.get("stagecode")==null?"":map.get("stagecode").toString());
 		workReport.setBz(map.get("bz")==null?"":map.get("bz").toString());
 		workReport.setAmount(map.get("amount")==null?0:Float.parseFloat(map.get("amount").toString()));
+		workReport.setOver_amount(map.get("over_amount")==null?0:Float.parseFloat(map.get("over_amount").toString()));
 		workReport.setFlag(map.get("flag")==null?0:Integer.parseInt(map.get("flag").toString()));
 		workReport.setDepartcode(map.get("departcode")==null?"":map.get("departcode").toString());
 		

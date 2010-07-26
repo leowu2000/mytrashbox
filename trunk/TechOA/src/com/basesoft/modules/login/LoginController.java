@@ -215,7 +215,7 @@ public class LoginController extends CommonController {
 			}
 			if(menuString.indexOf("022")>-1){//审核工作报告
 				haveworkreport = true;
-				PageList pageList = workreportDAO.findAllAudit(1, departcodes, emcode, "", "", "");
+				PageList pageList = workreportDAO.findAllAudit(1, departcodes, emcode, "", "", "", "", "");
 				List listReport = pageList.getList();
 				mv.addObject("listReport", listReport);
 			}
