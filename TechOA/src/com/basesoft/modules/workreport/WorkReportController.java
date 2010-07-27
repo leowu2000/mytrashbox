@@ -111,7 +111,7 @@ public class WorkReportController extends CommonController {
 				over_amount = "0";
 			}
 			
-			String insertSql = "insert into WORKREPORT values('" + uuid + "','" + reportname + "','" + emcode + "'," + datepick + "," + datepick + ",'" + pjcode + "','" + pjcode_d + "','" + stage + "'," + amount + ",'" + bz + "',0,'" + mapEm.get("DEPARTCODE") + "', " + over_amount + ")";
+			String insertSql = "insert into WORKREPORT values('" + uuid + "','" + reportname + "','" + emcode + "'," + datepick + "," + datepick + ",'" + pjcode + "','" + pjcode_d + "','" + stage + "'," + amount + ",'" + bz + "',0,'" + mapEm.get("DEPARTCODE") + "', '', '', '', " + over_amount + ")";
 			
 			workReportDAO.insert(insertSql);
 			
