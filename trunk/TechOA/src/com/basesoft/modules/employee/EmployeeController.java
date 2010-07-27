@@ -529,12 +529,10 @@ public class EmployeeController extends CommonController {
 			String empcodes = ServletRequestUtils.getStringParameter(request, "empcodes", "");
 			String startdate = ServletRequestUtils.getStringParameter(request, "startdate", "");
 			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
-			String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "1");
 			
 			List listYgjbtj = emDAO.getYgjbtj(empcodes, startdate, enddate);
-			String selpjname = "合计";
 			
-			ChartUtil.createChartYgjbtj(listYgjbtj, selpjname, path, sel_type);
+			ChartUtil.createChartYgjbtj(listYgjbtj, path);
 			
 			mv.addObject("listYgjbtj", listYgjbtj);
 		}

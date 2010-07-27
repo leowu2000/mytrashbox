@@ -88,11 +88,11 @@ public class ChartUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String createChartYgjbtj(List listData, String selpjname, String path, String sel_type) throws Exception{
+	public static String createChartYgjbtj(List listData, String path) throws Exception{
 		path = path + "\\ygjbtj.png";
 		String title = "员工加班统计";
-		CategoryDataset dataset = createDatasetYgtrfx(listData, selpjname);  
-		JFreeChart freeChart = createChart(dataset, title, sel_type);   
+		CategoryDataset dataset = createDatasetYgjbtj(listData);  
+		JFreeChart freeChart = createChart(dataset, title, "1");   
 		saveAsFile(freeChart, path, 700, 350);   
 		return path;
 	}
@@ -214,8 +214,33 @@ public class ChartUtil {
         
         for(int i=0;i<listData.size();i++){
         	Map mapData = (Map)listData.get(i);
-        	
-        	colKeys[i] = mapData.get("NAME").toString();
+        	String name = mapData.get("NAME")==null?"":mapData.get("NAME").toString();
+        	String code = mapData.get("CODE")==null?"":mapData.get("CODE").toString();
+        	colKeys[i] = name + code;
+        	data[0][i] = Double.parseDouble(mapData.get("AMOUNT").toString());
+        }
+           
+        return DatasetUtilities.createCategoryDataset(rowKeys, colKeys, data);           
+    }
+    
+    /** 
+     * 员工加班统计
+	 * @param listData
+     */ 
+    public static CategoryDataset createDatasetYgjbtj(List listData) {   
+    	//柱子
+        String[] rowKeys = {"合计"};
+        
+        //横坐标
+        String[] colKeys = new String[listData.size()];
+        
+        double [][] data = new double[1][listData.size()]; 
+        
+        for(int i=0;i<listData.size();i++){
+        	Map mapData = (Map)listData.get(i);
+        	String name = mapData.get("NAME")==null?"":mapData.get("NAME").toString();
+        	String code = mapData.get("CODE")==null?"":mapData.get("CODE").toString();
+        	colKeys[i] = name + code;
         	data[0][i] = Double.parseDouble(mapData.get("AMOUNT").toString());
         }
            
