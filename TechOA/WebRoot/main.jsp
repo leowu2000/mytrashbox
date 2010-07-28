@@ -224,19 +224,19 @@ if("true".equals(haveplanfollow_emp)||"true".equals(haveplanfollow_lead)||"true"
 <%
 	if("true".equals(haveplanfollow_emp)){
 %>
-	<a href="plan.do?action=frame_follow_emp">更多>></a></span>
+	<a href="plan.do?action=frame_follow_emp">更多&gt;&gt;</a>
 <%
 	}else if("true".equals(haveplanfollow_lead)){
 %>
-	<a href="plan.do?action=frame_follow_lead">更多>></a></span>
+	<a href="plan.do?action=frame_follow_lead">更多&gt;&gt;</a>
 <%
 	}else if("true".equals(haveplanfollow_plan)){
 %>
-	<a href="plan.do?action=frame_follow_plan">更多>></a></span>
+	<a href="plan.do?action=frame_follow_plan">更多&gt;&gt;</a>
 <%
 	}
 %>
-
+</span>
 <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
                 <td nowrap="nowrap">计划分类</td>
