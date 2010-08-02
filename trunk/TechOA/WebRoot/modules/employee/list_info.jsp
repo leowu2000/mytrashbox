@@ -100,7 +100,7 @@ Ext.onReady(function(){
         win1 = new Ext.Window({
         	el:'dlg1',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm1').action=action; Ext.getDom('dataForm1').submit();}},
+	        {text:'提交',handler: function(){if(vali_pass()){Ext.getDom('dataForm1').action=action; Ext.getDom('dataForm1').submit();}}},
 	        {text:'关闭',handler: function(){win1.hide();}}
 	        ]
         });
@@ -239,6 +239,34 @@ function checkAll(){
 		}
 	}
 }
+
+function vali_pass(){
+	var newpassword = document.getElementById('newpassword').value;
+	if(newpassword.length<8){
+		alert('密码长度应大于8个字符(包含8个)！');
+		return false;
+	}else if(newpassword.length>10){
+		alert('密码长度应小于10个字符(包含10个)！');
+		return false;
+	}
+	
+	var haveNum = false;
+	var haveSma = false;
+	var haveBig = false;
+	for(var i=0;i<newpassword.length;i++){
+		var char = newpassword.charAt(i);
+		if(/^[0-9]+$/.test(char))haveNum = true;
+		if(/^[a-z]+$/.test(char))haveSma = true;
+		if(/^[A-Z]+$/.test(char))haveBig = true;
+	}
+	
+	if(!(haveNum&&haveSma&&haveBig)){
+		alert('密码需含有大写、小写字母和数字！');
+		return false;
+	}
+	
+    return true;
+}
 </script>
   </head>
   
@@ -326,9 +354,12 @@ function checkAll(){
 	        	<input type="hidden" name="page" value="<%=pagenum %>">
                 <table>
 				  <tr>
-				    <td>新密码</td>
+				    <td nowrap="nowrap">新密码</td>
 				    <td><input type="password" name="newpassword" style="width:200"></td>
 				  </tr>	
+				  <tr>
+				    <td colspan="2">注意：密码长度要求8-10个字符之间，必须同时存在大写字母、小写字母和数字！</td>
+				  </tr>
 				</table>
 			</form>
 	</div>

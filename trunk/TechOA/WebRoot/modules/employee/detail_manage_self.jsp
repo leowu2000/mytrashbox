@@ -72,7 +72,7 @@ Ext.onReady(function(){
         win2 = new Ext.Window({
         	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'提交',handler: function(){if(vali_pass()){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}}},
 	        {text:'关闭',handler: function(){win2.hide();}}
 	        ]
         });
@@ -121,6 +121,39 @@ Ext.onReady(function(){
     }    
 });
 
+function vali_pass(){
+	var newpassword = document.getElementById('newpassword').value;
+	var newpassword2 = document.getElementById('newpassword2').value; 
+	if(newpassword != newpassword2){
+		alert('两次输入密码不同，请检查！');
+		return false;
+	}
+	
+	if(newpassword.length<8){
+		alert('密码长度应大于8个字符(包含8个)！');
+		return false;
+	}else if(newpassword.length>10){
+		alert('密码长度应小于10个字符(包含10个)！');
+		return false;
+	}
+	
+	var haveNum = false;
+	var haveSma = false;
+	var haveBig = false;
+	for(var i=0;i<newpassword.length;i++){
+		var char = newpassword.charAt(i);
+		if(/^[0-9]+$/.test(char))haveNum = true;
+		if(/^[a-z]+$/.test(char))haveSma = true;
+		if(/^[A-Z]+$/.test(char))haveBig = true;
+	}
+	
+	if(!(haveNum&&haveSma&&haveBig)){
+		alert('密码需含有大写、小写字母和数字！');
+		return false;
+	}
+	
+    return true;
+}
 </script>
   </head>
   
@@ -268,17 +301,20 @@ Ext.onReady(function(){
 	        <form id="dataForm2" name="dataForm2" action="" method="post">
                 <table>
                   <tr>
-				    <td>原密码</td>
+				    <td nowrap="nowrap">原密码</td>
 				    <td><input type="password" name="oldpassword" style="width:200"></td>
 				  </tr>
 				  <tr>
-				    <td>新密码</td>
+				    <td nowrap="nowrap">新密码</td>
 				    <td><input type="password" name="newpassword" style="width:200"></td>
 				  </tr>	
 				  <tr>
-				    <td>新密码</td>
+				    <td nowrap="nowrap">新密码</td>
 				    <td><input type="password" name="newpassword2" style="width:200"></td>
 				  </tr>	
+				  <tr>
+				    <td colspan="2">注意：密码长度要求8-10个字符之间，必须同时存在大写字母、小写字母和数字！</td>
+				  </tr>
 				</table>
 			</form>
 	</div>

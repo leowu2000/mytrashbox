@@ -219,6 +219,9 @@ public class LoginController extends CommonController {
 				List listReport = pageList.getList();
 				mv.addObject("listReport", listReport);
 			}
+			Map mapEm = emDAO.findByCode("EMPLOYEE", emcode);
+			String pass_date = mapEm.get("PASS_DATE")==null?"":mapEm.get("PASS_DATE").toString();
+			mv.addObject("pass_date", pass_date);
 			mv.addObject("haveworkcheck", haveworkcheck);
 			mv.addObject("haveworkcheck_lead", haveworkcheck_lead);
 			mv.addObject("haveplanfollow_emp", haveplanfollow_emp);

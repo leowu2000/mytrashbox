@@ -5,6 +5,7 @@
 <%@ page import="com.basesoft.modules.plan.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
+String pass_date = request.getAttribute("pass_date").toString();
 String haveworkcheck = request.getAttribute("haveworkcheck").toString();
 String haveworkcheck_lead = request.getAttribute("haveworkcheck_lead").toString();
 String haveplanfollow_emp = request.getAttribute("haveplanfollow_emp").toString();
@@ -63,6 +64,27 @@ body {
 <table width="100%"  border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td height="124" background="images/welcome_01.jpg" style="background-repeat: repeat-x;">
+<%
+if("".equals(pass_date)){
+%>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="red">请您及时修改密码！</font><a href="em.do?action=manage_self">修改密码</a><br>
+<%
+}else{
+	Date passdate = StringUtil.StringToDate(pass_date, "yyyy-MM-dd");
+	passdate = StringUtil.getNextDate(passdate, 30);
+	int days = StringUtil.getBetweenDays(new Date(), passdate);
+	if(days<=10&&days>0){
+%>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="red">离密码过期还有<%=days %>天，请您及时修改密码！</font><a href="em.do?action=manage_self">修改密码</a><br>
+<%
+	}else if(days<=0){
+%>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="red">离密码已过期<%=Math.abs(days) %>天，请您及时修改密码！</font><a href="em.do?action=manage_self">修改密码</a><br>
+<%		
+	}
+}
+%>
+
 <%
 if("true".equals(haveworkcheck)){
 %>
