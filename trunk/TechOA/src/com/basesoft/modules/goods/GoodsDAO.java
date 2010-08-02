@@ -1,5 +1,6 @@
 package com.basesoft.modules.goods;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.json.JSONObject;
 
 import com.basesoft.core.PageInfo;
 import com.basesoft.core.PageList;
+import com.basesoft.util.StringUtil;
 
 public class GoodsDAO extends com.basesoft.core.CommonDAO {
 
@@ -27,6 +29,68 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 		}else {
 			sql = sql = "select * from GOODS where LLRBM like '%" + empcode + "%' order by KJND,KJH,PJCODE";
 		}
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+		
+	}
+	
+	/**
+	 * 获取物资列表  用于查询
+	 * @param sel_depart
+	 * @param sel_empcode
+	 * @param sel_goodsname
+	 * @param sel_goodscode
+	 * @param departcodes
+	 * @param empcode
+	 * @param page
+	 * @return
+	 */
+	public PageList findAll(String sel_depart, String sel_empcode, String sel_goodsname, String sel_goodscode, String departcodes, String empcode, int page){
+		PageList pageList = new PageList();
+		String sql = "select * from GOODS where 1=1";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		if("''".equals(departcodes)){//普通员工，查看自己的
+			sql = sql + " and LLRBM='" + empcode + "'";
+		}else {//领导、组长
+			String empcodeSql = "select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+			String empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+			sql = sql + " and (LLRBM in (" + empcodeSql + ") or LLRMC in (" + empnameSql + "))";
+			
+			if(!"".equals(sel_depart)&&!"0".equals(sel_depart)){//选择了部门
+				List list = this.getChildDeparts(sel_depart, new ArrayList());
+				String departs = StringUtil.ListToStringAdd(list, ",", "CODE");
+				empcodeSql = "select CODE from EMPLOYEE where DEPARTCODE in (" + departs + ")";
+				empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departs + ")";
+				sql = sql + " and (LLRBM in (" + empcodeSql + ") or LLRMC in (" + empnameSql + "))";
+			}
+			
+			if(!"".equals(sel_empcode)){
+				sql = sql + " and LLRBM like '%" + sel_empcode + "%'";
+			}
+		}
+		
+		if(!"".equals(sel_goodsname)){
+			sql = sql + " and CHMC like '%" + sel_goodsname + "%'";
+		}
+		
+		if(!"".equals(sel_goodscode)){
+			sql = sql + " and CHBM like '%" + sel_goodscode + "%'";
+		}
+		
+		sql = sql + " order by KJND,KJH,PJCODE";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";
@@ -99,6 +163,69 @@ public class GoodsDAO extends com.basesoft.core.CommonDAO {
 		if(!"".equals(sel_code)){
 			sql = sql + " and CHBM like '" + sel_code + "'";
 		}
+		
+		sql = sql + " order by SQRQ desc";
+		
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+		
+	}
+	
+	/**
+	 * 获取物资列表  用于查询
+	 * @param sel_depart
+	 * @param sel_empcode
+	 * @param sel_goodsname
+	 * @param sel_goodscode
+	 * @param departcodes
+	 * @param empcode
+	 * @param page
+	 * @return
+	 */
+	public PageList findAll_apply(String sel_depart, String sel_empcode, String sel_goodsname, String sel_goodscode, String departcodes, String empcode, int page){
+		PageList pageList = new PageList();
+		String sql = "select * from GOODS_APPLY where 1=1";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		if("''".equals(departcodes)){//普通员工，查看自己的
+			String empname = findNameByCode("EMPLOYEE", empcode);
+			sql = sql + " and ZDR like '%" + empname + "%'";
+		}else {//领导、组长
+			String empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departcodes + ")";
+			sql = sql + " and ZDR in (" + empnameSql + ")";
+			
+			if(!"".equals(sel_depart)&&!"0".equals(sel_depart)){//选择了部门
+				List list = this.getChildDeparts(sel_depart, new ArrayList());
+				String departs = StringUtil.ListToStringAdd(list, ",", "CODE");
+				empnameSql = "select NAME from EMPLOYEE where DEPARTCODE in (" + departs + ")";
+				sql = sql + " and ZDR in (" + empnameSql + ")";
+			}
+			
+			if(!"".equals(sel_empcode)){
+				sql = sql + " and ZDR in (select NAME from EMPLOYEE where CODE like '%" + sel_empcode + "%')";
+			}
+		}
+		
+		if(!"".equals(sel_goodsname)){
+			sql = sql + " and CHMC like '%" + sel_goodsname + "%'";
+		}
+		
+		if(!"".equals(sel_goodscode)){
+			sql = sql + " and CHBM like '%" + sel_goodscode + "%'";
+		}
+		
+		sql = sql + " order by SQRQ desc";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")" + "";

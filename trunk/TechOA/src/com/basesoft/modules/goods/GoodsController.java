@@ -14,12 +14,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
+import com.basesoft.modules.role.RoleDAO;
+import com.basesoft.util.StringUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 public class GoodsController extends CommonController {
 
 	GoodsDAO goodsDAO;
+	RoleDAO roleDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -36,8 +39,57 @@ public class GoodsController extends CommonController {
 		String sel_empname = ServletRequestUtils.getStringParameter(request, "sel_empname", "");
 		sel_empname = URLDecoder.decode(sel_empname, "ISO8859-1");
 		sel_empname = new String(sel_empname.getBytes("ISO8859-1"),"UTF-8");
+		String sel_depart = ServletRequestUtils.getStringParameter(request, "sel_depart", "");
+		String sel_goodsname = ServletRequestUtils.getStringParameter(request, "sel_goodsname", "");
+		sel_goodsname = URLDecoder.decode(sel_goodsname, "ISO8859-1");
+		sel_goodsname = new String(sel_goodsname.getBytes("ISO8859-1"),"UTF-8");
+		String sel_goodscode = ServletRequestUtils.getStringParameter(request, "sel_goodscode", "");
 		
-		if("frame_list".equals(action)){//领料frame
+		if("frame_search".equals(action)){//物资领料查询frame
+			mv = new ModelAndView("modules/goods/frame_search");
+			return mv;	
+		}else if("list_search".equals(action)){//物资领料查询list
+			mv = new ModelAndView("modules/goods/list_search");
+			//根据登陆用户的数据权限过滤
+			String departcodes = ""; 
+			List listDepart = roleDAO.findAllUserDepart(emcode);
+			if(listDepart.size() == 0){
+				listDepart = roleDAO.findAllRoleDepart(emrole);
+			}
+			departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+			
+			PageList pageList = goodsDAO.findAll(sel_depart, sel_empcode, sel_goodsname, sel_goodscode, departcodes, emcode, page); 
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("sel_empcode", sel_empcode);
+			mv.addObject("sel_depart", sel_depart);
+			mv.addObject("sel_goodscode", sel_goodscode);
+			mv.addObject("sel_goodsname", sel_goodsname);
+			mv.addObject("errorMessage", errorMessage);
+			return mv;	
+		}else if("frame_searchapply".equals(action)){//物资领料查询frame
+			mv = new ModelAndView("modules/goods/frame_searchapply");
+			return mv;	
+		}else if("list_searchapply".equals(action)){//物资领料查询list
+			mv = new ModelAndView("modules/goods/list_searchapply");
+			//根据登陆用户的数据权限过滤
+			String departcodes = ""; 
+			List listDepart = roleDAO.findAllUserDepart(emcode);
+			if(listDepart.size() == 0){
+				listDepart = roleDAO.findAllRoleDepart(emrole);
+			}
+			departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+			
+			PageList pageList = goodsDAO.findAll_apply(sel_depart, sel_empcode, sel_goodsname, sel_goodscode, departcodes, emcode, page); 
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("sel_empcode", sel_empcode);
+			mv.addObject("sel_depart", sel_depart);
+			mv.addObject("sel_goodscode", sel_goodscode);
+			mv.addObject("sel_goodsname", sel_goodsname);
+			mv.addObject("errorMessage", errorMessage);
+			return mv;	
+		}else if("frame_list".equals(action)){//物资领料管理frame
 			mv = new ModelAndView("modules/goods/frame_goods");
 			return mv;
 		}else if("list".equals(action)){
@@ -226,5 +278,9 @@ public class GoodsController extends CommonController {
 
 	public void setGoodsDAO(GoodsDAO goodsDAO){
 		this.goodsDAO = goodsDAO;
+	}
+	
+	public void setRoleDAO(RoleDAO roleDAO){
+		this.roleDAO = roleDAO;
 	}
 }
