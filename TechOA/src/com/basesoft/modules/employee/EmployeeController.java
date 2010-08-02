@@ -103,7 +103,7 @@ public class EmployeeController extends CommonController {
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			String newpassword = ServletRequestUtils.getStringParameter(request, "newpassword", "");
 			
-			emDAO.update("update EMPLOYEE set PASSWORD='" + newpassword + "' where ID='" + id + "'");
+			emDAO.update("update EMPLOYEE set PASSWORD='" + newpassword + "',PASS_DATE='" + new Date() + "' where ID='" + id + "'");
 			
 			response.sendRedirect(returnUrl_infolist);
 			return null;
@@ -117,7 +117,7 @@ public class EmployeeController extends CommonController {
 			String message = "";
 			if(oldpassword.equals(em.getPassword())){//新旧密码相同
 				if(newpassword.equals(newpassword2)){//两次输入相同
-					String updateSql = "update EMPLOYEE set PASSWORD='" + newpassword + "' where ID='" + id + "'";
+					String updateSql = "update EMPLOYEE set PASSWORD='" + newpassword + "',PASS_DATE='" + new Date() + "' where ID='" + id + "'";
 					emDAO.update(updateSql);
 					message = "1";
 				}else {
