@@ -80,4 +80,5 @@
 	<bean id="contractDAO" class="com.basesoft.modules.contract.ContractDAO"></bean>
 	<bean id="budgetDAO" class="com.basesoft.modules.budget.BudgetDAO"></bean>
 	<bean id="customImportDAO" class="com.basesoft.modules.excel.CustomImportDAO"></bean>
+	<bean id="auditDAO" class="com.basesoft.modules.audit.AuditDAO"></bean>
 </beans>

@@ -24,9 +24,9 @@ public class ProjectDAO extends CommonDAO{
 		
 		for(int i=0;i<listProject.size();i++){//循环项目
 			Map mapProject = (Map)listProject.get(i);
-			String sql = "select sum(AMOUNT)+sum(OVER_AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and DEPARTCODE in (" + departCodes + ")";
+			String sql = "select sum(AMOUNT) as AMOUNT ,sum(OVER_AMOUNT) as OVER_AMOUNT from WORKREPORT where FLAG=2 and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and DEPARTCODE in (" + departCodes + ")";
 			Map map = jdbcTemplate.queryForMap(sql);
-			float totalCount = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
+			float totalCount = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString()) + (map.get("OVER_AMOUNT")==null?0:Float.parseFloat(map.get("OVER_AMOUNT").toString()));
 			mapProject.put("totalCount", totalCount);
 			
 			for(int j=0;j<listDepart.size();j++){//循环部门
@@ -34,9 +34,9 @@ public class ProjectDAO extends CommonDAO{
 				//下级部门列表
 				List childDepart = getChildDeparts(mapDepart.get("CODE").toString(), new ArrayList());
 				String departcodes = StringUtil.ListToStringAdd(childDepart, ",", "CODE");;
-				String sql1 = "select sum(AMOUNT)+sum(OVER_AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE in (" + departcodes + ") and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'"; 
+				String sql1 = "select sum(AMOUNT) as AMOUNT ,sum(OVER_AMOUNT) as OVER_AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE in (" + departcodes + ") and PJCODE='" + mapProject.get("CODE") + "' and STARTDATE>='" + start + "' and ENDDATE<='" + end + "'"; 
 				Map map1 = jdbcTemplate.queryForMap(sql1);
-				float departCount = map1.get("AMOUNT")==null?0:Float.parseFloat(map1.get("AMOUNT").toString());
+				float departCount = map1.get("AMOUNT")==null?0:Float.parseFloat(map1.get("AMOUNT").toString()) + (map.get("OVER_AMOUNT")==null?0:Float.parseFloat(map.get("OVER_AMOUNT").toString()));
 				
 				mapProject.put("departCount" + j, departCount);
 			}
@@ -77,15 +77,15 @@ public class ProjectDAO extends CommonDAO{
 				float count = 0;
 				
 				if("0".equals(depart)){//所有部门
-					String sql = "select sum(AMOUNT)+sum(OVER_AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
+					String sql = "select sum(AMOUNT) as AMOUNT ,sum(OVER_AMOUNT) as OVER_AMOUNT from WORKREPORT where FLAG=2 and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
 					Map map = jdbcTemplate.queryForMap(sql);
 					
-					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
+					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString()) + (map.get("OVER_AMOUNT")==null?0:Float.parseFloat(map.get("OVER_AMOUNT").toString()));
 				}else {
-					String sql = "select sum(AMOUNT)+sum(OVER_AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE in (" + departcodes + ") and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
+					String sql = "select sum(AMOUNT) as AMOUNT ,sum(OVER_AMOUNT) as OVER_AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE in (" + departcodes + ") and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
 					Map map = jdbcTemplate.queryForMap(sql);
 					
-					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
+					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString()) + (map.get("OVER_AMOUNT")==null?0:Float.parseFloat(map.get("OVER_AMOUNT").toString()));
 				}
 				
 				
@@ -152,16 +152,16 @@ public class ProjectDAO extends CommonDAO{
 				float count = 0;
 				
 				if("0".equals(depart)){//所有部门
-					String sql = "select sum(AMOUNT)+sum(OVER_AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
+					String sql = "select sum(AMOUNT) as AMOUNT ,sum(OVER_AMOUNT) as OVER_AMOUNT from WORKREPORT where FLAG=2 and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
 					Map map = jdbcTemplate.queryForMap(sql);
 					
-					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
+					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString()) + (map.get("OVER_AMOUNT")==null?0:Float.parseFloat(map.get("OVER_AMOUNT").toString()));
 					
 				}else {
-					String sql = "select sum(AMOUNT)+sum(OVER_AMOUNT) as AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE in (" + departcodes + ") and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
+					String sql = "select sum(AMOUNT) as AMOUNT ,sum(OVER_AMOUNT) as OVER_AMOUNT from WORKREPORT where FLAG=2 and DEPARTCODE in (" + departcodes + ") and STARTDATE>='" + start + "' and ENDDATE<='" + end + "' and PJCODE='" + mapProject.get("CODE") + "' and STAGECODE='" + mapPeriod.get("CODE") + "'";
 					Map map = jdbcTemplate.queryForMap(sql);
 					
-					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString());
+					count = map.get("AMOUNT")==null?0:Float.parseFloat(map.get("AMOUNT").toString()) + (map.get("OVER_AMOUNT")==null?0:Float.parseFloat(map.get("OVER_AMOUNT").toString()));
 				}
 				
 				
