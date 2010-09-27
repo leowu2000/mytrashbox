@@ -73,7 +73,7 @@ public class AuditDAO extends CommonDAO{
 	 */
 	public void unlockEmp(String empcode){
 		String delSql1 = "delete from EMP_STATUS where empcode='" + empcode + "'";
-		String delSql2 = "delete from AUDIT where TYPE=" + Audit.FAIL + " and TYPE=" + Audit.AU_FAILLOGIN + " and EMPCODE='" + empcode + "'";
+		String delSql2 = "delete from AUDIT where SUCCESS=" + Audit.FAIL + " and TYPE=" + Audit.AU_FAILLOGIN + " and EMPCODE='" + empcode + "'";
 		jdbcTemplate.execute(delSql1);
 		jdbcTemplate.execute(delSql2);
 	}

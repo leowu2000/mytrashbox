@@ -181,6 +181,15 @@ public class EmployeeController extends CommonController {
 			}
 			response.sendRedirect(returnUrl_infolist);
 			return null;
+		}else if("unlock".equals(action)){//用户解锁操作
+			String[] check=request.getParameterValues("check");
+			//循环按id解锁
+			for(int i=0;i<check.length;i++){
+				Employee em = emDAO.findById(check[i]);
+				auditDAO.unlockEmp(em.getCode());
+			}
+			response.sendRedirect(returnUrl_infolist);
+			return null;
 		}else if("frame_manage".equals(action)){//人事管理frame
 			mv = new ModelAndView("modules/employee/frame_manage");
 		}else if("list_manage".equals(action)){//人事管理列表

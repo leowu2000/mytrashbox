@@ -2,6 +2,7 @@
 <%@	page import="java.net.*" %>
 <%@ page import="com.basesoft.core.*" %>
 <%@ page import="com.basesoft.modules.employee.*" %>
+<%@ page import="com.basesoft.modules.audit.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 PageList pageList = (PageList)request.getAttribute("pageList");
@@ -16,6 +17,7 @@ int pagenum = pageList.getPageInfo().getCurPage();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 EmployeeDAO employeeDAO = (EmployeeDAO)ctx.getBean("employeeDAO");
+AuditDAO auditDAO = (AuditDAO)ctx.getBean("auditDAO");
 
 String errorMessage = request.getAttribute("errorMessage")==null?"":request.getAttribute("errorMessage").toString();
 %>
@@ -83,6 +85,7 @@ Ext.onReady(function(){
 	tb1.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb1.add({text: '修改密码',cls: 'x-btn-text-icon update',handler: onChangepassClick});
 	tb1.add({text: '修改角色',cls: 'x-btn-text-icon xiugai',handler: onChangeroleClick});
+	tb1.add({text: '解除锁定',cls: 'x-btn-text-icon xiugai',handler: onUnlockClick});
 	tb1.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
 	tb1.add({text: 'excel导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
@@ -223,6 +226,17 @@ Ext.onReady(function(){
 		  	}
 		});
     }
+    
+    function onUnlockClick(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+		
+		Ext.getDom('listForm').action=url+'?action=unlock&seldepart=<%=seldepart %>&emname=<%=emname %>&sel_empcode=<%=sel_empcode %>&page=<%=pagenum %>';       
+        Ext.getDom('listForm').submit();
+    }
 });
 
 function checkAll(){
@@ -283,6 +297,7 @@ function vali_pass(){
     		<td>部门</td>
     		<td>角色</td>
     		<td>配置数据权限</td>
+    		<td>状态</td>
     	</tr>
 <%
     for(int i=0;i<listEm.size();i++){
@@ -293,7 +308,8 @@ function vali_pass(){
     	}
     	String rolecode = mapEm.get("ROLECODE")==null?"":mapEm.get("ROLECODE").toString();
     	String rolename = employeeDAO.findNameByCode("USER_ROLE", rolecode);
-    	
+    	boolean isLocked = auditDAO.isLocked(mapEm.get("CODE").toString());
+    	String status = isLocked?"<font color='red'>锁定</font>":"正常";
 
 %>    	
 		<tr align="center">
@@ -303,6 +319,7 @@ function vali_pass(){
 			<td>&nbsp;<%=departname %></td>
 			<td>&nbsp;<%=rolename %></td>
 			<td><a href="/role.do?action=user_depart_list&code=<%=mapEm.get("CODE") %>">配置数据权限</a></td>
+			<td><%=status %></td>
 		</tr>
 <%  } %>
     </table>

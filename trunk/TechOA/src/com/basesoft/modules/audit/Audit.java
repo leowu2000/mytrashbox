@@ -28,7 +28,7 @@ public class Audit {
 		this.id = UUID.randomUUID().toString().replaceAll("-", "");
 		this.type = type;
 		this.date = StringUtil.DateToString(new Date(), "yyyy-MM-dd");
-		this.time = StringUtil.DateToString(new Date(), "hh:mm:ss");
+		this.time = StringUtil.DateToString(new Date(), "HH:mm:ss");
 		this.ip = ip;
 		this.success = success;
 		this.empcode = empcode;
