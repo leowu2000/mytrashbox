@@ -18,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
+import com.basesoft.modules.audit.Audit;
+import com.basesoft.modules.audit.AuditDAO;
 import com.basesoft.modules.project.ChartUtil;
 import com.basesoft.modules.role.RoleDAO;
 import com.basesoft.util.StringUtil;
@@ -28,6 +30,7 @@ public class EmployeeController extends CommonController {
 
 	EmployeeDAO emDAO;
 	RoleDAO roleDAO;
+	AuditDAO auditDAO;
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
@@ -105,6 +108,13 @@ public class EmployeeController extends CommonController {
 			
 			emDAO.update("update EMPLOYEE set PASSWORD='" + newpassword + "',PASS_DATE='" + new Date() + "' where ID='" + id + "'");
 			
+			//审计记录
+			Employee em = emDAO.findById(id);
+			String description = "系统管理员修改员工" + em.getName() + "(" + em.getCode() + ")的密码";
+			Audit audit = new Audit(Audit.AU_ADMIN, request.getLocalAddr(), Audit.SUCCESS, emcode, description);
+			auditDAO.addAudit(audit);
+			auditDAO.delHistory();
+			
 			response.sendRedirect(returnUrl_infolist);
 			return null;
 		}else if("userchangepass".equals(action)){//员工修改密码
@@ -115,17 +125,30 @@ public class EmployeeController extends CommonController {
 			
 			Employee em = emDAO.findById(id);
 			String message = "";
-			if(oldpassword.equals(em.getPassword())){//新旧密码相同
+			
+			String description = "员工" + em.getName() + "(" + em.getCode() + ")修改密码";
+			Audit audit = new Audit(Audit.AU_CHANGEPASS, request.getLocalAddr(), Audit.SUCCESS, emcode, description);
+			if(oldpassword.equals(em.getPassword())){//原密码输入正确
 				if(newpassword.equals(newpassword2)){//两次输入相同
 					String updateSql = "update EMPLOYEE set PASSWORD='" + newpassword + "',PASS_DATE='" + new Date() + "' where ID='" + id + "'";
 					emDAO.update(updateSql);
 					message = "1";
 				}else {
+					description = "员工" + em.getName() + "(" + em.getCode() + ")新密码输入错误，修改密码失败！";
+					audit.setSuccess(Audit.FAIL);
+					audit.setDescription(description);
+					
 					message = "2";
 				}
 			}else {
+				description = "员工" + em.getName() + "(" + em.getCode() + ")原密码输入错误，修改密码失败！";
+				audit.setSuccess(Audit.FAIL);
+				audit.setDescription(description);
+				
 				message = "3";
 			}
+			auditDAO.addAudit(audit);
+			auditDAO.delHistory();
 			
 			response.sendRedirect("em.do?action=manage_self&empcode=" + em.getCode() + "&message=" + message);
 			return null;
@@ -546,5 +569,9 @@ public class EmployeeController extends CommonController {
 	
 	public void setRoleDAO(RoleDAO roleDAO){
 		this.roleDAO = roleDAO;
+	}
+	
+	public void setAuditDAO(AuditDAO auditDAO){
+		this.auditDAO = auditDAO;
 	}
 }

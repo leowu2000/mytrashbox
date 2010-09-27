@@ -328,7 +328,7 @@ public class PlanController extends CommonController {
 		}else if("deleteall".equals(action)){//删除全部
 			String deleteSql = "delete from PLAN ";
 			if(!"".equals(datepick)){
-				Date start = StringUtil.StringToDate(datepick + "01", "yyyy-MM-dd");
+				Date start = StringUtil.StringToDate(datepick + "-01", "yyyy-MM-dd");
 				Date end = StringUtil.getEndOfMonth(start);
 				deleteSql = "delete from PLAN where ENDDATE>='" + start + "' and ENDDATE<='" + end + "'";
 			}

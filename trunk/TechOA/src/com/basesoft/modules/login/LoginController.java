@@ -13,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.basesoft.core.CommonController;
 import com.basesoft.core.Constants;
 import com.basesoft.core.PageList;
+import com.basesoft.modules.audit.Audit;
+import com.basesoft.modules.audit.AuditDAO;
 import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.role.RoleDAO;
@@ -30,6 +32,7 @@ public class LoginController extends CommonController {
 	RoleDAO roleDAO;
 	PlanDAO planDAO;
 	WorkReportDAO workreportDAO;
+	AuditDAO auditDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -106,24 +109,40 @@ public class LoginController extends CommonController {
 						return mv;
 					}
 				}
-				
-				if (password.equals(dbPassword)) {
+				boolean isLocked = auditDAO.isLocked(empcode);
+				if(!isLocked){//没有被锁
 					
-					request.getSession().setMaxInactiveInterval(Integer.parseInt(Constants.get("SessionOutTime")));
-					request.getSession().setAttribute("EMID", mapEm.get("ID")==null?"":mapEm.get("ID").toString());
-					request.getSession().setAttribute("EMROLE", mapEm.get("ROLECODE")==null?"":mapEm.get("ROLECODE").toString());
-					request.getSession().setAttribute("EMNAME", mapEm.get("NAME")==null?"":mapEm.get("NAME").toString());
-					request.getSession().setAttribute("EMCODE", empcode);
-					request.getSession().setAttribute("DEPARTCODE", mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString());
-					String departname = emDAO.findNameByCode("DEPARTMENT", mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString());
-					request.getSession().setAttribute("DEPARTNAME", departname);
-					
-					mv = new ModelAndView("index");
-					
-					return mv;
-					
-				} else {
-					errorMessage = "您输入的密码不正确，请确认后重新输入！";
+					if (password.equals(dbPassword)) {
+						
+						request.getSession().setMaxInactiveInterval(Integer.parseInt(Constants.get("SessionOutTime")));
+						request.getSession().setAttribute("EMID", mapEm.get("ID")==null?"":mapEm.get("ID").toString());
+						request.getSession().setAttribute("EMROLE", mapEm.get("ROLECODE")==null?"":mapEm.get("ROLECODE").toString());
+						request.getSession().setAttribute("EMNAME", mapEm.get("NAME")==null?"":mapEm.get("NAME").toString());
+						request.getSession().setAttribute("EMCODE", empcode);
+						request.getSession().setAttribute("DEPARTCODE", mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString());
+						String departname = emDAO.findNameByCode("DEPARTMENT", mapEm.get("DEPARTCODE")==null?"":mapEm.get("DEPARTCODE").toString());
+						request.getSession().setAttribute("DEPARTNAME", departname);
+						
+						mv = new ModelAndView("index");
+						
+						return mv;
+						
+					} else {
+						//审计信息
+						String description = "员工" + mapEm.get("NAME") + "(" + empcode + ")登陆失败！";
+						Audit audit = new Audit(Audit.AU_FAILLOGIN, request.getLocalAddr(), Audit.FAIL, empcode, description);
+						auditDAO.addAudit(audit);
+						auditDAO.delHistory();
+						
+						int failCount = auditDAO.getFailLoginCount(empcode);
+						errorMessage = "您输入的密码不正确，请确认后重新输入！<br>还可输错" + (5-failCount) + "次!";
+						if(failCount >= 5){
+							auditDAO.lockEmp(empcode);
+							errorMessage = "您输入的密码不正确，用户已被锁定，<br>请联系管理员!";
+						}
+					}
+				}else {
+					errorMessage = "您输入的用户名密码错误五次已被锁，<br>请联系管理员！";
 				}
 			} else {
 				errorMessage = "您输入的用户名不存在，请确认后重新输入！";
@@ -248,5 +267,9 @@ public class LoginController extends CommonController {
 	
 	public void setWorkReportDAO(WorkReportDAO workreportDAO){
 		this.workreportDAO = workreportDAO;
+	}
+	
+	public void setAuditDAO(AuditDAO auditDAO){
+		this.auditDAO = auditDAO;
 	}
 }
