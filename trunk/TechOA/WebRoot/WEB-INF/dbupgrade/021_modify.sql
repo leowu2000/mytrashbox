@@ -14,3 +14,7 @@ CREATE TABLE "PUBLIC"."EMP_STATUS"(
 "STATUS" INTEGER,
 PRIMARY KEY("ID")
 );
+
+INSERT INTO MENU VALUES('018','审计记录查询','1','audit.do?action=frame_search',5,'1','001','1.png');
+
+INSERT INTO USER_MENU VALUES('001','018','1');
