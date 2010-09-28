@@ -43,6 +43,7 @@
 				/b_increase.do=BudgetController_increase
 				/b_remain.do=BudgetController_remain
 				/custom_import.do=CustomImportController
+				/audit.do=AuditController
 			</value>
 		</property>
 	</bean>
@@ -98,5 +99,6 @@
 	<bean name="BudgetController_increase" class="com.basesoft.modules.budget.BudgetController_increase"></bean>
 	<bean name="BudgetController_remain" class="com.basesoft.modules.budget.BudgetController_remain"></bean>
 	<bean name="CustomImportController" class="com.basesoft.modules.excel.CustomImportController"></bean>
+	<bean name="AuditController" class="com.basesoft.modules.audit.AuditController"></bean>
 </beans>
 
