@@ -228,7 +228,7 @@ public class ExcelDAO extends CommonDAO {
 				//生成32位uuid
 				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 				
-				String insertSql = "insert into EMPLOYEE (ID,LOGINID,PASSWORD,CODE,ROLECODE,NAME,DEPARTCODE,MAINJOB,SECJOB,LEVEL,EMAIL,BLOG,SELFWEB,STCPHONE,MOBPHONE,ADDRESS,POST,MAJORCODE,DEGREECODE) values('" + uuid + "','" + code + "','1','" + code + "','003','" + name + "','" + departcode + "','" + mainjob + "','" + secjob + "','" + level + "','" + email + "','" + blog + "','" + selfweb + "','" + stcphone + "','" + mobphone + "','" + address + "','" + post + "','" + majorcode + "','" + degreecode + "')";
+				String insertSql = "insert into EMPLOYEE (ID,LOGINID,PASSWORD,CODE,ROLECODE,NAME,DEPARTCODE,MAINJOB,SECJOB,\"LEVEL\",EMAIL,BLOG,SELFWEB,STCPHONE,MOBPHONE,ADDRESS,POST,MAJORCODE,DEGREECODE) values('" + uuid + "','" + code + "','1','" + code + "','003','" + name + "','" + departcode + "','" + mainjob + "','" + secjob + "','" + level + "','" + email + "','" + blog + "','" + selfweb + "','" + stcphone + "','" + mobphone + "','" + address + "','" + post + "','" + majorcode + "','" + degreecode + "')";
 				
 				try{
 					insert(insertSql);
@@ -639,7 +639,7 @@ public class ExcelDAO extends CommonDAO {
 			if("".equals(parentname)){//一级部门
 				if(map.get("CODE")==null){//不存在则导入
 					String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-					String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,LEVEL) values('" + uuid + "','" + code + "','" + name + "','0','',1)";
+					String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,\"LEVEL\") values('" + uuid + "','" + code + "','" + name + "','0','',1)";
 					try{
 						insert(insertSql);
 					}catch(Exception e){
@@ -675,7 +675,7 @@ public class ExcelDAO extends CommonDAO {
 					//生成32位uuid
 					String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 					
-					String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,LEVEL) values('" + uuid + "','" + code + "','" + name + "','" + parentcode + "','" + allparents + "'," + level + ")";
+					String insertSql = "insert into DEPARTMENT (ID,CODE,NAME,PARENT,ALLPARENTS,\"LEVEL\") values('" + uuid + "','" + code + "','" + name + "','" + parentcode + "','" + allparents + "'," + level + ")";
 					
 					try{
 						insert(insertSql);

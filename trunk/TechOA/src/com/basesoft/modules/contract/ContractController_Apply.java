@@ -130,7 +130,7 @@ public class ContractController_Apply extends CommonController {
 			}
 			String empname = mapEmp.get("NAME")==null?"":mapEmp.get("NAME").toString();
 			
-			String updateSql = "update CONTRACT_APPLY set PJCODE='" + pjcode + "', SFXT='" + sfxt + "', CODE='" + code + "', NAME='" + name + "', LEVEL='" + level + "', MJ='" + mj + "', WXSL=" + wxsl + ", SFZJ='" + sfzj + "', ENDDATE=" + enddate + ", DEPARTCODE='" + departcode + "', DEPARTNAME='" + departname + "', EMPCODE='" + empcode + "', EMPNAME='" + empname + "', EMPPHONE='" + empphone + "' where ID='" + id + "'";
+			String updateSql = "update CONTRACT_APPLY set PJCODE='" + pjcode + "', SFXT='" + sfxt + "', CODE='" + code + "', NAME='" + name + "', \"LEVEL\"='" + level + "', MJ='" + mj + "', WXSL=" + wxsl + ", SFZJ='" + sfzj + "', ENDDATE=" + enddate + ", DEPARTCODE='" + departcode + "', DEPARTNAME='" + departname + "', EMPCODE='" + empcode + "', EMPNAME='" + empname + "', EMPPHONE='" + empphone + "' where ID='" + id + "'";
 			contractDAO.update(updateSql);
 			
 			response.sendRedirect("c_apply.do?action=list_apply&page=" + page + "&sel_code=" + sel_code + "&sel_pjcode=" + URLEncoder.encode(sel_pjcode,"UTF-8"));
