@@ -89,7 +89,7 @@ public class DepartmentController extends CommonController {
 			int ordercode = ServletRequestUtils.getIntParameter(request, "ordercode", 0);
 			
 			if("0".equals(parent)){//根部门作为父部门
-				departDAO.update("update DEPARTMENT set NAME='" + name + "',PARENT='" + parent + "',LEVEL=1,ALLPARENTS='',ORDERCODE=" + ordercode + " where ID='" + id + "'");
+				departDAO.update("update DEPARTMENT set NAME='" + name + "',PARENT='" + parent + "',\"LEVEL\"=1,ALLPARENTS='',ORDERCODE=" + ordercode + " where ID='" + id + "'");
 				
 				response.sendRedirect("depart.do?action=list&page=" + page);
 				return null;
@@ -104,7 +104,7 @@ public class DepartmentController extends CommonController {
 					allParents = parent;
 				}
 				
-				departDAO.update("update DEPARTMENT set NAME='" + name + "',PARENT='" + parent + "',level=" + level + ",ALLPARENTS='" + allParents + "',ORDERCODE=" + ordercode + " where ID='" + id + "'");
+				departDAO.update("update DEPARTMENT set NAME='" + name + "',PARENT='" + parent + "',\"level\"=" + level + ",ALLPARENTS='" + allParents + "',ORDERCODE=" + ordercode + " where ID='" + id + "'");
 				
 				response.sendRedirect("depart.do?action=list&page=" + page);
 				return null;

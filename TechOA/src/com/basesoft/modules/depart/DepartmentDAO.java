@@ -126,10 +126,10 @@ public class DepartmentDAO extends CommonDAO{
 		String querySql = "";
 		List listDepart = new ArrayList();
 		if("".equals(parent)){//没有上级单位属性，用于第一级部门检索
-			querySql = "select * from DEPARTMENT where CODE in (select DEPARTCODE from USER_DEPART where EMPCODE='" + empcode + "') and LEVEL=" + level + " order by ORDERCODE";
+			querySql = "select * from DEPARTMENT where CODE in (select DEPARTCODE from USER_DEPART where EMPCODE='" + empcode + "') and \"LEVEL\"=" + level + " order by ORDERCODE";
 			listDepart = jdbcTemplate.queryForList(querySql);
 			if(listDepart.size() == 0){//没有为用户配置数据权限的时候取角色配置的数据权限
-				querySql = "select * from DEPARTMENT where CODE in (select DEPARTCODE from ROLE_DEPART where ROLECODE='" + rolecode + "') and LEVEL=" + level + " order by ORDERCODE";
+				querySql = "select * from DEPARTMENT where CODE in (select DEPARTCODE from ROLE_DEPART where ROLECODE='" + rolecode + "') and \"LEVEL\"=" + level + " order by ORDERCODE";
 				listDepart = jdbcTemplate.queryForList(querySql);
 			}
 		}else {
@@ -149,7 +149,7 @@ public class DepartmentDAO extends CommonDAO{
 	 * @return
 	 */
 	public int getMaxLevel(){
-		String querySql = "select MAX(LEVEL) from DEPARTMENT ";
+		String querySql = "select MAX(\"LEVEL\") from DEPARTMENT ";
 		return jdbcTemplate.queryForInt(querySql);
 	}
 }

@@ -88,12 +88,14 @@ public class ContractController_Pay extends CommonController {
 			return null;
 		}else if("update".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
-			String code = ServletRequestUtils.getStringParameter(request, "code", "");
-			String funds = ServletRequestUtils.getStringParameter(request, "funds", "");
-			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
-			String empname = contractDAO.findNameByCode("EMPLOYEE", empcode);
-			
-			String updateSql = "update CONTRACT_BUDGET set CODE='" + code + "', EMPCODE='" + empcode + "', EMPNAME='" + empname + "', FUNDS='" + funds + "' where ID='" + id + "'";
+			String bdepart = ServletRequestUtils.getStringParameter(request, "bdepart", "");
+			String pay = ServletRequestUtils.getStringParameter(request, "pay", "");
+			String goodscode = ServletRequestUtils.getStringParameter(request, "goodscode", "");
+			String leader_station = ServletRequestUtils.getStringParameter(request, "leader_station", "");
+			if("".equals(pay)){
+				pay = "0";
+			}
+			String updateSql = "update CONTRACT_PAY set BDEPART='" + bdepart + "', PAY=" + pay + ", GOODSCODE='" + goodscode + "', LEADER_STATION='" + leader_station + "', PAYDATE='" + new Date() + "' where ID='" + id + "'";
 			contractDAO.update(updateSql);
 			
 			response.sendRedirect("c_pay.do?action=list_pay&contractcode=" + contractcode);

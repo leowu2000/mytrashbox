@@ -115,7 +115,7 @@ public class CommonDAO {
 	 */
 	public String findDepartcodeByName(String name){
 		String s = "";
-		List list = jdbcTemplate.queryForList("select CODE from DEPARTMENT where NAME  like '%" + name + "%' order by LEVEL");
+		List list = jdbcTemplate.queryForList("select CODE from DEPARTMENT where NAME  like '%" + name + "%' order by \"LEVEL\"");
 		if(list.size() > 0){
 			Map map = (Map)list.get(0);
 			s = map.get("CODE").toString();
