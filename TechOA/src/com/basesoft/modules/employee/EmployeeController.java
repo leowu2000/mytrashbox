@@ -21,6 +21,7 @@ import com.basesoft.core.PageList;
 import com.basesoft.modules.audit.Audit;
 import com.basesoft.modules.audit.AuditDAO;
 import com.basesoft.modules.project.ChartUtil;
+import com.basesoft.modules.role.Role;
 import com.basesoft.modules.role.RoleDAO;
 import com.basesoft.util.StringUtil;
 import com.thoughtworks.xstream.XStream;
@@ -84,6 +85,9 @@ public class EmployeeController extends CommonController {
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			
 			emDAO.insert("insert into EMPLOYEE values('" + id + "','" + code + "','1','" + code + "','" + rolecode + "','" + empname + "','" + depart + "','','','','','','','','','','','','','')");
+			Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "增加员工" + empname + "(" + code + ")");
+			auditDAO.addAudit(audit);
+			auditDAO.delHistory();
 			
 			response.sendRedirect(returnUrl_infolist);
 			return null;
@@ -110,8 +114,8 @@ public class EmployeeController extends CommonController {
 			
 			//审计记录
 			Employee em = emDAO.findById(id);
-			String description = "系统管理员修改员工" + em.getName() + "(" + em.getCode() + ")的密码";
-			Audit audit = new Audit(Audit.AU_ADMIN, request.getLocalAddr(), Audit.SUCCESS, emcode, description);
+			String description = "修改员工" + em.getName() + "(" + em.getCode() + ")的密码";
+			Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, description);
 			auditDAO.addAudit(audit);
 			auditDAO.delHistory();
 			
@@ -127,7 +131,7 @@ public class EmployeeController extends CommonController {
 			String message = "";
 			
 			String description = "员工" + em.getName() + "(" + em.getCode() + ")修改密码";
-			Audit audit = new Audit(Audit.AU_CHANGEPASS, request.getLocalAddr(), Audit.SUCCESS, emcode, description);
+			Audit audit = new Audit(Audit.AU_CHANGEPASS, request.getRemoteAddr(), Audit.SUCCESS, emcode, description);
 			if(oldpassword.equals(em.getPassword())){//原密码输入正确
 				if(newpassword.equals(newpassword2)){//两次输入相同
 					String updateSql = "update EMPLOYEE set PASSWORD='" + newpassword + "',PASS_DATE='" + new Date() + "' where ID='" + id + "'";
@@ -167,8 +171,13 @@ public class EmployeeController extends CommonController {
 		}else if("changerole".equals(action)){
 			String id = ServletRequestUtils.getStringParameter(request, "id", "");
 			String rolecode = ServletRequestUtils.getStringParameter(request, "oldrolecode", "");
+			Role role = roleDAO.findByCode(rolecode);
+			Employee em = emDAO.findById(id);
 			
 			emDAO.update("update EMPLOYEE set ROLECODE='" + rolecode + "' where ID='" + id + "'");
+			Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "修改员工" + em.getName() + "(" + em.getCode() + ")的角色为\"" + role.getName() + "\"");
+			auditDAO.addAudit(audit);
+			auditDAO.delHistory();
 			
 			response.sendRedirect(returnUrl_infolist);
 			return null;
@@ -176,8 +185,12 @@ public class EmployeeController extends CommonController {
 			String[] check=request.getParameterValues("check");
 			//循环按id删除
 			for(int i=0;i<check.length;i++){
+				Employee em = emDAO.findById(check[i]);
 				String deleteSql = "delete from EMPLOYEE where ID='" + check[i] + "'";
 				emDAO.delete(deleteSql);
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "删除员工" + em.getName() + "(" + em.getCode() + ")");
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 			}
 			response.sendRedirect(returnUrl_infolist);
 			return null;
@@ -187,6 +200,9 @@ public class EmployeeController extends CommonController {
 			for(int i=0;i<check.length;i++){
 				Employee em = emDAO.findById(check[i]);
 				auditDAO.unlockEmp(em.getCode());
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "解锁员工" + em.getName() + "(" + em.getCode() + ")");
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 			}
 			response.sendRedirect(returnUrl_infolist);
 			return null;

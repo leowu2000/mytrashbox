@@ -130,7 +130,7 @@ public class LoginController extends CommonController {
 					} else {
 						//审计信息
 						String description = "员工" + mapEm.get("NAME") + "(" + empcode + ")登陆失败！";
-						Audit audit = new Audit(Audit.AU_FAILLOGIN, request.getLocalAddr(), Audit.FAIL, empcode, description);
+						Audit audit = new Audit(Audit.AU_FAILLOGIN, request.getRemoteAddr(), Audit.FAIL, empcode, description);
 						auditDAO.addAudit(audit);
 						auditDAO.delHistory();
 						

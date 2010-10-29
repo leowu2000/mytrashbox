@@ -45,7 +45,7 @@ Ext.onReady(function(){
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '修  改',cls: 'x-btn-text-icon update',handler: onUpdateClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
-	tb.add({text: '开启访问限制',cls: 'x-btn-text-icon xiugai',handler: onStartClick});
+	tb.add({text: '开启访问限制',cls: 'x-btn-text-icon xiugai',handler: onStaClick});
 	tb.add({text: '关闭访问限制',cls: 'x-btn-text-icon xiugai',handler: onEndClick});
 
     if(!win){
@@ -129,7 +129,7 @@ Ext.onReady(function(){
         win2.show(btn.dom);
     }
     
-    function onStartClick(btn){
+    function onStaClick(btn){
 		Ext.Msg.confirm('确认','确定要开启访问限制?',function(btn){
     	    if(btn=='yes'){
 	    		if(window.XMLHttpRequest){ //Mozilla 
@@ -137,7 +137,7 @@ Ext.onReady(function(){
     			}else if(window.ActiveXObject){
  	  				var xmlHttpReq=new ActiveXObject("MSXML2.XMLHTTP.3.0");
     			}
-    			xmlHttpReq.open("GET", "/visit.do?action=start", false);
+    			xmlHttpReq.open("GET", "/visit.do?action=sta", false);
     			xmlHttpReq.send();
     			if(xmlHttpReq.responseText=='true'){
         			alert('已成功开启！');

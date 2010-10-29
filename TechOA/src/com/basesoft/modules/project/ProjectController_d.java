@@ -10,12 +10,15 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
+import com.basesoft.modules.audit.Audit;
+import com.basesoft.modules.audit.AuditDAO;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 public class ProjectController_d extends CommonController {
 
 	ProjectDAO projectDAO;
+	AuditDAO auditDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -23,6 +26,7 @@ public class ProjectController_d extends CommonController {
 
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
+		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		
 		if("list".equals(action)){
 			mv = new ModelAndView("modules/pj/list_pj_d");
@@ -66,6 +70,9 @@ public class ProjectController_d extends CommonController {
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			
 			projectDAO.insert("insert into PROJECT_D values('" + id + "','" + pjcode + "','" + name + "','" + name + "','" + manager + "'," + startdate + "," + enddate + "," + planedworkload + ",'" + note + "')");
+			Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "增加令号" + pjcode + "的分系统" + name);
+			auditDAO.addAudit(audit);
+			auditDAO.delHistory();
 			
 			response.sendRedirect("pj_d.do?action=list&pjcode=" + pjcode);
 			return null;
@@ -108,6 +115,9 @@ public class ProjectController_d extends CommonController {
 			}
 			
 			projectDAO.update("update PROJECT_D set NAME='" + name + "', MANAGER='" + manager + "', PLANEDWORKLOAD=" + planedworkload + ", STARTDATE=" + startdate + ", ENDDATE=" + enddate + " where ID='" + id + "'");
+			Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "修改令号" + pjcode + "的分系统" + name);
+			auditDAO.addAudit(audit);
+			auditDAO.delHistory();
 			
 			response.sendRedirect("pj_d.do?action=list&pjcode=" + pjcode);
 			return null;
@@ -117,8 +127,12 @@ public class ProjectController_d extends CommonController {
 			String[] check=request.getParameterValues("check");
 			//循环按id删除
 			for(int i=0;i<check.length;i++){
+				Project_d pj_d = projectDAO.findById_d(check[i]);
 				String deleteSql = "delete from PROJECT_D where ID='" + check[i] + "'";
 				projectDAO.delete(deleteSql);
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "删除令号" + pjcode + "的分系统" + pj_d.getCode());
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 			}
 			response.sendRedirect("pj_d.do?action=list&pjcode=" + pjcode);
 			return null;
@@ -129,5 +143,9 @@ public class ProjectController_d extends CommonController {
 
 	public void setProjectDAO(ProjectDAO projectDAO){
 		this.projectDAO = projectDAO;
+	}
+	
+	public void setAuditDAO(AuditDAO auditDAO){
+		this.auditDAO = auditDAO;
 	}
 }

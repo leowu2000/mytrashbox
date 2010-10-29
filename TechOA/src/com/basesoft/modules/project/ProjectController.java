@@ -1,7 +1,6 @@
 package com.basesoft.modules.project;
 
 import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
+import com.basesoft.modules.audit.Audit;
+import com.basesoft.modules.audit.AuditDAO;
 import com.basesoft.util.StringUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
@@ -21,6 +22,7 @@ import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 public class ProjectController extends CommonController {
 
 	ProjectDAO projectDAO;
+	AuditDAO auditDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -28,6 +30,7 @@ public class ProjectController extends CommonController {
 
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
+		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String path = request.getRealPath("\\chart\\");
 		String sel_type = ServletRequestUtils.getStringParameter(request, "sel_type", "1");
@@ -119,7 +122,7 @@ public class ProjectController extends CommonController {
 			mv.addObject("pageList", pageList);
 			mv.addObject("listEm", listEm);
 			mv.addObject("errorMessage", errorMessage);
-		}else if("add".equals(action)){//项目添加
+		}else if("add".equals(action)){//令号添加
 			//接收页面参数
 			String  pjname = ServletRequestUtils.getStringParameter(request, "pjname", "");
 			String  status = ServletRequestUtils.getStringParameter(request, "status", "");
@@ -148,6 +151,9 @@ public class ProjectController extends CommonController {
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			
 			projectDAO.insert("insert into PROJECT values('" + id + "','" + pjname + "','" + pjname + "','" + status + "','" + manager + "','" + manager + "'," + planedworkload + ",0," + startdate + "," + enddate + ",'" + note + "')");
+			Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "增加令号" + pjname);
+			auditDAO.addAudit(audit);
+			auditDAO.delHistory();
 			
 			response.sendRedirect("pj.do?action=list&page=" + page);
 			return null;
@@ -190,6 +196,9 @@ public class ProjectController extends CommonController {
 			}
 			
 			projectDAO.update("update PROJECT set NAME='" + pjname + "',CODE='" + pjname + "',STATUS='" + status + "',MANAGER='" + manager + "',planedworkload=" + planedworkload + ",startdate=" + startdate + ",enddate=" + enddate + ",note='" + note + "' where ID='" + id + "'");
+			Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "修改令号" + pjname);
+			auditDAO.addAudit(audit);
+			auditDAO.delHistory();
 			
 			response.sendRedirect("pj.do?action=list&page=" + page);
 			return null;
@@ -197,8 +206,12 @@ public class ProjectController extends CommonController {
 			String[] check=request.getParameterValues("check");
 			//循环按id删除
 			for(int i=0;i<check.length;i++){
+				Project pj = projectDAO.findById(check[i]);
 				String deleteSql = "delete from PROJECT where ID='" + check[i] + "'";
 				projectDAO.delete(deleteSql);
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "删除令号" + pj.getCode());
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 			}
 			response.sendRedirect("pj.do?action=list&page=" + page);
 			return null;
@@ -224,6 +237,10 @@ public class ProjectController extends CommonController {
 	
 	public void setProjectDAO(ProjectDAO projectDAO){
 		this.projectDAO = projectDAO;
+	}
+	
+	public void setAuditDAO(AuditDAO auditDAO){
+		this.auditDAO = auditDAO;
 	}
 
 }

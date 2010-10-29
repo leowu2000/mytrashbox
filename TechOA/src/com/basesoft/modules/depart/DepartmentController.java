@@ -12,12 +12,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
+import com.basesoft.modules.audit.Audit;
+import com.basesoft.modules.audit.AuditDAO;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 public class DepartmentController extends CommonController {
 
 	DepartmentDAO departDAO;
+	AuditDAO auditDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -26,6 +29,7 @@ public class DepartmentController extends CommonController {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		String emid = request.getSession().getAttribute("EMID")==null?"":request.getSession().getAttribute("EMID").toString();
 		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
+		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		String errorMessage = ServletRequestUtils.getStringParameter(request, "errorMessage", "");
 		errorMessage = new String(errorMessage.getBytes("ISO8859-1"),"UTF-8");
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
@@ -46,6 +50,9 @@ public class DepartmentController extends CommonController {
 			
 			if("0".equals(parent)){//根部门作为父部门
 				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "','',1," + ordercode + ")");
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "增加部门" + name);
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 				
 				response.sendRedirect("depart.do?action=list");
 				return null;
@@ -56,6 +63,9 @@ public class DepartmentController extends CommonController {
 				String allParents = mapParent.get("ALLPARENTS").toString() + "," + parent;
 				
 				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "','" + allParents + "'," + level + ", " + ordercode + ")");
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "增加子部门" + name);
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 				
 				response.sendRedirect("depart.do?action=list");
 				return null;
@@ -63,8 +73,12 @@ public class DepartmentController extends CommonController {
 		}else if("delete".equals(action)){//删除
 			String[] check=request.getParameterValues("check");
 			for(int i=0;i<check.length;i++){
+				Department depart = departDAO.findById(check[i]);
 				String deleteSql = "delete from DEPARTMENT where ID='" + check[i] + "'";
 				departDAO.delete(deleteSql);
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "删除部门" + depart.getName());
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 			}
 			
 			response.sendRedirect("depart.do?action=list");
@@ -90,6 +104,9 @@ public class DepartmentController extends CommonController {
 			
 			if("0".equals(parent)){//根部门作为父部门
 				departDAO.update("update DEPARTMENT set NAME='" + name + "',PARENT='" + parent + "',\"LEVEL\"=1,ALLPARENTS='',ORDERCODE=" + ordercode + " where ID='" + id + "'");
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "修改部门" + name);
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 				
 				response.sendRedirect("depart.do?action=list&page=" + page);
 				return null;
@@ -105,6 +122,9 @@ public class DepartmentController extends CommonController {
 				}
 				
 				departDAO.update("update DEPARTMENT set NAME='" + name + "',PARENT='" + parent + "',\"level\"=" + level + ",ALLPARENTS='" + allParents + "',ORDERCODE=" + ordercode + " where ID='" + id + "'");
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "修改部门" + name);
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 				
 				response.sendRedirect("depart.do?action=list&page=" + page);
 				return null;
@@ -136,5 +156,9 @@ public class DepartmentController extends CommonController {
 	
 	public void setDepartmentDAO(DepartmentDAO departmentDAO){
 		this.departDAO = departmentDAO;
+	}
+	
+	public void setAuditDAO(AuditDAO auditDAO){
+		this.auditDAO = auditDAO;
 	}
 }

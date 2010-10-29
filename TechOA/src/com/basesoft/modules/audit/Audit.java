@@ -6,17 +6,17 @@ import java.util.UUID;
 import com.basesoft.util.StringUtil;
 
 public class Audit {
-	public static final int AU_CHANGEPASS = 1;
-	public static final int AU_ADMIN = 2;
-	public static final int AU_FAILLOGIN = 3;
+	public static final String AU_CHANGEPASS = "1";		//修改密码
+	public static final String AU_ADMIN = "2";			//管理员操作
+	public static final String AU_FAILLOGIN = "3";		//登录失败
 	
-	public static final int SUCCESS = 1;
-	public static final int FAIL = 2;
+	public static final int SUCCESS = 1;				//操作成功
+	public static final int FAIL = 2;					//操作失败
 	
-	public static final int LOCKED = 1;
+	public static final int LOCKED = 1;					//用户锁定(锁定后不允许登陆，需由管理员打开)
 	
 	private String id;
-	private int type;
+	private String type;
 	private String date;
 	private String time;
 	private String ip;
@@ -24,7 +24,7 @@ public class Audit {
 	private String empcode;
 	private String description;
 	
-	public Audit(int type, String ip, int success, String empcode, String description){
+	public Audit(String type, String ip, int success, String empcode, String description){
 		this.id = UUID.randomUUID().toString().replaceAll("-", "");
 		this.type = type;
 		this.date = StringUtil.DateToString(new Date(), "yyyy-MM-dd");
@@ -43,11 +43,11 @@ public class Audit {
 		this.id = id;
 	}
 	
-	public int getType() {
+	public String getType() {
 		return type;
 	}
 	
-	public void setType(int type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 	

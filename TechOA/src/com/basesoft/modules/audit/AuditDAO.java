@@ -104,7 +104,7 @@ public class AuditDAO extends CommonDAO{
 		if(!"".equals(sel_empcode)){
 			sql = sql + " and EMPCODE like '%" + sel_empcode + "%'";
 		}
-		sql = sql + " order by DATE, TIME desc";
+		sql = sql + " order by DATE desc, TIME desc";
 		
 		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
 		String sqlCount = "select count(*) from (" + sql + ")";
