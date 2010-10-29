@@ -10,18 +10,25 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
+import com.basesoft.modules.audit.Audit;
+import com.basesoft.modules.audit.AuditDAO;
+import com.basesoft.modules.menu.Menu;
+import com.basesoft.modules.menu.MenuDAO;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 public class RoleController extends CommonController {
 
 	RoleDAO roleDAO;
+	AuditDAO auditDAO;
+	MenuDAO menuDAO;
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String code = ServletRequestUtils.getStringParameter(request, "code", "");
+		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		
 		if("list".equals(action)){//角色管理
 			mv = new ModelAndView("modules/role/list_role");
@@ -33,6 +40,9 @@ public class RoleController extends CommonController {
 			
 			String insertSql = "insert into USER_ROLE values('" + code + "', '" + name + "')";
 			roleDAO.insert(insertSql);
+			Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "增加角色" + name);
+			auditDAO.addAudit(audit);
+			auditDAO.delHistory();
 			
 			response.sendRedirect("/role.do?action=list");
 		}else if("query".equals(action)){//查找角色
@@ -52,14 +62,25 @@ public class RoleController extends CommonController {
 			
 			String updateSql = "update USER_ROLE set NAME='" + name + "' where CODE='" + id + "'";
 			roleDAO.update(updateSql);
+			Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "修改角色" + name);
+			auditDAO.addAudit(audit);
+			auditDAO.delHistory();
 			
 			response.sendRedirect("role.do?action=list&page=" + page);
 		}else if("delete".equals(action)){//删除角色
 			String[] check=request.getParameterValues("check");
 			//循环按id删除
 			for(int i=0;i<check.length;i++){
+				Role role = roleDAO.findByCode(check[i]);
 				String deleteSql = "delete from USER_ROLE where CODE='" + check[i] + "'";
+				String deleteRoleFuncs = "delete from USER_MENU where EMPCODE='" + check[i] + "'";
+				String deleteRoleDepart = "delete from ROLE_DEPART where ROLECODE='" + check[i] + "'";
 				roleDAO.delete(deleteSql);
+				roleDAO.delete(deleteRoleFuncs);
+				roleDAO.delete(deleteRoleDepart);
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "删除角色" + role.getName());
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 			}
 			
 			response.sendRedirect("role.do?action=list&page=" + page);
@@ -94,8 +115,14 @@ public class RoleController extends CommonController {
 			
 			String[] menus = menucodes.split(",");
 			for(int i=0;i<menus.length;i++){
+				Role role = roleDAO.findByCode(code);
+				Menu menu = menuDAO.findByMenuCode(menus[i]);
+				String menuname = menu.getMenuname();
 				String insertString = "insert into USER_MENU values('" + code + "','" + menus[i] + "','1')";
 				roleDAO.insert(insertString);
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "为角色" + role.getName() + "配置菜单\"" + menuname + "\"");
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 			}
 			response.sendRedirect("role.do?action=role_menu_list&code=" + code);
 		}else if("role_depart_list".equals(action)){//配置角色数据权限页面
@@ -116,8 +143,13 @@ public class RoleController extends CommonController {
 			
 			String[] departs = departcodes.split(",");
 			for(int i=0;i<departs.length;i++){
+				Role role = roleDAO.findByCode(code);
+				String departname = roleDAO.findNameByCode("DEPARTMENT", departs[i]);
 				String insertString = "insert into ROLE_DEPART values('" + code + "','" + departs[i] + "')";
 				roleDAO.insert(insertString);
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "为角色" + role.getName() + "配置\"" + departname + "\"的数据权限");
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 			}
 			response.sendRedirect("role.do?action=role_depart_list&code=" + code);
 		}else if("user_depart_list".equals(action)){//配置用户数据权限页面
@@ -139,8 +171,13 @@ public class RoleController extends CommonController {
 			String[] departs = departcodes.split(",");
 			Map mapEm = roleDAO.findByCode("EMPLOYEE", code);
 			for(int i=0;i<departs.length;i++){
+				String username = roleDAO.findNameByCode("EMPLOYEE", code);
+				String departname = roleDAO.findNameByCode("DEPARTMENT", departs[i]);
 				String insertString = "insert into USER_DEPART values('" + code + "','" + departs[i] + "','" + mapEm.get("ROLECODE") + "')";
 				roleDAO.insert(insertString);
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "为用户" + username + "(" + code + ")配置\"" + departname + "\"的数据权限");
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 			}
 			response.sendRedirect("role.do?action=user_depart_list&code=" + code);
 		}
@@ -151,5 +188,13 @@ public class RoleController extends CommonController {
 
 	public void setRoleDAO(RoleDAO roleDAO){
 		this.roleDAO = roleDAO;
+	}
+	
+	public void setAuditDAO(AuditDAO auditDAO){
+		this.auditDAO = auditDAO;
+	}
+	
+	public void setMenuDAO(MenuDAO menuDAO){
+		this.menuDAO = menuDAO;
 	}
 }

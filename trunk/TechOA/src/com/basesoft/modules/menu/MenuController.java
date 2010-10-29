@@ -11,12 +11,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
+import com.basesoft.modules.audit.Audit;
+import com.basesoft.modules.audit.AuditDAO;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 public class MenuController extends CommonController {
 
 	MenuDAO menuDAO;
+	AuditDAO auditDAO;
 	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -52,6 +55,9 @@ public class MenuController extends CommonController {
 			Menu menu = menuDAO.findByMenuCode(parent);
 			
 			menuDAO.insert("insert into MENU values('" + menucode + "', '" + menuname + "', '" + menutype + "', '" + menuurl + "', " + ordercode + ", '" + status + "', '" + parent + "', '" + menu.getIcon() + "')");
+			Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "增加菜单\"" + menuname + "\"");
+			auditDAO.addAudit(audit);
+			auditDAO.delHistory();
 			
 			response.sendRedirect("menu.do?action=manage&page="+page);
 			return null;
@@ -59,8 +65,12 @@ public class MenuController extends CommonController {
 			String[] check=request.getParameterValues("check");
 			//循环按code删除
 			for(int i=0;i<check.length;i++){
+				Menu menu = menuDAO.findByMenuCode(check[i]);
 				String deleteSql = "delete from MENU where MENUCODE='" + check[i] + "'";
 				menuDAO.delete(deleteSql);
+				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "删除菜单\"" + menu.getMenuname() + "\"");
+				auditDAO.addAudit(audit);
+				auditDAO.delHistory();
 			}
 			
 			response.sendRedirect("menu.do?action=manage&page="+page);
@@ -92,6 +102,9 @@ public class MenuController extends CommonController {
 			}
 			
 			menuDAO.update("update MENU set MENUCODE='" + menucode + "', MENUNAME='" + menuname + "', MENUTYPE='" + menutype + "', MENUURL='" + menuurl + "', ORDERCODE=" + ordercode + ", STATUS='" + status + "', PARENT='" + parent + "' where MENUCODE='" + menucode + "'");
+			Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "修改菜单\"" + menuname + "\"");
+			auditDAO.addAudit(audit);
+			auditDAO.delHistory();
 			
 			response.sendRedirect("menu.do?action=manage&page="+page);
 			return null;
@@ -177,5 +190,9 @@ public class MenuController extends CommonController {
 
 	public void setMenuDAO(MenuDAO menuDAO){
 		this.menuDAO = menuDAO;
+	}
+	
+	public void setAuditDAO(AuditDAO auditDAO){
+		this.auditDAO = auditDAO;
 	}
 }

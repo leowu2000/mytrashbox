@@ -22,10 +22,7 @@ String datepick = request.getAttribute("datepick").toString();
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	<%@ include file="../../../common/meta.jsp" %>
-	<style type="text/css">
-		#the-table { border:1px solid #bbb;border-collapse:collapse;margin: 5px auto 5px auto; font-size: 20px;color:#696969;font-size: 20px;}
-	</style>
+	<%@ include file="../../common/meta.jsp" %>
   </head>
   
   <body>
@@ -37,17 +34,18 @@ String datepick = request.getAttribute("datepick").toString();
 			<td>日期</td>
     		<td>类型</td>
     		<td>工号</td>
+    		<td>IP地址</td>
     		<td>操作</td>
     	</tr>
 <%
     for(int i=0;i<listAudit.size();i++){
     	Map mapAudit = (Map)listAudit.get(i);
     	String type = mapAudit.get("TYPE")==null?"":mapAudit.get("TYPE").toString();
-    	if(type.equals(String.valueOf(Audit.AU_ADMIN))){
-    		type = "系统管理员操作";
-    	}else if(type.equals(String.valueOf(Audit.AU_CHANGEPASS))){
-    		type = "密码修改操作";
-    	}else if(type.equals(String.valueOf(Audit.AU_FAILLOGIN))){
+    	if(Audit.AU_ADMIN.equals(type)){
+    		type = "管理员操作";
+    	}else if(Audit.AU_CHANGEPASS.equals(type)){
+    		type = "密码修改";
+    	}else if(Audit.AU_FAILLOGIN.equals(type)){
     		type = "违规操作";
     	}
 %>    	
@@ -55,6 +53,7 @@ String datepick = request.getAttribute("datepick").toString();
 			<td>&nbsp;<%=mapAudit.get("DATE")==null?"":mapAudit.get("DATE") %></td>
 			<td>&nbsp;<%=type %></td>
 			<td>&nbsp;<%=mapAudit.get("EMPCODE")==null?"":mapAudit.get("EMPCODE") %></td>
+			<td>&nbsp;<%=mapAudit.get("IP")==null?"":mapAudit.get("IP") %></td>
 			<td>&nbsp;<%=mapAudit.get("DESCRIPTION")==null?"":mapAudit.get("DESCRIPTION") %></td>
 		</tr>
 <%  } %>

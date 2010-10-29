@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page import="com.basesoft.modules.audit.*" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -44,9 +45,14 @@
   </head>
   
   <body onload="IFrameResize();" onresize="IFrameResize();">
-  	<h1>设计记录查询</h1>
+  	<h1>审计记录查询</h1>
   	<div id="toolbar"></div>
-  	<input type="text" name="sel_type" id="sel_type" style="width:60;">
+  	<select name="sel_type" id="sel_type" onchange="commit();">
+  		<option value="<%=Audit.AU_ADMIN %>">管理员操作</option>
+  		<option value="<%=Audit.AU_CHANGEPASS %>">修改密码</option>
+  		<option value="<%=Audit.AU_FAILLOGIN %>">违规操作</option>
+  	</select>
+  	
 	<input type="text" name="sel_empcode" id="sel_empcode" style="width:60;">
 	<input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="commit();" name="datepick" id="datepick" style="width:60;">
 	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
