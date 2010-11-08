@@ -64,10 +64,11 @@ body {
 <table width="100%"  border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td height="124" background="images/welcome_01.jpg" style="background-repeat: repeat-x;">
+    <br><br>
 <%
 if("".equals(pass_date)){
 %>
-&nbsp;&nbsp;&nbsp;&nbsp;<font color="red">请您及时修改密码！</font><a href="em.do?action=manage_self">修改密码</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="red">请您及时修改密码！</font><a href="em.do?action=manage_self">修改密码</a><br><br>
 <%
 }else{
 	Date passdate = StringUtil.StringToDate(pass_date, "yyyy-MM-dd");
@@ -84,6 +85,8 @@ if("".equals(pass_date)){
 	}
 }
 %>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<%=StringUtil.DateToString(new Date(), "yyyy-MM-dd") %><a href="/announce.do?action=list_view">最新公告</a><br><br>
 
 <%
 if("true".equals(haveworkcheck)){
