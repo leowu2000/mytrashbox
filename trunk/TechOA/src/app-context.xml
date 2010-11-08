@@ -81,4 +81,7 @@
 	<bean id="budgetDAO" class="com.basesoft.modules.budget.BudgetDAO"></bean>
 	<bean id="customImportDAO" class="com.basesoft.modules.excel.CustomImportDAO"></bean>
 	<bean id="auditDAO" class="com.basesoft.modules.audit.AuditDAO"></bean>
+	<bean id="announceDAO" class="com.basesoft.modules.announce.AnnounceDAO"></bean>
+	<bean id="zjglDAO" class="com.basesoft.modules.zjgl.ZjglDAO"></bean>
+	<bean id="tcglDAO" class="com.basesoft.modules.tcgl.TcglDAO"></bean>
 </beans>

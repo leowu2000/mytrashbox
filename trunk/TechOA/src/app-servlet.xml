@@ -44,6 +44,9 @@
 				/b_remain.do=BudgetController_remain
 				/custom_import.do=CustomImportController
 				/audit.do=AuditController
+				/announce.do=AnnounceController
+				/tcgl.do=TcglController
+				/zjgl.do=ZjglController
 			</value>
 		</property>
 	</bean>
@@ -100,5 +103,8 @@
 	<bean name="BudgetController_remain" class="com.basesoft.modules.budget.BudgetController_remain"></bean>
 	<bean name="CustomImportController" class="com.basesoft.modules.excel.CustomImportController"></bean>
 	<bean name="AuditController" class="com.basesoft.modules.audit.AuditController"></bean>
+	<bean name="AnnounceController" class="com.basesoft.modules.announce.AnnounceController"></bean>
+	<bean name="TcglController" class="com.basesoft.modules.tcgl.TcglController"></bean>
+	<bean name="ZjglController" class="com.basesoft.modules.zjgl.ZjglController"></bean>
 </beans>
 
