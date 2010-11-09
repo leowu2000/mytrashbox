@@ -1,4 +1,4 @@
-package com.basesoft.modules.tcgl;
+package com.basesoft.modules.workcheck;
 
 import java.util.ArrayList;
 
@@ -12,40 +12,34 @@ import com.basesoft.core.CommonController;
 import com.basesoft.core.PageInfo;
 import com.basesoft.core.PageList;
 
-public class TcglController extends CommonController {
+public class WorkcheckController extends CommonController {
 
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
+		
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
-		mv= new ModelAndView();
 		
-		if("tc_frame".equals(action)){
-			mv = new ModelAndView("/modules/tcgl/frame_tc");
+		if("detail_frame".equals(action)){//考勤明细frame
+			mv = new ModelAndView("/modules/workcheck/frame_detail");
 			return mv;
-		}else if("tc_list".equals(action)){//投产管理
-			mv = new ModelAndView("/modules/tcgl/list_tc");
+		}else if("detail_list".equals(action)){//考勤明细list
+			mv = new ModelAndView("/modules/workcheck/list_detail");
 			PageList pageList = new PageList();
 			pageList.setList(new ArrayList());
 			pageList.setPageInfo(new PageInfo(1,1));
 			mv.addObject("pageList", pageList);
 			return mv;
-		}else if("tc_con".equals(action)){//投产对比整件组成
-			mv = new ModelAndView("/modules/tcgl/con_tc");
+		}else if("eat_frame".equals(action)){//就餐明细frame
+			mv = new ModelAndView("/modules/workcheck/frame_eat");
 			return mv;
-		}else if("zjhz_frame".equals(action)){
-			mv = new ModelAndView("/modules/tcgl/frame_zjhz");
-			return mv;
-		}else if("zjhz_list".equals(action)){//投产管理
-			mv = new ModelAndView("/modules/tcgl/list_zjhz");
+		}else if("eat_list".equals(action)){//就餐明细list
+			mv = new ModelAndView("/modules/workcheck/list_eat");
 			PageList pageList = new PageList();
 			pageList.setList(new ArrayList());
 			pageList.setPageInfo(new PageInfo(1,1));
 			mv.addObject("pageList", pageList);
-			return mv;
-		}else if("zjhz_con".equals(action)){//投产对比整件组成
-			mv = new ModelAndView("/modules/tcgl/con_zjhz");
 			return mv;
 		}
 		

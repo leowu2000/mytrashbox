@@ -1,4 +1,4 @@
-package com.basesoft.modules.tcgl;
+package com.basesoft.modules.jfgl;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ import com.basesoft.core.CommonController;
 import com.basesoft.core.PageInfo;
 import com.basesoft.core.PageList;
 
-public class TcglController extends CommonController {
+public class JfglController extends CommonController {
 
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
@@ -21,31 +21,35 @@ public class TcglController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		mv= new ModelAndView();
 		
-		if("tc_frame".equals(action)){
-			mv = new ModelAndView("/modules/tcgl/frame_tc");
+		if("ys_frame".equals(action)){//预算frame
+			mv = new ModelAndView("/modules/jfgl/frame_ys");
 			return mv;
-		}else if("tc_list".equals(action)){//投产管理
-			mv = new ModelAndView("/modules/tcgl/list_tc");
+		}else if("ys_list".equals(action)){//预算list
+			mv = new ModelAndView("/modules/jfgl/list_ys");
 			PageList pageList = new PageList();
 			pageList.setList(new ArrayList());
 			pageList.setPageInfo(new PageInfo(1,1));
 			mv.addObject("pageList", pageList);
 			return mv;
-		}else if("tc_con".equals(action)){//投产对比整件组成
-			mv = new ModelAndView("/modules/tcgl/con_tc");
+		}else if("fy_frame".equals(action)){//费用frame
+			mv = new ModelAndView("/modules/jfgl/frame_fy");
 			return mv;
-		}else if("zjhz_frame".equals(action)){
-			mv = new ModelAndView("/modules/tcgl/frame_zjhz");
-			return mv;
-		}else if("zjhz_list".equals(action)){//投产管理
-			mv = new ModelAndView("/modules/tcgl/list_zjhz");
+		}else if("fy_list".equals(action)){//费用list
+			mv = new ModelAndView("/modules/jfgl/list_fy");
 			PageList pageList = new PageList();
 			pageList.setList(new ArrayList());
 			pageList.setPageInfo(new PageInfo(1,1));
 			mv.addObject("pageList", pageList);
 			return mv;
-		}else if("zjhz_con".equals(action)){//投产对比整件组成
-			mv = new ModelAndView("/modules/tcgl/con_zjhz");
+		}else if("ytj_frame".equals(action)){//月统计frame
+			mv = new ModelAndView("/modules/jfgl/frame_ytj");
+			return mv;
+		}else if("ytj_list".equals(action)){//月统计list
+			mv = new ModelAndView("/modules/jfgl/list_ytj");
+			PageList pageList = new PageList();
+			pageList.setList(new ArrayList());
+			pageList.setPageInfo(new PageInfo(1,1));
+			mv.addObject("pageList", pageList);
 			return mv;
 		}
 		

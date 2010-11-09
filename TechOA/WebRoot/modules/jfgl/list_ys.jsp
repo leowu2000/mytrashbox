@@ -12,7 +12,7 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>元件目录</title>
+    <title>预算管理</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -25,17 +25,19 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 <!--
 var win;
 var win1;
+var win2;
 var action;
-var url='/zjgl.do';
+var url='/jfgl.do';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
-	tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
-	tb.add({text: '导入组成表',cls: 'x-btn-text-icon import',handler: onImportClick1});
+	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
+	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: '预算导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
     if(!win){
         win = new Ext.Window({
-        	el:'dlg',width:380,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+        	el:'dlg',width:420,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
 	        {text:'提交',handler: function(){
 		        	Ext.getDom('dataForm').action=action; 
@@ -56,14 +58,20 @@ Ext.onReady(function(){
 	        ]
         });
     }
-    
-    function onBackClick(btn){
-    	history.back(-1);
+
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
+	        ]
+        });
     }
     
     function onAddClick(btn){
     	action = url+'?action=zjh_add';
-    	win.setTitle('增加整件号');
+    	win.setTitle('增加预算');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
     }
@@ -106,14 +114,8 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
-		if(selValue==undefined) {
-			alert('请选择数据项！');
-			return false;
-		}
-    
     	action = url+'?action=import_yjml';
-    	win1.setTitle('导入元件目录');
+    	win1.setTitle('导入源数据');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
     }
@@ -123,6 +125,13 @@ Ext.onReady(function(){
     	win1.setTitle('导入元件目录');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
+    }
+    
+    function onContrastClick(btn){
+    	action = url+'?action=tc_con';
+    	win2.setTitle('对比整件组成');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
     }
 });
 
@@ -152,23 +161,31 @@ function checkAll(){
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
     		<td><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
-			<td>令号</td>
-			<td>整件号</td>
-    		<td>项目代号</td>
-    		<td>编号</td>
-    		<td>名称、型号、规格</td>
-    		<td>数量</td>
-    		<td>备注</td>
+			<td>项目编码</td>
+			<td>部门名称</td>
+    		<td>其他科研收入</td>
+    		<td>项目小计</td>
+    		<td>材料费</td>
+    		<td>工资</td>
+    		<td>设计费</td>
+    		<td>外协费</td>
+    		<td>试验费</td>
+    		<td>设备费</td>
+    		<td>管理费</td>
     	</tr>
-    	<tr align="center" >
+    	<tr align="center">
     		<td><input type="checkbox" name="check" value="1" class="ainput"></td>
-			<td>工作令一</td>
-			<td>AL2.827.661</td>
-    		<td>D18</td>
-    		<td>05600803006211</td>
-    		<td>集成电路 MAX706TESA</td>
-    		<td>1</td>
+    		<td>产品令号1</td>
+    		<td>A00室</td>
     		<td></td>
+    		<td>7001</td>
+    		<td>44725</td>
+    		<td>2115</td>
+    		<td></td>
+    		<td></td>
+    		<td></td>
+    		<td>416848</td>
+    		<td>427312</td>
     	</tr>
 <%
     for(int i=0;i<listZjh.size();i++){
@@ -192,7 +209,7 @@ function checkAll(){
 	  <input type="hidden" name="id" >
       <table>
       	<tr>
-		  <td>令号</td>
+		  <td>项目编码</td>
 		  <td>
 			<select name="type" id="type">
   				<option value="1">工作令号一</option>
@@ -202,7 +219,47 @@ function checkAll(){
 		  </td>
 		</tr>
 		<tr>
-		  <td>整件号</td>
+		  <td>部门</td>
+		  <td><select name="depart">
+  				<option value="">全部</option>
+  				<option value="1">三部</option>
+  				<option value="2">304室</option>
+  		  </select></td>
+		</tr>
+		<tr>
+		  <td>其他科研收入</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>项目小计</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>材料费</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>工资</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>设计费</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>外协费</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>试验费</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>设备费</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>管理费</td>
 		  <td><input type="text" name="title" style="width:300"></td>
 		</tr>
 	  </table>

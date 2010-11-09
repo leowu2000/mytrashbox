@@ -12,7 +12,7 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>元件目录</title>
+    <title>就餐明细list</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -25,17 +25,19 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 <!--
 var win;
 var win1;
+var win2;
 var action;
-var url='/zjgl.do';
+var url='/computer.do';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
-	tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
-	tb.add({text: '导入组成表',cls: 'x-btn-text-icon import',handler: onImportClick1});
+	tb.add({text: '填写说明',cls: 'x-btn-text-icon add',handler: onAddClick});
+	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: '导  入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
     if(!win){
         win = new Ext.Window({
-        	el:'dlg',width:380,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+        	el:'dlg',width:380,autoHeight:true,buttonAlign:'center',closeAction:'hide',autoScroll:true,
 	        buttons: [
 	        {text:'提交',handler: function(){
 		        	Ext.getDom('dataForm').action=action; 
@@ -56,14 +58,26 @@ Ext.onReady(function(){
 	        ]
         });
     }
-    
-    function onBackClick(btn){
-    	history.back(-1);
+
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
+	        ]
+        });
     }
     
     function onAddClick(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+    
     	action = url+'?action=zjh_add';
-    	win.setTitle('增加整件号');
+    	win.setTitle('填写说明');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
     }
@@ -106,14 +120,8 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
-		if(selValue==undefined) {
-			alert('请选择数据项！');
-			return false;
-		}
-    
     	action = url+'?action=import_yjml';
-    	win1.setTitle('导入元件目录');
+    	win1.setTitle('导入就餐明细');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
     }
@@ -123,6 +131,13 @@ Ext.onReady(function(){
     	win1.setTitle('导入元件目录');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
+    }
+    
+    function onContrastClick(btn){
+    	action = url+'?action=tc_con';
+    	win2.setTitle('对比整件组成');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
     }
 });
 
@@ -152,22 +167,30 @@ function checkAll(){
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
     		<td><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
-			<td>令号</td>
-			<td>整件号</td>
-    		<td>项目代号</td>
-    		<td>编号</td>
-    		<td>名称、型号、规格</td>
-    		<td>数量</td>
-    		<td>备注</td>
+			<td>一级部门</td>
+			<td>二级部门</td>
+    		<td>人员编号</td>
+    		<td>姓名</td>
+    		<td>用餐类型</td>
+    		<td>用餐地点</td>
+    		<td>用餐时间</td>
+    		<td>上班时间</td>
+    		<td>下班时间</td>
+    		<td>日期</td>
+    		<td>说明</td>
     	</tr>
-    	<tr align="center" >
+    	<tr align="center">
     		<td><input type="checkbox" name="check" value="1" class="ainput"></td>
-			<td>工作令一</td>
-			<td>AL2.827.661</td>
-    		<td>D18</td>
-    		<td>05600803006211</td>
-    		<td>集成电路 MAX706TESA</td>
-    		<td>1</td>
+    		<td>三部</td>
+			<td>300</td>
+    		<td>002458</td>
+    		<td>张三</td>
+    		<td>晚餐</td>
+    		<td>B9食堂</td>
+    		<td>2010-11-01 17:33:30</td>
+    		<td>2010-11-01 08:22:00</td>
+    		<td>2010-11-01 21:22:00</td>
+    		<td>2010-11-01</td>
     		<td></td>
     	</tr>
 <%
@@ -191,19 +214,9 @@ function checkAll(){
 	<form id="dataForm" name="dataForm" action="" method="post" enctype="multipart/form-data">
 	  <input type="hidden" name="id" >
       <table>
-      	<tr>
-		  <td>令号</td>
-		  <td>
-			<select name="type" id="type">
-  				<option value="1">工作令号一</option>
-  				<option value="2">工作令号二</option>
-  				<option value="3">工作令号三</option>
-  			</select>
-		  </td>
-		</tr>
 		<tr>
-		  <td>整件号</td>
-		  <td><input type="text" name="title" style="width:300"></td>
+		  <td>说明</td>
+		  <td><textarea name="content" rows="5" style="width:320"></textarea></td>
 		</tr>
 	  </table>
 	</form>        
@@ -224,5 +237,6 @@ function checkAll(){
 	</form>        
   </div>
 </div>
+
   </body>
 </html>

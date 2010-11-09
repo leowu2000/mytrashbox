@@ -12,7 +12,7 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>元件目录</title>
+    <title>整件汇总</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -25,17 +25,20 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 <!--
 var win;
 var win1;
+var win2;
 var action;
-var url='/zjgl.do';
+var url='/tcgl.do';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
-	tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
-	tb.add({text: '导入组成表',cls: 'x-btn-text-icon import',handler: onImportClick1});
+	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
+	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: '导入汇总表',cls: 'x-btn-text-icon import',handler: onImportClick});
+	tb.add({text: '对比整件投产',cls: 'x-btn-text-icon add',handler: onContrastClick})
 
     if(!win){
         win = new Ext.Window({
-        	el:'dlg',width:380,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+        	el:'dlg',width:420,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
 	        {text:'提交',handler: function(){
 		        	Ext.getDom('dataForm').action=action; 
@@ -56,14 +59,20 @@ Ext.onReady(function(){
 	        ]
         });
     }
-    
-    function onBackClick(btn){
-    	history.back(-1);
+
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
+	        ]
+        });
     }
     
     function onAddClick(btn){
     	action = url+'?action=zjh_add';
-    	win.setTitle('增加整件号');
+    	win.setTitle('增加');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
     }
@@ -106,14 +115,8 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
-		if(selValue==undefined) {
-			alert('请选择数据项！');
-			return false;
-		}
-    
     	action = url+'?action=import_yjml';
-    	win1.setTitle('导入元件目录');
+    	win1.setTitle('导入组成表');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
     }
@@ -123,6 +126,13 @@ Ext.onReady(function(){
     	win1.setTitle('导入元件目录');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
+    }
+    
+    function onContrastClick(btn){
+    	action = url+'?action=zjhz_con';
+    	win2.setTitle('对比整件投产');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
     }
 });
 
@@ -152,23 +162,33 @@ function checkAll(){
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
     		<td><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
-			<td>令号</td>
-			<td>整件号</td>
-    		<td>项目代号</td>
-    		<td>编号</td>
-    		<td>名称、型号、规格</td>
+			<td>生产令号</td>
+    		<td>图号</td>
+    		<td>名称</td>
+    		<td>批次号</td>
+    		<td>主制部门</td>
     		<td>数量</td>
+    		<td>计划开工日期</td>
+    		<td>计划完工日期</td>
+    		<td>实际开工日期</td>
+    		<td>实际完工日期</td>
+    		<td>项目主管</td>
     		<td>备注</td>
     	</tr>
     	<tr align="center" >
     		<td><input type="checkbox" name="check" value="1" class="ainput"></td>
 			<td>工作令一</td>
-			<td>AL2.827.661</td>
-    		<td>D18</td>
-    		<td>05600803006211</td>
-    		<td>集成电路 MAX706TESA</td>
-    		<td>1</td>
-    		<td></td>
+			<td>AL2.827.661/7</td>
+    		<td>控制7</td>
+    		<td>2</td>
+    		<td>部门1</td>
+    		<td>2</td>
+    		<td>2010-11-01</td>
+    		<td>2010-11-20</td>
+    		<td>2010-11-08</td>
+    		<td>2010-11-30</td>
+    		<td>张三</td>
+    		<td>多做一些零件</td>
     	</tr>
 <%
     for(int i=0;i<listZjh.size();i++){
@@ -205,6 +225,46 @@ function checkAll(){
 		  <td>整件号</td>
 		  <td><input type="text" name="title" style="width:300"></td>
 		</tr>
+		<tr>
+		  <td>名称</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>批次号</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>主管部门</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>数量</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>计划开工日期</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>计划完工日期</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>实际开工日期</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>实际完工日期</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>项目主管</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>备注</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
 	  </table>
 	</form>        
   </div>
@@ -219,6 +279,25 @@ function checkAll(){
 		<tr>
 		  <td>文件</td>
 		  <td><input type="file" name="file1" style="width:220"></td>
+		</tr>
+	  </table>
+	</form>        
+  </div>
+</div>
+
+<div id="dlg2" class="x-hidden">
+  <div class="x-window-header">Dialog</div>
+  <div class="x-window-body" id="dlg-body">
+	<form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
+      <table>
+      	<tr>
+		<tr>
+		  <td>选择令号进行对比</td>
+		  <td><select name="type" id="type">
+  				<option value="1">工作令号一</option>
+  				<option value="2">工作令号二</option>
+  				<option value="3">工作令号三</option>
+  			</select></td>
 		</tr>
 	  </table>
 	</form>        

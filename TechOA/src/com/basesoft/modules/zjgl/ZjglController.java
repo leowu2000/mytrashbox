@@ -21,8 +21,11 @@ public class ZjglController extends CommonController {
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		mv= new ModelAndView();
 		
-		if("zjzc_list".equals(action)){//整件组成管理
-			mv = new ModelAndView("/modules/zjgl/list_zjzcgl");
+		if("zjzc_frame".equals(action)){//整件组成管理frame
+			mv = new ModelAndView("/modules/zjgl/frame_zjzc");
+			return mv;
+		}else if("zjzc_list".equals(action)){//整件组成管理
+			mv = new ModelAndView("/modules/zjgl/list_zjzc");
 			PageList pageList = new PageList();
 			pageList.setList(new ArrayList());
 			pageList.setPageInfo(new PageInfo(1,1));
@@ -35,8 +38,26 @@ public class ZjglController extends CommonController {
 			pageList.setPageInfo(new PageInfo(1,1));
 			mv.addObject("pageList", pageList);
 			return mv;
-		}else if("tsgz_list".equals(action)){
-			
+		}else if("tsgz_frame".equals(action)){//调试情况跟踪frame
+			mv = new ModelAndView("/modules/zjgl/frame_tsgz");
+			return mv;
+		}else if("tsgz_list".equals(action)){//调试情况跟踪
+			mv = new ModelAndView("/modules/zjgl/list_tsgz");
+			PageList pageList = new PageList();
+			pageList.setList(new ArrayList());
+			pageList.setPageInfo(new PageInfo(1,1));
+			mv.addObject("pageList", pageList);
+			return mv;
+		}else if("tstj_frame".equals(action)){
+			mv = new ModelAndView("/modules/zjgl/frame_tstj");
+			return mv;
+		}else if("tstj_list".equals(action)){//调试情况跟踪
+			mv = new ModelAndView("/modules/zjgl/list_tstj");
+			PageList pageList = new PageList();
+			pageList.setList(new ArrayList());
+			pageList.setPageInfo(new PageInfo(1,1));
+			mv.addObject("pageList", pageList);
+			return mv;
 		}
 		
 		return null;
