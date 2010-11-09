@@ -84,4 +84,7 @@
 	<bean id="announceDAO" class="com.basesoft.modules.announce.AnnounceDAO"></bean>
 	<bean id="zjglDAO" class="com.basesoft.modules.zjgl.ZjglDAO"></bean>
 	<bean id="tcglDAO" class="com.basesoft.modules.tcgl.TcglDAO"></bean>
+	<bean id="jfglDAO" class="com.basesoft.modules.jfgl.JfglDAO"></bean>
+	<bean id="computerDAO" class="com.basesoft.modules.computer.ConputerDAO"></bean>
+	<bean id="workcheckDAO" class="com.basesoft.modules.workcheck.WorkcheckDAO"></bean>
 </beans>

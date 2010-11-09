@@ -12,7 +12,7 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>元件目录</title>
+    <title>整件组成管理</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -30,8 +30,10 @@ var url='/zjgl.do';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
-	tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
-	tb.add({text: '导入组成表',cls: 'x-btn-text-icon import',handler: onImportClick1});
+	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
+	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: '导入元件目录',cls: 'x-btn-text-icon import',handler: onImportClick1});
+	tb.add({text: '导入组成表',cls: 'x-btn-text-icon import',handler: onImportClick});
 
     if(!win){
         win = new Ext.Window({
@@ -55,10 +57,6 @@ Ext.onReady(function(){
 	        {text:'关闭',handler: function(){win1.hide();}}
 	        ]
         });
-    }
-    
-    function onBackClick(btn){
-    	history.back(-1);
     }
     
     function onAddClick(btn){
@@ -106,14 +104,8 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
-		if(selValue==undefined) {
-			alert('请选择数据项！');
-			return false;
-		}
-    
     	action = url+'?action=import_yjml';
-    	win1.setTitle('导入元件目录');
+    	win1.setTitle('导入组成表');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
     }
@@ -154,20 +146,22 @@ function checkAll(){
     		<td><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
 			<td>令号</td>
 			<td>整件号</td>
-    		<td>项目代号</td>
     		<td>编号</td>
-    		<td>名称、型号、规格</td>
+    		<td>名称</td>
     		<td>数量</td>
+    		<td>总数量</td>
+    		<td>元件目录</td>
     		<td>备注</td>
     	</tr>
     	<tr align="center" >
     		<td><input type="checkbox" name="check" value="1" class="ainput"></td>
 			<td>工作令一</td>
 			<td>AL2.827.661</td>
-    		<td>D18</td>
-    		<td>05600803006211</td>
-    		<td>集成电路 MAX706TESA</td>
+    		<td>A.8</td>
+    		<td>接口</td>
     		<td>1</td>
+    		<td>1</td>
+    		<td><a href="/zjgl.do?action=yj_list">查看</a></td>
     		<td></td>
     	</tr>
 <%
@@ -202,7 +196,31 @@ function checkAll(){
 		  </td>
 		</tr>
 		<tr>
-		  <td>整件号</td>
+		  <td>序号</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>层次号</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>编号</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>版本</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>名称</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>数量</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>总数量</td>
 		  <td><input type="text" name="title" style="width:300"></td>
 		</tr>
 	  </table>

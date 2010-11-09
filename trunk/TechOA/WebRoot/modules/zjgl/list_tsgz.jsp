@@ -12,7 +12,7 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>元件目录</title>
+    <title>调试情况跟踪</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -25,17 +25,19 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 <!--
 var win;
 var win1;
+var win2;
 var action;
 var url='/zjgl.do';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
-	tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
-	tb.add({text: '导入组成表',cls: 'x-btn-text-icon import',handler: onImportClick1});
+	tb.add({text: '更改状态',cls: 'x-btn-text-icon add',handler: onChangeClick});
+	tb.add({text: '填写加工情况',cls: 'x-btn-text-icon add',handler: onWriteClick});
+	tb.add({text: '填写调试情况',cls: 'x-btn-text-icon add',handler: onWriteClick1});
 
     if(!win){
         win = new Ext.Window({
-        	el:'dlg',width:380,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+        	el:'dlg',width:200,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
 	        {text:'提交',handler: function(){
 		        	Ext.getDom('dataForm').action=action; 
@@ -49,7 +51,7 @@ Ext.onReady(function(){
     
     if(!win1){
         win1 = new Ext.Window({
-        	el:'dlg1',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+        	el:'dlg1',width:380,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
 	        {text:'提交',handler: function(){Ext.getDom('dataForm1').action=action; Ext.getDom('dataForm1').submit();}},
 	        {text:'关闭',handler: function(){win1.hide();}}
@@ -57,13 +59,24 @@ Ext.onReady(function(){
         });
     }
     
-    function onBackClick(btn){
-    	history.back(-1);
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:380,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
+	        ]
+        });
     }
     
-    function onAddClick(btn){
+    function onChangeClick(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
     	action = url+'?action=zjh_add';
-    	win.setTitle('增加整件号');
+    	win.setTitle('更改状态');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
     }
@@ -111,18 +124,36 @@ Ext.onReady(function(){
 			alert('请选择数据项！');
 			return false;
 		}
-    
     	action = url+'?action=import_yjml';
-    	win1.setTitle('导入元件目录');
+    	win1.setTitle('导入组成表');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
     }
     
-    function onImportClick1(btn){
+    function onWriteClick(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+    
     	action = url+'?action=import_yjml';
-    	win1.setTitle('导入元件目录');
+    	win1.setTitle('加工情况填写');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
+    }
+    
+    function onWriteClick1(btn){
+    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
+		if(selValue==undefined) {
+			alert('请选择数据项！');
+			return false;
+		}
+    
+    	action = url+'?action=import_yjml';
+    	win2.setTitle('调试情况填写');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
     }
 });
 
@@ -154,21 +185,22 @@ function checkAll(){
     		<td><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
 			<td>令号</td>
 			<td>整件号</td>
-    		<td>项目代号</td>
-    		<td>编号</td>
-    		<td>名称、型号、规格</td>
-    		<td>数量</td>
-    		<td>备注</td>
+    		<td>名称</td>
+    		<td>状态</td>
+    		<td>加工情况</td>
+    		<td>调试情况</td>
     	</tr>
-    	<tr align="center" >
+    	<tr align="center">
     		<td><input type="checkbox" name="check" value="1" class="ainput"></td>
 			<td>工作令一</td>
 			<td>AL2.827.661</td>
-    		<td>D18</td>
-    		<td>05600803006211</td>
-    		<td>集成电路 MAX706TESA</td>
-    		<td>1</td>
-    		<td></td>
+    		<td>接口</td>
+    		<td>交付设计师</td>
+    		<td>计划员：2010-11-01已完成生产加工，交付设计师。</td>
+    		<td>设计师1：2010-11-04完成总体联试。<br>
+    			设计师2：2010-11-05完成外场联试。<br>
+    			设计师1：2010-11-06整件交付出所。
+    		</td>
     	</tr>
 <%
     for(int i=0;i<listZjh.size();i++){
@@ -192,18 +224,15 @@ function checkAll(){
 	  <input type="hidden" name="id" >
       <table>
       	<tr>
-		  <td>令号</td>
+		  <td>状态</td>
 		  <td>
 			<select name="type" id="type">
-  				<option value="1">工作令号一</option>
-  				<option value="2">工作令号二</option>
-  				<option value="3">工作令号三</option>
+  				<option value="1">加工中</option>
+  				<option value="2">交付设计师</option>
+  				<option value="3">设计状态</option>
+  				<option value="3">已完成</option>
   			</select>
 		  </td>
-		</tr>
-		<tr>
-		  <td>整件号</td>
-		  <td><input type="text" name="title" style="width:300"></td>
 		</tr>
 	  </table>
 	</form>        
@@ -217,8 +246,23 @@ function checkAll(){
       <table>
       	<tr>
 		<tr>
-		  <td>文件</td>
-		  <td><input type="file" name="file1" style="width:220"></td>
+		  <td>加工情况</td>
+		  <td><textarea name="content" rows="5" style="width:320"></textarea></td>
+		</tr>
+	  </table>
+	</form>        
+  </div>
+</div>
+
+<div id="dlg2" class="x-hidden">
+  <div class="x-window-header">Dialog</div>
+  <div class="x-window-body" id="dlg-body">
+	<form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
+      <table>
+      	<tr>
+		<tr>
+		  <td>调试情况</td>
+		  <td><textarea name="content" rows="5" style="width:320"></textarea></td>
 		</tr>
 	  </table>
 	</form>        

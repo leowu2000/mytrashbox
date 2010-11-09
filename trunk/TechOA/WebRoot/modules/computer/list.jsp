@@ -12,7 +12,7 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>元件目录</title>
+    <title>计算机管理list</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -25,17 +25,19 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 <!--
 var win;
 var win1;
+var win2;
 var action;
-var url='/zjgl.do';
+var url='/computer.do';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
-	tb.add({text: '返  回',cls: 'x-btn-text-icon back',handler: onBackClick});
-	tb.add({text: '导入组成表',cls: 'x-btn-text-icon import',handler: onImportClick1});
+	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
+	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
+	tb.add({text: '导入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
     if(!win){
         win = new Ext.Window({
-        	el:'dlg',width:380,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+        	el:'dlg',width:480,height:350,buttonAlign:'center',closeAction:'hide',autoScroll:true,
 	        buttons: [
 	        {text:'提交',handler: function(){
 		        	Ext.getDom('dataForm').action=action; 
@@ -56,14 +58,20 @@ Ext.onReady(function(){
 	        ]
         });
     }
-    
-    function onBackClick(btn){
-    	history.back(-1);
+
+    if(!win2){
+        win2 = new Ext.Window({
+        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
+	        {text:'关闭',handler: function(){win2.hide();}}
+	        ]
+        });
     }
     
     function onAddClick(btn){
     	action = url+'?action=zjh_add';
-    	win.setTitle('增加整件号');
+    	win.setTitle('增加计算机');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
     }
@@ -106,14 +114,8 @@ Ext.onReady(function(){
     }
     
     function onImportClick(btn){
-    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
-		if(selValue==undefined) {
-			alert('请选择数据项！');
-			return false;
-		}
-    
     	action = url+'?action=import_yjml';
-    	win1.setTitle('导入元件目录');
+    	win1.setTitle('导入费用');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
     }
@@ -123,6 +125,13 @@ Ext.onReady(function(){
     	win1.setTitle('导入元件目录');
        	Ext.getDom('dataForm1').reset();
         win1.show(btn.dom);
+    }
+    
+    function onContrastClick(btn){
+    	action = url+'?action=tc_con';
+    	win2.setTitle('对比整件组成');
+       	Ext.getDom('dataForm2').reset();
+        win2.show(btn.dom);
     }
 });
 
@@ -152,23 +161,51 @@ function checkAll(){
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
     		<td><input type="checkbox" name="checkall" onclick="checkAll();">选择</td>
-			<td>令号</td>
-			<td>整件号</td>
-    		<td>项目代号</td>
-    		<td>编号</td>
-    		<td>名称、型号、规格</td>
-    		<td>数量</td>
-    		<td>备注</td>
+			<td>序号</td>
+			<td>固定资产编号</td>
+    		<td>类别</td>
+    		<td>名称型号</td>
+    		<td>直属部门</td>
+    		<td>二级部门</td>
+    		<td>使用地点</td>
+    		<td>责任人姓名</td>
+    		<td>责任人工号</td>
+    		<td>责任人密级</td>
+    		<td>上何网</td>
+    		<td>IP地址</td>
+    		<td>机器名</td>
+    		<td>MAC地址</td>
+    		<td>硬盘型号</td>
+    		<td>硬盘序列号</td>
+    		<td>配置</td>
+    		<td>操作系统安装日期</td>
+    		<td>密级</td>
+    		<td>密级编号</td>
+    		<td>使用情况</td>
     	</tr>
-    	<tr align="center" >
+    	<tr align="center">
     		<td><input type="checkbox" name="check" value="1" class="ainput"></td>
-			<td>工作令一</td>
-			<td>AL2.827.661</td>
-    		<td>D18</td>
-    		<td>05600803006211</td>
-    		<td>集成电路 MAX706TESA</td>
     		<td>1</td>
+			<td>1</td>
+    		<td>服务器</td>
+    		<td>Dell2305</td>
+    		<td>三部</td>
+    		<td>300室</td>
+    		<td>机房</td>
+    		<td>张三三</td>
+    		<td>0000006</td>
+    		<td>秘密</td>
+    		<td>内网</td>
+    		<td>192.168.2.10</td>
     		<td></td>
+    		<td>cc-cc-cc-cc-cc-cc</td>
+    		<td>Stj124</td>
+    		<td>sadf123r2</td>
+    		<td>Cure 2 i7*4</td>
+    		<td>2010-11-08</td>
+    		<td>内部</td>
+    		<td>1</td>
+    		<td>在用</td>
     	</tr>
 <%
     for(int i=0;i<listZjh.size();i++){
@@ -192,18 +229,112 @@ function checkAll(){
 	  <input type="hidden" name="id" >
       <table>
       	<tr>
-		  <td>令号</td>
-		  <td>
-			<select name="type" id="type">
-  				<option value="1">工作令号一</option>
-  				<option value="2">工作令号二</option>
-  				<option value="3">工作令号三</option>
-  			</select>
-		  </td>
+      	  <td>序号</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+      	</tr>
+      	<tr>
+      	  <td>固定资产编号</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+      	</tr>
+      	<tr>
+      	<tr>
+      	  <td>类别</td>
+		  <td><select name="type">
+  				<option value="">全部</option>
+  				<option value="1">服务器</option>
+  				<option value="2">便捷式计算机</option>
+  				<option value="3">内网计算机</option>
+  				<option value="4">不联网计算机</option>
+  				<option value="5">外网计算机</option>
+  				<option value="6">中间计算机</option>
+  			</select></td>
+      	</tr>
+      	<tr>
+		  <td>名称型号</td>
+		  <td><input type="text" name="title" style="width:300"></td>
 		</tr>
 		<tr>
-		  <td>整件号</td>
+		  <td>直属部门</td>
+		  <td><select name="depart">
+  				<option value="">A01室</option>
+  				<option value="1">A02室</option>
+  				<option value="2">A03室</option>
+  		  </select></td>
+		</tr>
+		<tr>
+		  <td>二级部门</td>
 		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>使用地点</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>责任人</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>责任人密级</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>机器名</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>上何网</td>
+		  <td><select name="whatweb">
+  				<option value="1">内网</option>
+  				<option value="2">外网</option>
+  				<option value="3">智能化网</option>
+  				<option value="4">集团科研网</option>
+  		  </select></td>
+		</tr>
+		<tr>
+		  <td>IP地址</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>MAC地址</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>硬盘型号</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>硬盘序列号</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>配置</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>操作系统安装日期</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>密级</td>
+		  <td><select name="whatweb">
+  				<option value="1">重要</option>
+  				<option value="2">一般</option>
+  				<option value="3">内部</option>
+  		  </select></td>
+		</tr>
+		<tr>
+		  <td>密级编号</td>
+		  <td><input type="text" name="title" style="width:300"></td>
+		</tr>
+		<tr>
+		  <td>使用情况</td>
+		  <td><select name="whatweb">
+  				<option value="1">在用</option>
+  				<option value="2">停用</option>
+  				<option value="3">维修</option>
+  				<option value="4">报废</option>
+  				<option value="5">销毁</option>
+  		  </select></td>
 		</tr>
 	  </table>
 	</form>        
@@ -215,7 +346,18 @@ function checkAll(){
   <div class="x-window-body" id="dlg-body">
 	<form id="dataForm1" name="dataForm1" action="" method="post" enctype="multipart/form-data">
       <table>
-      	<tr>
+        <tr>
+      	  <td>类别</td>
+		  <td><select name="type">
+  				<option value="">全部</option>
+  				<option value="1">服务器</option>
+  				<option value="2">便捷式计算机</option>
+  				<option value="3">内网计算机</option>
+  				<option value="4">不联网计算机</option>
+  				<option value="5">外网计算机</option>
+  				<option value="6">中间计算机</option>
+  			</select></td>
+      	</tr>
 		<tr>
 		  <td>文件</td>
 		  <td><input type="file" name="file1" style="width:220"></td>

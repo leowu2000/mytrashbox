@@ -47,6 +47,9 @@
 				/announce.do=AnnounceController
 				/tcgl.do=TcglController
 				/zjgl.do=ZjglController
+				/jfgl.do=JfglController
+				/computer.do=ComputerController
+				/workcheck.do=WorkcheckController
 			</value>
 		</property>
 	</bean>
@@ -106,5 +109,8 @@
 	<bean name="AnnounceController" class="com.basesoft.modules.announce.AnnounceController"></bean>
 	<bean name="TcglController" class="com.basesoft.modules.tcgl.TcglController"></bean>
 	<bean name="ZjglController" class="com.basesoft.modules.zjgl.ZjglController"></bean>
+	<bean name="JfglController" class="com.basesoft.modules.jfgl.JfglController"></bean>
+	<bean name="ComputerController" class="com.basesoft.modules.computer.ComputerController"></bean>
+	<bean name="WorkcheckController" class="com.basesoft.modules.workcheck.WorkcheckController"></bean>
 </beans>
 
