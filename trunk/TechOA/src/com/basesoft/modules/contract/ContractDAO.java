@@ -80,6 +80,47 @@ public class ContractDAO extends CommonDAO {
 	}
 	
 	/**
+	 * 获取分页立项申请
+	 * @param page
+	 * @param sel_code 项目编号
+	 * @param sel_pjcode 工作令号
+	 * @return
+	 */
+	public PageList findAllApply(int page, String sel_code, String sel_pjcode, String departcodes, String emrole, String emcode){
+		PageList pageList = new PageList();
+		String sql = "select * from CONTRACT_APPLY where 1=1";
+		int pagesize = 20;
+		int start = pagesize*(page - 1) + 1;
+		int end = pagesize*page;
+		
+		if(!"".equals(sel_code)){
+			sql = sql + " and CODE like '%" + sel_code + "%'";
+		}
+		if(!"".equals(sel_pjcode)){
+			sql = sql + " and PJCODE like '%" + sel_pjcode + "%'";
+		}
+		if(!"".equals(departcodes)){
+			if("003".equals(emrole)){
+				sql = sql + " and EMPCODE='" + emcode + "'";
+			}else {
+				sql = sql + " and EMPCODE in (select CODE from EMPLOYEE where DEPARTCODE in (" + departcodes + "))";
+			}
+		}
+		sql = sql + " order by CODE";
+		String sqlData = "select * from( select A.*, ROWNUM RN from (" + sql + ") A where ROWNUM<=" + end + ") WHERE RN>=" + start;
+		String sqlCount = "select count(*) from (" + sql + ")" + "";
+		
+		List list = jdbcTemplate.queryForList(sqlData);
+		int count = jdbcTemplate.queryForInt(sqlCount);
+		
+		pageList.setList(list);
+		PageInfo pageInfo = new PageInfo(page, count);
+		pageList.setPageInfo(pageInfo);
+		
+		return pageList;
+	}
+	
+	/**
 	 * 获取预算
 	 * @param applycode 项目编号
 	 * @return

@@ -1,12 +1,17 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@	page import="java.net.*" %>
 <%@ page import="com.basesoft.core.*" %>
-<%@ page import="com.basesoft.modules.announce.*" %>
+<%@ page import="com.basesoft.modules.workcheck.*" %>
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
-PageList pageList = request.getAttribute("pageList")==null?null:(PageList)request.getAttribute("pageList");
-List listZjh = pageList==null?new ArrayList():pageList.getList();
-int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
+PageList pageList = (PageList)request.getAttribute("pageList");
+List list = pageList.getList();
+int pagenum = pageList.getPageInfo().getCurPage();
+
+String datepick = request.getAttribute("datepick").toString();
+String seldepart = request.getAttribute("seldepart").toString();
+String empcode = request.getAttribute("empcode").toString();
+String sel_type = request.getAttribute("sel_type").toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -25,15 +30,14 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 <!--
 var win;
 var win1;
-var win2;
 var action;
-var url='/computer.do';
+var url='/workcheck.do';
 Ext.onReady(function(){
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
 	tb.add({text: '填写说明',cls: 'x-btn-text-icon add',handler: onAddClick});
+	tb.add({text: '设置上/下班时间',cls: 'x-btn-text-icon update',handler: onSetClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
-	tb.add({text: '导  入',cls: 'x-btn-text-icon import',handler: onImportClick});
 
     if(!win){
         win = new Ext.Window({
@@ -59,16 +63,6 @@ Ext.onReady(function(){
         });
     }
 
-    if(!win2){
-        win2 = new Ext.Window({
-        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
-	        buttons: [
-	        {text:'提交',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
-	        {text:'关闭',handler: function(){win2.hide();}}
-	        ]
-        });
-    }
-    
     function onAddClick(btn){
     	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
 		if(selValue==undefined) {
@@ -76,33 +70,18 @@ Ext.onReady(function(){
 			return false;
 		}
     
-    	action = url+'?action=zjh_add';
+    	action = url+'?action=detail_add_explain&id=' + selValue + "&datepick=<%=datepick %>&seldepart=<%=seldepart %>&empcode=<%=empcode %>&page=<%=pagenum %>&sel_tupe<%=sel_type %>";
     	win.setTitle('填写说明');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
     }
     
-    function onUpdateClick(btn){
-		var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
-		if(selValue==undefined) {
-			alert('请选择数据项！');
-			return false;
-		}
-		Ext.Ajax.request({
-			url: url+'?action=query&id='+selValue,
-			method: 'GET',
-			success: function(transport) {
-			    var data = eval('('+transport.responseText+')');
-			    Ext.get('id').set({'value':data.item.id});
-				Ext.get('type').set({'value':data.item.type});
-				Ext.get('title').set({'value':data.item.title});
-				Ext.get('content').set({'value':data.item.content});
-		    	action = url+'?action=zjh_update';
-	    		win.setTitle('修改');
-		        win.show(btn.dom);
-		  	}
-		});
-    }   
+    function onSetClick(btn){
+    	action = url+'?action=detail_set&datepick=<%=datepick %>&seldepart=<%=seldepart %>&empcode=<%=empcode %>&page=<%=pagenum %>&sel_tupe<%=sel_type %>';
+    	win1.setTitle('设定上/下班时间');
+       	Ext.getDom('dataForm1').reset();
+        win1.show(btn.dom);
+    }
     
     function onDeleteClick(btn){
 		var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
@@ -113,31 +92,10 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=zjh_delete';       
+	    		Ext.getDom('listForm').action=url+'?action=detail_del&datepick=<%=datepick %>&seldepart=<%=seldepart %>&empcode=<%=empcode %>&page=<%=pagenum %>&sel_tupe<%=sel_type %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
-    }
-    
-    function onImportClick(btn){
-    	action = url+'?action=import_yjml';
-    	win1.setTitle('导入考勤明细');
-       	Ext.getDom('dataForm1').reset();
-        win1.show(btn.dom);
-    }
-    
-    function onImportClick1(btn){
-    	action = url+'?action=import_yjml';
-    	win1.setTitle('导入元件目录');
-       	Ext.getDom('dataForm1').reset();
-        win1.show(btn.dom);
-    }
-    
-    function onContrastClick(btn){
-    	action = url+'?action=tc_con';
-    	win2.setTitle('对比整件组成');
-       	Ext.getDom('dataForm2').reset();
-        win2.show(btn.dom);
     }
 });
 
@@ -162,7 +120,7 @@ function checkAll(){
   <body>
   	<div id="toolbar"></div>
 	<form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("announce.do?action=zjh_list") %>
+<%=pageList.getPageInfo().getHtml("workcheck.do?action=detail_list&datepick=" + datepick + "&seldepart=" + seldepart + "&empcode=" + empcode + "&sel_type=" + sel_type) %>
 	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
@@ -178,30 +136,44 @@ function checkAll(){
     		<td>日期</td>
     		<td>原因说明</td>
     	</tr>
-    	<tr align="center">
-    		<td><input type="checkbox" name="check" value="1" class="ainput"></td>
-    		<td>2201</td>
-			<td>300</td>
-    		<td>002458</td>
-    		<td>张三</td>
-    		<td>08:22:13</td>
-    		<td>大厅正门</td>
-    		<td>21:33:30</td>
-    		<td>一层东南门</td>
-    		<td>2010-11-01</td>
-    		<td></td>
-    	</tr>
 <%
-    for(int i=0;i<listZjh.size();i++){
-    	Map mapAnnounce = (Map)listZjh.get(i);
-    	String type = mapAnnounce.get("TYPE")==null?"":mapAnnounce.get("TYPE").toString();
-    	
+    for(int i=0;i<list.size();i++){
+    	Map map = (Map)list.get(i);
+    	String late = map.get("LATE")==null?"":map.get("LATE").toString();
+    	String early = map.get("EARLY")==null?"":map.get("EARLY").toString();
 %>    	
-		<tr align="center">
-			<td><input type="checkbox" name="check" value="<%=mapAnnounce.get("ID") %>" class="ainput"></td>
-			<td>&nbsp;<%=mapAnnounce.get("PUBDATE")==null?"":mapAnnounce.get("PUBDATE") %></td>
-			<td>&nbsp;<%=type %></td>
-			<td>&nbsp;<a href="/announce.do?action=show&id=<%=mapAnnounce.get("ID") %>"><%=mapAnnounce.get("TITLE")==null?"":mapAnnounce.get("TITLE") %></a></td>
+		<tr align="center" >
+			<td><input type="checkbox" name="check" value="<%=map.get("ID") %>" class="ainput"></td>
+			<td>&nbsp;<%=map.get("DEPART")==null?"":map.get("DEPART") %></td>
+			<td>&nbsp;<%=map.get("DEPART2")==null?"":map.get("DEPART2") %></td>
+			<td>&nbsp;<%=map.get("EMPCODE")==null?"":map.get("EMPCODE") %></td>
+			<td>&nbsp;<%=map.get("EMPNAME")==null?"":map.get("EMPNAME") %></td>
+<%
+		if("true".equalsIgnoreCase(late)){
+%>			
+			<td title="迟到">&nbsp;<font color="red"><%=map.get("STARTTIME")==null?"":map.get("STARTTIME") %></font></td>
+<%
+		}else {
+%>
+			<td>&nbsp;<%=map.get("STARTTIME")==null?"":map.get("STARTTIME") %></td>
+<%
+		}
+%>
+			<td>&nbsp;<%=map.get("STARTLOCATION")==null?"":map.get("STARTLOCATION") %></td>
+<%
+		if("true".equalsIgnoreCase(early)){
+%>			
+			<td title="早退">&nbsp;<font color="blue"><%=map.get("ENDTIME")==null?"":map.get("ENDTIME") %></font></td>
+<%
+		}else {
+%>
+			<td>&nbsp;<%=map.get("ENDTIME")==null?"":map.get("ENDTIME") %></td>
+<%
+		}
+%>
+			<td>&nbsp;<%=map.get("ENDLOCATION")==null?"":map.get("ENDLOCATION") %></td>
+			<td>&nbsp;<%=map.get("DATE")==null?"":map.get("DATE") %></td>
+			<td>&nbsp;<%=map.get("EXPLAIN")==null?"":map.get("EXPLAIN") %></td>
 		</tr>
 <%  } %>
     </table>
@@ -210,11 +182,10 @@ function checkAll(){
   <div class="x-window-header">Dialog</div>
   <div class="x-window-body" id="dlg-body">
 	<form id="dataForm" name="dataForm" action="" method="post" enctype="multipart/form-data">
-	  <input type="hidden" name="id" >
       <table>
 		<tr>
 		  <td>说明</td>
-		  <td><textarea name="content" rows="5" style="width:320"></textarea></td>
+		  <td><textarea name="explain" id="explain" rows="5" style="width:320"></textarea></td>
 		</tr>
 	  </table>
 	</form>        
@@ -226,10 +197,13 @@ function checkAll(){
   <div class="x-window-body" id="dlg-body">
 	<form id="dataForm1" name="dataForm1" action="" method="post" enctype="multipart/form-data">
       <table>
-      	<tr>
 		<tr>
-		  <td>文件</td>
-		  <td><input type="file" name="file1" style="width:220"></td>
+		  <td>上班时间</td>
+		  <td><input type="starttime" name="starttime" onclick="WdatePicker({dateFmt:'HH:mm'})" value="<%=Constants.get("StartTime") %>" style="width:220"></td>
+		</tr>
+		<tr>
+		  <td>下班时间</td>
+		  <td><input type="endtime" name="endtime" onclick="WdatePicker({dateFmt:'HH:mm'})" value="<%=Constants.get("EndTime") %>" style="width:220"></td>
 		</tr>
 	  </table>
 	</form>        

@@ -141,6 +141,17 @@ public class PosController extends CommonController {
 			}
 			
 			response.sendRedirect(returnUrl);
+		}else if("self_frame".equals(action)){
+			mv = new ModelAndView("modules/employee/pos/frame_self");
+			return mv;
+		}else if("self_list".equals(action)){
+			mv = new ModelAndView("modules/employee/pos/list_self");
+			
+			PageList pageList = posDAO.findAll(emcode, datepick, page);
+			
+			mv.addObject("pageList", pageList);
+			mv.addObject("datepick", datepick);
+			return mv;
 		}
 		
 		return null;
