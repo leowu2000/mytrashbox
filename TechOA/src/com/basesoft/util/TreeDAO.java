@@ -315,7 +315,7 @@ public class TreeDAO extends com.basesoft.modules.depart.DepartmentDAO {
 	public List<CheckBoxTree> getMultiColumnTree(String table) {
 		List<CheckBoxTree> treeList = new ArrayList<CheckBoxTree>();
 		
-		List listCol = jdbcTemplate.queryForList("select * from DICT_COL where TB_NAME='" + table + "'");
+		List listCol = jdbcTemplate.queryForList("select * from DICT_COL where TB_NAME='" + table + "' order by ORDERCODE");
 		for(int i=0;i<listCol.size();i++){
 			Map mapCol = (Map)listCol.get(i);
 			CheckBoxTree leaf = new CheckBoxTree();

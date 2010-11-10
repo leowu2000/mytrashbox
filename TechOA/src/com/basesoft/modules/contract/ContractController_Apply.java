@@ -2,6 +2,7 @@ package com.basesoft.modules.contract;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -16,15 +17,21 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.basesoft.core.CommonController;
 import com.basesoft.core.PageList;
+import com.basesoft.modules.role.RoleDAO;
+import com.basesoft.util.StringUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 public class ContractController_Apply extends CommonController {
 	
 	ContractDAO contractDAO;
+	RoleDAO roleDAO;
+	
 	@Override
 	protected ModelAndView doHandleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response, ModelAndView mv) throws Exception {
+		String emrole = request.getSession().getAttribute("EMROLE")==null?"":request.getSession().getAttribute("EMROLE").toString();
+		String emcode = request.getSession().getAttribute("EMCODE")==null?"":request.getSession().getAttribute("EMCODE").toString();
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		String sel_code = ServletRequestUtils.getStringParameter(request, "sel_code", "");
@@ -166,6 +173,30 @@ public class ContractController_Apply extends CommonController {
 			response.getOutputStream().flush();
 			response.getOutputStream().close();
 			return null;
+		}else if("apply_search".equals(action)){
+			mv = new ModelAndView("/modules/contract/frame_apply_search");
+			List listPj = contractDAO.getProject();
+			mv.addObject("listPj", listPj);
+			return mv;
+		}else if("apply_search_list".equals(action)){
+			mv = new ModelAndView("/modules/contract/list_apply_search");
+			
+			String departcodes = "";
+			//根据登陆用户的数据权限过滤
+			List listDepart = roleDAO.findAllUserDepart(emcode);
+			if(listDepart.size() == 0){
+				listDepart = roleDAO.findAllRoleDepart(emrole);
+			}
+			departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+			PageList pageList = contractDAO.findAllApply(page, sel_code, sel_pjcode, departcodes, emrole, emcode);
+			
+			mv.addObject("pageList", pageList);
+			List listPj = contractDAO.getProject();
+			mv.addObject("pageList", pageList);
+			mv.addObject("listPj", listPj);
+			mv.addObject("sel_code", sel_code);
+			mv.addObject("sel_pjcode", sel_pjcode);
+			return mv;
 		}
 		
 		return null;
@@ -173,5 +204,9 @@ public class ContractController_Apply extends CommonController {
 	
 	public void setContractDAO(ContractDAO contractDAO){
 		this.contractDAO = contractDAO;
+	}
+	
+	public void setRoleDAO(RoleDAO roleDAO){
+		this.roleDAO = roleDAO;
 	}
 }

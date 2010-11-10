@@ -53,7 +53,7 @@ public class TableSelectDAO extends CommonDAO {
 	 */
 	public String getColumnComment(String table, String column){
 		String col_comment = "";
-		String sql = "select * from DICT_COL where COL_NAME='" + column + "' and TB_NAME='" + table + "'";
+		String sql = "select * from DICT_COL where COL_NAME='" + column + "' and TB_NAME='" + table + "' order by ORDERCODE";
 		List list = jdbcTemplate.queryForList(sql);
 		if(list.size() == 1){
 			Map map = (Map)list.get(0);
@@ -71,7 +71,7 @@ public class TableSelectDAO extends CommonDAO {
 	 */
 	public Map getColumn(String table, String column){
 		Map map = new HashMap();
-		String sql = "select * from DICT_COL where COL_NAME='" + column + "' and TB_NAME='" + table + "'";
+		String sql = "select * from DICT_COL where COL_NAME='" + column + "' and TB_NAME='" + table + "' order by ORDERCODE";
 		List list = jdbcTemplate.queryForList(sql);
 		if(list.size() == 1){
 			map = (Map)list.get(0);

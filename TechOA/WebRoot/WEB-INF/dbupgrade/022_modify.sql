@@ -27,6 +27,10 @@ INSERT INTO MENU VALUES('054', '计算机管理', '1', '/computer.do?action=fram
 
 INSERT INTO MENU VALUES('072', '考勤明细', '1', '/workcheck.do?action=detail_frame', 61, '1', '007', '7.png');
 INSERT INTO MENU VALUES('073', '就餐明细', '1', '/workcheck.do?action=eat_frame', 62, '1', '007', '7.png');
+INSERT INTO MENU VALUES('074', '乘车记录', '1', '/pos.do?action=self_frame', 62, '1', '007', '7.png');
+
+update menu set menuname='定制器材与科研外协' where menucode='110';
+INSERT INTO MENU VALUES('115', '立项申报', '1', '/c_apply.do?action=apply_search', 45, '1', '110', '11.png');
 
 INSERT INTO USER_MENU VALUES('001', '019', '1');
 
@@ -72,3 +76,16 @@ INSERT INTO USER_MENU VALUES('007','007','1');
 INSERT INTO USER_MENU VALUES('007','071','1');
 INSERT INTO USER_MENU VALUES('007','072','1');
 INSERT INTO USER_MENU VALUES('007','073','1');
+INSERT INTO USER_MENU VALUES('002','074','1');
+INSERT INTO USER_MENU VALUES('003','074','1');
+INSERT INTO USER_MENU VALUES('005','074','1');
+INSERT INTO USER_MENU VALUES('007','074','1');
+
+INSERT INTO USER_MENU VALUES('002','110','1');
+INSERT INTO USER_MENU VALUES('003','110','1');
+INSERT INTO USER_MENU VALUES('004','110','1');
+INSERT INTO USER_MENU VALUES('005','110','1');
+INSERT INTO USER_MENU VALUES('002','115','1');
+INSERT INTO USER_MENU VALUES('003','115','1');
+INSERT INTO USER_MENU VALUES('004','115','1');
+INSERT INTO USER_MENU VALUES('005','115','1');
