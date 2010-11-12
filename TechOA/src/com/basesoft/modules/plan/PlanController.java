@@ -435,15 +435,19 @@ public class PlanController extends CommonController {
 			String empcode = ServletRequestUtils.getStringParameter(request, "empcode", "");
 			String method = ServletRequestUtils.getStringParameter(request, "method", "");
 			
-			PageList pageList = planDAO.findAllResult(empcode, page);
+			PageList pageList = planDAO.findAllResult(empcode, datepick, page);
 			
 			mv.addObject("pageList", pageList);
 			mv.addObject("method", method);
 			return mv;	
+		}else if("feedback_frame".equals(action)){//计划反馈frame
+			mv = new ModelAndView("modules/plan/frame_feedback");
+			
+			return mv;
 		}else if("feedback".equals(action)){//计划反馈
 			mv = new ModelAndView("modules/plan/list_feedback");
 			
-			PageList pageList = planDAO.findAllResult(emcode, page);
+			PageList pageList = planDAO.findAllResult(emcode, datepick, page);
 			mv.addObject("pageList", pageList);
 			return mv;	
 		}else if("feedbackquery".equals(action)){//查找备注信息

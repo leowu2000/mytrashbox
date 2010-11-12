@@ -228,7 +228,7 @@ public class LoginController extends CommonController {
 			}
 			if(menuString.indexOf("083")>-1){//计划反馈
 				haveplanfeedback = true;
-				PageList pageList = planDAO.findAllResult(emcode, 1);
+				PageList pageList = planDAO.findAllResult(emcode, "", 1);
 				List listFeedback = pageList.getList();
 				mv.addObject("listFeedback", listFeedback);
 			}

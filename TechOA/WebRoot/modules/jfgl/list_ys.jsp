@@ -5,8 +5,10 @@
 <%@ page import="org.springframework.web.context.support.*,org.springframework.context.*" %>
 <%
 PageList pageList = request.getAttribute("pageList")==null?null:(PageList)request.getAttribute("pageList");
-List listZjh = pageList==null?new ArrayList():pageList.getList();
+List list = pageList==null?new ArrayList():pageList.getList();
 int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
+
+List listPj = (List)request.getAttribute("listPj");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -21,6 +23,7 @@ int pagenum = pageList==null?0:pageList.getPageInfo().getCurPage();
 	<meta http-equiv="description" content="This is my page">
 	<%@ include file="../../common/meta.jsp" %>
 <script src="/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<script src="../../ext-2.2.1/ComboBoxTree.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
 var win;
@@ -29,6 +32,49 @@ var win2;
 var action;
 var url='/jfgl.do';
 Ext.onReady(function(){
+	var comboBoxTree = new Ext.ux.ComboBoxTree({
+			renderTo : 'departspan',
+			width : 153,
+			hiddenName : 'departcode',
+			hiddenId : 'departcode',
+			tree : {
+				id:'tree1',
+				xtype:'treepanel',
+				rootVisible:true,
+				loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departTree'}),
+		   	 	root : new Ext.tree.AsyncTreeNode({id:'0',text:'全部'})
+			},
+			    	
+			//all:所有结点都可选中
+			//exceptRoot：除根结点，其它结点都可选(默认)
+			//folder:只有目录（非叶子和非根结点）可选
+			//leaf：只有叶子结点可选
+			selectNodeModel:'all',
+			listeners:{
+	            beforeselect: function(comboxtree,newNode,oldNode){//选择树结点设值之前的事件   
+	                return;  
+	            },   
+	            select: function(comboxtree,newNode,oldNode){//选择树结点设值之后的事件   
+	            	return;
+	            },   
+	            afterchange: function(comboxtree,newNode,oldNode){//选择树结点设值之后，并当新值和旧值不相等时的事件   
+	                return; 
+	            }   
+      		}
+			
+	});
+		
+	var pjcombo = new Ext.form.ComboBox({
+        	typeAhead: true,
+        	triggerAction: 'all',
+        	emptyText:'',
+        	mode: 'local',
+        	selectOnFocus:true,
+        	transform:'pjcode',
+        	width:153,
+        	maxHeight:300
+	});
+
 	var tb = new Ext.Toolbar({renderTo:'toolbar'});
 	
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
@@ -37,7 +83,7 @@ Ext.onReady(function(){
 
     if(!win){
         win = new Ext.Window({
-        	el:'dlg',width:420,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+        	el:'dlg',width:280,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
 	        {text:'提交',handler: function(){
 		        	Ext.getDom('dataForm').action=action; 
@@ -70,7 +116,7 @@ Ext.onReady(function(){
     }
     
     function onAddClick(btn){
-    	action = url+'?action=zjh_add';
+    	action = url+'?action=ys_add';
     	win.setTitle('增加预算');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -173,31 +219,24 @@ function checkAll(){
     		<td>设备费</td>
     		<td>管理费</td>
     	</tr>
-    	<tr align="center">
-    		<td><input type="checkbox" name="check" value="1" class="ainput"></td>
-    		<td>产品令号1</td>
-    		<td>A00室</td>
-    		<td></td>
-    		<td>7001</td>
-    		<td>44725</td>
-    		<td>2115</td>
-    		<td></td>
-    		<td></td>
-    		<td></td>
-    		<td>416848</td>
-    		<td>427312</td>
-    	</tr>
 <%
-    for(int i=0;i<listZjh.size();i++){
-    	Map mapAnnounce = (Map)listZjh.get(i);
-    	String type = mapAnnounce.get("TYPE")==null?"":mapAnnounce.get("TYPE").toString();
+    for(int i=0;i<list.size();i++){
+    	Map map = (Map)list.get(i);
     	
 %>    	
 		<tr align="center">
-			<td><input type="checkbox" name="check" value="<%=mapAnnounce.get("ID") %>" class="ainput"></td>
-			<td>&nbsp;<%=mapAnnounce.get("PUBDATE")==null?"":mapAnnounce.get("PUBDATE") %></td>
-			<td>&nbsp;<%=type %></td>
-			<td>&nbsp;<a href="/announce.do?action=show&id=<%=mapAnnounce.get("ID") %>"><%=mapAnnounce.get("TITLE")==null?"":mapAnnounce.get("TITLE") %></a></td>
+			<td><input type="checkbox" name="check" value="<%=map.get("ID") %>" class="ainput"></td>
+			<td>&nbsp;<%=map.get("PJNAME")==null?"":map.get("PJNAME") %></td>
+			<td>&nbsp;<%=map.get("DEPARTNAME")==null?"":map.get("DEPARTNAME") %></td>
+			<td>&nbsp;<%=map.get("QTKYSR")==null?"":map.get("QTKYSR") %></td>
+			<td>&nbsp;<%=map.get("XMXJ")==null?"":map.get("XMXJ") %></td>
+			<td>&nbsp;<%=map.get("CLF")==null?"":map.get("CLF") %></td>
+			<td>&nbsp;<%=map.get("GZ")==null?"":map.get("GZ") %></td>
+			<td>&nbsp;<%=map.get("SJF")==null?"":map.get("SJF") %></td>
+			<td>&nbsp;<%=map.get("WXF")==null?"":map.get("WXF") %></td>
+			<td>&nbsp;<%=map.get("SYF")==null?"":map.get("SYF") %></td>
+			<td>&nbsp;<%=map.get("SBF")==null?"":map.get("SBF") %></td>
+			<td>&nbsp;<%=map.get("GLF")==null?"":map.get("GLF") %></td>
 		</tr>
 <%  } %>
     </table>
@@ -211,56 +250,62 @@ function checkAll(){
       	<tr>
 		  <td>项目编码</td>
 		  <td>
-			<select name="type" id="type">
-  				<option value="1">工作令号一</option>
-  				<option value="2">工作令号二</option>
-  				<option value="3">工作令号三</option>
-  			</select>
+			<select name="pjcode" id="pjcode" onchange="commit();">
+				<option value="">全部</option>
+<%
+	for(int i=0;i<listPj.size();i++){
+		Map mapPj = (Map)listPj.get(i);
+		String name = mapPj.get("NAME")==null?"":mapPj.get("NAME").toString();
+		if(name.length()>14){
+			name = name.substring(0, 13) + "...";
+		}
+%>		
+				<option value="<%=mapPj.get("CODE") %>"><%=name %></option>
+<%
+	}
+%>
+			</select>
 		  </td>
 		</tr>
 		<tr>
 		  <td>部门</td>
-		  <td><select name="depart">
-  				<option value="">全部</option>
-  				<option value="1">三部</option>
-  				<option value="2">304室</option>
-  		  </select></td>
+		  <td><span name="departspan" id="departspan"></span></td>
 		</tr>
 		<tr>
 		  <td>其他科研收入</td>
-		  <td><input type="text" name="title" style="width:300"></td>
+		  <td><input type="text" name="qtkysr" style="width:150"></td>
 		</tr>
 		<tr>
 		  <td>项目小计</td>
-		  <td><input type="text" name="title" style="width:300"></td>
+		  <td><input type="text" name="xmxj" style="width:150"></td>
 		</tr>
 		<tr>
 		  <td>材料费</td>
-		  <td><input type="text" name="title" style="width:300"></td>
+		  <td><input type="text" name="clf" style="width:150"></td>
 		</tr>
 		<tr>
 		  <td>工资</td>
-		  <td><input type="text" name="title" style="width:300"></td>
+		  <td><input type="text" name="gz" style="width:150"></td>
 		</tr>
 		<tr>
 		  <td>设计费</td>
-		  <td><input type="text" name="title" style="width:300"></td>
+		  <td><input type="text" name="sjf" style="width:150"></td>
 		</tr>
 		<tr>
 		  <td>外协费</td>
-		  <td><input type="text" name="title" style="width:300"></td>
+		  <td><input type="text" name="wxf" style="width:150"></td>
 		</tr>
 		<tr>
 		  <td>试验费</td>
-		  <td><input type="text" name="title" style="width:300"></td>
+		  <td><input type="text" name="syf" style="width:150"></td>
 		</tr>
 		<tr>
 		  <td>设备费</td>
-		  <td><input type="text" name="title" style="width:300"></td>
+		  <td><input type="text" name="sbf" style="width:150"></td>
 		</tr>
 		<tr>
 		  <td>管理费</td>
-		  <td><input type="text" name="title" style="width:300"></td>
+		  <td><input type="text" name="glf" style="width:150"></td>
 		</tr>
 	  </table>
 	</form>        

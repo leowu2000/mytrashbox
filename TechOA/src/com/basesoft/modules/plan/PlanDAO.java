@@ -303,12 +303,18 @@ public class PlanDAO extends CommonDAO {
 	 * @param empcode
 	 * @return
 	 */
-	public PageList findAllResult(String empcode, int page){
+	public PageList findAllResult(String empcode, String datepick, int page){
 		PageList pageList = new PageList();
 		String sql = "select * from PLAN a where EMPCODE like '%" + empcode + "%'";
 		int pagesize = 20;
 		int start = pagesize*(page - 1) + 1;
 		int end = pagesize*page;
+		
+		if(!"".equals(datepick)){
+			Date startdate = StringUtil.StringToDate(datepick + "-01", "yyyy-MM-dd");
+			Date enddate = StringUtil.getEndOfMonth(startdate);
+			sql = sql + " and ENDDATE>='" + startdate + "' and ENDDATE<='" + enddate + "'";
+		}
 		
 		sql = sql + " order by TYPE,TYPE2,ORDERCODE,ENDDATE desc,STATUS";
 		
