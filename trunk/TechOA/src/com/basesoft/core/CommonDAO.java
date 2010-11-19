@@ -135,7 +135,7 @@ public class CommonDAO {
 		String code = "";
 		String querySql = "select CODE from EMPLOYEE where NAME='" + name + "'";
 		if(!"".equals(departcode)){
-			querySql = querySql + " and DEPARTCODE in (select CODE from DEPARTMENT where DEPARTCODE='" + departcode + "' or PARENT='" + departcode + "' or ALLPARENTS like '%" + departcode + "%')";
+			querySql = querySql + " and DEPARTCODE in (select CODE from DEPARTMENT where DEPARTMENT.CODE='" + departcode + "' or PARENT='" + departcode + "' or ALLPARENTS like '%" + departcode + "%')";
 		}
 		List list = jdbcTemplate.queryForList(querySql);
 		if(list.size() == 1){//如果匹配的出来，则选用

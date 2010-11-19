@@ -28,7 +28,7 @@ List listPj = (List)request.getAttribute("listPj");
 				xtype:'treepanel',
 				rootVisible:true,
 				loader: new Ext.tree.TreeLoader({dataUrl:'/tree.do?action=departTree'}),
-		   	 	root : new Ext.tree.AsyncTreeNode({id:'0',text:'全部'})
+		   	 	root : new Ext.tree.AsyncTreeNode({id:'',text:'全部'})
 			},
 			    	
 			//all:所有结点都可选中
@@ -79,12 +79,16 @@ List listPj = (List)request.getAttribute("listPj");
 	
 	function commit(){
 		var sel_pjcode = document.getElementById('sel_pjcode').value;
-		var sel_depart = "";
-		if(document.getElementById('sel_depart')!=null){
-			sel_depart = document.getElementById('sel_depart').value;
-		}
-		
-		document.getElementById('list_info').src = "/jfgl.do?action=ys_list&sel_depart" + sel_depart + "&sel_pjcode=" + sel_pjcode;
+		var depart = document.getElementById('sel_depart');
+	  	if(depart == null){
+	  		depart = '';
+	  	}else {
+	  		depart = depart.value;
+	  		if(depart == 'ynode-6'){//选择全部的时候取出来值为ynode-6
+	  			depart = '';
+	  		}
+	  	}
+		document.getElementById('list_info').src = "/jfgl.do?action=ys_list&sel_depart=" + depart + "&sel_pjcode=" + sel_pjcode;
 	}
 	
 	function IFrameResize(){

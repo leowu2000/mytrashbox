@@ -43,6 +43,8 @@ public class ExcelToJSON {
 		data.put("table", config.optJSONObject("head").optString("table"));
 				
 		Workbook wb = Workbook.getWorkbook(is);
+		Sheet[] sheets = wb.getSheets();
+		
 		Sheet sheet = wb.getSheet(0);
 		int row = config.optJSONObject("head").optInt("row");
 		int col = config.optJSONObject("head").optInt("col");
@@ -54,7 +56,7 @@ public class ExcelToJSON {
 			relation = new JSONArray();
 			relation.put(config.optJSONObject("body").optJSONObject("relation"));
 		}
-		data.put("row", excelToJSON(sheet, row, col, relation, type, count, split));
+		data.put("row", excelToJSON(sheets, row, col, relation, type, count, split));
 		wb.close();
 		
 		return data;
@@ -72,70 +74,71 @@ public class ExcelToJSON {
 	 * @return
 	 * @throws JSONException
 	 */
-	private static JSONArray excelToJSON(Sheet sheet, int row, int col, JSONArray relation, String type, String count, String split) throws JSONException {
+	private static JSONArray excelToJSON(Sheet[] sheets, int row, int col, JSONArray relation, String type, String count, String split) throws JSONException {
 		
 		JSONArray jsonArray = new JSONArray();
 		
-		//没有拆分
-		if ("1".equals(type)) {
-			for (int i = 0; i < sheet.getRows() - row + 1; i ++) {
-				
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("ID", i + 1);    //加上序号
-				
-				int size = 0;
-				if(sheet.getColumns() - col + 1>relation.length()){//当excel文件中列数多余配置的列数时，按配置文件中的列数取
-					size = relation.length();
-				}else {//当excel文件中列数少于配置的列数时，按excel文件中的列数取
-					size = sheet.getColumns() - col + 1;
-				}
-				for (int j = 0; j < size; j ++) {
-					int id = relation.optJSONObject(j).optInt("id");
-					String column = relation.optJSONObject(j).optString("column");
-					jsonObject.put(column, getCellContents(sheet.getCell(col - 1 + id - 1, i + row - 1), relation.optJSONObject(j).optString("format")));  //所有数据以字符串的形式存放
-				}
-				jsonArray.put(jsonObject);
-				
-			}
-		//有拆分
-		} else if("2".equals(type)) {
-			int countInt = Integer.parseInt(count);
-			int splitInt = Integer.parseInt(split);
-			
-			for (int i = 0; i < sheet.getRows() - row + 1; i ++) {
-				
-				for (int j = 0; j < countInt; j ++) {              //一行分几条 循环
+		for(int s=0;s<sheets.length;s++){
+			Sheet sheet = sheets[s];
+			//没有拆分
+			if ("1".equals(type)) {
+				for (int i = 0; i < sheet.getRows() - row + 1; i ++) {
+					
 					JSONObject jsonObject = new JSONObject();
-					jsonObject.put("ID", i * countInt + j + 1);    //加上序号
+					jsonObject.put("ID", i + 1);    //加上序号
 					
-					int dateId = relation.optJSONObject(0).optInt("id");
-					String dateColumn = relation.optJSONObject(0).optString("column");
-					jsonObject.put(dateColumn, getCellContents(sheet.getCell(col - 1 + dateId - 1, i + row - 1), relation.optJSONObject(0).optString("format")));  //所有数据以字符串的形式存放
-
-					int ListId = relation.optJSONObject(1).optInt("id");
-					String ListColumn = relation.optJSONObject(1).optString("column");
-					jsonObject.put(ListColumn, relation.optJSONObject(1).optString("format").split("/")[j]);  //所有数据以字符串的形式存放
-					
-					for (int k = 0; k < splitInt; k ++) {    //每条数据循环的列数
-						
-						int id = relation.optJSONObject(k + 2).optInt("id");
-						String column = relation.optJSONObject(k + 2).optString("column");
-						jsonObject.put(column, getCellContents(sheet.getCell(j * splitInt + col - 1 + id - 1, i + row - 1), relation.optJSONObject(k + 2).optString("format")));  //所有数据以字符串的形式存放
+					int size = 0;
+					if(sheet.getColumns() - col + 1>relation.length()){//当excel文件中列数多余配置的列数时，按配置文件中的列数取
+						size = relation.length();
+					}else {//当excel文件中列数少于配置的列数时，按excel文件中的列数取
+						size = sheet.getColumns() - col + 1;
 					}
-					
-					for (int k = 0; k < sheet.getColumns() - col + 1 - 1 - countInt * splitInt; k ++) {   //之后公用的字段
-						
-						int id = relation.optJSONObject(k + 2 + splitInt).optInt("id");
-						String column = relation.optJSONObject(k + 2 + splitInt).optString("column");
-						jsonObject.put(column, getCellContents(sheet.getCell(col - 1 + id - 1, i + row - 1), relation.optJSONObject(k + 2 + splitInt).optString("format")));  //所有数据以字符串的形式存放
+					for (int j = 0; j < size; j ++) {
+						int id = relation.optJSONObject(j).optInt("id");
+						String column = relation.optJSONObject(j).optString("column");
+						jsonObject.put(column, getCellContents(sheet.getCell(col - 1 + id - 1, i + row - 1), relation.optJSONObject(j).optString("format")));  //所有数据以字符串的形式存放
 					}
-					
 					jsonArray.put(jsonObject);
+					
 				}
+			//有拆分
+			} else if("2".equals(type)) {
+				int countInt = Integer.parseInt(count);
+				int splitInt = Integer.parseInt(split);
 				
+				for (int i = 0; i < sheet.getRows() - row + 1; i ++) {
+					
+					for (int j = 0; j < countInt; j ++) {              //一行分几条 循环
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("ID", i * countInt + j + 1);    //加上序号
+						
+						int dateId = relation.optJSONObject(0).optInt("id");
+						String dateColumn = relation.optJSONObject(0).optString("column");
+						jsonObject.put(dateColumn, getCellContents(sheet.getCell(col - 1 + dateId - 1, i + row - 1), relation.optJSONObject(0).optString("format")));  //所有数据以字符串的形式存放
+
+						int ListId = relation.optJSONObject(1).optInt("id");
+						String ListColumn = relation.optJSONObject(1).optString("column");
+						jsonObject.put(ListColumn, relation.optJSONObject(1).optString("format").split("/")[j]);  //所有数据以字符串的形式存放
+						
+						for (int k = 0; k < splitInt; k ++) {    //每条数据循环的列数
+							
+							int id = relation.optJSONObject(k + 2).optInt("id");
+							String column = relation.optJSONObject(k + 2).optString("column");
+							jsonObject.put(column, getCellContents(sheet.getCell(j * splitInt + col - 1 + id - 1, i + row - 1), relation.optJSONObject(k + 2).optString("format")));  //所有数据以字符串的形式存放
+						}
+						
+						for (int k = 0; k < sheet.getColumns() - col + 1 - 1 - countInt * splitInt; k ++) {   //之后公用的字段
+							
+							int id = relation.optJSONObject(k + 2 + splitInt).optInt("id");
+							String column = relation.optJSONObject(k + 2 + splitInt).optString("column");
+							jsonObject.put(column, getCellContents(sheet.getCell(col - 1 + id - 1, i + row - 1), relation.optJSONObject(k + 2 + splitInt).optString("format")));  //所有数据以字符串的形式存放
+						}
+						
+						jsonArray.put(jsonObject);
+					}
+					
+				}
 			}
-			
-			
 		}
 		return jsonArray;
 	}

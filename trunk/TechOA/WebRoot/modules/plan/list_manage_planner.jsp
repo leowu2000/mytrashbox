@@ -484,9 +484,9 @@ for(int i=0;i<listPlan.size();i++){
 		color = "red";
 	}
 	
-	String pjname = planDAO.findNameByCode("PROJECT", mapPlan.get("PJCODE").toString());
-	String plantype = planDAO.findNameByCode("PLAN_TYPE", mapPlan.get("TYPE").toString());
-	String plantype2 = planDAO.findNameByCode("PLAN_TYPE", mapPlan.get("TYPE2").toString());
+	String pjname = planDAO.findNameByCode("PROJECT", mapPlan.get("PJCODE")==null?"":mapPlan.get("PJCODE").toString());
+	String plantype = planDAO.findNameByCode("PLAN_TYPE", mapPlan.get("TYPE")==null?"":mapPlan.get("TYPE").toString());
+	String plantype2 = planDAO.findNameByCode("PLAN_TYPE", mapPlan.get("TYPE2")==null?"":mapPlan.get("TYPE2").toString());
 %>
             <tr align="LEFT">
                 <td width="40">

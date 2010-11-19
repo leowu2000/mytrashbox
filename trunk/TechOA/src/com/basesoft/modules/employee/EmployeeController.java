@@ -471,13 +471,22 @@ public class EmployeeController extends CommonController {
 			
 			List<Date> listDate = StringUtil.getDateList(start,end);
 			String departcodes = ""; 
-			List listDepart = roleDAO.findAllUserDepart(emcode);
-			if(listDepart.size() == 0){
-				listDepart = roleDAO.findAllRoleDepart(emrole);
+			List listDepart = new ArrayList();
+			if(!"".equals(depart)){
+				listDepart = roleDAO.getChildDeparts(depart, new ArrayList());
+				if(listDepart.size()>0){
+					departcodes = StringUtil.ListToStringAdd(listDepart, ",", "CODE");
+				}
+			}else {
+				listDepart = roleDAO.findAllUserDepart(emcode);
+				if(listDepart.size() == 0){
+					listDepart = roleDAO.findAllRoleDepart(emrole);
+				}
+				if(listDepart.size()>0){
+					departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
+				}
 			}
-			if(listDepart.size()>0){
-				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
-			}
+			
 			List listWorkCheck = emDAO.findWorkCheck(start, end, depart, method, emcode, departcodes);
 			
 			//考勤项列表

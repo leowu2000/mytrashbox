@@ -1,12 +1,14 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page import="com.basesoft.modules.tcgl.*" %>
 <%
 	List listPj = (List)request.getAttribute("listPj");
+	List listStatus = (List)request.getAttribute("listStatus");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>组件组成frame</title>
+    <title>调试跟踪frame</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -19,8 +21,10 @@
 	<script type="text/javascript">
 	Ext.onReady(function(){
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
-  		tb.add('令号：');
+		tb.add('令号：');
   		tb.add(document.getElementById('sel_pjcode'));
+  		tb.add('状态：');
+  		tb.add(document.getElementById('sel_status'));
   		tb.add('整件号：');
   		tb.add(document.getElementById('sel_zjh'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
@@ -42,11 +46,11 @@
 		});
 	});
 	
-	
 	function commit(){
 		var sel_pjcode = document.getElementById('sel_pjcode').value;
 		var sel_zjh = document.getElementById('sel_zjh').value;
-		document.getElementById('list_info').src = "/zjgl.do?action=zjzc_list&sel_pjcode=" + sel_pjcode + "&sel_zjh=" + sel_zjh;
+		var sel_status = document.getElementById('sel_status').value;
+		document.getElementById('list_info').src = "/tcgl.do?action=tcgz_list&sel_pjcode=" + sel_pjcode + "&sel_zjh=" + sel_zjh + "&sel_status=" + sel_status;
 	}
 	
 	function IFrameResize(){
@@ -56,7 +60,7 @@
   </head>
   
   <body onload="commit();IFrameResize();" onresize="IFrameResize();">
-	<h1>整件组成</h1>
+	<h1>调试情况跟踪</h1>
   	<div id="toolbar"></div>
   	<select name="sel_pjcode" id="sel_pjcode" onchange="commit();">
 		<option value="">全部</option>
@@ -73,6 +77,18 @@
 	}
 %>
 	</select>
+  	<select name="sel_status" id="sel_status" onchange="commit();">
+  		<option value="">全部</option>
+<%
+	for(int i=0;i<listStatus.size();i++){
+		Map mapStatus = (Map)listStatus.get(i);
+		String name = mapStatus.get("NAME")==null?"":mapStatus.get("NAME").toString();
+%>		
+		<option value="<%=mapStatus.get("CODE") %>"><%=name %></option>
+<%
+	}
+%>
+  	</select>
   	<input type="text" name="sel_zjh" id="sel_zjh" style="width:60;">
   	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
     <iframe name="list_info" width="100%" frameborder="0" height="500"></iframe>

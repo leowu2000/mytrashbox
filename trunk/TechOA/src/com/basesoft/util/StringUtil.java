@@ -227,6 +227,7 @@ public class StringUtil {
 	public static Date getEndOfMonth(Date date){
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
+		cal.set(cal.DAY_OF_MONTH, 1);
 		
 		cal.roll(cal.DATE, -1);
 		

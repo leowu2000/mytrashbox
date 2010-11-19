@@ -1,11 +1,12 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
+	List listPj = (List)request.getAttribute("listPj");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>调试跟踪frame</title>
+    <title>组件组成frame</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -18,16 +19,34 @@
 	<script type="text/javascript">
 	Ext.onReady(function(){
 		var tb = new Ext.Toolbar({renderTo:'toolbar'});
-  		tb.add('状态：');
-  		tb.add(document.getElementById('selstatus'));
+  		tb.add('令号：');
+  		tb.add(document.getElementById('sel_pjcode'));
   		tb.add('整件号：');
-  		tb.add(document.getElementById('zjh'));
+  		tb.add(document.getElementById('sel_zjh'));
   		tb.add('&nbsp;&nbsp;&nbsp;');
   		tb.add(document.getElementById('search'));
+  		
+  		var pjcombo = new Ext.form.ComboBox({
+        	typeAhead: true,
+        	triggerAction: 'all',
+        	emptyText:'',
+        	mode: 'local',
+        	selectOnFocus:true,
+        	transform:'sel_pjcode',
+        	width:203,
+        	maxHeight:300
+		});
+		
+		pjcombo.on('select',function(){
+			commit();
+		});
 	});
 	
+	
 	function commit(){
-		document.getElementById('list_info').src = "/zjgl.do?action=tsgz_list";
+		var sel_pjcode = document.getElementById('sel_pjcode').value;
+		var sel_zjh = document.getElementById('sel_zjh').value;
+		document.getElementById('list_info').src = "/zjgl.do?action=zjzcb_list&sel_pjcode=" + sel_pjcode + "&sel_zjh=" + sel_zjh;
 	}
 	
 	function IFrameResize(){
@@ -37,16 +56,24 @@
   </head>
   
   <body onload="commit();IFrameResize();" onresize="IFrameResize();">
-	<h1>调试情况跟踪</h1>
+	<h1>整件组成</h1>
   	<div id="toolbar"></div>
-  	<select name="selstatus">
-  		<option value="">全部</option>
-  		<option value="1">未开始</option>
-  		<option value="2">交付设计师</option>
-  		<option value="3">设计状态</option>
-  		<option value="3">已完成</option>
-  	</select>
-  	<input type="text" name="zjh" id="zjh" style="width:60;">
+  	<select name="sel_pjcode" id="sel_pjcode" onchange="commit();">
+		<option value="">全部</option>
+<%
+	for(int i=0;i<listPj.size();i++){
+		Map mapPj = (Map)listPj.get(i);
+		String name = mapPj.get("NAME")==null?"":mapPj.get("NAME").toString();
+		if(name.length()>14){
+			name = name.substring(0, 13) + "...";
+		}
+%>		
+		<option value="<%=mapPj.get("CODE") %>"><%=name %></option>
+<%
+	}
+%>
+	</select>
+  	<input type="text" name="sel_zjh" id="sel_zjh" style="width:60;">
   	<input type="button" class="btn" value="查询" name="search" onclick="commit();">
     <iframe name="list_info" width="100%" frameborder="0" height="500"></iframe>
   </body>

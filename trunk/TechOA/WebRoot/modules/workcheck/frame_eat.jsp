@@ -70,6 +70,9 @@
 	  		depart = '';
 	  	}else {
 	  		depart = depart.value;
+	  		if(depart == 'ynode-6'){//选择全部的时候取出来值为ynode-6
+	  			depart = '';
+	  		}
 	  	}
 		var empcode = document.getElementById('empcode').value;
 		document.getElementById('list_info').src = "/workcheck.do?action=eat_list&datepick=" + datepick + "&seldepart=" + depart + "&empcode=" + empcode;

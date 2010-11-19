@@ -449,30 +449,32 @@ public class PlanController extends CommonController {
 			
 			PageList pageList = planDAO.findAllResult(emcode, datepick, page);
 			mv.addObject("pageList", pageList);
+			mv.addObject("datepick", datepick);
 			return mv;	
-		}else if("feedbackquery".equals(action)){//查找备注信息
-			String planid = ServletRequestUtils.getStringParameter(request, "planid", "");
-			
-			Plan plan = planDAO.findById(planid);
-			
-			response.setHeader("Pragma", "No-cache");
-			response.setHeader("Cache-Control", "no-cache");
-			response.setDateHeader("Expiresponse", 0L);
-			response.setContentType("application/*;charset=utf-8");
-			response.getWriter().write(plan.getRemark());
-			response.getWriter().close();
 		}else if("feedbackupdate".equals(action)){//反馈信息更新
 			String planids = ServletRequestUtils.getStringParameter(request, "planids", "");
 			String remark = ServletRequestUtils.getStringParameter(request, "remark", "");
 			String haveproblem = ServletRequestUtils.getStringParameter(request, "haveproblem", "");
 			
+			if(!"".equals(remark)){
+				remark = emname + "(" + emcode + ")" + StringUtil.DateToString(new Date(), "yyyy-MM-dd") + ":" + remark;
+			}
+			
 			String[] planid = planids.split(",");
 			for(int i=0;i<planid.length;i++){
+				Plan plan = planDAO.findById(planid[i]);
+				if(!"".equals(plan.getRemark())){
+					if(!"".equals(remark)){
+						remark = plan.getRemark() + "<br>" + remark;
+					}else {
+						remark = plan.getRemark();
+					}
+				}
 				String updateSql = "update PLAN set REMARK='" + remark + "', STATUS='" + haveproblem + "' where ID='" + planid[i] + "'";
 				planDAO.update(updateSql);
 			}
 			
-			response.sendRedirect("plan.do?action=feedback&page=" + page);
+			response.sendRedirect("plan.do?action=feedback&page=" + page + "&datepick=" + datepick);
 		}else if("changeMultiEMP".equals(action)){//去除重名
 			String empcodes = ServletRequestUtils.getStringParameter(request, "empcodes", "");
 			String[] empcode = empcodes.split(",");

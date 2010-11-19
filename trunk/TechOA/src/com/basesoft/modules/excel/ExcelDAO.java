@@ -15,11 +15,11 @@ import com.basesoft.modules.employee.CardDAO;
 import com.basesoft.modules.employee.EmployeeDAO;
 import com.basesoft.modules.employee.FinanceDAO;
 import com.basesoft.modules.goods.GoodsDAO;
-import com.basesoft.modules.ins.InsDAO;
 import com.basesoft.modules.plan.PlanDAO;
 import com.basesoft.modules.plan.PlanTypeDAO;
 import com.basesoft.modules.project.ProjectDAO;
 import com.basesoft.modules.workreport.WorkReportDAO;
+import com.basesoft.modules.zjgl.ZjglDAO;
 import com.basesoft.util.StringUtil;
 
 public class ExcelDAO extends CommonDAO {
@@ -32,6 +32,7 @@ public class ExcelDAO extends CommonDAO {
 	GoodsDAO goodsDAO;
 	CarDAO carDAO;
 	PlanTypeDAO planTypeDAO;
+	ZjglDAO zjglDAO;
 	
 	/**
 	 * 获取要导出的工时统计汇总数据
@@ -1618,6 +1619,231 @@ public class ExcelDAO extends CommonDAO {
 	}
 	
 	/**
+	 * 整件组成信息入库
+	 * @param data
+	 * @param pjcode_imp
+	 * @return
+	 * @throws Exception
+	 */
+	public String insertZjzc(JSONObject data, String pjcode_imp) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		int count = 0;
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			String cch = row.optString("CCH").trim().replaceAll(" ", "");
+			if(cch==null || "".equals(cch) || "　".equals(cch)){
+				continue;
+			}
+			boolean haveZjzc = zjglDAO.haveZjzc(pjcode_imp, cch);
+			if(haveZjzc){
+				continue;
+			}
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			int xh = row.optInt("XH");
+			int level = cch.split("\\.").length;
+			String zjh = row.optString("ZJH");
+			String bb = row.optString("BB");
+			String mc = row.optString("MC");
+			int sl = row.optInt("SL");
+			int zsl = row.optInt("ZSL");
+			if(sl == 0){
+				sl = Integer.parseInt(row.optString("SL").substring(0, row.optString("SL").length()-1));
+			}
+			if(zsl == 0){
+				zsl = Integer.parseInt(row.optString("ZSL").substring(0, row.optString("ZSL").length()-1));
+			}
+			
+			String bz = row.optString("BZ");
+			
+			String insertSql = "insert into ZJZCB values('" + id + "', '" + pjcode_imp + "', " + xh + ", '" + cch + "', " + level + ", '" + zjh + "', '" + bb + "', '" + mc + "', " + sl + ", " + zsl + ", '" + bz + "')";
+			
+			try{
+				insert(insertSql);
+				count = count + 1;
+			}catch(Exception e){
+				e.printStackTrace();
+				errorMessage = getErrorMessage(errorMessage, i);
+				continue;
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + count + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 元件目录信息入库
+	 * @param data
+	 * @param zjid
+	 * @return
+	 * @throws Exception
+	 */
+	public String insertZjb_yj(JSONObject data, String zjid) throws Exception{
+		String errorMessage = "";
+		
+		Map zjMap = zjglDAO.getZjMap(zjid);
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		int count = 0;
+		String type = "";
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			
+			String bh = row.optString("BH").trim().replaceAll(" ", "");
+			String mc = row.optString("MC").trim().replaceAll(" ", "");
+			if(bh==null || "".equals(bh) || "　".equals(bh)){
+				if(mc==null || "".equals(mc) || "　".equals(mc)){
+					continue;
+				}else {
+					type = zjglDAO.getDictCode(mc, "");
+					continue;
+				}
+			}else {
+				if(mc==null || "".equals(mc) || "　".equals(mc)){
+					continue;
+				}
+			}
+			boolean haveZjzc = zjglDAO.haveYj(zjid, bh);
+			if(haveZjzc){
+				continue;
+			}
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			int xh = row.optInt("XH");
+			String fm = row.optString("FM");
+			String zrbh = row.optString("ZRBH");
+			int zrsl = row.optInt("ZRSL");
+			int zsl = row.optInt("ZSL");
+			if(zrsl == 0){
+				String s = row.optString("ZRSL").trim().replaceAll(" ", "");
+				if(!"".equals(s)&&!"　".equals(s)){
+					zrsl = Integer.parseInt(s.substring(0, s.length()-1));
+				}else {
+					zrsl = 0;
+				}
+			}
+			if(zsl == 0){
+				String s = row.optString("ZSL").trim().replaceAll(" ", "");
+				if(!"".equals(s)&&!"　".equals(s)){
+					zsl = Integer.parseInt(s.substring(0, s.length()-1));
+				}else {
+					zsl = 1;
+				}
+			}
+			
+			String bz = row.optString("BZ");
+			
+			String insertSql = "insert into ZJB_YJ values('" + id + "', '" + zjid + "', '', '" + type + "', " + xh + ", '" + fm + "', '" + bh + "', '" + mc + "', '" + zrbh + "', " + (zrsl==0?null:zrsl) + ", " + zsl + ", '" + bz + "')";
+			
+			String insertZjSql = "";
+			String updateZjSql = "";
+			//String bh_u = zjMap.get("BH")==null?"":zjMap.get("BH").toString();
+			//if(bh_u.indexOf("AL2")>=0 || bh_u.indexOf("AL3")>=0 || bh_u.indexOf("AL4")>=0){
+				if(bh.indexOf("AL2")>=0 || bh.indexOf("AL3")>=0 || bh.indexOf("AL4")>=0){//AL2,3,4为组成表中的整件号
+					String last = bh.substring(bh.length()-1, bh.length());
+					if((last.charAt(0)>='0')&&(last.charAt(0)<='9')){//最后一位整件号为数字
+						Map map = zjglDAO.createCCHAndXH(zjMap);
+						int xhzj = Integer.parseInt(map.get("xh").toString());
+						String cchzj= map.get("cch").toString();
+						int level = zjMap.get("LEVEL")==null?1:Integer.parseInt(zjMap.get("LEVEL").toString());
+						
+						updateZjSql = "update ZJB set XH=XH+1 where XH>=" + xhzj;
+						insertZjSql = "insert into ZJB values('" + id + "', '" + zjMap.get("PJCODE") + "', " + xhzj + ", '" + cchzj + "', " + (level+1) + ", '" + bh + "', '', '" + mc + "', " + zsl + ", " + zsl + ", '" + bz + "')";
+					}
+				}
+			//}
+			
+			try{
+				insert(insertSql);
+				if(updateZjSql.length()>0){
+					update(updateZjSql);
+				}
+				if(insertZjSql.length()>0){
+					insert(insertZjSql);
+				}
+				count = count + 1;
+			}catch(Exception e){
+				e.printStackTrace();
+				errorMessage = getErrorMessage(errorMessage, i);
+				continue;
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + count + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
+	 * 投产信息入库
+	 * @param data
+	 * @return
+	 * @throws Exception
+	 */
+	public String insertTc(JSONObject data) throws Exception{
+		String errorMessage = "";
+		
+		//循环数据行
+		JSONArray rows = data.optJSONArray("row");
+		int count = 0;
+		for(int i=0;i<rows.length();i++){
+			//取出一行数据
+			JSONObject row = rows.getJSONObject(i);
+			String zjh = row.optString("ZJH").trim().replaceAll(" ", "");
+			if(zjh==null || "".equals(zjh) || "　".equals(zjh)){
+				continue;
+			}
+			String id = UUID.randomUUID().toString().replaceAll("-", "");
+			String id1 = UUID.randomUUID().toString().replaceAll("-", "");
+			int xh = row.optInt("XH");
+			String pjcode = row.optString("PJCODE");
+			String mc = row.optString("MC");
+			int dtzjs = row.optInt("DTZJS");
+			int ts = row.optInt("TS");
+			int tsbfs = row.optInt("TSBFS");
+			int tczs = row.optInt("TCZS");
+			String tzd = row.optString("TZD");
+			String tzl = row.optString("TZL");
+			String qcys = row.optString("QCYS");
+			String yqrq = row.optString("YQRQ");
+			String czdw = row.optString("CZDW");
+			String dw = row.optString("DW");
+			String lxr = row.optString("LXR");
+			String dh = row.optString("DH");
+			String bz = row.optString("BZ");
+			
+			String insertSql = "insert into TCB values('" + id + "', " + xh + ", '" + pjcode + "', '" + zjh + "', '" + mc + "', " + dtzjs + ", " + ts + ", " + tsbfs + ", " + tczs + ", '" + tzd + "', '" + tzl + "', '" + qcys + "', '" + yqrq + "', '" + czdw + "', '" + dw + "', '" + lxr + "', '" + dh + "', '" + bz + "')";
+			String insertSql1 = "insert into TCGZB(ID, TCID) values('" + id1 + "', '" + id + "')";
+			
+			try{
+				insert(insertSql);
+				insert(insertSql1);
+				count = count + 1;
+			}catch(Exception e){
+				e.printStackTrace();
+				errorMessage = getErrorMessage(errorMessage, i);
+				continue;
+			}
+		}
+		
+		if("".equals(errorMessage)){
+			errorMessage = "成功导入" + count + "条数据！";
+		}
+		
+		return errorMessage;
+	}
+	
+	/**
 	 * 获取错误信息
 	 * @param errorMessage
 	 * @param i
@@ -1695,5 +1921,9 @@ public class ExcelDAO extends CommonDAO {
 	
 	public void setPlanTypeDAO(PlanTypeDAO planTypeDAO){
 		this.planTypeDAO = planTypeDAO;
+	}
+	
+	public void setZjglDAO(ZjglDAO zjglDAO){
+		this.zjglDAO = zjglDAO;
 	}
 }
