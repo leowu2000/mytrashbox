@@ -40,7 +40,7 @@ if(errorMessage!=''){
 }
 
 var win;
-var win2;
+var win1;
 var action;
 var url='/zjgl.do';
 Ext.onReady(function(){
@@ -48,8 +48,7 @@ Ext.onReady(function(){
 	
 	tb.add({text: '增  加',cls: 'x-btn-text-icon add',handler: onAddClick});
 	tb.add({text: '删  除',cls: 'x-btn-text-icon delete',handler: onDeleteClick});
-	tb.add({text: '导入明细',cls: 'x-btn-text-icon import',handler: onImportClick});
-	tb.add({text: '导出组成表',cls: 'x-btn-text-icon export',handler: onExportClick});
+	tb.add({text: '导入组成表',cls: 'x-btn-text-icon import',handler: onImportClick});
 
 	var pjcombo = new Ext.form.ComboBox({
         	typeAhead: true,
@@ -62,6 +61,17 @@ Ext.onReady(function(){
         	maxHeight:300
 	});
 	
+	var pjcombo1 = new Ext.form.ComboBox({
+        	typeAhead: true,
+        	triggerAction: 'all',
+        	emptyText:'',
+        	mode: 'local',
+        	selectOnFocus:true,
+        	transform:'pjcode_imp',
+        	width:203,
+        	maxHeight:300
+		});
+
     if(!win){
         win = new Ext.Window({
         	el:'dlg',width:280,autoHeight:true,buttonAlign:'center',closeAction:'hide',
@@ -76,18 +86,18 @@ Ext.onReady(function(){
         });
     }
     
-    if(!win2){
-        win2 = new Ext.Window({
-        	el:'dlg2',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+    if(!win1){
+        win1 = new Ext.Window({
+        	el:'dlg1',width:300,autoHeight:true,buttonAlign:'center',closeAction:'hide',
 	        buttons: [
-	        {text:'预览',handler: function(){Ext.getDom('dataForm2').action=action; Ext.getDom('dataForm2').submit();}},
-	        {text:'关闭',handler: function(){win2.hide();}}
+	        {text:'预览',handler: function(){Ext.getDom('dataForm1').action=action; Ext.getDom('dataForm1').submit();}},
+	        {text:'关闭',handler: function(){win1.hide();}}
 	        ]
         });
     }
     
     function onAddClick(btn){
-    	action = url+'?action=zjzc_add&sel_pjcode=<%=sel_pjcode %>&sel_zjh=<%=sel_zjh %>';
+    	action = url+'?action=zjzcb_add&sel_pjcode=<%=sel_pjcode %>&sel_zjh=<%=sel_zjh %>';
     	win.setTitle('增加整件号');
        	Ext.getDom('dataForm').reset();
         win.show(btn.dom);
@@ -102,28 +112,19 @@ Ext.onReady(function(){
 		
 		Ext.Msg.confirm('确认','确定删除?',function(btn){
     	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=zjzc_del&sel_pjcode=<%=sel_pjcode %>&sel_zjh=<%=sel_zjh %>&page=<%=pagenum %>';       
+	    		Ext.getDom('listForm').action=url+'?action=zjzcb_del&sel_pjcode=<%=sel_pjcode %>&sel_zjh=<%=sel_zjh %>&page=<%=pagenum %>';       
     	    	Ext.getDom('listForm').submit();
     	    }
     	});
     }
     
-    function onImportClick(btn){
-    	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
-		if(selValue==undefined) {
-			alert('请选择数据项！');
-			return false;
-		}
-    
-    	action = 'excel.do?action=preview&redirect=zjgl.do?action=zjzc_list&table=ZJB_YJ&zjid=' + selValue;
-    	win2.setTitle('导入明细');
-       	Ext.getDom('dataForm2').reset();
-        win2.show(btn.dom);
+   	function onImportClick(btn){
+		action = 'excel.do?action=preview&redirect=zjgl.do?action=zjzcb_list&table=ZJZCB&sel_pjcode=<%=sel_pjcode %>&sel_zjh=<%=sel_zjh %>';
+    	win1.setTitle('导入组成表');
+       	Ext.getDom('dataForm1').reset();
+        win1.show(btn.dom);
     }
     
-    function onExportClick(btn){
-    
-    }
 });
 
 function checkAll(){
@@ -147,7 +148,7 @@ function checkAll(){
   <body>
   	<div id="toolbar"></div>
 	<form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("zjgl.do?action=zjzc_list&sel_pjcode=" + sel_pjcode + "&sel_zjh=" + sel_zjh) %>
+<%=pageList.getPageInfo().getHtml("zjgl.do?action=zjzcb_list&sel_pjcode=" + sel_pjcode + "&sel_zjh=" + sel_zjh) %>
 	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
@@ -201,7 +202,8 @@ function checkAll(){
       	<tr>
 		  <td>令号</td>
 		  <td>
-			<select name="pjcode" id="pjcode" style="width:300">
+			<select name="pjcode" id="pjcode">
+				<option value="">全部</option>
 <%
 	for(int i=0;i<listPj.size();i++){
 		Map mapPj = (Map)listPj.get(i);
@@ -254,12 +256,32 @@ function checkAll(){
   </div>
 </div>
 
-<div id="dlg2" class="x-hidden">
+<div id="dlg1" class="x-hidden">
   <div class="x-window-header">Dialog</div>
   <div class="x-window-body" id="dlg-body">
-	<form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
+	<form id="dataForm1" name="dataForm1" action="" method="post" enctype="multipart/form-data">
       <table>
       	<tr>
+		  <td>令号</td>
+		  <td>
+			<select name="pjcode_imp" id="pjcode_imp">
+				<option value="">全部</option>
+<%
+	for(int i=0;i<listPj.size();i++){
+		Map mapPj = (Map)listPj.get(i);
+		String name = mapPj.get("NAME")==null?"":mapPj.get("NAME").toString();
+		if(name.length()>14){
+			name = name.substring(0, 13) + "...";
+		}
+%>		
+				<option value="<%=mapPj.get("CODE") %>"><%=name %></option>
+<%
+	}
+%>
+			</select>
+		  </td>
+		</tr>
+		<tr>
 		  <td>文件</td>
 		  <td><input type="file" name="file" style="width:220"></td>
 		</tr>

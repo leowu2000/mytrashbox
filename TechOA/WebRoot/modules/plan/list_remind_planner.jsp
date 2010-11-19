@@ -86,9 +86,9 @@ for(int i=0;i<listAssess.size();i++){
 	
 	state = "<font color='" + mapPersent.get("COLOR") + "'>" + mapPersent.get("NAME") + "</font>";
 	
-	String pjname = planDAO.findNameByCode("PROJECT", mapAssess.get("PJCODE").toString());
-	String plantype = planDAO.findNameByCode("PLAN_TYPE", mapAssess.get("TYPE").toString());
-	String plantype2 = planDAO.findNameByCode("PLAN_TYPE", mapAssess.get("TYPE2").toString());
+	String pjname = planDAO.findNameByCode("PROJECT", mapAssess.get("PJCODE")==null?"":mapAssess.get("PJCODE").toString());
+	String plantype = planDAO.findNameByCode("PLAN_TYPE", mapAssess.get("TYPE")==null?"":mapAssess.get("TYPE").toString());
+	String plantype2 = planDAO.findNameByCode("PLAN_TYPE", mapAssess.get("TYPE2")==null?"":mapAssess.get("TYPE").toString());
 %>
             <tr align="left">
             	<td><%=plantype %>--<%=plantype2 %></td>

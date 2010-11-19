@@ -31,7 +31,7 @@
 	});
 	
 	function commit(){
-		document.getElementById('list_info').src = "/zjgl.do?action=tstj_list";
+		document.getElementById('list_info').src = "/tcgl.do?action=tstj_list";
 	}
 	
 	function IFrameResize(){

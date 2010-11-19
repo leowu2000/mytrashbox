@@ -143,6 +143,17 @@ public class ExcelController extends CommonController {
 				mv = new ModelAndView("modules/excel/preview_budget_remain");
 				String import_year = ServletRequestUtils.getStringParameter(request, "import_year", "");
 				mv.addObject("import_year", import_year);
+			}else if("ZJZCB".equals(table)){//整件组成表
+				String pjcode_imp = ServletRequestUtils.getStringParameter(request, "pjcode_imp", "");
+				mv = new ModelAndView("modules/excel/preview_zjzc");
+				mv.addObject("pjcode_imp", pjcode_imp);
+			}else if("ZJB_YJ".equals(table)){//元件目录表
+				String zjid = ServletRequestUtils.getStringParameter(request, "zjid", "");
+				mv = new ModelAndView("modules/excel/preview_zjb_yj");
+				mv.addObject("zjid", zjid);
+				mv.addObject("redirect", redirect);
+			}else if("TCB".equals(table)){//投产表
+				mv = new ModelAndView("modules/excel/preview_tcb");
 			}
 			
 			MultipartHttpServletRequest mpRequest = (MultipartHttpServletRequest)request;
@@ -238,6 +249,15 @@ public class ExcelController extends CommonController {
 					import_year = Integer.parseInt(StringUtil.DateToString(new Date(), "yyyy"));
 				}
 				errorMessage = excelDAO.insertBudget_remain(data, import_year);
+			}else if("ZJZCB".equals(table)){//整件组成表
+				String pjcode_imp = ServletRequestUtils.getStringParameter(request, "pjcode_imp", "");
+				errorMessage = excelDAO.insertZjzc(data, pjcode_imp);
+			}else if("ZJB_YJ".equals(table)){//元件目录
+				String zjid = ServletRequestUtils.getStringParameter(request, "zjid", "");
+				redirect = redirect + "&zjid=" + zjid;
+				errorMessage = excelDAO.insertZjb_yj(data, zjid);
+			}else if("TCB".equals(table)){//投产表
+				errorMessage = excelDAO.insertTc(data);
 			}
 			
 			if(errorMessage.length()>200){

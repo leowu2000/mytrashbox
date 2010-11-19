@@ -50,6 +50,7 @@ public class DepartmentController extends CommonController {
 			
 			if("0".equals(parent)){//根部门作为父部门
 				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "','',1," + ordercode + ")");
+				departDAO.insert("insert into ROLE_DEPART values('001','" + code + "')");
 				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "增加部门" + name);
 				auditDAO.addAudit(audit);
 				auditDAO.delHistory();
@@ -63,6 +64,7 @@ public class DepartmentController extends CommonController {
 				String allParents = mapParent.get("ALLPARENTS").toString() + "," + parent;
 				
 				departDAO.insert("insert into DEPARTMENT values('" + id + "','" + code + "','" + name + "','" + parent + "','" + allParents + "'," + level + ", " + ordercode + ")");
+				departDAO.insert("insert into ROLE_DEPART values('001','" + code + "')");
 				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "增加子部门" + name);
 				auditDAO.addAudit(audit);
 				auditDAO.delHistory();
@@ -75,7 +77,9 @@ public class DepartmentController extends CommonController {
 			for(int i=0;i<check.length;i++){
 				Department depart = departDAO.findById(check[i]);
 				String deleteSql = "delete from DEPARTMENT where ID='" + check[i] + "'";
+				String deleteSql1 = "delete from ROLE_DEPART where ROLECODE='001' and DEPARTCODE='" + depart.getCode() + "'";
 				departDAO.delete(deleteSql);
+				departDAO.delete(deleteSql1);
 				Audit audit = new Audit(Audit.AU_ADMIN, request.getRemoteAddr(), Audit.SUCCESS, emcode, "删除部门" + depart.getName());
 				auditDAO.addAudit(audit);
 				auditDAO.delHistory();

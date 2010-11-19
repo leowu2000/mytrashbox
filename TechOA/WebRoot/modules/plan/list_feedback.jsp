@@ -9,6 +9,8 @@ PageList pageList = (PageList)request.getAttribute("pageList");
 List listAssess = (List)pageList.getList();
 int pagenum = pageList.getPageInfo().getCurPage();
 
+String datepick = request.getAttribute("datepick")==null?"":request.getAttribute("datepick").toString();
+
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 PlanDAO planDAO = (PlanDAO)ctx.getBean("planDAO");
 %>
@@ -68,16 +70,11 @@ Ext.onReady(function(){
 			}
 		}
 		
-		Ext.Ajax.request({
-			url: url+'?action=feedbackquery&planid='+selValue,
-			method: 'GET',
-			success: function(transport) {
-			    Ext.get('remark').set({'value':transport.responseText});
-			    action = url+'?action=feedbackupdate&page=<%=pagenum %>&planids=' + checkedids;
-	    		win.setTitle('计划反馈');
-		        win.show(btn.dom);
-		  	}
-		});
+		
+		action = url+'?action=feedbackupdate&page=<%=pagenum %>&datepick=<%=datepick %>&planids=' + checkedids;
+	    win.setTitle('计划反馈');
+		win.show(btn.dom);
+		
     }
 });
 
@@ -111,12 +108,13 @@ function changeProblem(value){
 		<div id="tabs1">
 			<div id="main" class="tab-content">
 <form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("plan.do?action=feedback") %>
+<%=pageList.getPageInfo().getHtml("plan.do?action=feedback&datepick=" + datepick) %>
 <table cellspacing="0" id="the-table" width="98%" align="center">
             <tr align="center" bgcolor="#E0F1F8" class="b_tr">
 				<td width="70"><input type="checkbox" name="checkall" onclick="checkAll();" style="width:20">选择</td>
                 <td nowrap="nowrap">产品令号</td>              
                 <td nowrap="nowrap">计划要求</td>
+                <td nowrap="nowrap">截止日期</td>
                 <td nowrap="nowrap">部领导</td>
                 <td nowrap="nowrap">责任单位</td>
                 <td nowrap="nowrap">责任人</td>
@@ -157,6 +155,7 @@ for(int i=0;i<listAssess.size();i++){
 				</td>
                 <td><%=pjname %></td>
                 <td><%=mapAssess.get("NOTE")==null?"":mapAssess.get("NOTE") %></td>
+                <td><%=mapAssess.get("ENDDATE")==null?"":mapAssess.get("ENDDATE") %></td>
                 <td><%=mapAssess.get("LEADER_SECTION")==null?"":mapAssess.get("LEADER_SECTION") %></td>
                 <td><%=mapAssess.get("DEPARTNAME")==null?"":mapAssess.get("DEPARTNAME") %></td>
                 <td><%=mapAssess.get("EMPNAME")==null?"":mapAssess.get("EMPNAME") %></td>
