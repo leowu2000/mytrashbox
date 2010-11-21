@@ -203,7 +203,6 @@ function checkAll(){
 		  <td>令号</td>
 		  <td>
 			<select name="pjcode" id="pjcode">
-				<option value="">全部</option>
 <%
 	for(int i=0;i<listPj.size();i++){
 		Map mapPj = (Map)listPj.get(i);
@@ -265,7 +264,6 @@ function checkAll(){
 		  <td>令号</td>
 		  <td>
 			<select name="pjcode_imp" id="pjcode_imp">
-				<option value="">全部</option>
 <%
 	for(int i=0;i<listPj.size();i++){
 		Map mapPj = (Map)listPj.get(i);

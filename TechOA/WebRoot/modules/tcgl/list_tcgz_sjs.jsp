@@ -226,7 +226,7 @@ function checkAll(){
   <body>
   	<div id="toolbar"></div>
 	<form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("announce.do?action=zjh_list") %>
+<%=pageList.getPageInfo().getHtml("tcgl.do?action=tcgz_list_sjs&sel_pjcode=" + sel_pjcode + "&sel_status=" + sel_status + "&sel_zjh=" + sel_zjh) %>
 	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">

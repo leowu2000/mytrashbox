@@ -185,7 +185,9 @@ public class TcglController extends CommonController {
 			
 			response.sendRedirect("tcgl.do?action=" + redirect + "&sel_pjcode=" + sel_pjcode + "&sel_status=" + sel_status + "&sel_zjh=" + sel_zjh + "&page=" + page);
 		}else if("tcgz_plan".equals(action)){//将调试计划列入计划
-			String[] check=request.getParameterValues("check");
+			String selidstoplan = ServletRequestUtils.getStringParameter(request, "selidstoplan", "");
+			String[] check = selidstoplan.split(",");
+			String enddate = ServletRequestUtils.getStringParameter(request, "enddate", "");
 			for(int i=0;i<check.length;i++){
 				Map mapTcgz = tcglDAO.getTcgz(check[i]); 
 				List listTcgz_rwhf = tcglDAO.getTcgz_Rwhf(check[i]);
@@ -213,11 +215,13 @@ public class TcglController extends CommonController {
 				}
 				String id = UUID.randomUUID().toString().replaceAll("-", "");
 				
-				
+				if("".equals(enddate)){
+					enddate = StringUtil.DateToString(StringUtil.getEndOfMonth(new Date()), "yyyy-MM-dd");
+				}
 				
 				String insertSql = "insert into PLAN(ID,EMPCODE,EMPNAME,DEPARTCODE,DEPARTNAME,PJCODE,STAGECODE,STARTDATE,ENDDATE,NOTE,PLANNERCODE,PLANNERNAME,STATUS) " +
 								   "values('" + id + "', '" + empcodes + "', '" + empnames + "', '" + departcode + "', '" + departname + "', '" + mapTcgz.get("PJCODE") + "', '500005', " +
-								   "'" + new Date() + "', '" + StringUtil.getEndOfMonth(new Date()) + "', '" + mapTcgz.get("MC") + "(" + mapTcgz.get("ZJH") + ")" + "调试', '" + emcode + "', '" + emname + "', '1')";
+								   "'" + new Date() + "', '" + enddate + "', '" + mapTcgz.get("MC") + "(" + mapTcgz.get("ZJH") + ")" + "调试', '" + emcode + "', '" + emname + "', '1')";
 				tcglDAO.insert(insertSql);
 			}
 			
@@ -338,7 +342,7 @@ public class TcglController extends CommonController {
 			tcglDAO.update(updateSql);
 			
 			response.sendRedirect("tcgl.do?action=" + redirect + "&sel_pjcode=" + sel_pjcode + "&sel_status=" + sel_status + "&sel_zjh=" + sel_zjh + "&page=" + page);
-		}else if("tcgz_rwhffk".equals(action)){//任务划分
+		}else if("tcgz_rwhffk".equals(action)){//任务划分反馈
 			
 		}else if("tstj_frame".equals(action)){//调试情况统计frame
 			mv = new ModelAndView("/modules/tcgl/frame_tstj");
