@@ -9,6 +9,7 @@
 JSONObject data = (JSONObject)request.getAttribute("data");
 JSONArray rows = data.optJSONArray("row");
 String path = request.getAttribute("path").toString();
+String pjcode = request.getAttribute("pjcode").toString();
 
 ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 ZjglDAO zjglDAO = (ZjglDAO)ctx.getBean("zjglDAO");
@@ -43,7 +44,7 @@ Ext.onReady(function(){
     }
     
     function onImportClick(){
-    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=tcgl.do?action=tc_list&table=TCB';
+    	document.getElementById('listForm').action = 'excel.do?action=import&redirect=tcgl.do?action=tc_list&table=TCB&pjcode=<%=pjcode %>';
     	document.getElementById('listForm').submit();
     }
 });

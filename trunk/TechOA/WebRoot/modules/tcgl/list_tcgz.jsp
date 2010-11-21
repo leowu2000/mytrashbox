@@ -37,6 +37,7 @@ var win2;
 var win3;
 var win4;
 var win5;
+var win6;
 var action;
 var url='/tcgl.do';
 Ext.onReady(function(){
@@ -114,6 +115,20 @@ Ext.onReady(function(){
         });
     }
     
+    if(!win6){
+        win6 = new Ext.Window({
+        	el:'dlg6',width:230,autoHeight:true,buttonAlign:'center',closeAction:'hide',
+	        buttons: [
+	        {text:'提交',handler: function(){
+		        	Ext.getDom('dataForm6').action=action; 
+	    	    	Ext.getDom('dataForm6').submit();
+	    	    }
+	        },
+	        {text:'关闭',handler: function(){win6.hide();}}
+	        ]
+        });
+    }
+    
     function onChangeClick(btn){
     	var selValue = Ext.DomQuery.selectValue('input[name=check]:checked/@value');
 		if(selValue==undefined) {
@@ -147,12 +162,23 @@ Ext.onReady(function(){
 			return false;
 		}
 		
-		Ext.Msg.confirm('确认','确定生成计划?',function(btn){
-    	    if(btn=='yes'){
-	    		Ext.getDom('listForm').action=url+'?action=tcgz_plan&sel_pjcode=<%=sel_pjcode %>&sel_status=<%=sel_status %>&sel_zjh=<%=sel_zjh %>&page=<%=pagenum %>&redirect=tcgz_list';       
-    	    	Ext.getDom('listForm').submit();
-    	    }
-    	});
+		var checks = document.getElementsByName('check');
+		var checkedids = '';
+		for(var i=0;i<checks.length;i++){
+			if(checks[i].checked){
+				if(checkedids == ''){
+					checkedids = checks[i].value;
+				}else {
+					checkedids = checkedids + ',' + checks[i].value;
+				}
+			}
+		}
+		
+		Ext.getDom('dataForm6').reset();
+		document.getElementById('selidstoplan').value = checkedids;
+		action = url+'?action=tcgz_plan&sel_pjcode=<%=sel_pjcode %>&sel_status=<%=sel_status %>&sel_zjh=<%=sel_zjh %>&page=<%=pagenum %>&redirect=tcgz_list';
+    	win6.setTitle('生成计划');
+        win6.show(btn.dom);
     }
     
     function onWriteJGClick(btn){
@@ -304,7 +330,7 @@ function checkAll(){
   <body>
   	<div id="toolbar"></div>
 	<form id="listForm" name="listForm" action="" method="post">
-<%=pageList.getPageInfo().getHtml("tcgl.do?action=tcgz_list&&sel_pjcode=" + sel_pjcode + "&sel_status=" + sel_status + "&sel_zjh=" + sel_zjh + "&redirect=tcgz_list") %>
+<%=pageList.getPageInfo().getHtml("tcgl.do?action=tcgz_list&sel_pjcode=" + sel_pjcode + "&sel_status=" + sel_status + "&sel_zjh=" + sel_zjh + "&redirect=tcgz_list") %>
 	<br>
     <table width="98%" align="center" vlign="middle" id="the-table">
     	<tr align="center" bgcolor="#E0F1F8"  class="b_tr">
@@ -402,7 +428,6 @@ function checkAll(){
 	<form id="dataForm3" name="dataForm3" action="" method="post">
 	<input type="hidden" name="selidscc" id="selidscc" >
       <table>
-      	<tr>
 		<tr>
 		  <td>差错记录</td>
 		  <td><textarea name="ccjl" rows="5" style="width:320"></textarea></td>
@@ -436,10 +461,24 @@ function checkAll(){
 	<form id="dataForm5" name="dataForm5" action="" method="post">
 	<input type="hidden" name="selidsfk" id="selidsfk" >
       <table>
-      	<tr>
 		<tr>
 		  <td>任务划分反馈</td>
 		  <td><textarea name="rwhffk" rows="5" style="width:320"></textarea></td>
+		</tr>
+	  </table>
+	</form>        
+  </div>
+</div>
+
+<div id="dlg6" class="x-hidden">
+  <div class="x-window-header">Dialog</div>
+  <div class="x-window-body" id="dlg-body">
+	<form id="dataForm6" name="dataForm6" action="" method="post">
+	<input type="hidden" name="selidstoplan" id="selidstoplan" >
+      <table>
+		<tr>
+		  <td>计划截止日期</td>
+		  <td><input type="text" name="enddate" id="enddate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:100"></td>
 		</tr>
 	  </table>
 	</form>        

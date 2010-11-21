@@ -59,6 +59,17 @@ Ext.onReady(function(){
         	width:303,
         	maxHeight:300
 	});
+	
+	var pjcombo1 = new Ext.form.ComboBox({
+        	typeAhead: true,
+        	triggerAction: 'all',
+        	emptyText:'',
+        	mode: 'local',
+        	selectOnFocus:true,
+        	transform:'pjcode1',
+        	width:223,
+        	maxHeight:300
+	});
 
     if(!win){
         win = new Ext.Window({
@@ -345,6 +356,24 @@ function checkAll(){
 	<form id="dataForm1" name="dataForm1" action="" method="post" enctype="multipart/form-data">
       <table>
       	<tr>
+		  <td>令号</td>
+		  <td>
+			<select name="pjcode1" id="pjcode1" style="width:200">
+<%
+	for(int i=0;i<listPj.size();i++){
+		Map mapPj = (Map)listPj.get(i);
+		String name = mapPj.get("NAME")==null?"":mapPj.get("NAME").toString();
+		if(name.length()>14){
+			name = name.substring(0, 13) + "...";
+		}
+%>		
+				<option value="<%=mapPj.get("CODE") %>"><%=name %></option>
+<%
+	}
+%>
+			</select>
+		  </td>
+		</tr>
 		<tr>
 		  <td>文件</td>
 		  <td><input type="file" name="file" style="width:220"></td>
@@ -359,7 +388,6 @@ function checkAll(){
   <div class="x-window-body" id="dlg-body">
 	<form id="dataForm2" name="dataForm2" action="" method="post" enctype="multipart/form-data">
       <table>
-      	<tr>
 		<tr>
 		  <td>选择令号进行对比</td>
 		  <td><select name="type" id="type">

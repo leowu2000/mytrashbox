@@ -183,33 +183,34 @@ public class LoginController extends CommonController {
 				departcodes = StringUtil.ListToStringAdd(listDepart, ",", "DEPARTCODE");
 			}
 			
-			if(menuString.indexOf("071")>-1){//考勤
-				haveworkcheck = true;
-				String start = "";
-				String end = StringUtil.DateToString(new Date(), "yyyy-MM") + "-25";
-				
-				String nowDate = StringUtil.DateToString(new Date(), "yyyy-MM-dd");
-				if(Integer.parseInt(end.split("-")[2])>=25){
-					end = StringUtil.DateToString(StringUtil.getNextDate(new Date(), 10), "yyyy-MM") + "-25";
-				}
-				
-				if("01".equals(end.split("-")[1])){
-					start = (Integer.parseInt(end.split("-")[0])-1) + "-12-25";
-				}else {
-					start = end.split("-")[0] + "-" + (Integer.parseInt(end.split("-")[1])-1) + "-25";
-				}
-				
-				List listWorkCheck = emDAO.findWorkCheck(start, end, "", "", emcode, departcodes);
-				List<Date> listDate = StringUtil.getDateList(start,end);
-				
-				mv.addObject("listWorkCheck", listWorkCheck);
-				mv.addObject("listDate", listDate);
-			}else if(menuString.indexOf("031")>-1){//领导查看各部门考勤结果统计
-				haveworkcheck_lead = true;
-				List listCheckResult = emDAO.getDICTByType("4");
-				mv.addObject("listDepart", listDepart);
-				mv.addObject("listCheckResult", listCheckResult);
-			}
+//			if(menuString.indexOf("031")>-1){//领导查看各部门考勤结果统计
+//				haveworkcheck_lead = true;
+//				List listCheckResult = emDAO.getDICTByType("4");
+//				mv.addObject("listDepart", listDepart);
+//				mv.addObject("listCheckResult", listCheckResult);
+//			}else if(menuString.indexOf("071")>-1){//考勤
+//				//haveworkcheck = true;
+//				String start = "";
+//				String end = StringUtil.DateToString(new Date(), "yyyy-MM") + "-25";
+//				
+//				String nowDate = StringUtil.DateToString(new Date(), "yyyy-MM-dd");
+//				if(Integer.parseInt(end.split("-")[2])>=25){
+//					end = StringUtil.DateToString(StringUtil.getNextDate(new Date(), 10), "yyyy-MM") + "-25";
+//				}
+//				
+//				if("01".equals(end.split("-")[1])){
+//					start = (Integer.parseInt(end.split("-")[0])-1) + "-12-25";
+//				}else {
+//					start = end.split("-")[0] + "-" + (Integer.parseInt(end.split("-")[1])-1) + "-25";
+//				}
+//				
+//				List listWorkCheck = emDAO.findWorkCheck(start, end, "", "", emcode, departcodes);
+//				List<Date> listDate = StringUtil.getDateList(start,end);
+//				
+//				mv.addObject("listWorkCheck", listWorkCheck);
+//				mv.addObject("listDate", listDate);
+//			}
+			
 			if(menuString.indexOf("087")>-1){//员工计划跟踪
 				haveplanfollow_emp = true;
 				PageList pageList = planDAO.findAllFollows_emp(1, emcode, StringUtil.DateToString(new Date(), "yyyy-MM"), "");

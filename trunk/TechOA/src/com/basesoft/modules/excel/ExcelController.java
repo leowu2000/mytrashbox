@@ -153,7 +153,9 @@ public class ExcelController extends CommonController {
 				mv.addObject("zjid", zjid);
 				mv.addObject("redirect", redirect);
 			}else if("TCB".equals(table)){//投产表
+				String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode1", "");
 				mv = new ModelAndView("modules/excel/preview_tcb");
+				mv.addObject("pjcode", pjcode);
 			}
 			
 			MultipartHttpServletRequest mpRequest = (MultipartHttpServletRequest)request;
@@ -257,7 +259,8 @@ public class ExcelController extends CommonController {
 				redirect = redirect + "&zjid=" + zjid;
 				errorMessage = excelDAO.insertZjb_yj(data, zjid);
 			}else if("TCB".equals(table)){//投产表
-				errorMessage = excelDAO.insertTc(data);
+				String pjcode = ServletRequestUtils.getStringParameter(request, "pjcode", "");
+				errorMessage = excelDAO.insertTc(data, pjcode);
 			}
 			
 			if(errorMessage.length()>200){

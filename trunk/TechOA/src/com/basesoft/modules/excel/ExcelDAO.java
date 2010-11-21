@@ -1790,7 +1790,7 @@ public class ExcelDAO extends CommonDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public String insertTc(JSONObject data) throws Exception{
+	public String insertTc(JSONObject data, String pjcode) throws Exception{
 		String errorMessage = "";
 		
 		//循环数据行
@@ -1806,7 +1806,9 @@ public class ExcelDAO extends CommonDAO {
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
 			String id1 = UUID.randomUUID().toString().replaceAll("-", "");
 			int xh = row.optInt("XH");
-			String pjcode = row.optString("PJCODE");
+			if("".equals(pjcode)){
+				pjcode = row.optString("PJCODE");
+			}
 			String mc = row.optString("MC");
 			int dtzjs = row.optInt("DTZJS");
 			int ts = row.optInt("TS");
